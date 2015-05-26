@@ -1,0 +1,180 @@
+{
+  "description": "Worker host image for Travis CI",
+  "variables": {
+    "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
+    "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
+    "base_ami": "{{ env `TRAVIS_CI_BASE_AMI` }}",
+    "travis_subnet_id": "{{ env `TRAVIS_SUBNET_ID` }}",
+    "travis_vpc_id": "{{ env `TRAVIS_VPC_ID` }}",
+    "travis_worker_binary_dir": "{{ env `TRAVIS_WORKER_BINARY_DIR` }}",
+    "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
+    "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
+    "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
+    "vsphere_host": "{{ env `VSPHERE_HOST` }}",
+    "vsphere_password": "{{ env `VSPHERE_PASSWORD` }}",
+    "vsphere_username": "{{ env `VSPHERE_USERNAME` }}",
+    "vsphere_vm_folder": "{{ env `VSPHERE_VM_FOLDER` }}",
+    "vsphere_vm_network": "{{ env `VSPHERE_VM_NETWORK` }}"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{ user `aws_access_key` }}",
+      "secret_key": "{{ user `aws_secret_key` }}",
+      "region": "us-east-1",
+      "source_ami": "{{ user `base_ami` }}",
+      "ami_name": "travis-ci-worker-host {{ isotime \"2006-01-02 15:04:06\" | clean_ami_name }}",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_virtualization_type": "hvm",
+      "tags": {
+        "role": "worker-host"
+      },
+      "associate_public_ip_address": true,
+      "subnet_id": "{{ user `travis_subnet_id` }}",
+      "vpc_id": "{{ user `travis_vpc_id` }}"
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vmware-atlas",
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz<wait>",
+        " auto<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-setup/layoutcode=us<wait>",
+        " console-setup/modelcode=pc105<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " debian-installer=en_US<wait>",
+        " fb=false<wait>",
+        " initrd=/install/initrd.gz<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/layout=USA<wait>",
+        " keyboard-configuration/variant=USA<wait>",
+        " locale=en_US<wait>",
+        " netcfg/get_domain=vm<wait>",
+        " netcfg/get_hostname=vagrant<wait>",
+        " noapic<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<wait>",
+        " -- <wait>",
+        "<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": 20480,
+      "guest_os_type": "Ubuntu-64",
+      "headless": true,
+      "http_directory": "packer-assets",
+      "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+      "iso_checksum_type": "sha256",
+      "iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.2-server-amd64.iso",
+      "skip_compaction": true,
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S bash 'shutdown.sh'",
+      "tools_upload_flavor": "linux"
+    },
+    {
+      "type": "vmware-vmx",
+      "name": "vmware-local",
+      "vm_name": "packer-vmware-local-worker",
+      "source_path": "output-vmware-ubuntu-base/packer-vmware-ubuntu-base.vmx",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "headless": true
+    }
+  ],
+  "push": {
+    "name": "travis-ci/worker-host",
+    "vcs": false
+  },
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "export DEBIAN_FRONTEND=noninteractive",
+        "perl -p -i -e 's#http://us.archive.ubuntu.com/ubuntu#http://mirror.rackspace.com/ubuntu#gi' /etc/apt/sources.list",
+        "apt-get -yqq update",
+        "apt-get install -yqq open-vm-tools"
+      ],
+      "override": {
+        "vmware-local": {
+          "execute_command": "echo vagrant | sudo -S bash '{{ .Path }}'"
+        },
+        "vmware-atlas": {
+          "execute_command": "echo vagrant | sudo -S bash '{{ .Path }}'"
+        }
+      },
+      "only": [
+        "vmware-local",
+        "vmware-atlas"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "{{ user `travis_worker_binary_dir` }}/travis-worker",
+      "destination": "/tmp/travis-worker"
+    },
+    {
+      "type": "file",
+      "source": "packer-assets/travis-worker.conf",
+      "destination": "/tmp/travis-worker.conf"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mv /tmp/travis-worker /usr/local/bin/travis-worker",
+        "sudo chmod 755 /usr/local/bin/travis-worker",
+        "sudo mv /tmp/travis-worker.conf /etc/init/travis-worker.conf",
+        "sudo touch /etc/default/travis-worker"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "atlas",
+      "artifact": "travis-ci/worker-host",
+      "artifact_type": "aws.ami",
+      "metadata": {
+        "created_at": "{{ timestamp }}"
+      },
+      "only": [
+        "amazon-ebs"
+      ]
+    },
+    {
+      "type": "atlas",
+      "artifact": "travis-ci/worker-host",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "vmware_desktop",
+        "created_at": "{{ timestamp }}"
+      },
+      "only": [
+        "vmware-atlas"
+      ]
+    },
+    {
+      "type": "vsphere",
+      "cluster": "{{ user `vsphere_cluster` }}",
+      "datacenter": "{{ user `vsphere_datacenter` }}",
+      "resource_pool": " ",
+      "host": "{{ user `vsphere_host` }}",
+      "username": "{{ user `vsphere_username` }}",
+      "password": "{{ user `vsphere_password` }}",
+      "vm_name": "travis-worker-{{ timestamp }}",
+      "datastore": "{{ user `vsphere_datastore` }}",
+      "vm_folder": "{{ user `vsphere_vm_folder` }}",
+      "vm_network": "{{ user `vsphere_vm_network` }}",
+      "insecure": true,
+      "only": [
+        "vmware-local"
+      ]
+    }
+  ]
+}
