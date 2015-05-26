@@ -43,14 +43,14 @@
     {
       "type": "shell",
       "scripts": [
-        "./packer-scripts/pre-chef-bootstrap"
+        "packer-scripts/pre-chef-bootstrap"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
     {
       "type": "shell",
       "scripts": [
-        "./packer-scripts/clone-travis-cookbooks"
+        "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
         "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
@@ -59,6 +59,9 @@
     },
     {
       "type": "chef-solo",
+      "cookbook_paths": [
+        "cookbooks"
+      ],
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
@@ -80,16 +83,8 @@
     {
       "type": "shell",
       "scripts": [
-        "./packer-scripts/ubuntu-cleanup",
-        "./packer-scripts/minimize"
-      ],
-      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "vmware-toolbox-cmd disk shrink /",
-        "vmware-toolbox-cmd disk shrink /boot"
+        "packer-scripts/ubuntu-cleanup",
+        "packer-scripts/minimize"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }

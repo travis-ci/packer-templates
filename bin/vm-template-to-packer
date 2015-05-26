@@ -47,6 +47,9 @@ class VMTemplateToPacker < Thor
 
     chef_solo_provisioner = {
       'type' => 'chef-solo',
+      'cookbook_paths' => [
+        'cookbooks'
+      ],
       'remote_cookbook_paths' => [
         '/tmp/chef-stuff/travis-cookbooks/ci_environment'
       ],

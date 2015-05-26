@@ -44,7 +44,7 @@
     {
       "type": "shell",
       "scripts": [
-        "./packer-scripts/clone-travis-cookbooks"
+        "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
         "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
@@ -53,6 +53,9 @@
     },
     {
       "type": "chef-solo",
+      "cookbook_paths": [
+        "cookbooks"
+      ],
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
