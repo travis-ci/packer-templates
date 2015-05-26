@@ -1,2 +1,5 @@
 language: ruby
-script: echo script
+script:
+- for f in $(git ls-files '*.json') ; do
+    jq . < $f >/dev/null ;
+  done
