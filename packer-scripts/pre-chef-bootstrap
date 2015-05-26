@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -ex
+
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get update -yqq
+apt-get install -yqq \
+  --no-install-suggests \
+  --no-install-recommends \
+  cron \
+  curl \
+  git \
+  sudo
+
+mkdir -p /var/run/sshd                                                                      \
+echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow                                                 \
+
+useradd -s /bin/bash -m travis                                                              \
+echo travis:travis | chpasswd                                                               \
+
+echo 'Defaults !authenticate' >> /etc/sudoers                                               \
+sed -e 's/^%.*//' -i /etc/sudoers                                                           \
+mkdir -p /etc/sudoers.d                                                                     \
+echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis                                \
+chmod 440 /etc/sudoers.d/travis
+
+mkdir -p /home/travis/.ssh
+chmod 0700 /home/travis/.ssh
+cat /var/tmp/*_rsa.pub > /home/travis/.ssh/authorized_keys
+chmod 0600 /home/travis/.ssh/authorized_keys
+chown -R travis:travis /home/travis
+
+[[ -d /home/vagrant ]] && mv /home/vagrant /home/vagrant.old

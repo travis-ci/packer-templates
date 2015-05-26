@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'json'
+
+require 'thor'
+
+class VMTemplateToPacker < Thor
+  CLONE_TRAVIS_COOKBOOKS = {
+    type: 'shell',
+    scripts: [
+      'packer-scripts/clone-travis-cookbooks'
+    ],
+    environment_vars: [
+      'COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}'
+    ],
+    execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  }.freeze
+
+  SHRINK_DISKS = {
+    type: 'shell',
+    scripts: [
+      'packer-scripts/ubuntu-cleanup',
+      'packer-scripts/minimize'
+    ],
+    execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  }.freeze
+
+  desc 'convert VM_TEMPLATE_FILE',
+    'convert a VM template YAML file to a packer template, or modify ' \
+    'an existing packer template'
+  def convert(vm_template_file, packer_template_file = nil)
+    vm_template = YAML.load_file(File.expand_path(vm_template_file))
+    packer_template = {
+      'variables' => {},
+      'provisioners' => []
+    }
+
+    if !packer_template_file.nil?
+      packer_template = JSON.parse(
+        File.read(File.expand_path(packer_template_file))
+      )
+    end
+
+    provisioners = packer_template['provisioners']
+    variables = packer_template['variables']
+
+    chef_solo_provisioner = {
+      'type' => 'chef-solo',
+      'remote_cookbook_paths' => [
+        '/tmp/chef-stuff/travis-cookbooks/ci_environment'
+      ],
+      'json' => vm_template['json'],
+      'run_list' => vm_template['recipes'].map { |r| "recipe[#{r}]" }
+    }
+
+    unless variables.key?('cookbooks_branch')
+      variables['cookbooks_branch'] = '{{ env `COOKBOOKS_BRANCH` }}'
+    end
+
+    unless provisioners.include?(CLONE_TRAVIS_COOKBOOKS)
+      provisioners.unshift(CLONE_TRAVIS_COOKBOOKS)
+    end
+
+    unless provisioners.include?(chef_solo_provisioner)
+      provisioners << chef_solo_provisioner
+    end
+
+    unless provisioners.include?(SHRINK_DISKS)
+      provisioners << SHRINK_DISKS
+    end
+
+    puts JSON.pretty_generate(
+      packer_template.merge(
+        'provisioners' => provisioners,
+        'variables' => variables
+      )
+    )
+  end
+  default_task :convert
+end
+
+VMTemplateToPacker.start(ARGV) if $PROGRAM_NAME == __FILE__

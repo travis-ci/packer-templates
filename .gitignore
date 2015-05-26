@@ -1,0 +1,12 @@
+*~
+tmp/*
+.DS_Store
+*.class
+*.rbc
+#~
+~*
+/Gemfile.lock
+.vagrant
+.env*
+packer_cache
+/output-*

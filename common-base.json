@@ -1,0 +1,97 @@
+{
+  "description": "Travis CI base build env template",
+  "variables": {
+    "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "name": "docker",
+      "image": "ubuntu-upstart:precise",
+      "run_command": [
+        "--privileged",
+        "-d",
+        "-i",
+        "-t",
+        "{{ .Image }}",
+        "/sbin/init"
+      ]
+    },
+    {
+      "type": "vmware-vmx",
+      "name": "vmware-local-base",
+      "vm_name": "packer-vmware-local-base",
+      "source_path": "output-vmware-ubuntu-base/packer-vmware-ubuntu-base.vmx",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "headless": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "./packer-assets/travis_rsa.pub",
+      "destination": "/var/tmp/travis_rsa.pub"
+    },
+    {
+      "type": "file",
+      "source": "./packer-assets/docker_rsa.pub",
+      "destination": "/var/tmp/docker_rsa.pub"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./packer-scripts/pre-chef-bootstrap"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./packer-scripts/clone-travis-cookbooks"
+      ],
+      "environment_vars": [
+        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    },
+    {
+      "type": "chef-solo",
+      "remote_cookbook_paths": [
+        "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+      ],
+      "json": {
+        "travis_build_environment": {
+          "packages": [
+            "bash",
+            "ca-certificates"
+          ]
+        }
+      },
+      "run_list": [
+        "recipe[apt]",
+        "recipe[package-updates]",
+        "recipe[build-essential]",
+        "recipe[sweeper]"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./packer-scripts/ubuntu-cleanup",
+        "./packer-scripts/minimize"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "vmware-toolbox-cmd disk shrink /",
+        "vmware-toolbox-cmd disk shrink /boot"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    }
+  ]
+}

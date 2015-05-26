@@ -1,0 +1,101 @@
+{
+  "description": "Travis CI minimal build env template",
+  "variables": {
+    "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
+    "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
+    "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
+    "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
+    "vsphere_host": "{{ env `VSPHERE_HOST` }}",
+    "vsphere_password": "{{ env `VSPHERE_PASSWORD` }}",
+    "vsphere_resource_pool": "{{ env `VSPHERE_RESOURCE_POOL` }}",
+    "vsphere_username": "{{ env `VSPHERE_USERNAME` }}",
+    "vsphere_vm_folder": "{{ env `VSPHERE_VM_FOLDER` }}",
+    "vsphere_vm_network": "{{ env `VSPHERE_VM_NETWORK` }}"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "name": "docker",
+      "pull": false,
+      "image": "travis-base:latest",
+      "run_command": [
+        "--privileged",
+        "-d",
+        "-i",
+        "-t",
+        "{{ .Image }}",
+        "/sbin/init"
+      ]
+    },
+    {
+      "type": "vmware-vmx",
+      "name": "vmware-local-minimal",
+      "vm_name": "packer-vmware-local-minimal",
+      "source_path": "output-vmware-local-base/packer-vmware-local-base.vmx",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "headless": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "./packer-scripts/clone-travis-cookbooks"
+      ],
+      "environment_vars": [
+        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    },
+    {
+      "type": "chef-solo",
+      "remote_cookbook_paths": [
+        "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+      ],
+      "json": {
+        "rvm": {
+          "default": "2.1.6",
+          "rubies": [
+            {
+              "name": "2.1.6"
+            }
+          ],
+          "gems": [
+            "nokogiri"
+          ]
+        },
+        "travis_build_environment": {
+          "use_tmpfs_for_builds": false,
+          "update_hosts_atomically": false
+        }
+      },
+      "run_list": [
+        "recipe[travis_build_environment]",
+        "recipe[docker]",
+        "recipe[sweeper]"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "vmware-toolbox-cmd disk shrink /",
+        "vmware-toolbox-cmd disk shrink /boot"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-import",
+      "repository": "travis-minimal",
+      "tag": "{{ timestamp }}",
+      "only": [
+        "docker"
+      ]
+    }
+  ]
+}
