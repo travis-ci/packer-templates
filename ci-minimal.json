@@ -30,9 +30,9 @@
     },
     {
       "type": "vmware-vmx",
-      "name": "vmware-local-minimal",
-      "vm_name": "packer-vmware-local-minimal",
-      "source_path": "output-vmware-local-base/packer-vmware-local-base.vmx",
+      "name": "vmware-minimal",
+      "vm_name": "packer-vmware-minimal",
+      "source_path": "output-vmware-ubuntu-base/packer-vmware-ubuntu-base.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -59,27 +59,8 @@
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
-      "json": {
-        "rvm": {
-          "default": "2.1.6",
-          "rubies": [
-            {
-              "name": "2.1.6"
-            }
-          ],
-          "gems": [
-            "nokogiri"
-          ]
-        },
-        "travis_build_environment": {
-          "use_tmpfs_for_builds": false,
-          "update_hosts_atomically": false
-        }
-      },
       "run_list": [
-        "recipe[travis_build_environment]",
-        "recipe[docker]",
-        "recipe[sweeper]"
+        "recipe[travis_ci_minimal]"
       ]
     },
     {
