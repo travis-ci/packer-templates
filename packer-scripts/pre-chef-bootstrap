@@ -10,18 +10,20 @@ apt-get install -yqq \
   cron \
   curl \
   git \
-  sudo
+  open-vm-tools \
+  sudo \
+  wget
 
-mkdir -p /var/run/sshd                                                                      \
-echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow                                                 \
+mkdir -p /var/run/sshd
+echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
 
-useradd -s /bin/bash -m travis                                                              \
-echo travis:travis | chpasswd                                                               \
+getent passwd | grep -E '\btravis\b' || useradd -s /bin/bash -m travis
+echo travis:travis | chpasswd
 
-echo 'Defaults !authenticate' >> /etc/sudoers                                               \
-sed -e 's/^%.*//' -i /etc/sudoers                                                           \
-mkdir -p /etc/sudoers.d                                                                     \
-echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis                                \
+echo 'Defaults !authenticate' >> /etc/sudoers
+sed -e 's/^%.*//' -i /etc/sudoers
+mkdir -p /etc/sudoers.d
+echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis
 chmod 440 /etc/sudoers.d/travis
 
 mkdir -p /home/travis/.ssh
@@ -30,4 +32,4 @@ cat /var/tmp/*_rsa.pub > /home/travis/.ssh/authorized_keys
 chmod 0600 /home/travis/.ssh/authorized_keys
 chown -R travis:travis /home/travis
 
-[[ -d /home/vagrant ]] && mv /home/vagrant /home/vagrant.old
+rm -rf /var/lib/apt/lists/*

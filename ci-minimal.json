@@ -34,8 +34,8 @@
       "name": "vmware-minimal",
       "vm_name": "packer-vmware-minimal",
       "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "travis",
+      "ssh_password": "travis",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "headless": true
@@ -45,6 +45,8 @@
     {
       "type": "shell",
       "scripts": [
+        "packer-scripts/pre-chef-bootstrap",
+        "packer-scripts/remove-vagrant-user",
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
