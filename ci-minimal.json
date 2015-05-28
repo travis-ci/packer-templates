@@ -3,6 +3,7 @@
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "travis_cookbooks_dir": "{{ env `TRAVIS_COOKBOOKS_DIR` }}",
     "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
     "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
     "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
@@ -54,11 +55,29 @@
     {
       "type": "chef-solo",
       "cookbook_paths": [
-        "cookbooks"
+        "cookbooks",
+        "{{ user `travis_cookbooks_dir` }}/ci_environment"
       ],
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
+      "json": {
+        "rvm": {
+          "default": "2.1.6",
+          "rubies": [
+            {
+              "name": "2.1.6"
+            }
+          ],
+          "gems": [
+            "nokogiri"
+          ]
+        },
+        "travis_build_environment": {
+          "use_tmpfs_for_builds": false,
+          "update_hosts_atomically": false
+        }
+      },
       "run_list": [
         "recipe[travis_ci_minimal]"
       ]

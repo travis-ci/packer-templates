@@ -24,8 +24,11 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+execute 'apt-get update -yqq'
+
 include_recipe 'travis_build_environment'
 include_recipe 'apt'
+
 include_recipe 'package-updates'
 include_recipe 'build-essential'
 include_recipe 'ccache'
