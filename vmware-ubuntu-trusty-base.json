@@ -1,9 +1,9 @@
 {
-  "description": "Travis CI VMware ubuntu base template",
+  "description": "Travis CI VMware Ubuntu Trusty base template",
   "builders": [
     {
       "type": "vmware-iso",
-      "name": "vmware-ubuntu-base",
+      "name": "vmware-ubuntu-trusty-base",
       "boot_command": [
         "<esc><wait>",
         "<esc><wait>",
@@ -48,7 +48,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "./packer-assets/apt-conf-90translations",
+      "source": "packer-assets/apt-conf-90translations",
       "destination": "/var/tmp/apt-conf-90translations"
     },
     {
@@ -67,8 +67,8 @@
     {
       "type": "shell",
       "scripts": [
-        "./packer-scripts/ubuntu-cleanup",
-        "./packer-scripts/minimize"
+        "packer-scripts/ubuntu-cleanup",
+        "packer-scripts/minimize"
       ],
       "environment_vars": [
         "CLEAN_DEV_PACKAGES=1"

@@ -33,7 +33,7 @@
       "type": "vmware-vmx",
       "name": "vmware-minimal",
       "vm_name": "packer-vmware-minimal",
-      "source_path": "output-vmware-ubuntu-base/packer-vmware-ubuntu-base.vmx",
+      "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,

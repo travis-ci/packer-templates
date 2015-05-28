@@ -1,0 +1,29 @@
+{
+  "description": "Travis CI meta docker import template",
+  "variables": {
+    "docker_import_image": "{{ env `DOCKER_IMPORT_IMAGE` }}",
+    "docker_import_image_name": "{{ env `DOCKER_IMPORT_IMAGE_NAME` }}"
+  },
+  "builders": [
+    {
+      "type": "vmware-vmx",
+      "name": "vmware-docker-import",
+      "vm_name": "vmware-docker-import-{{ user `docker_import_image_name` }}",
+      "source_path": "output-vmware-ubuntu-precise-base/packer-vmware-ubuntu-precise-base.vmx",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "headless": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "echo whatever hosers"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    }
+  ]
+}
