@@ -30,11 +30,7 @@ include_recipe 'travis_build_environment'
 include_recipe 'apt'
 
 package Array(node['travis_build_environment']['packages']) do
-  action :install
-end
-
-package Array(node['travis_build_environment']['packages']) do
-  action :upgrade
+  action [:install, :upgrade]
 end
 
 include_recipe 'clang::tarball'
@@ -44,14 +40,8 @@ include_recipe 'git::ppa'
 include_recipe 'jq'
 include_recipe 'docker'
 include_recipe 'libevent'
-include_recipe 'ant'
-include_recipe 'maven'
 include_recipe 'rvm'
-include_recipe 'rvm::multi'
-include_recipe 'postgresql'
 include_recipe 'nodejs::multi'
 include_recipe 'python::pyenv'
-include_recipe 'emacs::nox'
-include_recipe 'vim'
 include_recipe 'system_info'
 include_recipe 'sweeper'

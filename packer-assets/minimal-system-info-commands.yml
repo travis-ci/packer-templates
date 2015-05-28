@@ -1,0 +1,23 @@
+commands:
+  common:
+    - command: docker version
+      name: Docker version
+
+    - command: git --version
+      name: Git version
+
+    - command: gcc --version
+      name: GCC version
+
+    - command: clang --version
+      name: LLVM version
+
+  linux:
+    - command: date
+      name: Build image provisioning date and time
+
+    - command: lsb_release -a
+      name: Operating System Details
+
+    - command: uname -r
+      name: Linux Version

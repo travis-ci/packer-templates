@@ -53,6 +53,11 @@
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
     {
+      "type": "file",
+      "source": "packer-assets/minimal-system-info-commands.yml",
+      "destination": "/var/tmp/minimal-system-info-commands.yml"
+    },
+    {
       "type": "chef-solo",
       "cookbook_paths": [
         "cookbooks",
@@ -62,16 +67,14 @@
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
       "json": {
-        "rvm": {
-          "default": "2.1.6",
-          "rubies": [
-            {
-              "name": "2.1.6"
-            }
-          ],
-          "gems": [
-            "nokogiri"
-          ]
+        "java": {
+          "default_version": ""
+        },
+        "nodejs": {
+          "default": "",
+          "versions": [],
+          "aliases": [],
+          "default_modules": []
         },
         "python": {
           "pyenv": {
@@ -85,11 +88,25 @@
             "pythons": []
           }
         },
+        "rvm": {
+          "default": "",
+          "rubies": [
+          ],
+          "gems": [
+          ],
+          "prerequisite_recipes": [],
+          "pkg_requirements": []
+        },
+        "system_info": {
+          "use_bundler": false,
+          "commands_file": "/var/tmp/minimal-system-info-commands.yml"
+        },
         "travis_build_environment": {
           "use_tmpfs_for_builds": false,
           "update_hosts_atomically": false,
           "packages": [
             "autoconf",
+            "automake",
             "bash",
             "bison",
             "build-essential",
@@ -100,6 +117,7 @@
             "cmake",
             "curl",
             "flex",
+            "gawk",
             "gzip",
             "imagemagick",
             "iptables",
@@ -115,22 +133,36 @@
             "libncursesw5-dev",
             "libossp-uuid-dev",
             "libqt4-dev",
+            "libreadline-dev",
+            "libreadline6",
             "libsqlite3-dev",
+            "libssl-dev",
+            "libssl0.9.8",
+            "libtool",
+            "libxml2-dev",
+            "libxslt-dev",
+            "libxslt1-dev",
+            "libyaml-0-2",
+            "libyaml-dev",
             "lsof",
             "md5deep",
             "mercurial",
             "mingw32",
             "netcat-openbsd",
             "openssl",
+            "pkg-config",
             "python",
             "qt4-qmake",
             "ragel",
             "rsync",
+            "ruby2.0",
+            "sqlite3",
             "sqlite3",
             "subversion",
             "unzip",
             "wamerican",
-            "zip"
+            "zip",
+            "zlib1g-dev"
           ]
         }
       },
