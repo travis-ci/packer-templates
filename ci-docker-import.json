@@ -7,7 +7,7 @@
   "builders": [
     {
       "type": "vmware-vmx",
-      "name": "vmware-docker-import",
+      "name": "vmware-docker-import-{{ user `docker_import_image_name` }}",
       "vm_name": "vmware-docker-import-{{ user `docker_import_image_name` }}",
       "source_path": "output-vmware-ubuntu-precise-base/packer-vmware-ubuntu-precise-base.vmx",
       "ssh_username": "travis",
@@ -21,10 +21,14 @@
     {
       "type": "shell",
       "inline": [
+        "set -ex",
+        "cd /var/tmp",
         "curl https://get.docker.io | bash",
-        "docker pull {{ user `docker_import_image` }}",
-        "docker run -it {{ user `docker_import_image` }} echo > container_id",
-        "docker export $(cat container_id) > {{ user `docker_import_image_name` }}.tar"
+        "CONTAINER_ID=\"$(docker run -dit {{ user `docker_import_image` }} echo)\"",
+        "docker export \"$CONTAINER_ID\" > /var/tmp/{{ user `docker_import_image_name` }}.tar",
+        "stop docker",
+        "cd /",
+        "tar -xvf /var/tmp/{{ user `docker_import_image_name` }}.tar || echo 'tar error suppressed'"
      ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }

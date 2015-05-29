@@ -1,94 +1,94 @@
 apparmor
-aptitude
+# aptitude
 bash-completion
-biosdevname
+# biosdevname
 command-not-found-data
-console-setup
-cron
-dbus
-debconf-i18n
-dmidecode
-dnsutils
-dosfstools
-ed
-eject
+# console-setup
+# cron
+# dbus
+# debconf-i18n
+# dmidecode
+# dnsutils
+# dosfstools
+# ed
+# eject
 friendly-recovery
-ftp
-fuse
-geoip-database
-groff-base
-grub-pc-bin
-hdparm
+# ftp
+# fuse
+# geoip-database
+# groff-base
+# grub-pc-bin
+# hdparm
 install-info
 installation-report
-iputils-ping
-iputils-tracepath
-irqbalance
-iso-codes
-keyboard-configuration
-krb5-locales
-language-pack-gnome-en
-language-pack-gnome-en-base
-less
-libapparmor-perl
-libapparmor1
-libarchive-extract-perl
-libdbus-glib-1-2
-liblog-message-simple-perl
-libmodule-pluggable-perl
-libnuma1
-libpci3
-libpod-latex-perl
-libpolkit-gobject-1-0
-libpython3-stdlib
-libpython3.4-stdlib
-libsystemd-daemon0
-libsystemd-login0
-libtext-charwidth-perl
-libtext-iconv-perl
-libtext-soundex-perl
-libusb-1.0-0
+# iputils-ping
+# iputils-tracepath
+# irqbalance
+# iso-codes
+# keyboard-configuration
+# krb5-locales
+# language-pack-gnome-en
+# language-pack-gnome-en-base
+# less
+# libapparmor-perl
+# libapparmor1
+# libarchive-extract-perl
+# libdbus-glib-1-2
+# liblog-message-simple-perl
+# libmodule-pluggable-perl
+# libnuma1
+# libpci3
+# libpod-latex-perl
+# libpolkit-gobject-1-0
+# libpython3-stdlib
+# libpython3.4-stdlib
+# libsystemd-daemon0
+# libsystemd-login0
+# libtext-charwidth-perl
+# libtext-iconv-perl
+# libtext-soundex-perl
+# libusb-1.0-0
 libx11-6
 libx11-data
-libxau6
+# libxau6
 libxcb1
-libxdmcp6
+# libxdmcp6
 libxext6
 libxmuu1
 man-db
 manpages
 mlocate
-mtr-tiny
-nano
-net-tools
+# mtr-tiny
+# nano
+# net-tools
 parted
-pciutils
+# pciutils
 plymouth-theme-ubuntu-text
 popularity-contest
-powermgmt-base
+# powermgmt-base
 ppp
 pppconfig
 pppoeconf
-psmisc
-python
-python3
-python3-minimal
-python3.4
-python3.4-minimal
-rsyslog
-shared-mime-info
-strace
-systemd-shim
-tcpd
-tcpdump
-telnet
-ucf
-ureadahead
-usbutils
-uuid-runtime
-vim-common
-vim-tiny
-watershed
+# psmisc
+# python
+# python3
+# python3-minimal
+# python3.4
+# python3.4-minimal
+# rsyslog
+# shared-mime-info
+# strace
+# systemd-shim
+# tcpd
+# tcpdump
+# telnet
+# ucf
+# ureadahead
+# usbutils
+# uuid-runtime
+# vim-common
+# vim-tiny
+# watershed
 xauth
-xkb-data
-xz-utils
+# xkb-data
+# xz-utils

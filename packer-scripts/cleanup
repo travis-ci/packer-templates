@@ -17,7 +17,7 @@ if [[ $CLEAN_DEV_PACKAGES ]] ; then
 fi
 
 if [[ -f /var/tmp/purge.txt ]] ; then
-  cat /var/tmp/purge.txt | xargs apt-get -y purge
+  grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
 fi
 
 apt-get -y autoremove
