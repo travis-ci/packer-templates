@@ -14,12 +14,15 @@ find /bin /sbin \
      -type f >> /var/tmp/excludes
 
 cd /var/tmp
+
 CONTAINER_ID="$(docker run -dit "$IMAGE" echo)"
 docker export "$CONTAINER_ID" > $TARFILE
 
 dpkg -l | awk '{ print $2 }' | grep docker | xargs apt-get purge -y
 rm -rf /var/lib/docker
 
-set +e
-tar -C --exclude-from /var/tmp/excludes -xvf $TARFILE 2>&1 | \
-  tee /ci-docker-import.log
+(
+  set +e
+  tar -C / --exclude-from=/var/tmp/excludes -xf $TARFILE 2>&1 | \
+    tee /ci-docker-import.log
+) || echo 'tar nonzero exit suppressed'
