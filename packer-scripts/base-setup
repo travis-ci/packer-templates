@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -ex
+
+export DEBIAN_FRONTEND=noninteractive
+
+mv /var/tmp/apt-conf-90translations /etc/apt/apt.conf.d/90translations
+mv /var/tmp/ssh-keygen.init /etc/init.d/ssh-keygen
+mv /var/tmp/generate-ssh-host-keys /usr/local/bin/generate-ssh-host-keys
+update-rc.d ssh-keygen defaults
+
+apt-get update -yqq
+apt-get upgrade -yqq

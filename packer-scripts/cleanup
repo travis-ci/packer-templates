@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -ex
+
+_purge_packages() {
+  dpkg --list | awk '{ print $2 }' | grep -- "$1" | \
+    grep -v -- "${2:-^$}" | xargs apt-get -y purge
+}
+
+_purge_packages 'linux-headers'
+_purge_packages 'linux-source'
+_purge_packages 'chef'
+_purge_packages 'linux-image-3.*-generic' `uname -r`
+
+if [[ $CLEAN_DEV_PACKAGES ]] ; then
+  _purge_packages '-dev$'
+fi
+
+if [[ -f /var/tmp/purge.txt ]] ; then
+  cat /var/tmp/purge.txt | xargs apt-get -y purge
+fi
+
+apt-get -y autoremove
+apt-get -y clean
+
+rm -rf \
+  VBoxGuestAdditions_*.iso \
+  VBoxGuestAdditions_*.iso.? \
+  /tmp/packer* \
+  /var/log/installer \
+  /var/lib/man-db \
+  /var/lib/apt/lists/* \
+  /var/tmp/* \
+  /etc/ssh/ssh_host_* \
+  /etc/apparmor* \
+  /etc/systemd \
+  /lib/recovery-mode
+
+
+for f in $(find /var/log -type f) ; do
+  dd if=/dev/null of=$f
+done

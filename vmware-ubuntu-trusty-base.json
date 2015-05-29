@@ -48,13 +48,26 @@
   "provisioners": [
     {
       "type": "shell",
-      "inline": "rm -f /var/tmp/*_rsa.pub",
-      "execute_command": "echo 'travis' | sudo -S bash '{{ .Path }}'"
+      "inline": [
+        "rm -f /var/tmp/*_rsa.pub",
+        "rm -rf /var/lib/apt/lists/*"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
     {
       "type": "file",
       "source": "packer-assets/apt-conf-90translations",
       "destination": "/var/tmp/apt-conf-90translations"
+    },
+    {
+      "type": "file",
+      "source": "packer-assets/ssh-keygen.init",
+      "destination": "/var/tmp/ssh-keygen.init"
+    },
+    {
+      "type": "file",
+      "source": "packer-assets/generate-ssh-host-keys",
+      "destination": "/var/tmp/generate-ssh-host-keys"
     },
     {
       "type": "file",
@@ -67,16 +80,17 @@
       "destination": "/var/tmp/travis_rsa.pub"
     },
     {
-      "type": "shell",
-      "inline": "cp /var/tmp/apt-conf-90translations /etc/apt/apt.conf.d/90translations",
-      "execute_command": "echo 'travis' | sudo -S bash '{{ .Path }}'"
+      "type": "file",
+      "source": "packer-assets/ubuntu-trusty-minimal-purge.txt",
+      "destination": "/var/tmp/purge.txt"
     },
     {
       "type": "shell",
       "scripts": [
+        "packer-scripts/base-setup",
         "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/remove-vagrant-user",
-        "packer-scripts/ubuntu-cleanup",
+        "packer-scripts/cleanup",
         "packer-scripts/minimize"
       ],
       "environment_vars": [

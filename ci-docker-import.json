@@ -10,8 +10,8 @@
       "name": "vmware-docker-import",
       "vm_name": "vmware-docker-import-{{ user `docker_import_image_name` }}",
       "source_path": "output-vmware-ubuntu-precise-base/packer-vmware-ubuntu-precise-base.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "travis",
+      "ssh_password": "travis",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "headless": true
@@ -21,8 +21,11 @@
     {
       "type": "shell",
       "inline": [
-        "echo whatever hosers"
-      ],
+        "curl https://get.docker.io | bash",
+        "docker pull {{ user `docker_import_image` }}",
+        "docker run -it {{ user `docker_import_image` }} echo > container_id",
+        "docker export $(cat container_id) > {{ user `docker_import_image_name` }}.tar"
+     ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
   ]

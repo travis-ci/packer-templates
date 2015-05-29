@@ -43,6 +43,11 @@
   ],
   "provisioners": [
     {
+      "type": "file",
+      "source": "packer-assets/ubuntu-trusty-normal-purge.txt",
+      "destination": "/var/tmp/purge.txt"
+    },
+    {
       "type": "shell",
       "scripts": [
         "packer-scripts/pre-chef-bootstrap",
@@ -174,9 +179,9 @@
     },
     {
       "type": "shell",
-      "inline": [
-        "vmware-toolbox-cmd disk shrink /",
-        "vmware-toolbox-cmd disk shrink /boot"
+      "scripts": [
+        "packer-scripts/cleanup",
+        "packer-scripts/minimize"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
