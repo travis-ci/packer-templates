@@ -31,8 +31,8 @@
     },
     {
       "type": "vmware-vmx",
-      "name": "vmware-minimal",
-      "vm_name": "packer-vmware-minimal",
+      "name": "ci-minimal",
+      "vm_name": "ci-minimal",
       "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
       "ssh_username": "travis",
       "ssh_password": "travis",

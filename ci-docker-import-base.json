@@ -1,0 +1,37 @@
+{
+  "description": "Travis CI meta docker import base template",
+  "variables": {
+    "docker_base_image": "quay.io/travisci/travis-standard:dev"
+  },
+  "builders": [
+    {
+      "type": "vmware-vmx",
+      "name": "ci-docker-import-base",
+      "vm_name": "ci-docker-import-base",
+      "source_path": "output-vmware-ubuntu-precise-base/packer-vmware-ubuntu-precise-base.vmx",
+      "ssh_username": "travis",
+      "ssh_password": "travis",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "headless": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "curl https://get.docker.io | bash",
+        "docker pull {{ user `docker_base_image` }}"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "packer-scripts/cleanup",
+        "packer-scripts/minimize"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+    }
+  ]
+}
