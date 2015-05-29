@@ -2,13 +2,13 @@
   "description": "Travis CI meta docker import template",
   "variables": {
     "docker_import_image": "{{ env `DOCKER_IMPORT_IMAGE` }}",
-    "docker_import_image_name": "{{ env `DOCKER_IMPORT_IMAGE_NAME` }}"
+    "docker_import_name": "{{ env `DOCKER_IMPORT_NAME` }}"
   },
   "builders": [
     {
       "type": "vmware-vmx",
-      "name": "ci-docker-import-{{ user `docker_import_image_name` }}",
-      "vm_name": "ci-docker-import-{{ user `docker_import_image_name` }}",
+      "name": "ci-docker-import-{{ user `docker_import_name` }}",
+      "vm_name": "ci-docker-import-{{ user `docker_import_name` }}",
       "source_path": "output-ci-docker-import-base/ci-docker-import-base.vmx",
       "ssh_username": "travis",
       "ssh_password": "travis",
@@ -31,7 +31,7 @@
         "packer-scripts/minimize"
       ],
       "environment_vars": [
-        "TARFILE=/var/tmp/{{ user `docker_import_image_name` }}.tar",
+        "TARFILE=/var/tmp/{{ user `docker_import_name` }}.tar",
         "IMAGE={{ user `docker_import_image` }}"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"

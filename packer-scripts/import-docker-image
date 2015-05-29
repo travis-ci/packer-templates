@@ -25,4 +25,4 @@ rm -rf /var/lib/docker
   set +e
   tar -C / --exclude-from=/var/tmp/excludes -xf $TARFILE 2>&1 | \
     tee /ci-docker-import.log
-) || echo 'tar nonzero exit suppressed'
+) || echo "tar exit $? suppressed"
