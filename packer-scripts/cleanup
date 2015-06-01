@@ -36,6 +36,9 @@ rm -rf \
   /etc/systemd \
   /lib/recovery-mode
 
+if [[ -d /home/travis ]] ; then
+  rm -f /home/travis/linux.iso /home/travis/shutdown.sh
+fi
 
 for f in $(find /var/log -type f) ; do
   dd if=/dev/null of=$f
