@@ -8,8 +8,7 @@ if ! docker version ; then
   curl https://get.docker.io | bash
 fi
 
-CONTAINER_ID="$(docker run -dit "$IMAGE" echo)"
-docker export "$CONTAINER_ID" > $TARFILE
+docker save "$IMAGE" > $TARFILE
 
 dpkg -l | awk '{ print $2 }' | grep docker | xargs apt-get purge -y
 rm -rf /var/lib/docker
