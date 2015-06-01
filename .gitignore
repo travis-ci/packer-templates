@@ -10,3 +10,4 @@ tmp/*
 .env*
 packer_cache
 /output-*
+/*.box
