@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -ex
+shopt -s nullglob
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -28,8 +29,12 @@ chmod 440 /etc/sudoers.d/travis
 
 mkdir -p /home/travis/.ssh
 chmod 0700 /home/travis/.ssh
-cat /var/tmp/*_rsa.pub > /home/travis/.ssh/authorized_keys
+
+for f in /var/tmp/*_rsa.pub ; do
+  cat $f >> /home/travis/.ssh/authorized_keys
+done
 chmod 0600 /home/travis/.ssh/authorized_keys
+
 chown -R travis:travis /home/travis
 
 rm -rf /var/lib/apt/lists/*
