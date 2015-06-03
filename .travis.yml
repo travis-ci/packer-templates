@@ -1,5 +1,4 @@
 language: ruby
 script:
-- for f in $(git ls-files '*.json') ; do
-    jq . < $f >/dev/null ;
-  done
+- ./runtests
+- ./bin/vm-template-to-packer help

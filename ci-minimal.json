@@ -97,10 +97,8 @@
         },
         "rvm": {
           "default": "",
-          "rubies": [
-          ],
-          "gems": [
-          ],
+          "rubies": [],
+          "gems": [],
           "prerequisite_recipes": [],
           "pkg_requirements": []
         },

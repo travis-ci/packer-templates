@@ -41,9 +41,7 @@
         },
         "python": {
           "pyenv": {
-            "pythons": [
-
-            ]
+            "pythons": []
           }
         },
         "travis_build_environment": {

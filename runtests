@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -o errexit
+
+for f in $(git ls-files '*.json') ; do
+  echo -en "$f "
+  diff -q $f <(jq . < $f)
+  echo "✓"
+done
