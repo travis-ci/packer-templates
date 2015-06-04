@@ -54,7 +54,7 @@
         "<enter><wait>"
       ],
       "boot_wait": "10s",
-      "disk_size": 20480,
+      "disk_size": 10240,
       "guest_os_type": "Ubuntu-64",
       "headless": true,
       "http_directory": "packer-assets",
@@ -66,7 +66,6 @@
       "ssh_password": "travis",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'travis'|sudo -S bash 'shutdown.sh'",
       "tools_upload_flavor": "linux"
     }
   ],
@@ -76,14 +75,24 @@
   },
   "provisioners": [
     {
+      "type": "file",
+      "source": "packer-assets/ubuntu-trusty-minimal-purge.txt",
+      "destination": "/var/tmp/purge.txt"
+    },
+    {
       "type": "shell",
       "scripts": [
-        "packer-scripts/internal-base-pre-chef"
+        "packer-scripts/internal-base-setup",
+        "packer-scripts/remove-vagrant-user",
+        "packer-scripts/internal-pre-chef-bootstrap"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
     {
       "type": "chef-solo",
+      "cookbook_paths": [
+        "cookbooks"
+      ],
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/worker_host",
         "/tmp/chef-stuff/cookbooks"
@@ -210,6 +219,14 @@
       "run_list": [
         "recipe[travis_internal_base]"
       ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "packer-scripts/cleanup",
+        "packer-scripts/minimize"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
   ],
   "post-processors": [

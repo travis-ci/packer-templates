@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -ex
+
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get update -yqq
+apt-get upgrade -yqq

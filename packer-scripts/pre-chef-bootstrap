@@ -36,5 +36,3 @@ done
 chmod 0600 /home/travis/.ssh/authorized_keys
 
 chown -R travis:travis /home/travis
-
-rm -rf /var/lib/apt/lists/*
