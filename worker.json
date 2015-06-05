@@ -55,7 +55,7 @@
         " keyboard-configuration/variant=USA<wait>",
         " locale=en_US<wait>",
         " netcfg/get_domain=vm<wait>",
-        " netcfg/get_hostname=vagrant<wait>",
+        " netcfg/get_hostname=travis<wait>",
         " noapic<wait>",
         " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<wait>",
         " -- <wait>",
@@ -70,23 +70,12 @@
       "iso_checksum_type": "sha256",
       "iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.2-server-amd64.iso",
       "skip_compaction": true,
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "travis",
+      "ssh_password": "travis",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S bash 'shutdown.sh'",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'travis' | sudo -S bash 'shutdown.sh'",
       "tools_upload_flavor": "linux"
-    },
-    {
-      "type": "vmware-vmx",
-      "name": "vmware-local",
-      "vm_name": "packer-vmware-local-worker",
-      "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
-      "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
-      "headless": true
     }
   ],
   "push": {
@@ -103,15 +92,11 @@
         "apt-get install -yqq open-vm-tools"
       ],
       "override": {
-        "vmware-local": {
-          "execute_command": "echo vagrant | sudo -S bash '{{ .Path }}'"
-        },
         "vmware-atlas": {
-          "execute_command": "echo vagrant | sudo -S bash '{{ .Path }}'"
+          "execute_command": "echo travis | sudo -S bash '{{ .Path }}'"
         }
       },
       "only": [
-        "vmware-local",
         "vmware-atlas"
       ]
     },
@@ -157,23 +142,6 @@
       },
       "only": [
         "vmware-atlas"
-      ]
-    },
-    {
-      "type": "vsphere",
-      "cluster": "{{ user `vsphere_cluster` }}",
-      "datacenter": "{{ user `vsphere_datacenter` }}",
-      "resource_pool": " ",
-      "host": "{{ user `vsphere_host` }}",
-      "username": "{{ user `vsphere_username` }}",
-      "password": "{{ user `vsphere_password` }}",
-      "vm_name": "travis-worker-{{ timestamp }}",
-      "datastore": "{{ user `vsphere_datastore` }}",
-      "vm_folder": "{{ user `vsphere_vm_folder` }}",
-      "vm_network": "{{ user `vsphere_vm_network` }}",
-      "insecure": true,
-      "only": [
-        "vmware-local"
       ]
     }
   ]

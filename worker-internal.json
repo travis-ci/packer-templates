@@ -1,12 +1,22 @@
 {
-  "description": "Base Ubuntu 14.04 image for Travis CI internal stuff",
+  "description": "Worker host image for Travis CI (internal)",
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
-    "ubuntu_trusty_ami": "{{ env `UBUNTU_TRUSTY_AMI` }}",
-    "opsmatic_integration_token": "{{env `OPSMATIC_INTEGRATION_TOKEN` }}",
+    "base_ami": "{{ env `TRAVIS_CI_BASE_AMI` }}",
+    "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
     "travis_subnet_id": "{{ env `TRAVIS_SUBNET_ID` }}",
-    "travis_vpc_id": "{{ env `TRAVIS_VPC_ID` }}"
+    "travis_vpc_id": "{{ env `TRAVIS_VPC_ID` }}",
+    "travis_worker_binary_dir": "{{ env `TRAVIS_WORKER_BINARY_DIR` }}",
+    "ubuntu_trusty_ami": "{{ env `UBUNTU_TRUSTY_AMI` }}",
+    "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
+    "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
+    "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
+    "vsphere_host": "{{ env `VSPHERE_HOST` }}",
+    "vsphere_password": "{{ env `VSPHERE_PASSWORD` }}",
+    "vsphere_username": "{{ env `VSPHERE_USERNAME` }}",
+    "vsphere_vm_folder": "{{ env `VSPHERE_VM_FOLDER` }}",
+    "vsphere_vm_network": "{{ env `VSPHERE_VM_NETWORK` }}"
   },
   "builders": [
     {
@@ -28,7 +38,7 @@
     },
     {
       "type": "vmware-iso",
-      "name": "vmware-atlas",
+      "name": "vmware-worker-internal",
       "boot_command": [
         "<esc><wait>",
         "<esc><wait>",
@@ -66,6 +76,7 @@
       "ssh_password": "travis",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh ; echo 'travis' | sudo -S bash 'shutdown.sh'",
       "tools_upload_flavor": "linux"
     }
   ],
@@ -78,6 +89,11 @@
       "type": "file",
       "source": "packer-assets/ubuntu-trusty-minimal-purge.txt",
       "destination": "/var/tmp/purge.txt"
+    },
+    {
+      "type": "file",
+      "source": "packer-assets/travis-user-shutdown-implode",
+      "destination": "/var/tmp/travis-user-shutdown-implode"
     },
     {
       "type": "shell",
@@ -210,7 +226,8 @@
               "konstantin",
               "mathias",
               "piotr",
-              "sven"
+              "sven",
+              "travis"
             ],
             "passwordless": "true"
           }

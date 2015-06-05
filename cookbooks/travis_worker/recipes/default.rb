@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: travis_internal_base
+# Cookbook Name:: travis_worker
 # Recipe:: default
 #
 # Copyright 2015, Travis CI GmbH

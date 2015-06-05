@@ -186,6 +186,12 @@
   ],
   "post-processors": [
     {
+      "type": "vagrant",
+      "only": [
+        "ci-minimal"
+      ]
+    },
+    {
       "type": "docker-import",
       "repository": "travis-minimal",
       "tag": "{{ timestamp }}",

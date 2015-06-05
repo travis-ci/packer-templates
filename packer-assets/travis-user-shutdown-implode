@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -o errexit
+
+IMPLODE_SCRIPT=/tmp/implode.$(date -u +%s).sh
+
+cat > $IMPLODE_SCRIPT <<EOF
+sleep 3
+
+cd /tmp
+echo "travis:$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)" | chpasswd
+rm -rf /home/travis
+usermod -d /dev/null -G nogroup -s /bin/false travis
+rm -f /usr/local/bin/travis-user-shutdown-implode
+rm -f $IMPLODE_SCRIPT
+
+exec /sbin/halt -h -p
+EOF
+
+echo "bash $IMPLODE_SCRIPT >/dev/null" | at now + 0 minutes
