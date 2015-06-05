@@ -28,7 +28,8 @@
     },
     {
       "type": "vmware-iso",
-      "name": "vmware-atlas",
+      "name": "internal-base",
+      "vm_name": "internal-base",
       "boot_command": [
         "<esc><wait>",
         "<esc><wait>",
@@ -64,6 +65,7 @@
       "skip_compaction": true,
       "ssh_username": "travis",
       "ssh_password": "travis",
+      "shutdown_command": "exec sudo /usr/local/bin/travis-user-shutdown-implode",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "tools_upload_flavor": "linux"
@@ -78,6 +80,11 @@
       "type": "file",
       "source": "packer-assets/ubuntu-trusty-minimal-purge.txt",
       "destination": "/var/tmp/purge.txt"
+    },
+    {
+      "type": "file",
+      "source": "packer-assets/travis-user-shutdown-implode",
+      "destination": "/var/tmp/travis-user-shutdown-implode"
     },
     {
       "type": "shell",
@@ -210,7 +217,8 @@
               "konstantin",
               "mathias",
               "piotr",
-              "sven"
+              "sven",
+              "travis"
             ],
             "passwordless": "true"
           }
