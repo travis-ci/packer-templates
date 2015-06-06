@@ -38,6 +38,7 @@
       "ssh_password": "travis",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo travis | sudo halt -h -p",
       "headless": true
     }
   ],
@@ -96,9 +97,16 @@
           }
         },
         "rvm": {
-          "default": "",
-          "rubies": [],
-          "gems": [],
+          "default": "1.9.3",
+          "rubies": [
+            {
+              "name": "1.9.3"
+            }
+          ],
+          "gems": [
+            "nokogiri"
+          ],
+          "multi_prerequisite_recipes": [],
           "prerequisite_recipes": [],
           "pkg_requirements": []
         },
@@ -179,6 +187,7 @@
       "type": "shell",
       "scripts": [
         "packer-scripts/cleanup",
+        "packer-scripts/ensure-travis-user",
         "packer-scripts/minimize"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
@@ -187,6 +196,7 @@
   "post-processors": [
     {
       "type": "vagrant",
+      "keep_input_artifact": true,
       "only": [
         "ci-minimal"
       ]

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -o errexit
+
+getent passwd | grep -q travis
+echo 'travis:travis' | chpasswd
+[[ -d /home/travis ]]
