@@ -31,9 +31,21 @@
     },
     {
       "type": "vmware-vmx",
-      "name": "ci-minimal",
+      "name": "ci-minimal-vmx",
       "vm_name": "ci-minimal",
       "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
+      "ssh_username": "travis",
+      "ssh_password": "travis",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo travis | sudo halt -h -p",
+      "headless": true
+    },
+    {
+      "type": "virtualbox-ovf",
+      "name": "ci-minimal-ovf",
+      "vm_name": "ci-minimal",
+      "source_path": "output-virtualbox-ubuntu-trusty-base/packer-virtualbox-ubuntu-trusty-base.ovf",
       "ssh_username": "travis",
       "ssh_password": "travis",
       "ssh_port": 22,
@@ -198,7 +210,8 @@
       "type": "vagrant",
       "keep_input_artifact": true,
       "only": [
-        "ci-minimal"
+        "ci-minimal-vmx",
+        "ci-minimal-ovf"
       ]
     },
     {
