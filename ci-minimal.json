@@ -96,6 +96,34 @@
           "aliases": [],
           "default_modules": []
         },
+        "php": {
+          "multi": {
+            "versions": [],
+            "extensions": [],
+            "prerequisite_recipes": [
+              "bison",
+              "phpenv",
+              "phpbuild"
+            ],
+            "postrequisite_recipes": [
+              "phpunit",
+              "composer"
+            ]
+          },
+          "binaries": []
+        },
+        "composer": {
+          "github_oauth_token": "2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6"
+        },
+        "perlbrew": {
+          "perls": [],
+          "modules": [],
+          "prerequisite_packages": []
+        },
+        "gimme": {
+          "versions": [],
+          "default_version": ""
+        },
         "python": {
           "pyenv": {
             "pythons": [],
@@ -109,6 +137,7 @@
           }
         },
         "rvm": {
+          "latest_minor": true,
           "default": "1.9.3",
           "rubies": [
             {
@@ -175,6 +204,7 @@
             "mingw32",
             "netcat-openbsd",
             "openssl",
+            "perl",
             "pkg-config",
             "python",
             "qt4-qmake",

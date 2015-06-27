@@ -19,7 +19,7 @@ OVA with `ovftool`, and then deploy the OVA via the VSphere extended web client:
 (Depends on `packer` &gt;= v0.7.5)
 
 ``` bash
-packer build -only=ci-minimal ci-minimal.json
+packer build -only=ci-minimal-vmx ci-minimal.json
 ```
 
 ### convert the VMX to an OVA
@@ -27,7 +27,7 @@ packer build -only=ci-minimal ci-minimal.json
 (Depends on `ovftool` ~&gt; 4.0.0)
 
 ``` bash
-ovftool ./output-ci-minimal/ci-minimal.vmx ./output-ci-minimal/ci-minimal.ova
+ovftool ./output-ci-minimal-vmx/ci-minimal.vmx ./output-ci-minimal-vmx/ci-minimal.ova
 ```
 
 ### deploy the OVA
