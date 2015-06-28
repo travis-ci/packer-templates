@@ -1,0 +1,230 @@
+---
+description: Travis CI minimal build env template
+variables:
+  cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
+  cookbooks_sha: "{{ env `COOKBOOKS_SHA` }}"
+  travis_cookbooks_dir: "{{ env `TRAVIS_COOKBOOKS_DIR` }}"
+  vsphere_cluster: "{{ env `VSPHERE_CLUSTER` }}"
+  vsphere_datacenter: "{{ env `VSPHERE_DATACENTER` }}"
+  vsphere_datastore: "{{ env `VSPHERE_DATASTORE` }}"
+  vsphere_host: "{{ env `VSPHERE_HOST` }}"
+  vsphere_password: "{{ env `VSPHERE_PASSWORD` }}"
+  vsphere_resource_pool: "{{ env `VSPHERE_RESOURCE_POOL` }}"
+  vsphere_username: "{{ env `VSPHERE_USERNAME` }}"
+  vsphere_vm_folder: "{{ env `VSPHERE_VM_FOLDER` }}"
+  vsphere_vm_network: "{{ env `VSPHERE_VM_NETWORK` }}"
+builders:
+- type: docker
+  name: docker
+  pull: false
+  image: travis-base:latest
+  run_command:
+  - "--privileged"
+  - "-d"
+  - "-i"
+  - "-t"
+  - "{{ .Image }}"
+  - "/sbin/init"
+- type: vmware-vmx
+  name: ci-minimal-vmx
+  vm_name: ci-minimal
+  source_path: output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx
+  ssh_username: travis
+  ssh_password: travis
+  ssh_port: 22
+  ssh_wait_timeout: 10000s
+  shutdown_command: echo travis | sudo halt -h -p
+  headless: true
+- type: virtualbox-ovf
+  name: ci-minimal-ovf
+  vm_name: ci-minimal
+  source_path: output-virtualbox-ubuntu-trusty-base/packer-virtualbox-ubuntu-trusty-base.ovf
+  ssh_username: travis
+  ssh_password: travis
+  ssh_port: 22
+  ssh_wait_timeout: 10000s
+  shutdown_command: echo travis | sudo halt -h -p
+  headless: true
+provisioners:
+- type: file
+  source: packer-assets/ubuntu-trusty-normal-purge.txt
+  destination: "/var/tmp/purge.txt"
+- type: shell
+  scripts:
+  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/remove-vagrant-user
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: packer-assets/minimal-system-info-commands.yml
+  destination: "/var/tmp/minimal-system-info-commands.yml"
+- type: chef-solo
+  cookbook_paths:
+  - cookbooks
+  - "{{ user `travis_cookbooks_dir` }}/ci_environment"
+  remote_cookbook_paths:
+  - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  json:
+    java:
+      default_version: ''
+      alternate_versions: []
+    nodejs:
+      default: ''
+      versions: []
+      aliases: []
+      default_modules: []
+    phpenv:
+      prerequisite_recipes: []
+    phpbuild:
+      prerequisite_recipes: []
+    php:
+      multi:
+        versions: []
+        extensions: []
+        prerequisite_recipes:
+        - bison
+        - phpenv
+        - phpbuild
+        postrequisite_recipes:
+        - phpunit
+        - composer
+      binaries: []
+    composer:
+      github_oauth_token: 2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6
+    perlbrew:
+      perls: []
+      modules: []
+      prerequisite_packages: []
+    gimme:
+      versions: []
+      default_version: ''
+    python:
+      pyenv:
+        pythons: []
+        aliases: {}
+      pip:
+        packages: {}
+      system:
+        pythons: []
+    rvm:
+      latest_minor: true
+      default: 1.9.3
+      rubies:
+      - name: 1.9.3
+      gems:
+      - nokogiri
+      multi_prerequisite_recipes: []
+      prerequisite_recipes: []
+      pkg_requirements: []
+    system_info:
+      use_bundler: false
+      commands_file: "/var/tmp/minimal-system-info-commands.yml"
+    travis_build_environment:
+      use_tmpfs_for_builds: false
+      update_hosts_atomically: false
+      packages:
+      # - libcurl4-gnutls-dev
+      - autoconf
+      - automake
+      - bash
+      - bison
+      - build-essential
+      - bzip2
+      - bzr
+      - ca-certificates
+      - ccache
+      - cmake
+      - curl
+      - flex
+      - gawk
+      - gzip
+      - imagemagick
+      - iptables
+      - lemon
+      - libbz2-dev
+      - libbz2-dev
+      - libc-client2007e-dev
+      - libcurl4-openssl-dev
+      - libexpat1-dev
+      - libffi-dev
+      - libfreetype6-dev
+      - libgdbm-dev
+      - libgmp3-dev
+      - libicu-dev
+      - libicu-dev
+      - libjpeg8-dev
+      - libkrb5-dev
+      - libldap-2.4.2
+      - libldap2-dev
+      - libldap2-dev
+      - libltdl-dev
+      - libmagickwand-dev
+      - libmcrypt-dev
+      - libmhash-dev
+      - libmysqlclient-dev
+      - libncurses5-dev
+      - libncursesw5-dev
+      - libossp-uuid-dev
+      - libpng12-dev
+      - libpq-dev
+      - libqt4-dev
+      - libreadline-dev
+      - libreadline6
+      - libsasl2-dev
+      - libsqlite3-dev
+      - libssl-dev
+      - libssl0.9.8
+      - libt1-dev
+      - libtidy-dev
+      - libtool
+      - libxml2-dev
+      - libxslt-dev
+      - libxslt1-dev
+      - libyaml-0-2
+      - libyaml-dev
+      - lsof
+      - md5deep
+      - mercurial
+      - mingw32
+      - mysql-client
+      - netcat-openbsd
+      - openssl
+      - perl
+      - pkg-config
+      - postgresql-client
+      - python
+      - qt4-qmake
+      - ragel
+      - re2c
+      - rsync
+      - ruby-mysql2
+      - ruby2.0
+      - sqlite3
+      - subversion
+      - unzip
+      - wamerican
+      - zip
+      - zlib1g-dev
+  run_list:
+  - "recipe[travis_ci_minimal]"
+- type: shell
+  scripts:
+  - packer-scripts/cleanup
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/minimize
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+<% unless ENV['SKIP_POST_PROCESSORS'] %>
+post-processors:
+- type: vagrant
+  keep_input_artifact: true
+  only:
+  - ci-minimal-vmx
+  - ci-minimal-ovf
+- type: docker-import
+  repository: travis-minimal
+  tag: "{{ timestamp }}"
+  only:
+  - docker
+<% end %>

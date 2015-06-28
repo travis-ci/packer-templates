@@ -1,23 +1,23 @@
 commands:
   common:
-    - command: docker version
-      name: Docker version
-
-    - command: git --version
-      name: Git version
-
-    - command: gcc --version
-      name: GCC version
-
-    - command: clang --version
-      name: LLVM version
+    - { command: docker version, name: Docker version }
+    - { command: git --version, name: Git version }
+    - { command: gcc --version, name: GCC version }
+    - { command: clang --version, name: LLVM version }
+    - { command: jq --version, name: jq version }
+    - { command: gimme --version, name: gimme version }
+    - { command: nvm --version, name: nvm version }
+    - { command: perlbrew --version, name: perlbrew version }
+    - { command: psql --version, name: postgresql client version }
+    - { command: phpenv --version, name: phpenv version }
+    - { command: rvm --version, name: rvm version }
+    - { command: ruby --version, name: default ruby version }
+    - { command: python --version, name: default python version }
 
   linux:
     - command: date
       name: Build image provisioning date and time
-
     - command: lsb_release -a
       name: Operating System Details
-
     - command: uname -r
       name: Linux Version

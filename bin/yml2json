@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require 'erb'
+require 'json'
+require 'yaml'
+
+$stdout.puts JSON.pretty_generate(YAML.load(ERB.new($stdin.read).result))
