@@ -97,6 +97,9 @@
           "aliases": [],
           "default_modules": []
         },
+        "phpenv": {
+          "prerequisite_recipes": []
+        },
         "php": {
           "multi": {
             "versions": [],
