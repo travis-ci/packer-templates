@@ -1,8 +1,7 @@
-#
 # Cookbook Name:: travis_ci_minimal
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH
+# Copyright 2015, Travis CI GmbH <contact+packer-templates@travis-ci.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -22,7 +21,6 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
 
 execute 'apt-get update -yqq'
 
