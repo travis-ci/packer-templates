@@ -3,7 +3,6 @@
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
-    "travis_cookbooks_dir": "{{ env `TRAVIS_COOKBOOKS_DIR` }}",
     "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
     "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
     "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
@@ -80,8 +79,7 @@
     {
       "type": "chef-solo",
       "cookbook_paths": [
-        "cookbooks",
-        "{{ user `travis_cookbooks_dir` }}/ci_environment"
+        "cookbooks"
       ],
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
@@ -148,7 +146,8 @@
           "default": "1.9.3",
           "rubies": [
             {
-              "name": "1.9.3"
+              "name": "1.9.3",
+              "arguments": "--binary --fuzzy"
             }
           ],
           "gems": [
@@ -239,14 +238,14 @@
             "ragel",
             "re2c",
             "rsync",
-            "ruby-mysql2",
-            "ruby2.0",
             "sqlite3",
             "subversion",
             "unzip",
             "wamerican",
             "zip",
-            "zlib1g-dev"
+            "zlib1g-dev",
+            "ruby-mysql2",
+            "ruby2.0"
           ]
         }
       },
