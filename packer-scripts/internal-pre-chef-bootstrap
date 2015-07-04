@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
+if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
+  APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
+fi
+
 apt-get update -yqq
 apt-get install -yqq \
   --no-install-suggests \
@@ -9,9 +13,9 @@ apt-get install -yqq \
   cron \
   curl \
   git \
-  open-vm-tools \
   sudo \
-  wget
+  wget \
+  ${APT_GET_INSTALL_PRE_CHEF}
 
 mkdir -p /tmp/chef-stuff/cookbooks
 

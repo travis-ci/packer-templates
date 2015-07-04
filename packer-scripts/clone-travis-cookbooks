@@ -2,8 +2,17 @@
 set -ex
 mkdir -p /tmp/chef-stuff
 cd /tmp/chef-stuff
-[[ -d travis-cookbooks ]] && rm -rf ./travis-cookbooks
+
+if [[ -d travis-cookbooks ]] ; then
+  rm -rf ./travis-cookbooks
+fi
+
 git clone \
   --depth=10 \
   --branch=${COOKBOOKS_BRANCH:-master} \
   ${COOKBOOKS_URL:-https://github.com/travis-ci/travis-cookbooks.git}
+
+if [[ ${COOKBOOKS_SHA} ]] ; then
+  pushd travis-cookbooks
+  git checkout -qf "${COOKBOOKS_SHA}"
+fi

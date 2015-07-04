@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 set -ex
 
-readonly swapuuid=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)
-readonly swappart=$(readlink -f /dev/disk/by-uuid/"$swapuuid")
-/sbin/swapoff "$swappart"
-dd if=/dev/zero of="$swappart" bs=1M || echo "dd exit $? suppressed"
-/sbin/mkswap -U "$swapuuid" "$swappart"
+readonly SWAP_UUID=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)
+
+if [[ $SWAP_UUID ]] ; then
+  readonly SWAP_PART=$(readlink -f /dev/disk/by-uuid/"$SWAP_UUID")
+  /sbin/swapoff "$SWAP_PART"
+  dd if=/dev/zero of="$SWAP_PART" bs=1M || echo "dd exit $? suppressed"
+  /sbin/mkswap -U "$SWAP_UUID" "$SWAP_PART"
+fi
+
 dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit $? suppressed"
 rm -f /EMPTY
+
 sync
+
 vmware-toolbox-cmd disk shrink / || echo "vmware-toolbox-cmd exit $? suppressed"
 vmware-toolbox-cmd disk shrink /boot || echo "vmware-toolbox-cmd exit $? suppressed"

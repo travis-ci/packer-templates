@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Ported from travis-images:
+# https://github.com/travis-ci/travis-images/blob/48a140536667622b84cbe75a2e8852252bef65c9/lib/travis/cloud_images/vm_provisioner.rb#L20-L29
+
+sudo usermod -s /bin/bash travis
+sudo apt-get -y update
+sudo apt-get -y -qq upgrade
+sudo apt-get -y -qq install bash curl build-essential bison openssl vim wget
+sudo rm /dev/null
+sudo mknod -m 0666 /dev/null c 1 3
+sudo apt-get -y install --reinstall language-pack-en
+export LANG="en_US.UTF-8"

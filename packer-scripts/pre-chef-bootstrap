@@ -4,6 +4,10 @@ shopt -s nullglob
 
 export DEBIAN_FRONTEND=noninteractive
 
+if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
+  APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
+fi
+
 apt-get update -yqq
 apt-get install -yqq \
   --no-install-suggests \
@@ -11,9 +15,9 @@ apt-get install -yqq \
   cron \
   curl \
   git \
-  open-vm-tools \
   sudo \
-  wget
+  wget \
+  ${APT_GET_INSTALL_PRE_CHEF}
 
 mkdir -p /var/run/sshd
 echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
@@ -30,6 +34,7 @@ chmod 440 /etc/sudoers.d/travis
 mkdir -p /home/travis/.ssh
 chmod 0700 /home/travis/.ssh
 
+touch /home/travis/.ssh/authorized_keys
 for f in /var/tmp/*_rsa.pub ; do
   cat $f >> /home/travis/.ssh/authorized_keys
 done

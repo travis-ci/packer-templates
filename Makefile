@@ -1,7 +1,17 @@
 TEMPLATES := \
-	ci-minimal.json \
+	ci-android.json \
 	ci-docker-import-base.json \
 	ci-docker-import.json \
+	ci-erlang.json \
+	ci-go.json \
+	ci-haskell.json \
+	ci-jvm.json \
+	ci-minimal.json \
+	ci-node-js.json \
+	ci-perl.json \
+	ci-php.json \
+	ci-python.json \
+	ci-ruby.json \
 	ci-standard.json \
 	internal-base.json \
 	ubuntu-precise-base.json \
