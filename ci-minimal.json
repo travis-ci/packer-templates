@@ -3,6 +3,7 @@
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
     "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
     "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
     "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
@@ -51,6 +52,24 @@
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo travis | sudo halt -h -p",
       "headless": true
+    },
+    {
+      "type": "googlecompute",
+      "name": "googlecompute",
+      "communicator": "ssh",
+      "ssh_timeout": "10m",
+      "ssh_port": 22,
+      "image_description": "Travis CI Minimal",
+      "account_file": "tmp/gce.json",
+      "project_id": "{{ user `gce_project_id` }}",
+      "source_image": "ubuntu-1404-trusty-v20150316",
+      "zone": "us-central1-a",
+      "image_name": "travis-ci-minimal-trusty-{{ timestamp }}",
+      "machine_type": "n1-standard-2",
+      "tags": [
+        "ci",
+        "go"
+      ]
     }
   ],
   "provisioners": [
