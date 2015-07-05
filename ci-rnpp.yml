@@ -1,0 +1,122 @@
+<% @dist = ENV.fetch('CI_RUBY_DIST', 'precise') %>
+---
+variables:
+  cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
+  cookbooks_sha: "{{ env `COOKBOOKS_SHA` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+builders:
+- type: vmware-vmx
+  name: ci-minimal-vmx
+  communicator: ssh
+  vm_name: ci-minimal
+  source_path: output-vmware-ubuntu-<%= @dist %>-base/packer-vmware-ubuntu-<%= @dist %>-base.vmx
+  ssh_username: travis
+  ssh_password: travis
+  ssh_port: 22
+  ssh_wait_timeout: 10000s
+  shutdown_command: echo travis | sudo halt -h -p
+  headless: true
+- type: googlecompute
+  name: googlecompute
+  communicator: ssh
+  ssh_timeout: 10m
+  ssh_port: 22
+  image_description: Travis CI Ruby
+  account_file: tmp/gce.json
+  project_id: "{{ user `gce_project_id` }}"
+  <% if @dist == 'trusty' %>
+  source_image: ubuntu-1404-trusty-v20150316
+  <% else %>
+  source_image: ubuntu-1204-precise-v20150616
+  <% end %>
+  zone: us-central1-a
+  image_name: travis-ci-ruby-<%= @dist %>-{{ timestamp }}
+  machine_type: n1-standard-2
+  tags:
+  - ci
+  - ruby
+provisioners:
+- type: file
+  source: packer-assets/ubuntu-<%= @dist %>-normal-purge.txt
+  destination: "/var/tmp/purge.txt"
+- type: shell
+  scripts:
+  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/remove-vagrant-user
+  - packer-scripts/travis-images-setup-env
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}
+  - COOKBOOKS_SHA={{ user `cookbooks_sha` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: chef-solo
+  cookbook_paths:
+  - cookbooks
+  remote_cookbook_paths:
+  - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  json:
+    rvm:
+      latest_minor: true
+      default: 1.9.3
+      rubies:
+      - name: 1.9.3
+      - name: 1.8.7
+      - name: jruby-1.7.19-d18
+        arguments: "--18"
+        check_for: jruby-d18
+      - name: jruby-1.7.19-d19
+        arguments: "--19"
+        check_for: jruby-d19
+      - name: jruby-9.0.0.0.pre1
+      - name: ree
+      - name: 1.9.2
+      - name: 2.0.0
+      - name: 2.1.2
+      - name: 2.1.3
+      - name: 2.1.4
+      - name: 2.1.5
+      - name: 2.2.0
+      gems:
+      - bundler
+      - rake
+      aliases:
+        jruby-d18: jruby-1.7.19-d18
+        jruby-d19: jruby-1.7.19-d19
+        jruby-18mode: jruby-d18
+        jruby-19mode: jruby-d19
+        jruby: jruby-19mode
+        '2.0': ruby-2.0.0
+        '2.1': ruby-2.1.5
+        '2.2': ruby-2.2.0
+    java:
+      alternate_versions:
+      - openjdk6
+      - openjdk7
+      - oraclejdk8
+    system_info:
+      cookbooks_sha: "{{ user `cookbooks_sha` }}"
+  run_list:
+  - recipe[rvm]
+  - recipe[rvm::multi]
+  - recipe[java]
+  - recipe[system_info]
+  - recipe[sweeper]
+- type: shell
+  scripts:
+  - packer-scripts/cleanup
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/minimize
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+<% unless ENV['SKIP_POST_PROCESSORS'] %>
+# post-processors:
+# - type: vagrant
+#   keep_input_artifact: true
+#   only:
+#   - ci-minimal-vmx
+#   - ci-minimal-ovf
+# - type: docker-import
+#   repository: travisci/travis-ruby
+#   tag: "{{ timestamp }}"
+#   only:
+#   - docker
+<% end %>
