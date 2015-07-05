@@ -55,6 +55,20 @@ provisioners:
   remote_cookbook_paths:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json:
+    # install 1.9.3 and make it the default so that system_info can run
+    rvm:
+      latest_minor: true
+      default: 1.9.3
+      rubies:
+      - name: 1.9.3
+      gems:
+      - bundler
+      - rake
+    # NOTE: this disables hhvm installation because the precise packages are no
+    # longer available
+    hhvm:
+      package:
+        disabled: true
     composer:
       github_oauth_token: 2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6
     system_info:
