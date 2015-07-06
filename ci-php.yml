@@ -64,11 +64,13 @@ provisioners:
       gems:
       - bundler
       - rake
+    <% if @dist == 'precise' %>
     # NOTE: this disables hhvm installation because the precise packages are no
     # longer available
     hhvm:
       package:
         disabled: true
+    <% end %>
     composer:
       github_oauth_token: 2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6
     system_info:
@@ -76,6 +78,8 @@ provisioners:
   run_list:
   - recipe[php::multi]
   - recipe[composer]
+  - recipe[rvm]
+  - recipe[rvm::multi]
   - recipe[system_info]
   - recipe[sweeper]
 - type: shell

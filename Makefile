@@ -11,6 +11,7 @@ TEMPLATES := \
 	ci-perl.json \
 	ci-php.json \
 	ci-python.json \
+	ci-rnpp.json \
 	ci-ruby.json \
 	ci-standard.json \
 	internal-base.json \

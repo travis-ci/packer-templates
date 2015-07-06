@@ -1,4 +1,4 @@
-<% @dist = ENV.fetch('CI_RUBY_DIST', 'precise') %>
+<% @dist = ENV.fetch('CI_RNPP_DIST', 'precise') %>
 ---
 variables:
   cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
@@ -21,7 +21,7 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  image_description: Travis CI Ruby
+  image_description: Travis CI Ruby Node Python PHP Combo
   account_file: tmp/gce.json
   project_id: "{{ user `gce_project_id` }}"
   <% if @dist == 'trusty' %>
@@ -30,11 +30,11 @@ builders:
   source_image: ubuntu-1204-precise-v20150616
   <% end %>
   zone: us-central1-a
-  image_name: travis-ci-ruby-<%= @dist %>-{{ timestamp }}
+  image_name: travis-ci-rnpp-<%= @dist %>-{{ timestamp }}
   machine_type: n1-standard-2
   tags:
   - ci
-  - ruby
+  - rnpp
 provisioners:
 - type: file
   source: packer-assets/ubuntu-<%= @dist %>-normal-purge.txt
@@ -52,8 +52,12 @@ provisioners:
 - type: chef-solo
   cookbook_paths:
   - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/ci_environment
+  <% else %>
   remote_cookbook_paths:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  <% end %>
   json:
     rvm:
       latest_minor: true
@@ -93,14 +97,45 @@ provisioners:
       - openjdk6
       - openjdk7
       - oraclejdk8
+    nodejs:
+      versions:
+      - 0.6.21
+      - 0.8.27
+      - 0.10.18
+      - 0.10.36
+      - 0.11.15
+      aliases:
+        '0.10': '0.1'
+        0.11.15: node-unstable
+      default: 0.10.36
+    <% if @dist == 'precise' %>
+    # NOTE: this disables hhvm installation because the precise packages are no
+    # longer available
+    hhvm:
+      package:
+        disabled: true
+    <% end %>
+    composer:
+      github_oauth_token: 2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6
     system_info:
       cookbooks_sha: "{{ user `cookbooks_sha` }}"
   run_list:
+  - recipe[travis_build_environment]
+  - recipe[apt]
+  - recipe[sysctl]
+  - recipe[docker]
   - recipe[rvm]
   - recipe[rvm::multi]
   - recipe[java]
+  - recipe[nodejs::multi]
+  - recipe[nodejs::iojs]
+  - recipe[python::pyenv]
+  - recipe[python::system]
+  - recipe[php::multi]
+  - recipe[composer]
   - recipe[system_info]
   - recipe[sweeper]
+  - recipe[python::devshm]
 - type: shell
   scripts:
   - packer-scripts/cleanup
@@ -115,7 +150,7 @@ provisioners:
 #   - ci-minimal-vmx
 #   - ci-minimal-ovf
 # - type: docker-import
-#   repository: travisci/travis-ruby
+#   repository: travisci/travis-rnpp
 #   tag: "{{ timestamp }}"
 #   only:
 #   - docker
