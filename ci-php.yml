@@ -52,8 +52,12 @@ provisioners:
 - type: chef-solo
   cookbook_paths:
   - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/ci_environment
+  <% else %>
   remote_cookbook_paths:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  <% end %>
   json:
     # install 1.9.3 and make it the default so that system_info can run
     rvm:
