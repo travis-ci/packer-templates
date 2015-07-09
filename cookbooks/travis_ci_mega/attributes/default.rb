@@ -1,14 +1,16 @@
 override['rvm']['latest_minor'] = true
 override['rvm']['default'] = '2.2.2'
 override['rvm']['rubies'] = [
-  { 'name' => '1.9.3' },
+  { 'name' => '1.9.3', 'arguments' => '--binary --fuzzy' },
+  { 'name' => '2.0.0', 'arguments' => '--binary --fuzzy' },
+  # { 'name' => '2.0.0', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.0.0' },
-  { 'name' => '2.1.6' },
-  { 'name' => '2.2.2' },
+  { 'name' => '2.1.6', 'arguments' => '--binary --fuzzy' },
+  { 'name' => '2.2.2', 'arguments' => '--binary --fuzzy' },
   # { 'name' => 'jruby-1.7.20-d18', 'arguments' => '--18', 'check_for' => 'jruby-d18' },
   # { 'name' => 'jruby-1.7.20-d19', 'arguments' => '--19', 'check_for' => 'jruby-d19' },
   { 'name' => 'jruby-9.0.0.0.rc1' },
-  { 'name' => 'ree' },
+  # { 'name' => 'ree' },
 ]
 override['rvm']['gems'] = %w(
   bundler
@@ -26,6 +28,10 @@ override['rvm']['aliases'] = {
 }
 
 override['gimme']['versions'] = %w(
+  1.0.3
+  1.1.2
+  1.2.2
+  1.3.3
   1.4.2
 )
 override['gimme']['default_version'] = '1.4.2'
