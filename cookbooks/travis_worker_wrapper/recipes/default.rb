@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: travis_internal_base
+# Cookbook Name:: travis_worker_wrapper
 # Recipe:: default
 #
 # Copyright 2015, Travis CI GmbH
@@ -24,8 +24,5 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe 'apt'
-include_recipe 'openssh'
-include_recipe 'opsmatic::agent' unless node['travis_internal_base']['opsmatic_disabled']
-include_recipe 'users'
-include_recipe 'sudo'
+include_recipe 'travis_internal_base'
+include_recipe 'travis_go_worker'
