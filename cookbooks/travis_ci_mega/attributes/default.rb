@@ -1,10 +1,10 @@
 override['rvm']['latest_minor'] = true
 override['rvm']['default'] = '2.2.2'
 override['rvm']['rubies'] = [
+  # { 'name' => '1.8.7', 'arguments' => '--binary --fuzzy' },
+  { 'name' => '1.8.7-p374' },
   { 'name' => '1.9.3', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.0.0', 'arguments' => '--binary --fuzzy' },
-  # { 'name' => '2.0.0', 'arguments' => '--binary --fuzzy' },
-  { 'name' => '2.0.0' },
   { 'name' => '2.1.6', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.2.2', 'arguments' => '--binary --fuzzy' },
   # { 'name' => 'jruby-1.7.20-d18', 'arguments' => '--18', 'check_for' => 'jruby-d18' },
@@ -22,6 +22,8 @@ override['rvm']['aliases'] = {
   # 'jruby-18mode' => 'jruby-d18',
   # 'jruby-19mode' => 'jruby-d19',
   # 'jruby' => 'jruby-19mode',
+  '1.8' => 'ruby-1.8.7-p374',
+  '1.9' => 'ruby-1.9.3',
   '2.0' => 'ruby-2.0.0',
   '2.1' => 'ruby-2.1.6',
   '2.2' => 'ruby-2.2.2'
