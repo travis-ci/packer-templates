@@ -38,6 +38,9 @@ builders:
   - mega
   - prerelease
 provisioners:
+- type: shell
+  inline: sleep 10
+  only: googlecompute
 - type: file
   source: packer-assets/ubuntu-<%= @dist %>-normal-purge.txt
   destination: "/var/tmp/purge.txt"
