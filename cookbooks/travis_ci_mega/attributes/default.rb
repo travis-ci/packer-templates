@@ -9,7 +9,7 @@ override['rvm']['rubies'] = [
   { 'name' => '2.2.2', 'arguments' => '--binary --fuzzy' },
   # { 'name' => 'jruby-1.7.20-d18', 'arguments' => '--18', 'check_for' => 'jruby-d18' },
   # { 'name' => 'jruby-1.7.20-d19', 'arguments' => '--19', 'check_for' => 'jruby-d19' },
-  { 'name' => 'jruby-9.0.0.0.rc1' },
+  { 'name' => 'jruby-9.0.0.0' },
   # { 'name' => 'ree' },
 ]
 override['rvm']['gems'] = %w(
@@ -21,7 +21,7 @@ override['rvm']['aliases'] = {
   # 'jruby-d19' => 'jruby-1.7.20-d19',
   # 'jruby-18mode' => 'jruby-d18',
   # 'jruby-19mode' => 'jruby-d19',
-  # 'jruby' => 'jruby-19mode',
+  'jruby' => 'jruby-9.0.0.0',
   '1.8' => 'ruby-1.8.7-p374',
   '1.9' => 'ruby-1.9.3-p551',
   '2.0' => 'ruby-2.0.0-p645',
