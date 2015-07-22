@@ -17,13 +17,3 @@ if [[ ${COOKBOOKS_SHA} ]] ; then
   git checkout -qf "${COOKBOOKS_SHA}"
   popd
 fi
-
-# XXX: hackety hack
-if [[ ${INTERNAL} ]] ; then
-  pushd travis-cookbooks/worker_host
-  rm -rf users
-  git clone \
-    --depth=10 \
-    --branch=master \
-    https://github.com/travis-infrastructure/users-cookbook.git users
-fi

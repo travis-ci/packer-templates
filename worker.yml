@@ -95,6 +95,10 @@ push:
   vcs: false
 provisioners:
 - type: shell
+  inline: sleep 10
+  only:
+  - googlecompute
+- type: shell
   inline:
   - perl -p -i -e 's#http://us.archive.ubuntu.com/ubuntu#http://mirror.rackspace.com/ubuntu#gi'
     /etc/apt/sources.list
@@ -111,7 +115,6 @@ provisioners:
   environment_vars:
   - COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}
   - COOKBOOKS_SHA={{ user `cookbooks_sha` }}
-  - INTERNAL=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
   cookbook_paths:
@@ -120,6 +123,8 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/worker_host"
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json:
+    travis_internal_base:
+      opsmatic_disabled: true
     opsmatic:
       integration_token: "{{ user `opsmatic_integration_token` }}"
   run_list:
