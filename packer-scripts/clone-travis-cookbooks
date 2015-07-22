@@ -15,4 +15,5 @@ git clone \
 if [[ ${COOKBOOKS_SHA} ]] ; then
   pushd travis-cookbooks
   git checkout -qf "${COOKBOOKS_SHA}"
+  popd
 fi

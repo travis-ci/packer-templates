@@ -4,6 +4,10 @@
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "base_ami": "{{ env `TRAVIS_CI_BASE_AMI` }}",
+    "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
+    "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
+    "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
     "travis_subnet_id": "{{ env `TRAVIS_SUBNET_ID` }}",
     "travis_vpc_id": "{{ env `TRAVIS_VPC_ID` }}",
     "travis_worker_binary_dir": "{{ env `TRAVIS_WORKER_BINARY_DIR` }}",
@@ -76,6 +80,23 @@
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'travis' | sudo -S bash 'shutdown.sh'",
       "tools_upload_flavor": "linux"
+    },
+    {
+      "type": "googlecompute",
+      "name": "googlecompute",
+      "communicator": "ssh",
+      "ssh_timeout": "10m",
+      "ssh_port": 22,
+      "image_description": "Travis Worker",
+      "account_file": "tmp/gce.json",
+      "project_id": "{{ user `gce_project_id` }}",
+      "source_image": "ubuntu-1404-trusty-v20150316",
+      "zone": "us-central1-a",
+      "image_name": "travis-worker-{{ timestamp }}",
+      "machine_type": "n1-standard-4",
+      "tags": [
+        "worker"
+      ]
     }
   ],
   "push": {
@@ -85,11 +106,15 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline": "sleep 10",
+      "only": [
+        "googlecompute"
+      ]
+    },
+    {
+      "type": "shell",
       "inline": [
-        "export DEBIAN_FRONTEND=noninteractive",
-        "perl -p -i -e 's#http://us.archive.ubuntu.com/ubuntu#http://mirror.rackspace.com/ubuntu#gi' /etc/apt/sources.list",
-        "apt-get -yqq update",
-        "apt-get install -yqq open-vm-tools"
+        "perl -p -i -e 's#http://us.archive.ubuntu.com/ubuntu#http://mirror.rackspace.com/ubuntu#gi' /etc/apt/sources.list"
       ],
       "override": {
         "vmware-atlas": {
@@ -101,23 +126,46 @@
       ]
     },
     {
-      "type": "file",
-      "source": "{{ user `travis_worker_binary_dir` }}/travis-worker",
-      "destination": "/tmp/travis-worker"
+      "type": "shell",
+      "scripts": [
+        "packer-scripts/pre-chef-bootstrap",
+        "packer-scripts/remove-vagrant-user",
+        "packer-scripts/clone-travis-cookbooks"
+      ],
+      "environment_vars": [
+        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}",
+        "COOKBOOKS_SHA={{ user `cookbooks_sha` }}"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
     {
-      "type": "file",
-      "source": "packer-assets/travis-worker.conf",
-      "destination": "/tmp/travis-worker.conf"
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "cookbooks"
+      ],
+      "remote_cookbook_paths": [
+        "/tmp/chef-stuff/travis-cookbooks/worker_host",
+        "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+      ],
+      "json": {
+        "travis_internal_base": {
+          "opsmatic_disabled": true
+        },
+        "opsmatic": {
+          "integration_token": "{{ user `opsmatic_integration_token` }}"
+        }
+      },
+      "run_list": [
+        "recipe[travis_worker_wrapper]"
+      ]
     },
     {
       "type": "shell",
-      "inline": [
-        "sudo mv /tmp/travis-worker /usr/local/bin/travis-worker",
-        "sudo chmod 755 /usr/local/bin/travis-worker",
-        "sudo mv /tmp/travis-worker.conf /etc/init/travis-worker.conf",
-        "sudo touch /etc/default/travis-worker"
-      ]
+      "scripts": [
+        "packer-scripts/cleanup",
+        "packer-scripts/minimize"
+      ],
+      "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
   ],
   "post-processors": [

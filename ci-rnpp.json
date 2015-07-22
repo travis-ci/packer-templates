@@ -163,22 +163,7 @@
         }
       },
       "run_list": [
-        "recipe[travis_build_environment]",
-        "recipe[apt]",
-        "recipe[sysctl]",
-        "recipe[docker]",
-        "recipe[rvm]",
-        "recipe[rvm::multi]",
-        "recipe[java]",
-        "recipe[nodejs::multi]",
-        "recipe[nodejs::iojs]",
-        "recipe[python::pyenv]",
-        "recipe[python::system]",
-        "recipe[php::multi]",
-        "recipe[composer]",
-        "recipe[system_info]",
-        "recipe[sweeper]",
-        "recipe[python::devshm]"
+        "recipe[travis_ci_rnpp]"
       ]
     },
     {
