@@ -8,6 +8,7 @@ tmp/*
 /Gemfile.lock
 .vagrant
 .env*
+*env
 packer_cache
 /output-*
 /*.box

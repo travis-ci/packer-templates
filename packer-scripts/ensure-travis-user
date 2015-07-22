@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit
 
+: ${TRAVIS_USER_PASSWORD:=travis}
+
+if [[ ${TRAVIS_OBFUSCATE_PASSWORD} ]] ; then
+  TRAVIS_USER_PASSWORD="$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)"
+fi
+
 getent passwd | grep -q travis
-echo 'travis:travis' | chpasswd
+echo "travis:${TRAVIS_USER_PASSWORD}" | chpasswd
 [[ -d /home/travis ]]

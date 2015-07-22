@@ -7,6 +7,7 @@ TEMPLATES := \
 	ci-haskell.json \
 	ci-jvm.json \
 	ci-minimal.json \
+	ci-mega.json \
 	ci-node-js.json \
 	ci-perl.json \
 	ci-php.json \
