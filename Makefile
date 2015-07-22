@@ -6,8 +6,8 @@ TEMPLATES := \
 	ci-go.json \
 	ci-haskell.json \
 	ci-jvm.json \
-	ci-minimal.json \
 	ci-mega.json \
+	ci-minimal.json \
 	ci-node-js.json \
 	ci-perl.json \
 	ci-php.json \
@@ -16,6 +16,9 @@ TEMPLATES := \
 	ci-ruby.json \
 	ci-standard.json \
 	internal-base.json \
+	internal-bastion.json \
+	internal-nat.json \
+	jupiter-brain.json \
 	ubuntu-precise-base.json \
 	ubuntu-trusty-base.json \
 	worker.json
