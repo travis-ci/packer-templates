@@ -10,10 +10,11 @@ if [[ $SWAP_UUID ]] ; then
   /sbin/mkswap -U "$SWAP_UUID" "$SWAP_PART"
 fi
 
-dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit $? suppressed"
-rm -f /EMPTY
-
-sync
+if [[ $PACKER_BUILDER_TYPE != googlecompute ]] ; then
+  dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit $? suppressed"
+  rm -f /EMPTY
+  sync
+fi
 
 vmware-toolbox-cmd disk shrink / || echo "vmware-toolbox-cmd exit $? suppressed"
 vmware-toolbox-cmd disk shrink /boot || echo "vmware-toolbox-cmd exit $? suppressed"

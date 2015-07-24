@@ -8,6 +8,7 @@
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
     "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
+    "papertrail_remote_port": "{{ env `PAPERTRAIL_REMOTE_PORT` }}",
     "travis_subnet_id": "{{ env `TRAVIS_SUBNET_ID` }}",
     "travis_vpc_id": "{{ env `TRAVIS_VPC_ID` }}",
     "travis_worker_binary_dir": "{{ env `TRAVIS_WORKER_BINARY_DIR` }}",
@@ -153,6 +154,9 @@
         },
         "opsmatic": {
           "integration_token": "{{ user `opsmatic_integration_token` }}"
+        },
+        "papertrail": {
+          "remote_port": "{{ user `papertrail_remote_port` }}"
         }
       },
       "run_list": [

@@ -7,6 +7,7 @@
     "ubuntu_trusty_ami": "{{ env `UBUNTU_TRUSTY_AMI` }}",
     "github_oauth_token": "{{ env `GITHUB_OAUTH_TOKEN` }}",
     "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
+    "papertrail_remote_port": "{{ env `PAPERTRAIL_REMOTE_PORT` }}",
     "duo_integration_key": "{{ env `DUO_INTEGRATION_KEY` }}",
     "duo_secret_key": "{{ env `DUO_SECRET_KEY` }}",
     "duo_api_hostname": "{{ env `DUO_API_HOSTNAME` }}"
@@ -68,6 +69,9 @@
           "integration_key": "{{ user `duo_integration_key` }}",
           "secret_key": "{{ user `duo_secret_key` }}",
           "api_hostname": "{{ user `duo_api_hostname` }}"
+        },
+        "papertrail": {
+          "remote_port": "{{ user `papertrail_remote_port` }}"
         }
       },
       "run_list": [

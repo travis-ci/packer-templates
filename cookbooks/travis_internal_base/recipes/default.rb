@@ -27,5 +27,6 @@
 include_recipe 'apt'
 include_recipe 'openssh'
 include_recipe 'opsmatic::agent' unless node['travis_internal_base']['opsmatic_disabled']
+include_recipe 'papertrail'
 include_recipe 'users'
 include_recipe 'sudo'
