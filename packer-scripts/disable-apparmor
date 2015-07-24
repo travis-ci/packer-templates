@@ -5,4 +5,4 @@ set -o xtrace
 
 service apparmor stop
 update-rc.d -f apparmor remove
-apt-get purge -y apparmor apparmor-utils
+service apparmor teardown
