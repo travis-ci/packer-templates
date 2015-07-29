@@ -46,6 +46,7 @@ override['gimme']['versions'] = %w(
 )
 override['gimme']['default_version'] = '1.4.2'
 
+override['java']['default_version'] = 'oraclejdk7'
 override['java']['alternate_versions'] = %w(
   openjdk6
   openjdk7
