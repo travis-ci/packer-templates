@@ -1,6 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'rake'
-gem 'serverspec'
 gem 'test-kitchen'
-gem 'thor'
+gem 'kitchen-vagrant'

@@ -1,3 +1,11 @@
+default['travis_ci_mega']['prerequisite_packages'] = %w(
+  cron
+  curl
+  git
+  sudo
+  wget
+)
+
 override['rvm']['latest_minor'] = true
 override['rvm']['default'] = '2.2.2'
 override['rvm']['rubies'] = [

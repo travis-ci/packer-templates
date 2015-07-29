@@ -12,3 +12,4 @@ tmp/*
 packer_cache
 /output-*
 /*.box
+.kitchen

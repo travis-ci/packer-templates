@@ -24,6 +24,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+execute 'apt-get update -yqq'
+package node['travis_ci_mega']['prerequisite_packages']
+
 include_recipe 'travis_build_environment'
 include_recipe 'apt'
 include_recipe 'package-updates'
