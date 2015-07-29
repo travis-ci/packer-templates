@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-set -ex
+
+set -o errexit
+set -o xtrace
 
 [[ $TARFILE ]]
 [[ $IMAGE  ]]

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-set -ex
+
+set -o errexit
+set -o xtrace
+
 shopt -s nullglob
 
 export DEBIAN_FRONTEND=noninteractive

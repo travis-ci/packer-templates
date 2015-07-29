@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-set -ex
+
+set -o errexit
+set -o xtrace
+
 mkdir -p /tmp/chef-stuff
 cd /tmp/chef-stuff
 
