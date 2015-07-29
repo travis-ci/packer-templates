@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-set -ex
+
+set -o errexit
+set -o xtrace
 
 if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
   APT_GET_INSTALL_PRE_CHEF='open-vm-tools'

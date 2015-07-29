@@ -277,6 +277,7 @@
       "scripts": [
         "packer-scripts/cleanup",
         "packer-scripts/ensure-travis-user",
+        "packer-scripts/disable-apparmor",
         "packer-scripts/minimize"
       ],
       "environment_vars": [

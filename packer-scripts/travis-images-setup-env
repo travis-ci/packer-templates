@@ -2,6 +2,9 @@
 # Ported from travis-images:
 # https://github.com/travis-ci/travis-images/blob/48a140536667622b84cbe75a2e8852252bef65c9/lib/travis/cloud_images/vm_provisioner.rb#L20-L29
 
+set -o errexit
+set -o xtrace
+
 sudo usermod -s /bin/bash travis
 sudo apt-get -y update
 sudo apt-get -y -qq upgrade

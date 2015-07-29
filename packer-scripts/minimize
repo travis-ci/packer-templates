@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-set -ex
+
+set -o errexit
+set -o xtrace
 
 readonly SWAP_UUID=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)
 

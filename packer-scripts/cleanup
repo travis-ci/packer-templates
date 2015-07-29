@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -ex
+set -o errexit
+set -o xtrace
 
 _purge_packages() {
   dpkg --list | awk '{ print $2 }' | grep -- "$1" | \

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o xtrace
+
+service apparmor stop
+update-rc.d -f apparmor remove
+service apparmor teardown
