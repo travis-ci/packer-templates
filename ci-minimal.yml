@@ -63,7 +63,7 @@ builders:
   account_file: tmp/gce.json
   project_id: "{{ user `gce_project_id` }}"
   <% if @dist == 'trusty' %>
-  source_image: ubuntu-1404-trusty-v20150805
+  source_image: ubuntu-1404-trusty-v20150901a
   <% else %>
   source_image: ubuntu-1204-precise-v20150616
   <% end %>
