@@ -12,8 +12,7 @@ set -o errexit
   exit 1
 }
 
-: ${UNAME:=$(uname | tr '[:upper:]' '[:lower:]')}
-: ${TAGS:=group:dev,os:$UNAME}
+: ${TAGS:=group:dev}
 : ${IMAGE_INFRA:=gce}
 
 if [[ $PACKER_BUILD_NAME ]] ; then
