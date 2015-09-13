@@ -76,7 +76,7 @@ override['python']['pyenv']['pythons'] = %w(
   3.3.6
   3.4.3
   3.5.0
-  pypy-2.6.0
+  pypy-2.6.1
   pypy3-2.4.0
 )
 override['python']['pyenv']['aliases'] = {
@@ -86,7 +86,7 @@ override['python']['pyenv']['aliases'] = {
   '3.3.6' => %w(3.3),
   '3.4.3' => %w(3.4),
   '3.5.0' => %w(3.5),
-  'pypy-2.6.0' => %w(pypy),
+  'pypy-2.6.1' => %w(pypy),
   'pypy3-2.4.0' => %w(pypy3),
 }
 
