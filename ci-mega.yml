@@ -42,7 +42,6 @@ builders:
   tags:
   - ci
   - mega
-  - prerelease
 provisioners:
 - type: shell
   inline: sleep 10
