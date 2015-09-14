@@ -11,7 +11,6 @@ _purge_packages() {
 _purge_packages 'linux-headers'
 _purge_packages 'linux-source'
 _purge_packages 'chef'
-_purge_packages 'linux-image-3.*-generic' `uname -r`
 
 if [[ $CLEAN_DEV_PACKAGES ]] ; then
   _purge_packages '-dev$'
