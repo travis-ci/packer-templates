@@ -71,7 +71,6 @@ override['nodejs']['default'] = '4.0.0'
 
 override['python']['pyenv']['pythons'] = %w(
   2.7.10
-  2.6.9
   3.2.6
   3.3.6
   3.4.3
@@ -80,7 +79,6 @@ override['python']['pyenv']['pythons'] = %w(
   pypy3-2.4.0
 )
 override['python']['pyenv']['aliases'] = {
-  '2.6.9' => %w(2.6),
   '2.7.10' => %w(2.7),
   '3.2.6' => %w(3.2),
   '3.3.6' => %w(3.3),
