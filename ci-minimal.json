@@ -111,7 +111,8 @@
         "cookbooks"
       ],
       "remote_cookbook_paths": [
-        "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+        "/tmp/chef-stuff/travis-cookbooks/cookbooks",
+        "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
       ],
       "json": {
         "java": {

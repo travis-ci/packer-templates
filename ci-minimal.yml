@@ -96,11 +96,9 @@ provisioners:
 - type: chef-solo
   cookbook_paths:
   - cookbooks
-  <% if ENV['CI_MINIMAL_USE_LOCAL_COOKBOOKS'] %>
-  - "{{ user `travis_cookbooks_dir` }}/ci_environment"
-  <% end %>
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
+  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
   json:
     java:
       default_version: ''
