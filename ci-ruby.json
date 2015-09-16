@@ -27,7 +27,7 @@
       "image_description": "Travis CI Ruby",
       "account_file": "tmp/gce.json",
       "project_id": "{{ user `gce_project_id` }}",
-      "source_image": "ubuntu-1204-precise-v20150616",
+      "source_image": "ubuntu-1204-precise-v20150910",
       "zone": "us-central1-a",
       "image_name": "travis-ci-ruby-precise-{{ timestamp }}",
       "machine_type": "n1-standard-2",
