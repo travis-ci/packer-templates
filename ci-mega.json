@@ -37,8 +37,7 @@
       "disk_size": 20,
       "tags": [
         "ci",
-        "mega",
-        "prerelease"
+        "mega"
       ]
     }
   ],
