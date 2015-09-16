@@ -64,10 +64,12 @@ provisioners:
   cookbook_paths:
   - cookbooks
   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
-  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/ci_environment
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
   <% else %>
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
+  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
   <% end %>
   json: {}
   run_list:
