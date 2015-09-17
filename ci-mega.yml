@@ -31,9 +31,9 @@ builders:
   account_file: tmp/gce.json
   project_id: "{{ user `gce_project_id` }}"
   <% if @dist == 'trusty' %>
-  source_image: ubuntu-1404-trusty-v20150901a
+  source_image: ubuntu-1404-trusty-v20150909a
   <% else %>
-  source_image: ubuntu-1204-precise-v20150616
+  source_image: ubuntu-1204-precise-v20150910
   <% end %>
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"
@@ -42,7 +42,6 @@ builders:
   tags:
   - ci
   - mega
-  - prerelease
 provisioners:
 - type: shell
   inline: sleep 10
@@ -65,10 +64,12 @@ provisioners:
   cookbook_paths:
   - cookbooks
   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
-  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/ci_environment
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
   <% else %>
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
+  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
   <% end %>
   json: {}
   run_list:

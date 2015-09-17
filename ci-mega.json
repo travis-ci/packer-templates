@@ -30,15 +30,14 @@
       "image_description": "Travis CI Mega",
       "account_file": "tmp/gce.json",
       "project_id": "{{ user `gce_project_id` }}",
-      "source_image": "ubuntu-1404-trusty-v20150901a",
+      "source_image": "ubuntu-1404-trusty-v20150909a",
       "zone": "us-central1-a",
       "image_name": "{{ user `gce_image_name` }}",
       "machine_type": "n1-standard-4",
       "disk_size": 20,
       "tags": [
         "ci",
-        "mega",
-        "prerelease"
+        "mega"
       ]
     }
   ],
@@ -75,7 +74,8 @@
         "cookbooks"
       ],
       "remote_cookbook_paths": [
-        "/tmp/chef-stuff/travis-cookbooks/ci_environment"
+        "/tmp/chef-stuff/travis-cookbooks/cookbooks",
+        "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
       ],
       "json": {},
       "run_list": [
