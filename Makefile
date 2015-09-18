@@ -1,7 +1,5 @@
 TEMPLATES := \
 	ci-android.json \
-	ci-docker-import-base.json \
-	ci-docker-import.json \
 	ci-erlang.json \
 	ci-go.json \
 	ci-haskell.json \
