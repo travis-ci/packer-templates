@@ -29,12 +29,12 @@ class VMTemplateToPacker < Thor
   }.freeze
 
   desc 'convert VM_TEMPLATE_FILE',
-    'convert a VM template YAML file to a packer template, or modify ' \
-    'an existing packer template'
+       'convert a VM template YAML file to a packer template, or modify ' \
+       'an existing packer template'
   def convert(vm_template_file, packer_template_file = nil)
     vm_template = YAML.load_file(File.expand_path(vm_template_file))
     packer_template = {
-      'variables' => { },
+      'variables' => {},
       'builders' => [
         {
           'type' => 'vmware-vmx',
@@ -51,7 +51,7 @@ class VMTemplateToPacker < Thor
       'provisioners' => []
     }
 
-    if !packer_template_file.nil?
+    unless packer_template_file.nil?
       packer_template = JSON.parse(
         File.read(File.expand_path(packer_template_file))
       )
@@ -87,9 +87,7 @@ class VMTemplateToPacker < Thor
       'vsphere_vm_folder' => '{{ env `VSPHERE_VM_FOLDER` }}',
       'vsphere_vm_network' => '{{ env `VSPHERE_VM_NETWORK` }}'
     }.each do |key, value|
-      unless variables.key?(key)
-        variables[key] = value
-      end
+      variables[key] = value unless variables.key?(key)
     end
 
     unless provisioners.include?(CLONE_TRAVIS_COOKBOOKS)
@@ -100,9 +98,7 @@ class VMTemplateToPacker < Thor
       provisioners << chef_solo_provisioner
     end
 
-    unless provisioners.include?(SHRINK_DISKS)
-      provisioners << SHRINK_DISKS
-    end
+    provisioners << SHRINK_DISKS unless provisioners.include?(SHRINK_DISKS)
 
     puts JSON.pretty_generate(
       packer_template.merge(
