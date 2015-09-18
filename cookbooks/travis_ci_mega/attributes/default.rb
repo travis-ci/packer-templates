@@ -15,8 +15,10 @@ override['rvm']['rubies'] = [
   { 'name' => '2.0.0-p647', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.1.7', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.2.3', 'arguments' => '--binary --fuzzy' },
-  # { 'name' => 'jruby-1.7.20-d18', 'arguments' => '--18', 'check_for' => 'jruby-d18' },
-  # { 'name' => 'jruby-1.7.20-d19', 'arguments' => '--19', 'check_for' => 'jruby-d19' },
+  # { 'name' => 'jruby-1.7.20-d18', 'arguments' => '--18',
+  #   'check_for' => 'jruby-d18' },
+  # { 'name' => 'jruby-1.7.20-d19', 'arguments' => '--19',
+  #   'check_for' => 'jruby-d19' },
   { 'name' => 'jruby-9.0.0.0' },
   # { 'name' => 'ree' },
 ]
@@ -87,7 +89,7 @@ override['python']['pyenv']['aliases'] = {
   '3.4.3' => %w(3.4),
   '3.5.0' => %w(3.5),
   'pypy-2.6.1' => %w(pypy),
-  'pypy3-2.4.0' => %w(pypy3),
+  'pypy3-2.4.0' => %w(pypy3)
 }
 
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
