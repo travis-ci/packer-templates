@@ -5,4 +5,3 @@ script:
 - git diff --cached --exit-code
 - bundle exec rake
 - ./runtests
-- ./bin/vm-template-to-packer help
