@@ -22,6 +22,10 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+def precise?
+  node['lsb']['codename'] == 'precise'
+end
+
 execute 'apt-get update -yqq'
 
 include_recipe 'travis_build_environment'
@@ -35,7 +39,8 @@ include_recipe 'clang::tarball'
 include_recipe 'sysctl'
 include_recipe 'git::ppa'
 include_recipe 'jq'
-include_recipe 'docker' unless node['lsb']['codename'] == 'precise'
+include_recipe 'travis_docker' unless precise?
+include_recipe 'travis_docker::compose' unless precise?
 include_recipe 'libevent'
 include_recipe 'gimme'
 include_recipe 'java::multi'
