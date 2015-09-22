@@ -41,7 +41,7 @@ include_recipe 'git::ppa'
 include_recipe 'jq'
 include_recipe 'travis_docker' unless precise?
 include_recipe 'travis_docker::compose' unless precise?
-include_recipe 'libevent'
+include_recipe 'travis_libevent'
 include_recipe 'gimme'
 include_recipe 'java::multi'
 include_recipe 'nodejs::multi'
