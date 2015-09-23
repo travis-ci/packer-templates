@@ -105,7 +105,7 @@ provisioners:
   source: packer-assets/travis_rsa.pub
   destination: "/var/tmp/travis_rsa.pub"
 - type: file
-  source: packer-assets/ubuntu-trusty-minimal-purge.txt
+  source: packer-assets/ubuntu-trusty-normal-purge.txt
   destination: "/var/tmp/purge.txt"
 - type: shell
   scripts:
