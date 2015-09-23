@@ -37,7 +37,7 @@ end
 
 include_recipe 'clang::tarball'
 include_recipe 'sysctl'
-include_recipe 'git::ppa'
+include_recipe 'travis_git::ppa'
 include_recipe 'jq'
 include_recipe 'travis_docker' unless precise?
 include_recipe 'travis_docker::compose' unless precise?
