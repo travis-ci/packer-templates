@@ -37,11 +37,13 @@ override['python']['pyenv']['aliases'] = {}
 override['python']['pip']['packages'] = {}
 override['python']['system']['pythons'] = []
 
+override['rvm']['rubies'] = ['2.2.3']
+
 override['travis_rvm']['latest_minor'] = true
-override['travis_rvm']['default'] = '1.9.3'
+override['travis_rvm']['default'] = '2.2.3'
 override['travis_rvm']['rubies'] = [
   {
-    name: '1.9.3',
+    name: '2.2.3',
     arguments: '--binary --fuzzy'
   }
 ]
