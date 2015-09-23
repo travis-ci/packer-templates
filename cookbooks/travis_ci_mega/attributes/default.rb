@@ -6,9 +6,11 @@ default['travis_ci_mega']['prerequisite_packages'] = %w(
   wget
 )
 
-override['rvm']['latest_minor'] = true
-override['rvm']['default'] = '2.2.3'
-override['rvm']['rubies'] = [
+override['rvm']['rubies'] = ['2.2.3']
+
+override['travis_rvm']['latest_minor'] = true
+override['travis_rvm']['default'] = '2.2.3'
+override['travis_rvm']['rubies'] = [
   # { 'name' => '1.8.7', 'arguments' => '--binary --fuzzy' },
   { 'name' => '1.8.7-p374' },
   { 'name' => '1.9.3-p551', 'arguments' => '--binary --fuzzy' },
@@ -22,11 +24,11 @@ override['rvm']['rubies'] = [
   { 'name' => 'jruby-9.0.0.0' },
   # { 'name' => 'ree' },
 ]
-override['rvm']['gems'] = %w(
+override['travis_rvm']['gems'] = %w(
   bundler
   rake
 )
-override['rvm']['aliases'] = {
+override['travis_rvm']['aliases'] = {
   # 'jruby-d18' => 'jruby-1.7.20-d18',
   # 'jruby-d19' => 'jruby-1.7.20-d19',
   # 'jruby-18mode' => 'jruby-d18',

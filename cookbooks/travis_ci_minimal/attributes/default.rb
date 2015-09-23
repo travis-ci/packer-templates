@@ -42,10 +42,7 @@ override['rvm']['rubies'] = ['2.2.3']
 override['travis_rvm']['latest_minor'] = true
 override['travis_rvm']['default'] = '2.2.3'
 override['travis_rvm']['rubies'] = [
-  {
-    name: '2.2.3',
-    arguments: '--binary --fuzzy'
-  }
+  { name: '2.2.3', arguments: '--binary --fuzzy' }
 ]
 override['travis_rvm']['gems'] = %w(nokogiri)
 override['travis_rvm']['multi_prerequisite_recipes'] = []
