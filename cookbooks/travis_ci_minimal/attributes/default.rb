@@ -23,7 +23,8 @@ override['php']['multi']['postrequisite_recipes'] = %w(
 )
 override['php']['multi']['binaries'] = []
 
-override['composer']['github_oauth_token'] = '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
+override['composer']['github_oauth_token'] = \
+  '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
 override['perlbrew']['perls'] = []
 override['perlbrew']['modules'] = []
@@ -50,7 +51,8 @@ override['travis_rvm']['prerequisite_recipes'] = []
 override['travis_rvm']['pkg_requirements'] = []
 
 override['system_info']['use_bundler'] = false
-override['system_info']['commands_file'] = '/var/tmp/minimal-system-info-commands.yml'
+override['system_info']['commands_file'] = \
+  '/var/tmp/minimal-system-info-commands.yml'
 
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['update_hosts_atomically'] = false
