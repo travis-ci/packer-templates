@@ -3,10 +3,15 @@
 set -o errexit
 set -o xtrace
 
+export DEBIAN_FRONTEND='noninteractive'
+
 _purge_packages() {
   dpkg --list | awk '{ print $2 }' | grep -- "$1" | \
     grep -v -- "${2:-^$}" | xargs apt-get -y purge
 }
+
+apt-get -y update
+apt-get -y upgrade
 
 _purge_packages 'linux-headers'
 _purge_packages 'linux-source'
@@ -26,6 +31,7 @@ apt-get -y clean
 rm -rf \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.? \
+  /opt/chef \
   /tmp/packer* \
   /var/log/installer \
   /var/lib/man-db \
