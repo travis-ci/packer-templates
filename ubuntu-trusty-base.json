@@ -124,7 +124,7 @@
     },
     {
       "type": "file",
-      "source": "packer-assets/ubuntu-trusty-minimal-purge.txt",
+      "source": "packer-assets/ubuntu-trusty-normal-purge.txt",
       "destination": "/var/tmp/purge.txt"
     },
     {
