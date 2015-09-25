@@ -1,7 +1,20 @@
 language: ruby
+
+env:
+  global:
+  - PATH="/opt/chef/bin:$PATH"
+
+addons:
+  apt:
+    sources:
+    - chef-stable-precise
+    packages:
+    - chefdk
+
 script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
 - bundle exec rake
+- ./run-foodcritic cookbooks
 - ./runtests

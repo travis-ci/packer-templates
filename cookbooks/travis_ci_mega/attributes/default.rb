@@ -6,34 +6,51 @@ default['travis_ci_mega']['prerequisite_packages'] = %w(
   wget
 )
 
+override['travis_phpenv']['prerequisite_recipes'] = []
+
+override['travis_phpbuild']['prerequisite_recipes'] = []
+
+override['php']['multi']['versions'] = []
+override['php']['multi']['extensions'] = []
+override['php']['multi']['prerequisite_recipes'] = %w(
+  bison
+  travis_phpbuild
+  travis_phpenv
+)
+override['php']['multi']['postrequisite_recipes'] = %w(
+  composer
+  phpunit
+)
+override['php']['multi']['binaries'] = []
+
+override['composer']['github_oauth_token'] = \
+  '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
+
+override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['prerequisite_packages'] = []
+
 override['rvm']['rubies'] = ['2.2.3']
+override['rvm']['user_rubies'] = ['2.2.3']
+override['rvm']['default_ruby'] = 'ruby-2.2.3'
+override['rvm']['user_default_ruby'] = 'ruby-2.2.3'
 
 override['travis_rvm']['latest_minor'] = true
 override['travis_rvm']['default'] = '2.2.3'
 override['travis_rvm']['rubies'] = [
-  # { 'name' => '1.8.7', 'arguments' => '--binary --fuzzy' },
+  { 'name' => 'jruby-9.0.1.0' },
   { 'name' => '1.8.7-p374' },
   { 'name' => '1.9.3-p551', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.0.0-p647', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.1.7', 'arguments' => '--binary --fuzzy' },
-  { 'name' => '2.2.3', 'arguments' => '--binary --fuzzy' },
-  # { 'name' => 'jruby-1.7.20-d18', 'arguments' => '--18',
-  #   'check_for' => 'jruby-d18' },
-  # { 'name' => 'jruby-1.7.20-d19', 'arguments' => '--19',
-  #   'check_for' => 'jruby-d19' },
-  { 'name' => 'jruby-9.0.0.0' },
-  # { 'name' => 'ree' },
+  { 'name' => '2.2.3', 'arguments' => '--binary --fuzzy' }
 ]
 override['travis_rvm']['gems'] = %w(
   bundler
   rake
 )
 override['travis_rvm']['aliases'] = {
-  # 'jruby-d18' => 'jruby-1.7.20-d18',
-  # 'jruby-d19' => 'jruby-1.7.20-d19',
-  # 'jruby-18mode' => 'jruby-d18',
-  # 'jruby-19mode' => 'jruby-d19',
-  'jruby' => 'jruby-9.0.0.0',
+  'jruby' => 'jruby-9.0.1.0',
   '1.8' => 'ruby-1.8.7-p374',
   '1.9' => 'ruby-1.9.3-p551',
   '2.0' => 'ruby-2.0.0-p647',
@@ -51,13 +68,21 @@ override['gimme']['versions'] = %w(
 )
 override['gimme']['default_version'] = '1.5.1'
 
-override['java']['default_version'] = 'oraclejdk7'
-override['java']['alternate_versions'] = %w(
+override['java']['jdk_version'] = '8'
+override['java']['install_flavor'] = 'oracle'
+override['java']['oracle']['accept_oracle_download_terms'] = true
+override['java']['oracle']['jce']['enabled'] = true
+
+override['travis_java']['default_version'] = 'oraclejdk8'
+override['travis_java']['alternate_versions'] = %w(
   openjdk6
   openjdk7
   openjdk8
-  oraclejdk8
+  oraclejdk7
 )
+
+override['leiningen']['home'] = '/home/travis'
+override['leiningen']['user'] = 'travis'
 
 override['nodejs']['versions'] = %w(
   0.6.21
@@ -94,6 +119,6 @@ override['python']['pyenv']['aliases'] = {
   'pypy3-2.4.0' => %w(pypy3)
 }
 
-override['travis_build_environment']['use_tmpfs_for_builds'] = false
-
 override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
+
+override['travis_build_environment']['use_tmpfs_for_builds'] = false
