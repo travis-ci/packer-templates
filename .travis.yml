@@ -2,7 +2,7 @@ language: generic
 
 env:
   global:
-  - PATH="/opt/chefdk/bin:/opt/chef/bin:$PATH"
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
 
 addons:
   apt:
