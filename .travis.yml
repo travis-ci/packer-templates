@@ -12,13 +12,12 @@ addons:
     - chefdk
 
 install:
-- bundle install --jobs=3 --retry=3
 - unset GEM_PATH
 
 script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- bundle exec rake
+- rubocop
 - ./run-foodcritic cookbooks
 - ./runtests
