@@ -6,56 +6,9 @@
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-ci-minimal-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
-    "job_board_images_url": "{{ env `JOB_BOARD_IMAGES_URL` }}",
-    "vsphere_cluster": "{{ env `VSPHERE_CLUSTER` }}",
-    "vsphere_datacenter": "{{ env `VSPHERE_DATACENTER` }}",
-    "vsphere_datastore": "{{ env `VSPHERE_DATASTORE` }}",
-    "vsphere_host": "{{ env `VSPHERE_HOST` }}",
-    "vsphere_password": "{{ env `VSPHERE_PASSWORD` }}",
-    "vsphere_resource_pool": "{{ env `VSPHERE_RESOURCE_POOL` }}",
-    "vsphere_username": "{{ env `VSPHERE_USERNAME` }}",
-    "vsphere_vm_folder": "{{ env `VSPHERE_VM_FOLDER` }}",
-    "vsphere_vm_network": "{{ env `VSPHERE_VM_NETWORK` }}"
+    "job_board_images_url": "{{ env `JOB_BOARD_IMAGES_URL` }}"
   },
   "builders": [
-    {
-      "type": "docker",
-      "name": "docker",
-      "pull": false,
-      "image": "travis-base:latest",
-      "run_command": [
-        "--privileged",
-        "-d",
-        "-i",
-        "-t",
-        "{{ .Image }}",
-        "/sbin/init"
-      ]
-    },
-    {
-      "type": "vmware-vmx",
-      "name": "ci-minimal-vmx",
-      "vm_name": "ci-minimal",
-      "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
-      "ssh_username": "travis",
-      "ssh_password": "travis",
-      "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo travis | sudo halt -h -p",
-      "headless": true
-    },
-    {
-      "type": "virtualbox-ovf",
-      "name": "ci-minimal-ovf",
-      "vm_name": "ci-minimal",
-      "source_path": "output-virtualbox-ubuntu-trusty-base/packer-virtualbox-ubuntu-trusty-base.ovf",
-      "ssh_username": "travis",
-      "ssh_password": "travis",
-      "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo travis | sudo halt -h -p",
-      "headless": true
-    },
     {
       "type": "googlecompute",
       "name": "googlecompute",
@@ -134,24 +87,6 @@
         "IMAGE_NAME={{ user `gce_image_name` }}"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-    }
-  ],
-  "post-processors": [
-    {
-      "type": "vagrant",
-      "keep_input_artifact": true,
-      "only": [
-        "ci-minimal-vmx",
-        "ci-minimal-ovf"
-      ]
-    },
-    {
-      "type": "docker-import",
-      "repository": "travis-minimal",
-      "tag": "{{ timestamp }}",
-      "only": [
-        "docker"
-      ]
     }
   ]
 }
