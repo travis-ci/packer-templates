@@ -3,7 +3,7 @@
 set -o errexit
 set -o xtrace
 
-export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND='noninteractive'
 
 cp /var/tmp/travis-user-shutdown-implode /usr/local/bin/travis-user-shutdown-implode
 chown root:root /usr/local/bin/travis-user-shutdown-implode

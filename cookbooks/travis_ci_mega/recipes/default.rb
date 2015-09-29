@@ -1,4 +1,3 @@
-#
 # Cookbook Name:: travis_ci_mega
 # Recipe:: default
 #
@@ -22,13 +21,20 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
 
 execute 'apt-get update -yqq'
-package node['travis_ci_mega']['prerequisite_packages']
+
+package Array(node['travis_ci_mega']['prerequisite_packages']) do
+  action [:install, :upgrade]
+end
 
 include_recipe 'travis_build_environment'
 include_recipe 'apt'
+
+package Array(node['travis_build_environment']['packages']) do
+  action [:install, :upgrade]
+end
+
 include_recipe 'package-updates'
 include_recipe 'build-essential'
 include_recipe 'sysctl'
@@ -36,6 +42,7 @@ include_recipe 'travis_docker'
 include_recipe 'travis_docker::compose'
 include_recipe 'ccache'
 include_recipe 'clang::tarball'
+include_recipe 'travis_libevent'
 include_recipe 'gimme'
 include_recipe 'wget'
 include_recipe 'networking_basic'
@@ -61,21 +68,22 @@ include_recipe 'ragel'
 include_recipe 'imagemagick'
 include_recipe 'imagemagick::rmagick'
 include_recipe 'mingw32'
-include_recipe 'travis_libevent'
-include_recipe 'java'
+include_recipe 'travis_java::multi'
 include_recipe 'ant'
 include_recipe 'maven'
 include_recipe 'lein'
-include_recipe 'sbt-extras'
-include_recipe 'gradle::tarball'
+include_recipe 'travis_sbt_extras'
+include_recipe 'gradle'
 include_recipe 'sqlite'
-include_recipe 'rvm::system'
-include_recipe 'travis_rvm::multi'
+include_recipe 'postgresql'
 include_recipe 'python::pyenv'
 include_recipe 'python::system'
 include_recipe 'nodejs::multi'
 include_recipe 'nodejs::iojs'
-include_recipe 'postgresql'
+include_recipe 'travis_php::multi'
+include_recipe 'travis_perlbrew::multi'
+include_recipe 'rvm::system'
+include_recipe 'travis_rvm::multi'
 include_recipe 'redis'
 # include_recipe 'riak'
 # include_recipe 'mongodb'
@@ -83,7 +91,7 @@ include_recipe 'redis'
 include_recipe 'memcached'
 # include_recipe 'neo4j-server::tarball'
 # include_recipe 'cassandra::tarball'
-include_recipe 'rabbitmq::with_management_plugin'
+include_recipe 'rabbitmq::plugin_management'
 # include_recipe 'zeromq::ppa'
 # include_recipe 'elasticsearch'
 include_recipe 'sphinx::all'
@@ -91,8 +99,8 @@ include_recipe 'xserver'
 include_recipe 'firefox::tarball'
 include_recipe 'chromium'
 include_recipe 'google-chrome'
-include_recipe 'phantomjs::tarball'
-include_recipe 'phantomjs::2.0'
+include_recipe 'travis_phantomjs'
+include_recipe 'travis_phantomjs::2'
 include_recipe 'emacs::nox'
 include_recipe 'vim'
 include_recipe 'system_info'

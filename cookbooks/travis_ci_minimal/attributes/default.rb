@@ -1,42 +1,29 @@
-override['java']['default_version'] = ''
-override['java']['alternate_versions'] = []
+override['travis_java']['default_version'] = ''
+override['travis_java']['alternate_versions'] = []
 
-override['nodejs']['default'] = ''
-override['nodejs']['versions'] = []
-override['nodejs']['aliases'] = []
-override['nodejs']['default_modules'] = []
+override['travis_phpenv']['prerequisite_recipes'] = []
 
-override['phpenv']['prerequisite_recipes'] = []
+override['travis_phpbuild']['prerequisite_recipes'] = []
 
-override['phpbuild']['prerequisite_recipes'] = []
-
-override['php']['multi']['versions'] = []
-override['php']['multi']['extensions'] = []
-override['php']['multi']['prerequisite_recipes'] = %w(
+override['travis_php']['multi']['versions'] = []
+override['travis_php']['multi']['extensions'] = []
+override['travis_php']['multi']['prerequisite_recipes'] = %w(
   bison
-  phpbuild
-  phpenv
+  travis_phpbuild
+  travis_phpenv
 )
-override['php']['multi']['postrequisite_recipes'] = %w(
+override['travis_php']['multi']['postrequisite_recipes'] = %w(
   composer
   phpunit
 )
-override['php']['multi']['binaries'] = []
+override['travis_php']['multi']['binaries'] = []
 
 override['composer']['github_oauth_token'] = \
   '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
-override['perlbrew']['perls'] = []
-override['perlbrew']['modules'] = []
-override['perlbrew']['prerequisite_packages'] = []
-
-override['gimme']['versions'] = []
-override['gimme']['default_version'] = ''
-
-override['python']['pyenv']['pythons'] = []
-override['python']['pyenv']['aliases'] = {}
-override['python']['pip']['packages'] = {}
-override['python']['system']['pythons'] = []
+override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['prerequisite_packages'] = []
 
 override['rvm']['rubies'] = ['2.2.3']
 
@@ -49,6 +36,19 @@ override['travis_rvm']['gems'] = %w(nokogiri)
 override['travis_rvm']['multi_prerequisite_recipes'] = []
 override['travis_rvm']['prerequisite_recipes'] = []
 override['travis_rvm']['pkg_requirements'] = []
+
+override['gimme']['versions'] = []
+override['gimme']['default_version'] = ''
+
+override['python']['pyenv']['pythons'] = []
+override['python']['pyenv']['aliases'] = {}
+override['python']['pip']['packages'] = {}
+override['python']['system']['pythons'] = []
+
+override['nodejs']['default'] = ''
+override['nodejs']['versions'] = []
+override['nodejs']['aliases'] = []
+override['nodejs']['default_modules'] = []
 
 override['system_info']['use_bundler'] = false
 override['system_info']['commands_file'] = \
