@@ -2,7 +2,8 @@
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
-    "gce_project_id": "{{ env `GCE_PROJECT_ID` }}"
+    "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
+    "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}"
   },
   "builders": [
     {
@@ -25,7 +26,7 @@
       "ssh_timeout": "10m",
       "ssh_port": 22,
       "image_description": "Travis CI Erlang",
-      "account_file": "tmp/gce.json",
+      "account_file": "{{ user `gce_account_file` }}",
       "project_id": "{{ user `gce_project_id` }}",
       "source_image": "ubuntu-1204-precise-v20150910",
       "zone": "us-central1-a",
