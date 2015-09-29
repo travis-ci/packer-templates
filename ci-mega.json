@@ -8,20 +8,6 @@
   },
   "builders": [
     {
-      "type": "vmware-vmx",
-      "name": "ci-minimal-vmx",
-      "communicator": "ssh",
-      "vm_name": "ci-minimal",
-      "source_path": "output-vmware-ubuntu-trusty-base/packer-vmware-ubuntu-trusty-base.vmx",
-      "ssh_username": "travis",
-      "ssh_password": "travis",
-      "ssh_port": 22,
-      "ssh_disable_agent": true,
-      "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo travis | sudo halt -h -p",
-      "headless": true
-    },
-    {
       "type": "googlecompute",
       "name": "googlecompute",
       "communicator": "ssh",
