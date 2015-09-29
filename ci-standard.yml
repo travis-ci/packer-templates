@@ -3,6 +3,7 @@
 variables:
   cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
   cookbooks_sha: "{{ env `COOKBOOKS_SHA` }}"
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
 builders:
 - type: vmware-vmx
@@ -22,7 +23,7 @@ builders:
   ssh_timeout: 10m
   ssh_port: 22
   image_description: Travis CI Standard
-  account_file: tmp/gce.json
+  account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   <% if @dist == 'trusty' %>
   source_image: ubuntu-1404-trusty-v20150909a
