@@ -85,5 +85,18 @@
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
+  ],
+  "post-processors": [
+    {
+      "type": "atlas",
+      "artifact": "travis-ci/ci-mega",
+      "artifact_type": "google.image",
+      "metadata": {
+        "name": "{{ user `gce_image_name` }}"
+      },
+      "only": [
+        "googlecompute"
+      ]
+    }
   ]
 }
