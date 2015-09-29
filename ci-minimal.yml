@@ -74,3 +74,11 @@ provisioners:
   - "JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}"
   - "IMAGE_NAME={{ user `gce_image_name` }}"
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+post-processors:
+- type: atlas
+  artifact: "travis-ci/ci-minimal"
+  artifact_type: "google.image"
+  metadata:
+    name: "{{ user `gce_image_name` }}"
+  only:
+  - googlecompute
