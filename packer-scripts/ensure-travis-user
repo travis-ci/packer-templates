@@ -10,4 +10,13 @@ fi
 
 getent passwd | grep -q travis
 echo "travis:${TRAVIS_USER_PASSWORD}" | chpasswd
+
 [[ -d /home/travis ]]
+
+for f in .ssh/authorized_keys .ssh/known_hosts ; do
+  mkdir -p $(dirname $f)
+  touch $f
+  chmod 0600 /home/travis/$f
+done
+
+chown -R travis:travis /home/travis
