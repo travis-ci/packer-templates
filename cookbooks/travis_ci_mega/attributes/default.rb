@@ -31,6 +31,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 override['rvm']['rubies'] = ['2.2.3']
+override['rvm']['group_users'] = %w(travis)
 override['rvm']['user_rubies'] = ['2.2.3']
 override['rvm']['default_ruby'] = 'ruby-2.2.3'
 override['rvm']['user_default_ruby'] = 'ruby-2.2.3'
