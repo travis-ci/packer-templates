@@ -126,4 +126,5 @@ override['python']['pyenv']['aliases'] = {
 
 override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
 
+override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
