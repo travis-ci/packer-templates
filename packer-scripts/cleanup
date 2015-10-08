@@ -11,7 +11,10 @@ _purge_packages() {
 }
 
 apt-get -y update
-apt-get -y upgrade
+
+if [[ $APT_GET_UPGRADE_DURING_CLEANUP ]] ; then
+  apt-get -y upgrade
+fi
 
 _purge_packages 'linux-headers'
 _purge_packages 'linux-source'

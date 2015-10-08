@@ -3,6 +3,7 @@
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "docker_tag": "packer-{{ timestamp }}",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-ci-minimal-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
@@ -25,8 +26,23 @@
       "disk_size": 20,
       "tags": [
         "ci",
-        "go"
+        "minimal"
       ]
+    },
+    {
+      "type": "docker",
+      "name": "docker",
+      "ssh_pty": true,
+      "image": "ubuntu-upstart:14.04",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--privileged=true",
+        "{{.Image}}",
+        "/sbin/init"
+      ],
+      "commit": true
     }
   ],
   "provisioners": [
@@ -50,7 +66,8 @@
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
-        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
+        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}",
+        "COOKBOOKS_SHA={{ user `cookbooks_sha` }}"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
@@ -60,7 +77,12 @@
       "destination": "/var/tmp/minimal-system-info-commands.yml"
     },
     {
+      "type": "shell",
+      "inline": "chmod 0644 /var/tmp/minimal-system-info-commands.yml"
+    },
+    {
       "type": "chef-solo",
+      "config_template": "chef-solo.rb.tmpl",
       "cookbook_paths": [
         "cookbooks"
       ],
@@ -68,6 +90,11 @@
         "/tmp/chef-stuff/travis-cookbooks/cookbooks",
         "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
       ],
+      "json": {
+        "travis_build_environment": {
+          "incremental_package_install": true
+        }
+      },
       "run_list": [
         "recipe[travis_ci_minimal]"
       ]
@@ -100,6 +127,14 @@
       "only": [
         "googlecompute"
       ]
-    }
+    },
+    [
+      {
+        "type": "docker-tag",
+        "repository": "travisci/ci-mega",
+        "tag": "{{ user `docker_tag` }}"
+      },
+      "docker-push"
+    ]
   ]
 }

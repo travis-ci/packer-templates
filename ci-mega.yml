@@ -3,9 +3,11 @@
 @image_prefix = ENV.fetch('CI_MEGA_IMAGE_PREFIX', 'travis')
 %>
 ---
+description: Travis CI mega build env template
 variables:
   cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
   cookbooks_sha: "{{ env `COOKBOOKS_SHA` }}"
+  docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "<%= @image_prefix %>-ci-mega-<%= @dist %>-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
@@ -31,6 +33,12 @@ builders:
   tags:
   - ci
   - mega
+- type: docker
+  name: docker
+  ssh_pty: true
+  image: "ubuntu-upstart:14.04"
+  run_command: ["-d", "-i", "-t", "{{.Image}}", "/sbin/init"]
+  commit: true
 provisioners:
 - type: shell
   inline: sleep 10
@@ -50,6 +58,7 @@ provisioners:
   - COOKBOOKS_SHA={{ user `cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
+  config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
@@ -71,9 +80,9 @@ provisioners:
   - packer-scripts/job-board-register
   - packer-scripts/minimize
   environment_vars:
-  - "TRAVIS_OBFUSCATE_PASSWORD=1"
-  - "JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}"
-  - "IMAGE_NAME={{ user `gce_image_name` }}"
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
+  - IMAGE_NAME={{ user `gce_image_name` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
 - type: atlas
@@ -83,3 +92,8 @@ post-processors:
     name: "{{ user `gce_image_name` }}"
   only:
   - googlecompute
+-
+  - type: docker-tag
+    repository: travisci/ci-mega
+    tag: "{{ user `docker_tag` }}"
+  - docker-push

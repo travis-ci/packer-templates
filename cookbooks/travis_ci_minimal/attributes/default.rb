@@ -56,7 +56,7 @@ override['system_info']['commands_file'] = \
   '/var/tmp/minimal-system-info-commands.yml'
 
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
-override['travis_build_environment']['update_hosts_atomically'] = false
+override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['packages'] = %w(
   autoconf
   automake
@@ -112,7 +112,6 @@ override['travis_build_environment']['packages'] = %w(
   libtidy-dev
   libtool
   libxml2-dev
-  libxslt-dev
   libxslt1-dev
   libyaml-0-2
   libyaml-dev

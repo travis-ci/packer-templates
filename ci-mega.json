@@ -1,7 +1,9 @@
 {
+  "description": "Travis CI mega build env template",
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "docker_tag": "packer-{{ timestamp }}",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-ci-mega-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
@@ -26,6 +28,20 @@
         "ci",
         "mega"
       ]
+    },
+    {
+      "type": "docker",
+      "name": "docker",
+      "ssh_pty": true,
+      "image": "ubuntu-upstart:14.04",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "{{.Image}}",
+        "/sbin/init"
+      ],
+      "commit": true
     }
   ],
   "provisioners": [
@@ -57,6 +73,7 @@
     },
     {
       "type": "chef-solo",
+      "config_template": "chef-solo.rb.tmpl",
       "cookbook_paths": [
         "cookbooks"
       ],
@@ -97,6 +114,14 @@
       "only": [
         "googlecompute"
       ]
-    }
+    },
+    [
+      {
+        "type": "docker-tag",
+        "repository": "travisci/ci-mega",
+        "tag": "{{ user `docker_tag` }}"
+      },
+      "docker-push"
+    ]
   ]
 }
