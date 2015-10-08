@@ -25,8 +25,15 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-override['rvm']['rubies'] = ['2.2.3']
 override['rvm']['group_users'] = %w(travis)
+override['rvm']['install_rubies'] = false
+override['rvm']['rubies'] = []
+override['rvm']['rvmrc']['rvm_remote_server_url3'] = \
+  'https://s3.amazonaws.com/travis-rubies/binaries'
+override['rvm']['rvmrc']['rvm_remote_server_type3'] = 'rubies'
+override['rvm']['rvmrc']['rvm_remote_server_verify_downloads3'] = '1'
+override['rvm']['user_rubies'] = []
+override['rvm']['user_install_rubies'] = false
 
 override['travis_rvm']['latest_minor'] = true
 override['travis_rvm']['default'] = '2.2.3'
