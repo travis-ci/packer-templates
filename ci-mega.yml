@@ -7,6 +7,10 @@ description: Travis CI mega build env template
 variables:
   cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
   cookbooks_sha: "{{ env `COOKBOOKS_SHA` }}"
+  docker_login_email: "{{ env `DOCKER_LOGIN_EMAIL` }}"
+  docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
+  docker_login_server: "{{ env `DOCKER_LOGIN_SERVER` }}"
+  docker_login_username: "{{ env `DOCKER_LOGIN_USERNAME` }}"
   docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "<%= @image_prefix %>-ci-mega-<%= @dist %>-{{ timestamp }}"
@@ -96,4 +100,13 @@ post-processors:
   - type: docker-tag
     repository: travisci/ci-mega
     tag: "{{ user `docker_tag` }}"
-  - docker-push
+    only:
+    - docker
+  - type: docker-push
+    login: true
+    login_email: "{{ user `docker_login_email` }}"
+    login_username: "{{ user `docker_login_username` }}"
+    login_password: "{{ user `docker_login_password` }}"
+    login_server: "{{ user `docker_login_server` }}"
+    only:
+    - docker
