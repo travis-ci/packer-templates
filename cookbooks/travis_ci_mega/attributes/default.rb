@@ -42,7 +42,6 @@ override['rvm']['user_install_rubies'] = false
 
 rubies = [
   { 'name' => 'jruby-9.0.1.0' },
-  { 'name' => '1.8.7-p374' },
   { 'name' => '1.9.3-p551', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.0.0-p647', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.1.7', 'arguments' => '--binary --fuzzy' },
