@@ -109,4 +109,6 @@ include_recipe 'emacs::nox'
 include_recipe 'vim'
 include_recipe 'system_info'
 include_recipe 'sweeper'
-include_recipe 'python::devshm'
+
+include_recipe 'python::devshm' unless
+  node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
