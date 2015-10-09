@@ -30,19 +30,17 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-override['rvm']['default_ruby'] = 'ruby-2.2.3'
 override['rvm']['group_users'] = %w(travis)
-override['rvm']['rubies'] = ['2.2.3']
+override['rvm']['install_rubies'] = false
+override['rvm']['rubies'] = []
 override['rvm']['rvmrc']['rvm_remote_server_url3'] = \
   'https://s3.amazonaws.com/travis-rubies/binaries'
 override['rvm']['rvmrc']['rvm_remote_server_type3'] = 'rubies'
 override['rvm']['rvmrc']['rvm_remote_server_verify_downloads3'] = '1'
-override['rvm']['user_default_ruby'] = 'ruby-2.2.3'
-override['rvm']['user_rubies'] = ['2.2.3']
+override['rvm']['user_rubies'] = []
+override['rvm']['user_install_rubies'] = false
 
-override['travis_rvm']['latest_minor'] = true
-override['travis_rvm']['default'] = '2.2.3'
-override['travis_rvm']['rubies'] = [
+rubies = [
   { 'name' => 'jruby-9.0.1.0' },
   { 'name' => '1.8.7-p374' },
   { 'name' => '1.9.3-p551', 'arguments' => '--binary --fuzzy' },
@@ -50,20 +48,25 @@ override['travis_rvm']['rubies'] = [
   { 'name' => '2.1.7', 'arguments' => '--binary --fuzzy' },
   { 'name' => '2.2.3', 'arguments' => '--binary --fuzzy' }
 ]
-override['travis_rvm']['gems'] = %w(
-  bundler
-  rake
-)
-override['travis_rvm']['aliases'] = {
-  'jruby' => 'jruby-9.0.1.0',
-  '1.8' => 'ruby-1.8.7-p374',
-  '1.9' => 'ruby-1.9.3-p551',
-  '2.0' => 'ruby-2.0.0-p647',
-  '2.1' => 'ruby-2.1.7',
-  '2.2' => 'ruby-2.2.3'
-}
 
-override['gimme']['versions'] = %w(
+ruby_names = rubies.map { |r| r['name'] }
+mri_names = ruby_names.reject { |n| n =~ /jruby/ }
+
+def ruby_alias(full_name)
+  nodash = full_name.sub(/-.*/, '')
+  return nodash unless nodash.include?('.')
+  nodash[0, 3]
+end
+
+override['travis_rvm']['latest_minor'] = true
+override['travis_rvm']['default'] = mri_names.max
+override['travis_rvm']['rubies'] = rubies
+override['travis_rvm']['gems'] = %w(bundler nokogiri rake)
+ruby_names.each do |full_name|
+  override['travis_rvm']['aliases'][ruby_alias(full_name)] = full_name
+end
+
+gimme_versions = %w(
   1.0.3
   1.1.2
   1.2.2
@@ -71,7 +74,9 @@ override['gimme']['versions'] = %w(
   1.4.2
   1.5.1
 )
-override['gimme']['default_version'] = '1.5.1'
+
+override['gimme']['versions'] = gimme_versions
+override['gimme']['default_version'] = gimme_versions.max
 
 override['java']['jdk_version'] = '8'
 override['java']['install_flavor'] = 'oracle'
@@ -89,21 +94,21 @@ override['travis_java']['alternate_versions'] = %w(
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
-override['nodejs']['versions'] = %w(
+node_versions = %w(
   0.6.21
   0.8.28
   0.10.40
   0.11.16
   0.12.7
-  4.0.0
+  4.1.2
 )
-override['nodejs']['aliases'] = {
-  '0.10' => '0.1',
-  '0.11.16' => 'node-unstable'
-}
-override['nodejs']['default'] = '4.0.0'
 
-override['python']['pyenv']['pythons'] = %w(
+override['nodejs']['versions'] = node_versions
+override['nodejs']['aliases']['0.10'] = '0.1'
+override['nodejs']['aliases']['0.11.16'] = 'node-unstable'
+override['nodejs']['default'] = node_versions.max
+
+pythons = %w(
   2.6.9
   2.7.10
   3.2.6
@@ -113,16 +118,17 @@ override['python']['pyenv']['pythons'] = %w(
   pypy-2.6.1
   pypy3-2.4.0
 )
-override['python']['pyenv']['aliases'] = {
-  '2.6.9' => %w(2.6),
-  '2.7.10' => %w(2.7),
-  '3.2.6' => %w(3.2),
-  '3.3.6' => %w(3.3),
-  '3.4.3' => %w(3.4),
-  '3.5.0' => %w(3.5),
-  'pypy-2.6.1' => %w(pypy),
-  'pypy3-2.4.0' => %w(pypy3)
-}
+
+def python_aliases(full_name)
+  nodash = full_name.sub(/-.*/, '')
+  return [nodash] unless nodash.include?('.')
+  [nodash[0, 3]]
+end
+
+override['python']['pyenv']['pythons'] = pythons
+pythons.each do |full_name|
+  override['python']['pyenv']['aliases'][full_name] = python_aliases(full_name)
+end
 
 override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
 

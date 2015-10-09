@@ -94,11 +94,7 @@
         "/tmp/chef-stuff/travis-cookbooks/cookbooks",
         "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
       ],
-      "json": {
-        "travis_build_environment": {
-          "incremental_package_install": true
-        }
-      },
+      "json": {},
       "run_list": [
         "recipe[travis_ci_minimal]"
       ]

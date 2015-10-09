@@ -41,7 +41,13 @@ builders:
   name: docker
   ssh_pty: true
   image: "ubuntu-upstart:14.04"
-  run_command: ["-d", "-i", "-t", "{{.Image}}", "/sbin/init"]
+  run_command:
+  - "-d"
+  - "-i"
+  - "-t"
+  - "--privileged=true"
+  - "{{.Image}}"
+  - "/sbin/init"
   commit: true
 provisioners:
 - type: shell
@@ -55,7 +61,6 @@ provisioners:
   scripts:
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/remove-vagrant-user
-  - packer-scripts/travis-images-setup-env
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}
@@ -96,6 +101,13 @@ post-processors:
     name: "{{ user `gce_image_name` }}"
   only:
   - googlecompute
+- type: atlas
+  artifact: "travis-ci/ci-mega"
+  artifact_type: "docker.image"
+  metadata:
+    tag: "{{ user `docker_tag` }}"
+  only:
+  - docker
 -
   - type: docker-tag
     repository: travisci/ci-mega

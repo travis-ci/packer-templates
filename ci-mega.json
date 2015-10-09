@@ -42,6 +42,7 @@
         "-d",
         "-i",
         "-t",
+        "--privileged=true",
         "{{.Image}}",
         "/sbin/init"
       ],
@@ -66,7 +67,6 @@
       "scripts": [
         "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/remove-vagrant-user",
-        "packer-scripts/travis-images-setup-env",
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
@@ -117,6 +117,17 @@
       },
       "only": [
         "googlecompute"
+      ]
+    },
+    {
+      "type": "atlas",
+      "artifact": "travis-ci/ci-mega",
+      "artifact_type": "docker.image",
+      "metadata": {
+        "tag": "{{ user `docker_tag` }}"
+      },
+      "only": [
+        "docker"
       ]
     },
     [

@@ -38,8 +38,12 @@ end
 include_recipe 'package-updates'
 include_recipe 'build-essential'
 include_recipe 'sysctl'
-include_recipe 'travis_docker'
-include_recipe 'travis_docker::compose'
+
+unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
+  include_recipe 'travis_docker'
+  include_recipe 'travis_docker::compose'
+end
+
 include_recipe 'ccache'
 include_recipe 'clang::tarball'
 include_recipe 'travis_libevent'
