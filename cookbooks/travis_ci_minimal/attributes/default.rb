@@ -25,8 +25,15 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-override['rvm']['rubies'] = ['2.2.3']
 override['rvm']['group_users'] = %w(travis)
+override['rvm']['install_rubies'] = false
+override['rvm']['rubies'] = []
+override['rvm']['rvmrc']['rvm_remote_server_url3'] = \
+  'https://s3.amazonaws.com/travis-rubies/binaries'
+override['rvm']['rvmrc']['rvm_remote_server_type3'] = 'rubies'
+override['rvm']['rvmrc']['rvm_remote_server_verify_downloads3'] = '1'
+override['rvm']['user_rubies'] = []
+override['rvm']['user_install_rubies'] = false
 
 override['travis_rvm']['latest_minor'] = true
 override['travis_rvm']['default'] = '2.2.3'
@@ -34,6 +41,7 @@ override['travis_rvm']['rubies'] = [
   { name: '2.2.3', arguments: '--binary --fuzzy' }
 ]
 override['travis_rvm']['gems'] = %w(nokogiri)
+override['travis_rvm']['aliases']['2.2'] = 'ruby-2.2.3'
 override['travis_rvm']['multi_prerequisite_recipes'] = []
 override['travis_rvm']['prerequisite_recipes'] = []
 override['travis_rvm']['pkg_requirements'] = []
@@ -56,7 +64,7 @@ override['system_info']['commands_file'] = \
   '/var/tmp/minimal-system-info-commands.yml'
 
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
-override['travis_build_environment']['update_hosts_atomically'] = false
+override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['packages'] = %w(
   autoconf
   automake
@@ -112,7 +120,6 @@ override['travis_build_environment']['packages'] = %w(
   libtidy-dev
   libtool
   libxml2-dev
-  libxslt-dev
   libxslt1-dev
   libyaml-0-2
   libyaml-dev

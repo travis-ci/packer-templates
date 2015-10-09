@@ -3,6 +3,11 @@
   "variables": {
     "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
     "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "docker_login_email": "{{ env `DOCKER_LOGIN_EMAIL` }}",
+    "docker_login_password": "{{ env `DOCKER_LOGIN_PASSWORD` }}",
+    "docker_login_server": "{{ env `DOCKER_LOGIN_SERVER` }}",
+    "docker_login_username": "{{ env `DOCKER_LOGIN_USERNAME` }}",
+    "docker_tag": "packer-{{ timestamp }}",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-ci-minimal-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
@@ -25,8 +30,23 @@
       "disk_size": 20,
       "tags": [
         "ci",
-        "go"
+        "minimal"
       ]
+    },
+    {
+      "type": "docker",
+      "name": "docker",
+      "ssh_pty": true,
+      "image": "ubuntu-upstart:14.04",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--privileged=true",
+        "{{.Image}}",
+        "/sbin/init"
+      ],
+      "commit": true
     }
   ],
   "provisioners": [
@@ -50,7 +70,8 @@
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
-        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}"
+        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}",
+        "COOKBOOKS_SHA={{ user `cookbooks_sha` }}"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
@@ -60,7 +81,12 @@
       "destination": "/var/tmp/minimal-system-info-commands.yml"
     },
     {
+      "type": "shell",
+      "inline": "chmod 0644 /var/tmp/minimal-system-info-commands.yml"
+    },
+    {
       "type": "chef-solo",
+      "config_template": "chef-solo.rb.tmpl",
       "cookbook_paths": [
         "cookbooks"
       ],
@@ -68,6 +94,7 @@
         "/tmp/chef-stuff/travis-cookbooks/cookbooks",
         "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
       ],
+      "json": {},
       "run_list": [
         "recipe[travis_ci_minimal]"
       ]
@@ -100,6 +127,38 @@
       "only": [
         "googlecompute"
       ]
-    }
+    },
+    {
+      "type": "atlas",
+      "artifact": "travis-ci/ci-minimal",
+      "artifact_type": "docker.image",
+      "metadata": {
+        "tag": "{{ user `docker_tag` }}"
+      },
+      "only": [
+        "docker"
+      ]
+    },
+    [
+      {
+        "type": "docker-tag",
+        "repository": "travisci/ci-minimal",
+        "tag": "{{ user `docker_tag` }}",
+        "only": [
+          "docker"
+        ]
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_email": "{{ user `docker_login_email` }}",
+        "login_username": "{{ user `docker_login_username` }}",
+        "login_password": "{{ user `docker_login_password` }}",
+        "login_server": "{{ user `docker_login_server` }}",
+        "only": [
+          "docker"
+        ]
+      }
+    ]
   ]
 }
