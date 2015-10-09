@@ -53,7 +53,7 @@ ruby_names = rubies.map { |r| r['name'] }
 mri_names = ruby_names.reject { |n| n =~ /jruby/ }
 
 def ruby_alias(full_name)
-  nodash = full_name.sub(/-.*/, '')
+  nodash = full_name.split('-').first
   return nodash unless nodash.include?('.')
   nodash[0, 3]
 end
@@ -120,7 +120,7 @@ pythons = %w(
 )
 
 def python_aliases(full_name)
-  nodash = full_name.sub(/-.*/, '')
+  nodash = full_name.split('-').first
   return [nodash] unless nodash.include?('.')
   [nodash[0, 3]]
 end
