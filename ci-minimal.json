@@ -146,7 +146,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "travisci/ci-mega",
+        "repository": "travisci/ci-minimal",
         "tag": "{{ user `docker_tag` }}",
         "only": [
           "docker"
