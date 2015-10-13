@@ -22,19 +22,13 @@ if [[ $PACKER_BUILDER_TYPE ]] ; then
   TAGS="$TAGS,packer_builder_type:$PACKER_BUILDER_TYPE"
 
   case "$PACKER_BUILDER_TYPE" in
-    googlecompute)
-      IMAGE_INFRA=gce
-      ;;
-    docker)
-      IMAGE_INFRA=docker
-      ;;
-    vmware)
-      IMAGE_INFRA=jupiterbrain
-      ;;
+    googlecompute) IMAGE_INFRA=gce ;;
+    docker) IMAGE_INFRA=docker ;;
+    vmware) IMAGE_INFRA=jupiterbrain ;;
   esac
 fi
 
-: ${IMAGE_INFRA:=gce}
+: ${IMAGE_INFRA:=local}
 
 exec curl \
   -s \
