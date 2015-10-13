@@ -9,5 +9,5 @@ cp /var/tmp/travis-user-shutdown-implode /usr/local/bin/travis-user-shutdown-imp
 chown root:root /usr/local/bin/travis-user-shutdown-implode
 chmod 0700 /usr/local/bin/travis-user-shutdown-implode
 
-apt-get update -yqq
+apt-get -o Acquire::CompressionTypes::Order::=bz2 update -yqq
 apt-get upgrade -yqq

@@ -14,5 +14,5 @@ chmod 0750 /etc/init.d/ssh-keygen /usr/local/sbin/generate-ssh-host-keys
 
 update-rc.d ssh-keygen defaults
 
-apt-get update -yqq
+apt-get -o Acquire::CompressionTypes::Order::=bz2 update -yqq
 apt-get upgrade -yqq

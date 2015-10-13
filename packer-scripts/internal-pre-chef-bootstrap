@@ -9,7 +9,7 @@ if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
   APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
 fi
 
-apt-get update -yqq
+apt-get -o Acquire::CompressionTypes::Order::=bz2 update -yqq
 apt-get install -yqq \
   --no-install-suggests \
   --no-install-recommends \
