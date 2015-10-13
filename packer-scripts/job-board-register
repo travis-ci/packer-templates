@@ -13,7 +13,6 @@ set -o errexit
 }
 
 : ${TAGS:=group:dev}
-: ${IMAGE_INFRA:=gce}
 
 if [[ $PACKER_BUILD_NAME ]] ; then
   TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
@@ -21,7 +20,21 @@ fi
 
 if [[ $PACKER_BUILDER_TYPE ]] ; then
   TAGS="$TAGS,packer_builder_type:$PACKER_BUILDER_TYPE"
+
+  case "$PACKER_BUILDER_TYPE" in
+    googlecompute)
+      IMAGE_INFRA=gce
+      ;;
+    docker)
+      IMAGE_INFRA=docker
+      ;;
+    vmware)
+      IMAGE_INFRA=jupiterbrain
+      ;;
+  esac
 fi
+
+: ${IMAGE_INFRA:=gce}
 
 exec curl \
   -s \
