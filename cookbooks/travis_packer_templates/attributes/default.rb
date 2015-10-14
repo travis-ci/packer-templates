@@ -9,3 +9,6 @@ default['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] = ''
 
   default['travis_packer_templates']['env'][attr_name] = attr_value
 end
+
+default['travis_packer_templates']['job_board']['languages'] = []
+default['travis_packer_templates']['job_board']['edge'] = false
