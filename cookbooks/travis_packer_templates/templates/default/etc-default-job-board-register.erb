@@ -1,0 +1,11 @@
+# vim:filetype=sh
+# Managed by Chef! :heart_eyes_cat:
+
+TAGS=""
+<% if @edge %>
+TAGS="$TAGS,group:edge"
+<% end %>
+<% @languages.each do |lang| %>
+TAGS="$TAGS,language_${lang}:true"
+<% end %>
+export TAGS

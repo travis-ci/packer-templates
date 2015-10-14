@@ -147,3 +147,6 @@ override['travis_build_environment']['packages'] = %w(
   zip
   zlib1g-dev
 )
+
+override['travis_packer_templates']['job_board']['languages'] = %w(generic)
+override['travis_packer_templates']['job_board']['edge'] = true

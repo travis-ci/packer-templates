@@ -133,3 +133,18 @@ override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
+
+override['travis_packer_templates']['job_board']['languages'] = %w(
+  c
+  cpp
+  clojure
+  go
+  groovy
+  java
+  node_js
+  python
+  ruby
+  rust
+  scala
+)
+override['travis_packer_templates']['job_board']['edge'] = true
