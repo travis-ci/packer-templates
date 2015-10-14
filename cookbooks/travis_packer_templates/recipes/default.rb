@@ -25,7 +25,7 @@
 execute 'apt-get update -yqq'
 
 template '/etc/default/job-board-register' do
-  source 'etc-default-job-board-register.erb'
+  source 'etc-default-job-board-register.sh.erb'
   owner 'root'
   group 'root'
   mode 0644
