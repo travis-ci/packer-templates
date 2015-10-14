@@ -30,7 +30,7 @@ template '/etc/default/job-board-register' do
   group 'root'
   mode 0644
   variables(
-    languages: node['travis_packer_templates']['job_board']['languages']
+    languages: node['travis_packer_templates']['job_board']['languages'],
     edge: node['travis_packer_templates']['job_board']['edge']
   )
 end
