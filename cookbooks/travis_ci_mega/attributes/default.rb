@@ -118,6 +118,14 @@ pythons = %w(
   pypy3-2.4.0
 )
 
+pythons.select { |p| p =~ /^3/ }.max.tap do |py3|
+  pythons = pythons.delete(py3).unshift(py3)
+end
+
+pythons.select { |p| p =~ /^2/ }.max.tap do |py2|
+  pythons = pythons.delete(py2).unshift(py2)
+end
+
 def python_aliases(full_name)
   nodash = full_name.split('-').first
   return [nodash] unless nodash.include?('.')
