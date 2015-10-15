@@ -118,12 +118,12 @@ pythons = %w(
   pypy3-2.4.0
 )
 
-pythons.select { |p| p =~ /^3/ }.max.tap do |py3|
-  pythons = pythons.delete(py3).unshift(py3)
-end
-
-pythons.select { |p| p =~ /^2/ }.max.tap do |py2|
-  pythons = pythons.delete(py2).unshift(py2)
+# Reorder pythons so that default python2 and python3 come first
+# as this affects the ordering in $PATH.
+%w(3 2).each do |pyver|
+  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+    pythons = pythons.delete(py).unshift(py)
+  end
 end
 
 def python_aliases(full_name)
