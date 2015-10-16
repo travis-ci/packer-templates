@@ -49,10 +49,10 @@ override['travis_rvm']['pkg_requirements'] = []
 override['gimme']['versions'] = []
 override['gimme']['default_version'] = ''
 
-override['python']['pyenv']['pythons'] = []
-override['python']['pyenv']['aliases'] = {}
-override['python']['pip']['packages'] = {}
-override['python']['system']['pythons'] = []
+override['travis_python']['pyenv']['pythons'] = []
+override['travis_python']['pyenv']['aliases'] = {}
+override['travis_python']['pip']['packages'] = {}
+override['travis_python']['system']['pythons'] = []
 
 override['nodejs']['default'] = ''
 override['nodejs']['versions'] = []
