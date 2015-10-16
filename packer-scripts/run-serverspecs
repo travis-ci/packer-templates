@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -o errexit
+set -o xtrace
 shopt -s nullglob
 
 export PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
@@ -36,7 +37,9 @@ for suite in ${SPEC_SUITES} ; do
 
     chown -R travis:travis /var/tmp/${suite}
     HOME=/home/travis sudo -u travis -- bash -l -c "
+      set -o xtrace
       export PATH=\"/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH\"
+      unset GEM_PATH
       cd /var/tmp/${suite}
       rspec
     "
