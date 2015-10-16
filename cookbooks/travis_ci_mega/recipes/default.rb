@@ -80,8 +80,8 @@ include_recipe 'travis_sbt_extras'
 include_recipe 'gradle'
 include_recipe 'sqlite'
 include_recipe 'postgresql'
-include_recipe 'python::pyenv'
-include_recipe 'python::system'
+include_recipe 'travis_python::pyenv'
+include_recipe 'travis_python::system'
 include_recipe 'nodejs::multi'
 include_recipe 'nodejs::iojs'
 include_recipe 'travis_php::multi'
@@ -110,5 +110,5 @@ include_recipe 'vim'
 include_recipe 'system_info'
 include_recipe 'sweeper'
 
-include_recipe 'python::devshm' unless
+include_recipe 'travis_python::devshm' unless
   node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
