@@ -122,7 +122,7 @@ pythons = %w(
 # as this affects the ordering in $PATH.
 %w(3 2).each do |pyver|
   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
-    pythons = pythons.delete(py).unshift(py)
+    pythons.unshift(pythons.delete(py))
   end
 end
 
