@@ -88,9 +88,9 @@ provisioners:
   - recipe[travis_ci_minimal]
 - type: shell
   scripts:
+  - packer-scripts/ensure-travis-user
   - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
-  - packer-scripts/ensure-travis-user
   - packer-scripts/disable-apparmor
   - packer-scripts/job-board-register
   - packer-scripts/minimize
