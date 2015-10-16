@@ -134,7 +134,8 @@ end
 
 override['travis_python']['pyenv']['pythons'] = pythons
 pythons.each do |full_name|
-  override['travis_python']['pyenv']['aliases'][full_name] = python_aliases(full_name)
+  override['travis_python']['pyenv']['aliases'][full_name] = \
+    python_aliases(full_name)
 end
 
 override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
