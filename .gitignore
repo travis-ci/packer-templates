@@ -14,3 +14,4 @@ packer_cache
 /*.box
 .kitchen
 /*.pem
+spec/bin/rabbitmqadmin
