@@ -15,13 +15,11 @@ apt-get install -y chefdk
 
 set -o xtrace
 
+cd /tmp/packer-chef-solo
+
 for suite in ${SPEC_SUITES} ; do
-  for d in $(
-    find /tmp/packer-chef-solo \
-      -wholename "*${suite}*/test/integration/server" \
-      -type d
-  ) ; do
-    pushd "$d"
+  for d in $(find . -wholename "*${suite}/spec" -type d) ; do
+    pushd "$(dirname $d)"
 
     mkdir -p /var/tmp/${suite}
     find /var/tmp/${suite}/ -type f | xargs rm -rvf || true
