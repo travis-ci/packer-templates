@@ -17,7 +17,7 @@ set -o xtrace
 
 cd /tmp/packer-chef-solo
 
-for suite in $(echo ${SPEC_SUITES/,/ } ; do
+for suite in $(echo ${SPEC_SUITES/,/ }) ; do
   for d in $(find . -wholename "*${suite}/spec" -type d) ; do
     pushd "$(dirname $d)"
 
