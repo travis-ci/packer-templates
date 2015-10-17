@@ -15,7 +15,7 @@ echo "travis:${TRAVIS_USER_PASSWORD}" | chpasswd
 
 for f in .ssh/authorized_keys .ssh/known_hosts ; do
   mkdir -p /home/travis/$(dirname $f)
-  touch $f
+  touch /home/travis/$f
   chmod 0600 /home/travis/$f
 done
 
