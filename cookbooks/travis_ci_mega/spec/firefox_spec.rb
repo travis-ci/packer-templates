@@ -4,9 +4,12 @@ describe 'firefox installation' do
   end
 
   describe 'firefox commands' do
-    describe command(%w(firefox -CreateProfile test --display=DISPLAY=:99.0 ;
-                        cat ~/.mozilla/firefox/profiles.ini).join(' ')) do
-      its(:stdout) { should match 'Name=test' }
+    before do
+      system 'firefox -CreateProfile test'
+    end
+
+    describe file('/home/travis/.mozilla/firefox/profiles.ini') do
+      its(:content) { should match(/^Name=test/) }
     end
   end
 end

@@ -39,6 +39,7 @@ for suite in $(echo ${SPEC_SUITES/,/ }) ; do
       export PATH=\"/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:\$PATH\"
       unset GEM_PATH
       cd /var/tmp/${suite}
+      sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
       rspec
     "
     rm -rvf /var/tmp/${suite}
