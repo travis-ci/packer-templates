@@ -16,6 +16,7 @@ TEMPLATES := \
 	internal-bastion.json \
 	internal-nat.json \
 	jupiter-brain.json \
+	play.json \
 	ubuntu-precise-base.json \
 	ubuntu-trusty-base.json \
 	worker.json
