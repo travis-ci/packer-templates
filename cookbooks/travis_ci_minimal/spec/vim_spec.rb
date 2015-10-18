@@ -6,14 +6,14 @@ describe 'vim installation' do
   end
 
   describe 'vim commands' do
-    describe 'add a file and replace text with vim' do
+    describe 'batch editing' do
       before do
         File.write('./spec/files/flower.txt', "blume\n")
+        system('vim ./spec/files/flower.txt -c s/blume/flower -c wq')
       end
 
-      describe command('vim flower.txt -c s/blume/flower -c wq') do
-        its(:stderr) { should be_empty }
-        its(:stdout) { should match 'flower' }
+      describe file('./spec/files/flower.txt') do
+        its(:content) { should match(/flower/) }
       end
     end
   end
