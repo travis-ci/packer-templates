@@ -64,15 +64,6 @@ provisioners:
   run_list:
   - recipe[system_info]
 - type: shell
-  scripts:
-  - packer-scripts/ensure-travis-user
-  - packer-scripts/cleanup
-  - packer-scripts/disable-apparmor
-  - packer-scripts/minimize
-  environment_vars:
-  - TRAVIS_OBFUSCATE_PASSWORD=1
-  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-- type: shell
-  inline: echo aborting ; exit 1
+  inline: while true ; do date -u ; echo tick ; sleep 1 ; done
   only:
   - googlecompute
