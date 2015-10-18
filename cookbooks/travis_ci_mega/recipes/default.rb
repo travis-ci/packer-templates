@@ -46,6 +46,7 @@ end
 
 include_recipe 'ccache'
 include_recipe 'clang::tarball'
+include_recipe 'travis_cmake'
 include_recipe 'travis_libevent'
 include_recipe 'gimme'
 include_recipe 'wget'
