@@ -85,6 +85,7 @@ override['travis_build_environment']['packages'] = %w(
   automake
   bash
   bison
+  bsdmainutils
   build-essential
   bzip2
   bzr
