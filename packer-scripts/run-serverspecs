@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o xtrace
+shopt -s nullglob
+
+export PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+export DEBIAN_FRONTEND='noninteractive'
+
+curl -sSL 'https://packagecloud.io/gpg.key' | apt-key add -
+apt-add-repository \
+  'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+apt-get update -y
+apt-get install -y chefdk
+
+set -o xtrace
+
+cd /tmp/packer-chef-solo
+
+for suite in $(echo ${SPEC_SUITES/,/ }) ; do
+  for d in $(find . -wholename "*${suite}/spec" -type d) ; do
+    pushd "$(dirname $d)"
+
+    mkdir -p /var/tmp/${suite}
+    find /var/tmp/${suite}/ -type f | xargs rm -rvf || true
+
+    if [[ -d spec/bin ]] ; then
+      curl -sSL \
+        -o spec/bin/rabbitmqadmin \
+        http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
+      chmod +x spec/bin/rabbitmqadmin
+    fi
+
+    rsync -avz . /var/tmp/${suite}
+
+    chown -R travis:travis /var/tmp/${suite}
+    HOME=/home/travis sudo -u travis -- bash -l -c "
+      set -o xtrace
+      export PATH=\"/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:\$PATH\"
+      unset GEM_PATH
+      cd /var/tmp/${suite}
+      sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
+      rspec
+    "
+    rm -rvf /var/tmp/${suite}
+
+    popd
+  done
+done
+
+apt-add-repository --remove \
+  'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'

@@ -2,4 +2,3 @@ popularity-contest
 ppp
 pppconfig
 pppoeconf
-xauth

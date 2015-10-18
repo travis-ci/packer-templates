@@ -19,6 +19,7 @@ fi
 _purge_packages 'linux-headers'
 _purge_packages 'linux-source'
 _purge_packages 'chef'
+_purge_packages 'chefdk'
 
 if [[ $CLEAN_DEV_PACKAGES ]] ; then
   _purge_packages '-dev$'
