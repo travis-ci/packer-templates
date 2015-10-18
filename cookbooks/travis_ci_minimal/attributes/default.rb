@@ -159,6 +159,7 @@ override['travis_build_environment']['packages'] = %w(
   sqlite3
   subversion
   unzip
+  vim-tiny
   wamerican
   zip
   zlib1g-dev
