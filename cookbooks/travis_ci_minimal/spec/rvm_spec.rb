@@ -7,6 +7,7 @@ describe 'rvm installation' do
   describe 'rvm commands' do
     describe command('rvm list') do
       its(:stdout) { should include('rvm rubies', 'current') }
+      its(:stdout) { should include('ruby-1.9.3') }
     end
   end
 end
