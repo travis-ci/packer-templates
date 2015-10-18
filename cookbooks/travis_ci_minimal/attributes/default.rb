@@ -91,14 +91,15 @@ override['travis_build_environment']['packages'] = %w(
   bzr
   ca-certificates
   ccache
+  cron
   curl
   flex
   gawk
+  git
   gzip
   imagemagick
   iptables
   lemon
-  libbz2-dev
   libbz2-dev
   libc-client2007e-dev
   libcurl4-openssl-dev
@@ -108,11 +109,9 @@ override['travis_build_environment']['packages'] = %w(
   libgdbm-dev
   libgmp3-dev
   libicu-dev
-  libicu-dev
   libjpeg8-dev
   libkrb5-dev
   libldap-2.4.2
-  libldap2-dev
   libldap2-dev
   libltdl-dev
   libmagickwand-dev
@@ -158,9 +157,11 @@ override['travis_build_environment']['packages'] = %w(
   software-properties-common
   sqlite3
   subversion
+  sudo
   unzip
   vim-tiny
   wamerican
+  wget
   zip
   zlib1g-dev
 )

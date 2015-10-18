@@ -31,13 +31,15 @@ end
 include_recipe 'travis_build_environment'
 include_recipe 'apt'
 
-package Array(node['travis_build_environment']['packages']) do
-  action [:install, :upgrade]
+Array(node['travis_build_environment']['packages']).each_slice(10) do |slice|
+  package slice do
+    retries 2
+    action [:install, :upgrade]
+  end
 end
 
 include_recipe 'package-updates'
 include_recipe 'build-essential'
-include_recipe 'sysctl'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker'
