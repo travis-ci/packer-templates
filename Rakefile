@@ -25,21 +25,19 @@ end
 namespace :spec do
   targets = []
 
-  Dir.glob('./spec/*') do |dir|
-    next unless File.directory?(dir)
-    next if %w(bin files).include?(File.basename(dir))
-    targets << File.basename(dir)
+  Dir.glob('./cookbooks/**/spec') do |spec_dir|
+    next unless File.directory?(spec_dir)
+    targets << File.basename(File.dirname(spec_dir))
   end
 
   task all: %w(spec/bin/rabbitmqadmin) + targets
   task default: :all
 
   targets.each do |target|
-    desc "Run serverspec tests to #{target}"
+    desc "Run serverspec tests for #{target}"
     RSpec::Core::RakeTask.new(target.to_sym) do |t|
-      ENV['TARGET_HOST'] = target
       t.rspec_opts = (ENV['RSPEC_OPTS'] || '')
-      t.pattern = "spec/#{target}/*_spec.rb"
+      t.pattern = "./cookbooks/#{target}/spec/*_spec.rb"
     end
   end
 end

@@ -56,7 +56,7 @@ override['travis_python']['system']['pythons'] = []
 
 override['nodejs']['default'] = ''
 override['nodejs']['versions'] = []
-override['nodejs']['aliases'] = []
+override['nodejs']['aliases'] = {}
 override['nodejs']['default_modules'] = []
 
 override['system_info']['use_bundler'] = false
