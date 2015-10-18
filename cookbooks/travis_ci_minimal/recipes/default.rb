@@ -34,6 +34,7 @@ Array(node['travis_build_environment']['packages']).each_slice(10) do |slice|
 end
 
 include_recipe 'clang::tarball'
+include_recipe 'travis_cmake'
 include_recipe 'sysctl'
 include_recipe 'travis_git::ppa'
 include_recipe 'jq'

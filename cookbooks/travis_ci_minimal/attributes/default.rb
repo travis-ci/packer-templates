@@ -75,7 +75,6 @@ override['travis_build_environment']['packages'] = %w(
   bzr
   ca-certificates
   ccache
-  cmake
   curl
   flex
   gawk
