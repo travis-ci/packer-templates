@@ -2,6 +2,7 @@ default['travis_ci_mega']['prerequisite_packages'] = %w(
   cron
   curl
   git
+  software-properties-common
   sudo
   wget
 )
