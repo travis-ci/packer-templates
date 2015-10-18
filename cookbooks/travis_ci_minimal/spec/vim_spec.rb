@@ -8,7 +8,7 @@ describe 'vim installation' do
   describe 'vim commands' do
     describe 'add a file and replace text with vim' do
       before do
-        system('echo "blume" > ./spec/files/flower.txt')
+        File.write('./spec/files/flower.txt', "blume\n")
       end
 
       describe command('vim flower.txt -c s/blume/flower -c wq') do
