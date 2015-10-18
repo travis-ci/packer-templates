@@ -40,7 +40,7 @@ rubies = [
   { name: '2.2.3', arguments: '--binary --fuzzy' }
 ]
 
-ruby_names = rubies.map { |r| r['name'] }
+ruby_names = rubies.map { |r| r.fetch(:name) }
 mri_names = ruby_names.reject { |n| n =~ /jruby/ }
 
 def ruby_alias(full_name)
