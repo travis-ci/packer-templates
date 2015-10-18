@@ -80,6 +80,7 @@ override['system_info']['commands_file'] = \
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['packages'] = %w(
+  apt-transport-https
   autoconf
   automake
   bash
@@ -153,6 +154,7 @@ override['travis_build_environment']['packages'] = %w(
   rsync
   ruby-mysql2
   ruby2.0
+  software-properties-common
   sqlite3
   subversion
   unzip
