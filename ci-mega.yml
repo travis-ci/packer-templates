@@ -87,9 +87,9 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
-  - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
   - packer-scripts/disable-apparmor
+  - packer-scripts/run-serverspecs
   - packer-scripts/job-board-register
   - packer-scripts/minimize
   environment_vars:
