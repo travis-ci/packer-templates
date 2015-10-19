@@ -22,7 +22,7 @@ iptables
 lemon
 libbz2-dev
 libc-client2007e-dev
-libcurl4-openssl-dev
+libcurl4-gnutls-dev
 libexpat1-dev
 libffi-dev
 libfreetype6-dev
@@ -31,7 +31,7 @@ libgmp3-dev
 libicu-dev
 libjpeg8-dev
 libkrb5-dev
-libldap-2.4.2
+libldap-2.4-2
 libldap2-dev
 libltdl-dev
 libmagickwand-dev
