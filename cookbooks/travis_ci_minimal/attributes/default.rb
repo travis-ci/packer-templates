@@ -79,8 +79,6 @@ override['system_info']['commands_file'] = \
 
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['update_hostname'] = false
-override['travis_build_environment']['packages'] = \
-  node['travis_packer_templates']['base_packages']
 
 override['travis_packer_templates']['job_board']['languages'] = %w(generic)
 override['travis_packer_templates']['job_board']['edge'] = true

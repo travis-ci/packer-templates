@@ -142,8 +142,6 @@ override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
-override['travis_build_environment']['packages'] = \
-  node['travis_packer_templates']['base_packages']
 override['travis_packer_templates']['job_board']['languages'] = %w(
   c
   cpp
