@@ -62,7 +62,6 @@ md5deep
 mercurial
 mingw32
 mysql-client
-ncurses-dev
 netcat-openbsd
 openssl
 perl
