@@ -34,3 +34,17 @@ template '/etc/default/job-board-register' do
     edge: node['travis_packer_templates']['job_board']['edge']
   )
 end
+
+ruby_block 'load packages from packer-injected file' do
+  block do
+    if ::File.exist?(node['travis_packer_templates']['packages_file'])
+      node.set['travis_packer_templates']['packages'] = ::File.read(
+        node['travis_packer_templates']['packages_file']
+      ).split(/\n/).map(&:strip).reject { |l| l =~ /^#/ }.uniq
+    else
+      Chef::Log.info(
+        "No file found at #{node['travis_packer_templates']['packages_file']}"
+      )
+    end
+  end
+end

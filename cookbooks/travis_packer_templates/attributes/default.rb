@@ -15,9 +15,3 @@ default['travis_packer_templates']['job_board']['edge'] = false
 
 default['travis_packer_templates']['packages'] = []
 default['travis_packer_templates']['packages_file'] = '/var/tmp/packages.txt'
-
-if ::File.exist?(node['travis_packer_templates']['packages_file'])
-  default['travis_packer_templates']['packages'] = ::File.read(
-    node['travis_packer_templates']['packages_file']
-  ).split(/\n/).map(&:strip).reject { |l| l =~ /^#/ }.uniq
-end
