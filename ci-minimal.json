@@ -63,6 +63,11 @@
       "destination": "/var/tmp/purge.txt"
     },
     {
+      "type": "file",
+      "source": "packer-assets/ubuntu-trusty-ci-packages.txt",
+      "destination": "/var/tmp/packages.txt"
+    },
+    {
       "type": "shell",
       "scripts": [
         "packer-scripts/pre-chef-bootstrap",
