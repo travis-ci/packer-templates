@@ -15,6 +15,8 @@ apt-get install -y chefdk
 
 set -o xtrace
 
+chown -R travis:travis /var/tmp/*
+
 cd /tmp/packer-chef-solo
 
 for suite in $(echo ${SPEC_SUITES/,/ }) ; do
