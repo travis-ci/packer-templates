@@ -22,8 +22,6 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-execute 'apt-get update -yqq'
-
 template '/etc/default/job-board-register' do
   source 'etc-default-job-board-register.sh.erb'
   owner 'root'
@@ -33,4 +31,21 @@ template '/etc/default/job-board-register' do
     languages: node['travis_packer_templates']['job_board']['languages'],
     edge: node['travis_packer_templates']['job_board']['edge']
   )
+end
+
+if ::File.exist?(node['travis_packer_templates']['packages_file'])
+  node.set['travis_packer_templates']['packages'] = ::File.read(
+    node['travis_packer_templates']['packages_file']
+  ).split(/\n/).map(&:strip).reject { |l| l =~ /^#/ }.uniq
+else
+  Chef::Log.info(
+    "No file found at #{node['travis_packer_templates']['packages_file']}"
+  )
+end
+
+Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
+  package slice do
+    retries 2
+    action [:install, :upgrade]
+  end
 end

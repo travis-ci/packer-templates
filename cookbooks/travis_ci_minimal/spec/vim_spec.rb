@@ -1,16 +1,19 @@
 describe 'vim installation' do
   describe command('vim --version') do
+    its(:stdout) { should_not be_empty }
+    its(:stderr) { should be_empty }
     its(:exit_status) { should eq 0 }
   end
 
   describe 'vim commands' do
-    describe 'add a file and replace text with vim' do
+    describe 'batch editing' do
       before do
-        system('echo "blume" > ./spec/files/flower.txt')
+        File.write('./spec/files/flower.txt', "blume\n")
+        system('vim ./spec/files/flower.txt -c s/blume/flower -c wq')
       end
 
-      describe command('vim flower.txt -c s/blume/flower -c wq') do
-        its(:stdout) { should match 'flower' }
+      describe file('./spec/files/flower.txt') do
+        its(:content) { should match(/flower/) }
       end
     end
   end

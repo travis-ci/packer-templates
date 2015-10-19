@@ -63,6 +63,11 @@
       "destination": "/var/tmp/purge.txt"
     },
     {
+      "type": "file",
+      "source": "packer-assets/ubuntu-trusty-ci-packages.txt",
+      "destination": "/var/tmp/packages.txt"
+    },
+    {
       "type": "shell",
       "scripts": [
         "packer-scripts/pre-chef-bootstrap",
@@ -103,9 +108,10 @@
       "type": "shell",
       "scripts": [
         "packer-scripts/ensure-travis-user",
+        "packer-scripts/purge",
+        "packer-scripts/disable-apparmor",
         "packer-scripts/run-serverspecs",
         "packer-scripts/cleanup",
-        "packer-scripts/disable-apparmor",
         "packer-scripts/job-board-register",
         "packer-scripts/minimize"
       ],

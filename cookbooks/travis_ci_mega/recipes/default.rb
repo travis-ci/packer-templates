@@ -22,22 +22,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'travis_packer_templates'
-
-package Array(node['travis_ci_mega']['prerequisite_packages']) do
-  action [:install, :upgrade]
-end
-
-include_recipe 'travis_build_environment'
 include_recipe 'apt'
-
-package Array(node['travis_build_environment']['packages']) do
-  action [:install, :upgrade]
-end
-
-include_recipe 'package-updates'
-include_recipe 'build-essential'
-include_recipe 'sysctl'
+include_recipe 'travis_packer_templates'
+include_recipe 'travis_build_environment'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker'
@@ -63,16 +50,6 @@ include_recipe 'unarchivers'
 include_recipe 'md5deep'
 include_recipe 'dictionaries'
 include_recipe 'jq'
-include_recipe 'libqt4'
-include_recipe 'libgdbm'
-include_recipe 'libncurses'
-include_recipe 'libossp-uuid'
-include_recipe 'libffi'
-include_recipe 'libicu'
-include_recipe 'ragel'
-include_recipe 'imagemagick'
-include_recipe 'imagemagick::devel'
-include_recipe 'mingw32'
 include_recipe 'travis_java::multi'
 include_recipe 'ant'
 include_recipe 'maven'

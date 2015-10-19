@@ -1,9 +1,7 @@
 default['travis_ci_mega']['prerequisite_packages'] = %w(
-  apt-transport-https
   cron
   curl
   git
-  software-properties-common
   sudo
   wget
 )
@@ -144,7 +142,6 @@ override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
-
 override['travis_packer_templates']['job_board']['languages'] = %w(
   c
   cpp

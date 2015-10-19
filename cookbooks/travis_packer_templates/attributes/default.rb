@@ -12,3 +12,6 @@ end
 
 default['travis_packer_templates']['job_board']['languages'] = []
 default['travis_packer_templates']['job_board']['edge'] = false
+
+default['travis_packer_templates']['packages'] = []
+default['travis_packer_templates']['packages_file'] = '/var/tmp/packages.txt'

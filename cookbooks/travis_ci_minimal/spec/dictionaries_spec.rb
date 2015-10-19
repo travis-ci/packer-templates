@@ -5,7 +5,10 @@ describe 'dictionaries installation' do
 end
 
 describe 'dictionaries commands' do
-  describe command('look colonize') do
-    its(:stdout) { should include('colonize', 'colonized', 'colonizer', 'colonizers', 'colonizes') }
+  describe command('look kid') do
+    its(:stderr) { should be_empty }
+    its(:stdout) { should match(/^kidnappers$/) }
+    its(:stdout) { should match(/^kidding$/) }
+    its(:stdout) { should match(/^kidney$/) }
   end
 end
