@@ -80,7 +80,7 @@ sqlite3
 subversion
 sudo
 unzip
-vim-tiny
+vim
 wamerican
 wget
 zip
