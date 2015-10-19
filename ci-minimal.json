@@ -108,9 +108,10 @@
       "type": "shell",
       "scripts": [
         "packer-scripts/ensure-travis-user",
-        "packer-scripts/cleanup",
+        "packer-scripts/purge",
         "packer-scripts/disable-apparmor",
         "packer-scripts/run-serverspecs",
+        "packer-scripts/cleanup",
         "packer-scripts/job-board-register",
         "packer-scripts/minimize"
       ],
