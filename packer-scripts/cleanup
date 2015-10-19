@@ -3,35 +3,6 @@
 set -o errexit
 set -o xtrace
 
-export DEBIAN_FRONTEND='noninteractive'
-
-_purge_packages() {
-  dpkg --list | awk '{ print $2 }' | grep -- "$1" | \
-    grep -v -- "${2:-^$}" | xargs apt-get -y purge
-}
-
-apt-get -y update
-
-if [[ $APT_GET_UPGRADE_DURING_CLEANUP ]] ; then
-  apt-get -y upgrade
-fi
-
-_purge_packages 'linux-headers'
-_purge_packages 'linux-source'
-_purge_packages 'chef'
-_purge_packages 'chefdk'
-
-if [[ $CLEAN_DEV_PACKAGES ]] ; then
-  _purge_packages '-dev$'
-fi
-
-if [[ -f /var/tmp/purge.txt ]] ; then
-  grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
-fi
-
-apt-get -y autoremove
-apt-get -y clean
-
 rm -rf \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.? \
