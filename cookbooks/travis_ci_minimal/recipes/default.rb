@@ -22,17 +22,10 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+include_recipe 'apt'
+include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
-include_recipe 'apt'
-
-Array(node['travis_build_environment']['packages']).each_slice(10) do |slice|
-  package slice do
-    retries 2
-    action [:install, :upgrade]
-  end
-end
-
 include_recipe 'clang::tarball'
 include_recipe 'travis_cmake'
 include_recipe 'sysctl'

@@ -12,6 +12,7 @@ ca-certificates
 ccache
 cron
 curl
+dosemu
 flex
 gawk
 gettext
