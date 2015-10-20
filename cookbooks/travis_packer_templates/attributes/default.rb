@@ -14,8 +14,8 @@ end
 
 default['travis_packer_templates']['job_board']['languages'] = []
 default['travis_packer_templates']['job_board']['edge'] = (
-  node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_BRANCH'] = 'master' &&
-  node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] = ''
+  default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
+  default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] == ''
 )
 
 default['travis_packer_templates']['packages'] = []
