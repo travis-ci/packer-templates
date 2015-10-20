@@ -5,8 +5,8 @@
 ---
 description: Travis play build env template
 variables:
-  cookbooks_branch: "{{ env `COOKBOOKS_BRANCH` }}"
-  cookbooks_sha: "{{ env `COOKBOOKS_SHA` }}"
+  cookbooks_branch: "meat-path-tidy"
+  cookbooks_sha: "45cce74"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "<%= @image_prefix %>-play-<%= @dist %>-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
