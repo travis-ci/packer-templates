@@ -132,6 +132,7 @@
     {
       "type": "shell",
       "scripts": [
+        "packer-scripts/packer-env-dump",
         "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/remove-vagrant-user",
         "packer-scripts/clone-travis-cookbooks"
