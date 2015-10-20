@@ -64,6 +64,17 @@ provisioners:
   run_list:
   - recipe[system_info]
 - type: shell
+  scripts:
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/purge
+  - packer-scripts/disable-apparmor
+  - packer-scripts/run-serverspecs
+  environment_vars:
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - IMAGE_NAME={{ user `gce_image_name` }}
+  - SPEC_SUITES=travis_ci_minimal
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
   inline: while true ; do date -u ; echo tick ; sleep 1 ; done
   only:
   - googlecompute
