@@ -32,6 +32,7 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 
 override['rvm']['group_users'] = %w(travis)
 override['rvm']['install_rubies'] = false
+override['rvm']['root_path'] = '/home/travis/.rvm'
 override['rvm']['rubies'] = []
 override['rvm']['rvmrc']['rvm_remote_server_url3'] = \
   'https://s3.amazonaws.com/travis-rubies/binaries'
@@ -155,4 +156,3 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   rust
   scala
 )
-override['travis_packer_templates']['job_board']['edge'] = true

@@ -1,6 +1,7 @@
 describe 'rvm installation' do
   describe command('rvm version') do
     its(:stdout) { should match(/^rvm /) }
+    its(:stderr) { should be_empty }
     its(:exit_status) { should eq 0 }
   end
 
@@ -8,9 +9,10 @@ describe 'rvm installation' do
     describe command('rvm list') do
       its(:stdout) { should include('rvm rubies', 'current') }
       its(:stdout) { should include('ruby-1.9.3') }
+      its(:stderr) { should be_empty }
     end
 
-    describe command('bash -c ". ~/.bashrc ; rvm default do echo whatever"') do
+    describe command('rvm default do echo whatever') do
       its(:stderr) { should_not include('Warning!') }
       its(:stdout) { should_not include('Warning!') }
       its(:stdout) { should include('whatever') }

@@ -1,8 +1,8 @@
 {
   "description": "Travis play build env template",
   "variables": {
-    "cookbooks_branch": "meat-path-tidy",
-    "cookbooks_sha": "45cce74",
+    "travis_cookbooks_branch": "meat-path-tidy",
+    "travis_cookbooks_sha": "45cce74",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-play-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}"
@@ -49,8 +49,8 @@
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
-        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}",
-        "COOKBOOKS_SHA={{ user `cookbooks_sha` }}"
+        "TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}",
+        "TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },

@@ -46,9 +46,3 @@ done
 chmod 0600 /home/travis/.ssh/authorized_keys
 
 chown -R travis:travis /home/travis
-
-mkdir -p /var/tmp/packer-env
-
-for var in $(env | grep PACKER | awk -F= '{ print $1 }') ; do
-  eval "echo \$$var" > /var/tmp/packer-env/$var
-done
