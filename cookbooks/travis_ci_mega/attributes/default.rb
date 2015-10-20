@@ -47,23 +47,23 @@ override['rvm']['installs']['travis'] = {}.tap do |travis|
   travis['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
   travis['global_gems'] = %w(bundler nokogiri rake).map { |gem| { name: gem } }
   travis['rubies'] = rubies
-  travis['rvmrc_env']['rvm_autoupdate_flag'] = '0'
-  travis['rvmrc_env']['rvm_binary_flag'] = '1'
-  travis['rvmrc_env']['rvm_fuzzy_flag'] = '1'
-  travis['rvmrc_env']['rvm_remote_flag'] = '1'
-  travis['rvmrc_env']['rvm_gem_options'] = '--no-ri --no-rdoc'
-  travis['rvmrc_env']['rvm_max_time_flag'] = '5'
-  travis['rvmrc_env']['rvm_path'] = \
-    "#{node['travis_build_environment']['home']}/.rvm"
-  travis['rvmrc_env']['rvm_project_rvmrc'] = '0'
-  travis['rvmrc_env']['rvm_remote_server_type3'] = 'rubies'
-  travis['rvmrc_env']['rvm_remote_server_url3'] = \
-    'https://s3.amazonaws.com/travis-rubies/binaries'
-  travis['rvmrc_env']['rvm_remote_server_verify_downloads3'] = '1'
-  travis['rvmrc_env']['rvm_silence_path_mismatch_check_flag'] = '1'
-  travis['rvmrc_env']['rvm_user_install_flag'] = '1'
-  travis['rvmrc_env']['rvm_with_default_gems'] = 'rake bundler'
-  travis['rvmrc_env']['rvm_without_gems'] = 'rubygems-bundler'
+  travis['rvmrc_env'] = {}.tap do |rvmrc_env|
+    rvmrc_env['rvm_autoupdate_flag'] = '0'
+    rvmrc_env['rvm_binary_flag'] = '1'
+    rvmrc_env['rvm_fuzzy_flag'] = '1'
+    rvmrc_env['rvm_remote_flag'] = '1'
+    rvmrc_env['rvm_gem_options'] = '--no-ri --no-rdoc'
+    rvmrc_env['rvm_max_time_flag'] = '5'
+    rvmrc_env['rvm_path'] = "#{node['travis_build_environment']['home']}/.rvm"
+    rvmrc_env['rvm_project_rvmrc'] = '0'
+    rvmrc_env['rvm_remote_server_type3'] = 'rubies'
+    rvmrc_env['rvm_remote_server_url3'] = 'https://s3.amazonaws.com/travis-rubies/binaries'
+    rvmrc_env['rvm_remote_server_verify_downloads3'] = '1'
+    rvmrc_env['rvm_silence_path_mismatch_check_flag'] = '1'
+    rvmrc_env['rvm_user_install_flag'] = '1'
+    rvmrc_env['rvm_with_default_gems'] = 'rake bundler'
+    rvmrc_env['rvm_without_gems'] = 'rubygems-bundler'
+  end
 end
 
 gimme_versions = %w(
