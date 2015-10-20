@@ -64,9 +64,6 @@ provisioners:
   json: {}
   run_list:
   - recipe[apt]
-  - recipe[travis_build_environment]
-  - recipe[rvm::system]
-  - recipe[travis_rvm::multi]
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user

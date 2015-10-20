@@ -67,10 +67,7 @@
       ],
       "json": {},
       "run_list": [
-        "recipe[apt]",
-        "recipe[travis_build_environment]",
-        "recipe[rvm::system]",
-        "recipe[travis_rvm::multi]"
+        "recipe[apt]"
       ]
     },
     {
