@@ -1,6 +1,7 @@
 require 'serverspec'
 
 set :backend, :exec
+set :shell, 'bash'
 
 class Support
   def self.base_packages
