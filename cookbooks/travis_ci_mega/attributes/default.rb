@@ -40,31 +40,8 @@ rubies = %w(
   2.2.3
 )
 
-override['rvm']['group_users'] = %w(travis)
-override['rvm']['install_rubies'] = false
-override['rvm']['rubies'] = []
-override['rvm']['installs']['travis'] = {}.tap do |travis|
-  travis['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
-  travis['global_gems'] = %w(bundler nokogiri rake).map { |gem| { name: gem } }
-  travis['rubies'] = rubies
-  travis['rvmrc_env'] = {}.tap do |rvmrc_env|
-    rvmrc_env['rvm_autoupdate_flag'] = '0'
-    rvmrc_env['rvm_binary_flag'] = '1'
-    rvmrc_env['rvm_fuzzy_flag'] = '1'
-    rvmrc_env['rvm_remote_flag'] = '1'
-    rvmrc_env['rvm_gem_options'] = '--no-ri --no-rdoc'
-    rvmrc_env['rvm_max_time_flag'] = '5'
-    rvmrc_env['rvm_path'] = "#{node['travis_build_environment']['home']}/.rvm"
-    rvmrc_env['rvm_project_rvmrc'] = '0'
-    rvmrc_env['rvm_remote_server_type3'] = 'rubies'
-    rvmrc_env['rvm_remote_server_url3'] = 'https://s3.amazonaws.com/travis-rubies/binaries'
-    rvmrc_env['rvm_remote_server_verify_downloads3'] = '1'
-    rvmrc_env['rvm_silence_path_mismatch_check_flag'] = '1'
-    rvmrc_env['rvm_user_install_flag'] = '1'
-    rvmrc_env['rvm_with_default_gems'] = 'rake bundler'
-    rvmrc_env['rvm_without_gems'] = 'rubygems-bundler'
-  end
-end
+override['travis_build_environment']['rubies'] = rubies
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 
 gimme_versions = %w(
   1.0.3

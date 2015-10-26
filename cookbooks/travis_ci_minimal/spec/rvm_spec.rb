@@ -21,7 +21,7 @@ describe 'rvm installation' do
 
   %w(
     /home/travis/.rvmrc
-    /usr/local/rvm/user/db
+    /home/travis/.rvm/user/db
   ).each do |filename|
     describe file(filename) do
       it { should exist }

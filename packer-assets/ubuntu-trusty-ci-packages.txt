@@ -17,6 +17,7 @@ flex
 gawk
 gettext
 git
+gnupg2
 gzip
 imagemagick
 iptables
