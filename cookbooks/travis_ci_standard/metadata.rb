@@ -8,7 +8,7 @@ version '0.1.0'
 
 depends 'travis_build_environment'
 depends 'apt'
-#depends 'package-updates'
+# depends 'package-updates'
 depends 'build-essential'
 depends 'ccache'
 depends 'clang'
@@ -65,4 +65,3 @@ depends 'emacs'
 depends 'vim'
 depends 'system_info'
 depends 'sweeper'
-
