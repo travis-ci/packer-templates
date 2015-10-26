@@ -6,5 +6,5 @@ description 'Installs/Configures travis_worker_wrapper'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.1.0'
 
-depends 'travis_internal_base'
 depends 'travis_go_worker'
+depends 'travis_internal_base'
