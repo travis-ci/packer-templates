@@ -1,5 +1,3 @@
-include_attribute 'travis_build_environment'
-
 default['travis_ci_mega']['prerequisite_packages'] = %w(
   cron
   curl
@@ -31,17 +29,6 @@ override['composer']['github_oauth_token'] = \
 override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
-
-rubies = %w(
-  jruby-9.0.1.0
-  1.9.3-p551
-  2.0.0-p647
-  2.1.7
-  2.2.3
-)
-
-override['travis_build_environment']['rubies'] = rubies
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 
 gimme_versions = %w(
   1.0.3
@@ -118,6 +105,16 @@ end
 
 override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
 
+rubies = %w(
+  jruby-9.0.1.0
+  1.9.3-p551
+  2.0.0-p647
+  2.1.7
+  2.2.3
+)
+
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['languages'] = %w(

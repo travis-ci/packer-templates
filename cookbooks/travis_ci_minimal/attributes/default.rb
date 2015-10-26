@@ -1,5 +1,3 @@
-include_attribute 'travis_build_environment'
-
 override['travis_java']['default_version'] = ''
 override['travis_java']['alternate_versions'] = []
 
@@ -27,14 +25,6 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-rubies = %w(
-  1.9.3-p551
-  2.2.3
-)
-
-override['travis_build_environment']['rubies'] = rubies
-override['travis_build_environment']['default_ruby'] = rubies.max
-
 override['gimme']['versions'] = []
 override['gimme']['default_version'] = ''
 
@@ -52,7 +42,14 @@ override['system_info']['use_bundler'] = false
 override['system_info']['commands_file'] = \
   '/var/tmp/minimal-system-info-commands.yml'
 
-override['travis_build_environment']['use_tmpfs_for_builds'] = false
+rubies = %w(
+  1.9.3-p551
+  2.2.3
+)
+
+override['travis_build_environment']['default_ruby'] = rubies.max
+override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['update_hostname'] = false
+override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_packer_templates']['job_board']['languages'] = %w(generic)
