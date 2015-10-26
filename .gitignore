@@ -13,3 +13,5 @@ packer_cache
 /output-*
 /*.box
 .kitchen
+/*.pem
+rabbitmqadmin

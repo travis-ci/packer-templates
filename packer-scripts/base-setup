@@ -3,7 +3,7 @@
 set -o errexit
 set -o xtrace
 
-export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND='noninteractive'
 
 mv /var/tmp/apt-conf-90translations /etc/apt/apt.conf.d/90translations
 mv /var/tmp/generate-ssh-host-keys /usr/local/sbin/generate-ssh-host-keys
@@ -13,6 +13,8 @@ chown root:root /etc/init.d/ssh-keygen /usr/local/sbin/generate-ssh-host-keys
 chmod 0750 /etc/init.d/ssh-keygen /usr/local/sbin/generate-ssh-host-keys
 
 update-rc.d ssh-keygen defaults
+
+rm -vf /etc/apt/sources.list.d/partner.list
 
 apt-get update -yqq
 apt-get upgrade -yqq

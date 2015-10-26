@@ -3,29 +3,10 @@
 set -o errexit
 set -o xtrace
 
-_purge_packages() {
-  dpkg --list | awk '{ print $2 }' | grep -- "$1" | \
-    grep -v -- "${2:-^$}" | xargs apt-get -y purge
-}
-
-_purge_packages 'linux-headers'
-_purge_packages 'linux-source'
-_purge_packages 'chef'
-
-if [[ $CLEAN_DEV_PACKAGES ]] ; then
-  _purge_packages '-dev$'
-fi
-
-if [[ -f /var/tmp/purge.txt ]] ; then
-  grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
-fi
-
-apt-get -y autoremove
-apt-get -y clean
-
 rm -rf \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.? \
+  /opt/chef \
   /tmp/packer* \
   /var/log/installer \
   /var/lib/man-db \

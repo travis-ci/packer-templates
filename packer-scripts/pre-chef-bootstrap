@@ -5,11 +5,13 @@ set -o xtrace
 
 shopt -s nullglob
 
-export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND='noninteractive'
 
 if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
   APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
 fi
+
+rm -vf /etc/apt/sources.list.d/partner.list
 
 apt-get update -yqq
 apt-get install -yqq \

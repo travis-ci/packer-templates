@@ -2,3 +2,23 @@ inherit_from: .rubocop_todo.yml
 
 Style/Documentation:
   Enabled: false
+
+Style/FileName:
+  Exclude:
+    - 'run-foodcritic'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'run-foodcritic'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'run-foodcritic'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'run-foodcritic'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'run-foodcritic'

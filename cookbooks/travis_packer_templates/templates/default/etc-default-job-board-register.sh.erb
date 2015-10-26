@@ -1,0 +1,9 @@
+# Managed by Chef! :heart_eyes_cat:
+
+TAGS="group:<%= @edge ? 'edge' : 'dev' %>"
+
+<% @languages.each do |lang| %>
+TAGS="$TAGS,language_<%= lang %>:true"
+<% end %>
+
+export TAGS

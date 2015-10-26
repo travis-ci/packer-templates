@@ -1,7 +1,8 @@
 {
   "variables": {
-    "cookbooks_branch": "{{ env `COOKBOOKS_BRANCH` }}",
-    "cookbooks_sha": "{{ env `COOKBOOKS_SHA` }}",
+    "travis_cookbooks_branch": "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}",
+    "travis_cookbooks_sha": "{{ env `TRAVIS_COOKBOOKS_SHA` }}",
+    "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}"
   },
   "builders": [
@@ -25,7 +26,7 @@
       "ssh_timeout": "10m",
       "ssh_port": 22,
       "image_description": "Travis CI Android",
-      "account_file": "tmp/gce.json",
+      "account_file": "{{ user `gce_account_file` }}",
       "project_id": "{{ user `gce_project_id` }}",
       "source_image": "ubuntu-1204-precise-v20150910",
       "zone": "us-central1-a",
@@ -46,14 +47,15 @@
     {
       "type": "shell",
       "scripts": [
+        "packer-scripts/packer-env-dump",
         "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/remove-vagrant-user",
         "packer-scripts/travis-images-setup-env",
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
-        "COOKBOOKS_BRANCH={{ user `cookbooks_branch` }}",
-        "COOKBOOKS_SHA={{ user `cookbooks_sha` }}"
+        "TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}",
+        "TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
@@ -74,7 +76,7 @@
           ]
         },
         "system_info": {
-          "cookbooks_sha": "{{ user `cookbooks_sha` }}"
+          "travis_cookbooks_sha": "{{ user `travis_cookbooks_sha` }}"
         }
       },
       "run_list": [

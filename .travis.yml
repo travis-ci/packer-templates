@@ -1,7 +1,23 @@
-language: ruby
+language: generic
+
+env:
+  global:
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+
+addons:
+  apt:
+    sources:
+    - chef-stable-precise
+    packages:
+    - chefdk
+
+install:
+- unset GEM_PATH
+
 script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- bundle exec rake
+- rubocop
+- ./run-foodcritic cookbooks
 - ./runtests
