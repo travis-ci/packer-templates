@@ -16,3 +16,5 @@ override['gimme']['default_version'] = gimme_versions.max
 default['python']['pyenv']['pythons'] = []
 
 default['travis_build_environment']['use_tmpfs_for_builds'] = false
+
+default['travis_ci_standard']['standalone'] = false

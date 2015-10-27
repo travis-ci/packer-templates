@@ -1,10 +1,4 @@
-libx11-6
-libx11-data
-libxcb1
-libxext6
-libxmuu1
 popularity-contest
 ppp
 pppconfig
 pppoeconf
-xauth
