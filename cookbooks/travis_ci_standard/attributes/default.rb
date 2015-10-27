@@ -1,18 +1,18 @@
-# default attributes
-#
+rubies = %w(
+  1.9.3
+)
 
-# rvm defaults
+default['rvm']['default'] = rubies.max
+default['rvm']['rubies'] = rubies.map { |r| { 'name' => r } }
+default['rvm']['gems'] = %w(nokogiri)
 
-default['rvm']['default'] = '1.9.3'
-default['rvm']['rubies'] = { 'name' => '1.9.3' }
-default['rvm']['gems'] = ['nokogiri']
+gimme_versions = %w(
+  1.4.2
+)
 
-# gimme defaults
-default['gimme']['versions'] = ['1.4.2']
-default['gimme']['default_version'] = '1.4.2'
+override['gimme']['versions'] = gimme_versions
+override['gimme']['default_version'] = gimme_versions.max
 
-# python defaults
 default['python']['pyenv']['pythons'] = []
 
-# travis defaults
 default['travis_build_environment']['use_tmpfs_for_builds'] = false
