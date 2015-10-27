@@ -6,19 +6,27 @@ describe 'cassandra installation' do
   describe 'cassandra commands', sudo: true do
     before :all do
       system('sudo /etc/init.d/cassandra start')
-      system('sleep 10')
+      sleep 10
     end
 
     describe service('cassandra') do
       it { should be_running }
     end
 
-    describe command('cassandra-cli -host localhost -port 9160 &') do
-      its(:stdout) { should match 'Connected to: \"Test Cluster\" on localhost/9160' }
+    describe command('cqlsh --version') do
+      its(:stdout) { should match(/cqlsh \d/) }
     end
 
-    describe command('cassandra-cli -host localhost -port 9160 -f ./spec/files/cassandra_schema.txt') do
-      its(:stdout) { should include('Value inserted', 'Returned 3 results', 'name=age', 'value=45', 'name=first', 'value=Allen', 'name=last', 'value=Dakota') }
+    describe command('cqlsh --debug -e quit') do
+      its(:stdout) { should be_empty }
+      its(:stderr) { should match(/Using CQL driver:/) }
+      its(:stderr) { should match(/Using thrift lib:/) }
+    end
+
+    describe command('cqlsh --no-color --debug -f ./spec/files/cassandra_schema.cql') do
+      its(:stdout) { should match(/\s+first\s+\|\s+Jane/) }
+      its(:stdout) { should match(/\s+last\s+\|\s+Doe/) }
+      its(:stdout) { should match(/\s+age\s+\|\s+84/) }
     end
   end
 end
