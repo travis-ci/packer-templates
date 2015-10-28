@@ -4,7 +4,7 @@ describe 'rabbitmq installation' do
       'sudo service rabbitmq-server start',
       [:out, :err] => '/dev/null'
     )
-    sleep 3
+    procwait(/rabbitmq_server/, 30)
   end
 
   describe package('rabbitmq-server') do
