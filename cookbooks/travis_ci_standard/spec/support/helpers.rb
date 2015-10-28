@@ -15,5 +15,18 @@ module Support
         end
       end
     end
+
+    def procwait(proc_pattern, timeout = 10)
+      now = Time.now
+
+      loop do
+        procs = `ps aux`.split(/\n/).map(&:strip)
+        break if procs.grep(proc_pattern).any?
+        raise TimesUp if (Time.now - now >= timeout)
+        sleep 0.1
+      end
+    end
+
+    TimesUp = Class.new(StandardError)
   end
 end
