@@ -1,18 +1,17 @@
 describe 'rabbitmq installation' do
+  before :all do
+    system(
+      'sudo service rabbitmq-server start',
+      [:out, :err] => '/dev/null'
+    )
+    sleep 3
+  end
+
   describe package('rabbitmq-server') do
     it { should be_installed }
   end
 
   describe 'rabbitmq commands', sudo: true do
-    before :all do
-      system(
-        'sudo service rabbitmq-server start',
-        [:out, :err] => '/dev/null'
-      )
-      # tcpwait('127.0.0.1', 5672)
-      sleep 5
-    end
-
     describe service('rabbitmq-server') do
       it { should be_running }
     end
@@ -30,14 +29,6 @@ describe 'rabbitmq installation' do
   end
 
   describe 'rabbitmqadmin commands', sudo: true do
-    before :all do
-      system(
-        'sudo service rabbitmq-server start',
-        [:out, :err] => '/dev/null'
-      )
-      sleep 5
-    end
-
     before :each do
       system(
         './spec/bin/rabbitmqadmin declare queue ' \
