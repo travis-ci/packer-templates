@@ -78,7 +78,6 @@ include_recipe 'xserver'
 include_recipe 'firefox::tarball'
 include_recipe 'chromium'
 include_recipe 'phantomjs::tarball'
-include_recipe 'phantomjs::2.0'
 include_recipe 'emacs::nox'
 include_recipe 'vim'
 
