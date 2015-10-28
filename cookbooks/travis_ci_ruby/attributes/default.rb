@@ -2,6 +2,7 @@ override['rvm']['rubies'] = [
   # { name:  'jruby-1.7.19-d18', arguments: '--18', check_for: 'jruby-d18' },
   # { name:  'jruby-1.7.19-d19', arguments: '--19', check_for: 'jruby-d19' },
   # { name:  'jruby-9.0.0.0.pre1' },
+  { name: 'ree' }
 ] + (%w(
   1.8.7
   1.9.2
@@ -12,7 +13,6 @@ override['rvm']['rubies'] = [
   2.1.4
   2.1.5
   2.2.0
-  ree
 ).map { |name| { name: name, arguments: '--binary --fuzzy' } })
 
 override['rvm']['gems'] = %w(
