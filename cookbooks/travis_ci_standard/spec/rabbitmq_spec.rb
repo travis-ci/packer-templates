@@ -9,10 +9,11 @@ describe 'rabbitmq installation' do
         'sudo service rabbitmq-server start',
         [:out, :err] => '/dev/null'
       )
-      tcpwait('127.0.0.1', 5672)
+      # tcpwait('127.0.0.1', 5672)
+      sleep 5
     end
 
-    describe service('rabbitmq') do
+    describe service('rabbitmq-server') do
       it { should be_running }
     end
 
