@@ -10,7 +10,7 @@ describe 'riak installation' do
 
   describe 'riak commands', sudo: true do
     before do
-      system('sudo riak start')
+      sh('sudo riak start')
       sleep 5
     end
 

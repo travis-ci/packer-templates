@@ -6,13 +6,11 @@ describe 'mercurial installation' do
 
   describe 'mecurial commands are executed' do
     before :all do
-      system(
-        %w(
-          rm -rf hg-test-project ;
-          hg init hg-test-project ;
-          touch hg-test-project/test-file.txt
-        ).join(' ')
-      )
+      sh(%w(
+        rm -rf hg-test-project ;
+        hg init hg-test-project ;
+        touch hg-test-project/test-file.txt
+      ).join(' '))
     end
 
     describe command(

@@ -13,18 +13,12 @@ apt-add-repository \
 apt-get update -y
 apt-get install -y chefdk
 
-set -o xtrace
-
-chown -R travis:travis /var/tmp/*
-
+chown -R travis:travis /tmp/packer-chef-solo
 cd /tmp/packer-chef-solo
 
 for suite in $(echo ${SPEC_SUITES/,/ }) ; do
   for d in $(find . -wholename "*${suite}/spec" -type d) ; do
     pushd "$(dirname $d)"
-
-    mkdir -p /var/tmp/${suite}
-    find /var/tmp/${suite}/ -type f | xargs rm -rvf || true
 
     if [[ -d spec/bin ]] ; then
       curl -sSL \
@@ -33,19 +27,15 @@ for suite in $(echo ${SPEC_SUITES/,/ }) ; do
       chmod +x spec/bin/rabbitmqadmin
     fi
 
-    rsync -avz . /var/tmp/${suite}
-
-    chown -R travis:travis /var/tmp/${suite}
     HOME=/home/travis sudo -u travis -- bash -l -c "
       set -o xtrace
       export PATH=\"/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:\$PATH\"
       export TERM=xterm
       unset GEM_PATH
-      cd /var/tmp/${suite}
+      cd $(pwd)
       sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
-      rspec
+      rspec ${SPEC_ARGS}
     "
-    rm -rvf /var/tmp/${suite}
 
     popd
   done

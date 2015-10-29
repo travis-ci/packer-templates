@@ -5,8 +5,8 @@ describe 'neo4j installation' do
 
   describe 'neo4j commands', sudo: true do
     before :all do
-      system('sudo neo4j start')
-      system('sleep 10')
+      sh('sudo neo4j start')
+      sleep 10
     end
 
     describe service('neo4j') do

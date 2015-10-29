@@ -9,7 +9,7 @@ describe 'vim installation' do
     describe 'batch editing' do
       before do
         File.write('./spec/files/flower.txt', "blume\n")
-        system('vim ./spec/files/flower.txt -c s/blume/flower -c wq')
+        sh('vim ./spec/files/flower.txt -c s/blume/flower -c wq')
       end
 
       describe file('./spec/files/flower.txt') do

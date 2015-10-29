@@ -1,9 +1,7 @@
-rubies = %w(
-  1.9.3
-)
-
-default['rvm']['default'] = rubies.max
-default['rvm']['rubies'] = rubies.map { |r| { 'name' => r } }
+default['rvm']['default'] = '1.9.3'
+default['rvm']['rubies'] = [
+  { name: '1.9.3', arguments: '--binary --fuzzy' }
+]
 default['rvm']['gems'] = %w(nokogiri)
 
 gimme_versions = %w(
