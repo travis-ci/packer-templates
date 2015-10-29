@@ -5,7 +5,7 @@ describe 'firefox installation' do
 
   describe 'firefox commands' do
     before do
-      system 'DISPLAY=:99.0 firefox -CreateProfile test'
+      sh('DISPLAY=:99.0 firefox -CreateProfile test')
     end
 
     describe file('/home/travis/.mozilla/firefox/profiles.ini') do
