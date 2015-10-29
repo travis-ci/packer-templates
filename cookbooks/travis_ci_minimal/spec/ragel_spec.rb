@@ -14,7 +14,7 @@ describe 'ragel installation' do
         File.open('./spec/files/hello_world.rl', 'w') do |f|
           f.puts 'puts "Hello World"'
         end
-        system('ragel -R ./spec/files/hello_world.rl')
+        sh('ragel -R ./spec/files/hello_world.rl')
       end
 
       describe command('cat ./spec/files/hello_world.rb') do

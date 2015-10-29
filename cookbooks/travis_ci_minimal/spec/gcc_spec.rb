@@ -1,13 +1,10 @@
 describe 'gcc installation' do
   before :all do
-    system(
-      %w(
-        mkdir -p /tmp/travis-images-specs/gcc ;
-        cd /tmp/travis-images-specs/gcc ;
-        find . -type f | xargs rm -rf
-      ).join(' '),
-      [:out, :err] => '/dev/null'
-    )
+    sh(%w(
+      mkdir -p /tmp/travis-images-specs/gcc ;
+      cd /tmp/travis-images-specs/gcc ;
+      find . -type f | xargs rm -rf
+    ).join(' '))
   end
 
   describe command('gcc -v') do

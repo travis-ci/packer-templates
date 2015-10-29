@@ -9,10 +9,11 @@ describe 'couchdb installation' do
 
   describe 'couchdb commands', sudo: true do
     before :all do
-      system('sudo service couchdb start')
-      system('sleep 5')
-      system('curl -X PUT http://127.0.0.1:5984/baseball')
-      system('curl -X PUT http://127.0.0.1:5984/baseball/bat -H \'Content-Type: application/json\' -d \'{"Name":"Testname"}\'')
+      sh('sudo service couchdb start')
+      sleep 5
+      sh('curl -X PUT http://127.0.0.1:5984/baseball')
+      sh('curl -X PUT http://127.0.0.1:5984/baseball/bat ' \
+         '-H \'Content-Type: application/json\' -d \'{"Name":"Testname"}\'')
     end
 
     describe command('curl http://127.0.0.1:5984/') do

@@ -5,7 +5,7 @@ describe 'cassandra installation' do
 
   describe 'cassandra commands', sudo: true do
     before :all do
-      system('sudo /etc/init.d/cassandra start')
+      sh('sudo /etc/init.d/cassandra start')
       sleep 10
     end
 

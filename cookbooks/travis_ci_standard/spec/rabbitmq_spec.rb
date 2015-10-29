@@ -1,10 +1,13 @@
 describe 'rabbitmq installation' do
   before :all do
-    system(
-      'sudo service rabbitmq-server start',
-      [:out, :err] => '/dev/null'
-    )
+    sh('sudo service rabbitmq-server start')
+
     procwait(/rabbitmq_server/, 30)
+
+    sh('./spec/bin/rabbitmqadmin declare queue ' \
+       'name=my-test-queue durable=false')
+    sh('./spec/bin/rabbitmqadmin publish exchange=amq.default ' \
+       'routing_key=my-test-queue payload="hello, world"')
   end
 
   describe package('rabbitmq-server') do
@@ -12,10 +15,6 @@ describe 'rabbitmq installation' do
   end
 
   describe 'rabbitmq commands', sudo: true do
-    describe service('rabbitmq-server') do
-      it { should be_running }
-    end
-
     describe command('sudo service rabbitmq-server status') do
       its(:stdout) { should match 'running_applications' }
     end
@@ -29,27 +28,11 @@ describe 'rabbitmq installation' do
   end
 
   describe 'rabbitmqadmin commands', sudo: true do
-    before :each do
-      system(
-        './spec/bin/rabbitmqadmin declare queue ' \
-        'name=my-test-queue durable=false',
-        [:out, :err] => '/dev/null'
-      )
-      system(
-        './spec/bin/rabbitmqadmin publish exchange=amq.default ' \
-        'routing_key=my-test-queue payload="hello, world"',
-        [:out, :err] => '/dev/null'
-      )
-      sleep 2
-    end
-
     describe command('./spec/bin/rabbitmqadmin list queues') do
       its(:stdout) { should include('my-test-queue') }
     end
 
-    describe command(
-      './spec/bin/rabbitmqadmin get queue=my-test-queue requeue=false'
-    ) do
+    describe command('./spec/bin/rabbitmqadmin get queue=my-test-queue') do
       its(:stdout) { should include('my-test-queue', 'hello, world') }
     end
   end

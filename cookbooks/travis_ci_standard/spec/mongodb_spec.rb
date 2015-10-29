@@ -6,9 +6,9 @@ describe 'mongodb installation' do
 
   describe 'mongo commands', sudo: true do
     before :all do
-      system 'sudo service mongodb start'
+      sh('sudo service mongodb start')
       sleep 10
-      system 'mongo --eval "db.testData.insert( { x : 6 } );"'
+      sh('mongo --eval "db.testData.insert( { x : 6 } );"')
     end
 
     describe file('/var/log/mongodb/mongodb.log') do
