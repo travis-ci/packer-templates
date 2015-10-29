@@ -85,31 +85,9 @@
       "remote_cookbook_paths": [
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
-      "json": {
-        "nodejs": {
-          "versions": [
-            "0.6.21",
-            "0.8.27",
-            "0.10.18",
-            "0.10.36",
-            "0.11.15"
-          ],
-          "aliases": {
-            "0.10": "0.1",
-            "0.11.15": "node-unstable"
-          },
-          "default": "0.10.36"
-        },
-        "system_info": {
-          "travis_cookbooks_sha": "{{ user `travis_cookbooks_sha` }}"
-        }
-      },
+      "json": {},
       "run_list": [
-        "recipe[travis_ci_standard]",
-        "recipe[nodejs::multi]",
-        "recipe[nodejs::iojs]",
-        "recipe[system_info]",
-        "recipe[sweeper]"
+        "recipe[travis_ci_nodejs]"
       ]
     },
     {
