@@ -1,7 +1,7 @@
 ---
 description: Travis play build env template
 variables:
-  travis_cookbooks_branch: "meat-brushoff"
+  travis_cookbooks_branch: "meat-sbt-update"
   travis_cookbooks_sha: ""
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-play-precise-{{ timestamp }}"
@@ -51,7 +51,9 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json: {}
   run_list:
-  - 'recipe[rabbitmq::with_management_plugin]'
+  - 'recipe[travis_build_environment]'
+  - 'recipe[java]'
+  - 'recipe[sbt-extras]'
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
@@ -62,7 +64,7 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - IMAGE_NAME={{ user `gce_image_name` }}
   - SPEC_SUITES=travis_ci_standard
-  - SPEC_ARGS=./spec/rabbitmq_spec.rb
+  - SPEC_ARGS=./spec/java_spec.rb
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   inline: while true ; do date -u ; echo tick ; sleep 1 ; done
