@@ -23,6 +23,6 @@ describe 'riak installation', sudo: true do
       'sleep 1 ; ' \
     'done'
   ) do
-    its(:stdout) { should match(/^Successfully completed 1 read\/write cycle/)
+    its(:stdout) { should match(/^Successfully completed 1 read\/write cycle/) }
   end
 end
