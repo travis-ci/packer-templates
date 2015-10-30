@@ -26,8 +26,8 @@ describe 'elasticsearch installation', sudo: true do
   describe command(
     "curl -X GET 'http://localhost:9200/twitter/tweet/_search?q=message:Trying&pretty=true'"
   ) do
-    its(:stdout) { should match(/"total": 1/) }
-    its(:stdout) { should match(/"user": "kimchy"/) }
-    its(:stdout) { should match(/"message": "Trying out Elasticsearch"/) }
+    its(:stdout) { should match(/"total"\s*:\s*1/) }
+    its(:stdout) { should match(/"user"\s*:\s*"kimchy"/) }
+    its(:stdout) { should match(/"message"\s*:\s*"Trying out Elasticsearch"/) }
   end
 end
