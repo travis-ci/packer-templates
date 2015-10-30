@@ -85,7 +85,7 @@
         "TRAVIS_OBFUSCATE_PASSWORD=1",
         "IMAGE_NAME={{ user `gce_image_name` }}",
         "SPEC_SUITES=travis_ci_standard",
-        "SPEC_ARGS=./spec/rabbitmq_spec.rb"
+        "SPEC_ARGS=./spec/java_spec.rb"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
