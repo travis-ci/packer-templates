@@ -1,7 +1,7 @@
 describe 'riak installation', sudo: true do
   before :all do
     sh('sudo riak start')
-    sleep 5
+    sleep 10
   end
 
   describe package('riak') do
@@ -14,6 +14,10 @@ describe 'riak installation', sudo: true do
   end
 
   describe command('sudo riak ping') do
-    its(:stdout) { should match 'pong' }
+    its(:stdout) { should match(/^pong$/) }
+  end
+
+  describe command('sudo riak-admin test') do
+    its(:stdout) { should match(/^Successfully completed 1 read\/write cycle/)
   end
 end
