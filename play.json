@@ -1,7 +1,7 @@
 {
   "description": "Travis play build env template",
   "variables": {
-    "travis_cookbooks_branch": "meat-brushoff",
+    "travis_cookbooks_branch": "meat-sbt-update",
     "travis_cookbooks_sha": "",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-play-precise-{{ timestamp }}",
@@ -68,7 +68,9 @@
       ],
       "json": {},
       "run_list": [
-        "recipe[rabbitmq::with_management_plugin]"
+        "recipe[travis_build_environment]",
+        "recipe[java]",
+        "recipe[sbt-extras]"
       ]
     },
     {
