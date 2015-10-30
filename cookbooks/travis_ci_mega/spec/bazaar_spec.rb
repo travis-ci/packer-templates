@@ -6,12 +6,9 @@ describe 'bazaar installation' do
 
   describe 'bazaar commands' do
     before :each do
-      system(
-        %w(rm -rf bzr-project ;
-           bzr init bzr-project ;
-           touch bzr-project/test-file.rb).join(' '),
-        [:out, :err] => '/dev/null'
-      )
+      sh(%w(rm -rf bzr-project ;
+            bzr init bzr-project ;
+            touch bzr-project/test-file.rb).join(' '))
     end
 
     describe command(

@@ -5,7 +5,7 @@ describe 'imagemagick installation' do
 
   describe 'imagemagick commands' do
     before do
-      system('convert logo: logo.gif')
+      sh('convert logo: logo.gif')
     end
 
     describe command('identify logo.gif') do

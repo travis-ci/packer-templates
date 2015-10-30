@@ -1,6 +1,6 @@
 describe 'apt installation' do
   before :all do
-    system('sudo apt-get update -yqq', [:out, :err] => '/dev/null')
+    sh('sudo apt-get update -yqq')
   end
 
   describe command('apt-get -v') do

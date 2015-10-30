@@ -6,10 +6,7 @@ describe 'scons installation' do
 
   describe 'scons commands' do
     before :each do
-      system(
-        'rm -f ./spec/files/helloworld.o ./spec/files/helloworld',
-        [:out, :err] => '/dev/null'
-      )
+      sh('rm -f ./spec/files/helloworld.o ./spec/files/helloworld')
     end
 
     describe command('scons -C ./spec/files') do

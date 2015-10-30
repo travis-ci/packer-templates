@@ -11,10 +11,7 @@ describe 'redis installation' do
     end
 
     before :each do
-      system(
-        'redis-cli -p 16379 SET test_key test_value',
-        [:out, :err] => '/dev/null'
-      )
+      sh('redis-cli -p 16379 SET test_key test_value')
     end
 
     describe command('redis-cli -p 16379 PING') do

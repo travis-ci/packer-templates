@@ -10,8 +10,8 @@ describe 'memcached installation' do
 
   describe 'memcached commands', sudo: true do
     before :all do
-      system('sudo service memcached start', [:out, :err] => '/dev/null')
-      system('sleep 5')
+      sh('sudo service memcached start')
+      sleep 5
     end
 
     describe service('memcached') do

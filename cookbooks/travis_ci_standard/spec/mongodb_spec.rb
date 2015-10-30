@@ -6,20 +6,17 @@ describe 'mongodb installation' do
 
   describe 'mongo commands', sudo: true do
     before :all do
-      system('sudo service mongodb start')
-      system('sleep 10')
+      sh('sudo service mongodb start')
+      sleep 10
+      sh('mongo --eval "db.testData.insert( { x : 6 } );"')
     end
 
-    describe command('cat /var/log/mongodb/mongodb.log') do
-      its(:stdout) { should match '[initandlisten] waiting for connections on port' }
-    end
-
-    describe command('mongo --eval "db.testData.insert( { x : 6 } ); db.getCollectionNames()"') do
-      its(:stdout) { should match 'testData' }
+    describe file('/var/log/mongodb/mongodb.log') do
+      its(:content) { should match(/\[initandlisten\] waiting for connections on port/) }
     end
 
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
-      its(:stdout) { should match '{ "_id" : ObjectId\("[\w]+"\), "x" : 6 }' }
+      its(:stdout) { should match(/{ "_id" : ObjectId\("[\w]+"\), "x" : 6 }/) }
     end
   end
 end

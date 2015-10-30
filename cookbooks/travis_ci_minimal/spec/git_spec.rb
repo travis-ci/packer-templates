@@ -10,11 +10,11 @@ describe 'git installation' do
 
   describe 'git commands' do
     before :each do
-      system(%w(
+      sh(%w(
         rm -rf git-project ;
         git init git-project ;
         touch git-project/test-file.txt
-      ).join(' '), [:out, :err] => '/dev/null')
+      ).join(' '))
     end
 
     describe command(

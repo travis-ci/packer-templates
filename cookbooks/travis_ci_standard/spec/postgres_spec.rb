@@ -6,10 +6,7 @@ describe 'postgres installation' do
 
   describe 'psql commands' do
     before do
-      system(
-        'dropdb test_db || true ; createdb test_db',
-        [:out, :err] => '/dev/null'
-      )
+      sh('dropdb test_db || true ; createdb test_db')
     end
 
     describe command('psql -ltA') do

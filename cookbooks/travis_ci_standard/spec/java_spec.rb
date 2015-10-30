@@ -10,7 +10,7 @@ describe 'java installation' do
 
   describe 'java command' do
     before do
-      system('cd ./spec/files && javac Hello.java')
+      Dir.chdir('./spec/files') { sh('javac Hello.java') }
     end
 
     describe command('cd ./spec/files && java Hello') do
