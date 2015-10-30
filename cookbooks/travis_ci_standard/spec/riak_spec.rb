@@ -1,4 +1,9 @@
-describe 'riak installation' do
+describe 'riak installation', sudo: true do
+  before :all do
+    sh('sudo riak start')
+    sleep 5
+  end
+
   describe package('riak') do
     it { should be_installed }
   end
@@ -8,18 +13,7 @@ describe 'riak installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe 'riak commands', sudo: true do
-    before do
-      sh('sudo riak start')
-      sleep 5
-    end
-
-    describe command('sudo riak ping') do
-      its(:stdout) { should match 'pong' }
-    end
-
-    describe command('sudo riak-admin test') do
-      its(:stdout) { should match 'completed 1 read/write cycle' }
-    end
+  describe command('sudo riak ping') do
+    its(:stdout) { should match 'pong' }
   end
 end
