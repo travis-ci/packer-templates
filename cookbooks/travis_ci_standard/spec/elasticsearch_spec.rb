@@ -1,4 +1,4 @@
-describe 'elasticsearch installation' do
+describe 'elasticsearch installation', sudo: true do
   before :all do
     sh('sudo service elasticsearch start')
     sleep 5
@@ -17,13 +17,17 @@ describe 'elasticsearch installation' do
     it { should be_installed }
   end
 
-  describe 'elasticsearch start', sudo: true do
-    describe command('curl -XGET \'http://localhost:9200/twitter/tweet/1?pretty=true\'') do
-      its(:stdout) { should include('Trying out Elasticsearch') }
-    end
+  describe command(
+    "curl -X GET 'http://localhost:9200/twitter/tweet/1?pretty=true'"
+  ) do
+    its(:stdout) { should include('Trying out Elasticsearch') }
+  end
 
-    describe command('curl -XGET \'http://localhost:9200/twitter/tweet/_search?q=message:Trying&pretty=true\'') do
-      its(:stdout) { should include('"total" : 1', '"user": "kimchy"', '"message": "Trying out Elasticsearch"') }
-    end
+  describe command(
+    "curl -X GET 'http://localhost:9200/twitter/tweet/_search?q=message:Trying&pretty=true'"
+  ) do
+    its(:stdout) { should match(/"total": 1/) }
+    its(:stdout) { should match(/"user": "kimchy"/) }
+    its(:stdout) { should match(/"message": "Trying out Elasticsearch"/) }
   end
 end
