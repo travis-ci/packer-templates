@@ -20,3 +20,8 @@ if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
   git checkout -qf "${TRAVIS_COOKBOOKS_SHA}"
   popd
 fi
+
+pushd travis-cookbooks
+pwd > /var/tmp/packer-env/TRAVIS_COOKBOOKS_DIR
+git log -1 --format=%h > /var/tmp/packer-env/TRAVIS_COOKBOOKS_SHA
+popd
