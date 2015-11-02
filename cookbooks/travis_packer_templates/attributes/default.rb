@@ -3,6 +3,8 @@ default['travis_packer_templates']['env']['PACKER_BUILD_NAME'] = ''
 default['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] = ''
 default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_BRANCH'] = ''
 default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] = ''
+default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_DIR'] = \
+  '/tmp/chef-stuff/travis-cookbooks'
 
 ::Dir.glob("#{node['travis_packer_templates']['packer_env_dir']}/*") do |f|
   attr_name = ::File.basename(f)

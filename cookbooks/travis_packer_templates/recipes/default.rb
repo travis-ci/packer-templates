@@ -43,6 +43,14 @@ else
   )
 end
 
+ruby_block 'set system_info.cookbooks_sha' do
+  block do
+    sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
+    Chef::Log.info("Setting system_info.cookbooks_sha to #{sha.inspect}")
+    node.set['system_info']['cookbooks_sha'] = sha
+  end
+end
+
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
   package slice do
     retries 2
