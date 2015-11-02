@@ -1,2 +1,10 @@
+# vim:filetype=ruby
 file_atomic_update false
 cookbook_path [{{.CookbookPaths}}]
+log_level((
+  if "{{ user `chef_log_level` }}".empty?
+    :info
+  else
+    "{{ user `chef_log_level` }}"
+  end
+).to_sym)
