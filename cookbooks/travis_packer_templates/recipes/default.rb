@@ -43,6 +43,21 @@ else
   )
 end
 
+ruby_block 'set system_info.cookbooks_sha' do
+  block do
+    sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
+
+    if sha.empty?
+      git_dir = "#{node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_DIR']}/.git"
+      git = Mixlib::ShellOut.new("GIT_DIR=#{git_dir} git log -1 --format=%h")
+      git.run_command
+      sha = git.stdout.strip unless git.stdout.strip.empty?
+    end
+
+    node.set['system_info']['cookbooks_sha'] = sha
+  end
+end
+
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
   package slice do
     retries 2
