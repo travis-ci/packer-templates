@@ -13,7 +13,7 @@ apt-add-repository \
 apt-get update -y
 apt-get install -y chefdk
 
-chown -R travis:travis /tmp/packer-chef-solo
+chown -R travis:travis /tmp/packer-chef-solo /var/tmp
 cd /tmp/packer-chef-solo
 
 for suite in $(echo ${SPEC_SUITES/,/ }) ; do
