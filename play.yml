@@ -1,10 +1,10 @@
 ---
 description: Travis play build env template
 variables:
-  travis_cookbooks_branch: "meat-sbt-update"
+  travis_cookbooks_branch: "meat-sphinxsearch-ppa"
   travis_cookbooks_sha: ""
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: "travis-play-precise-{{ timestamp }}"
+  gce_image_name: "travis-play-trusty-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
 builders:
 - type: googlecompute
@@ -15,7 +15,7 @@ builders:
   image_description: Travis play
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1204-precise-v20150910
+  source_image: ubuntu-1404-trusty-v20150909a
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
@@ -29,7 +29,7 @@ provisioners:
   only:
   - googlecompute
 - type: file
-  source: packer-assets/ubuntu-precise-normal-purge.txt
+  source: packer-assets/ubuntu-trusty-normal-purge.txt
   destination: "/var/tmp/purge.txt"
 - type: shell
   scripts:
@@ -51,21 +51,7 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json: {}
   run_list:
-  - 'recipe[travis_build_environment]'
-  - 'recipe[java]'
-  - 'recipe[sbt-extras]'
-- type: shell
-  scripts:
-  - packer-scripts/ensure-travis-user
-  - packer-scripts/purge
-  - packer-scripts/disable-apparmor
-  - packer-scripts/run-serverspecs
-  environment_vars:
-  - TRAVIS_OBFUSCATE_PASSWORD=1
-  - IMAGE_NAME={{ user `gce_image_name` }}
-  - SPEC_SUITES=travis_ci_standard
-  - SPEC_ARGS=./spec/java_spec.rb
-  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  - 'recipe[travis_sphinxsearch]'
 - type: shell
   inline: while true ; do date -u ; echo tick ; sleep 1 ; done
   only:
