@@ -54,6 +54,7 @@ ruby_block 'set system_info.cookbooks_sha' do
       sha = git.stdout.strip unless git.stdout.strip.empty?
     end
 
+    Chef::Log.info("Setting system_info.cookbooks_sha to #{sha.inspect}")
     node.set['system_info']['cookbooks_sha'] = sha
   end
 end
