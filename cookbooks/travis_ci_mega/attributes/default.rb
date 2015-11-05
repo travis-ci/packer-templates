@@ -6,24 +6,17 @@ default['travis_ci_mega']['prerequisite_packages'] = %w(
   wget
 )
 
-override['travis_phpenv']['prerequisite_recipes'] = []
-
-override['travis_phpbuild']['prerequisite_recipes'] = []
-
-override['travis_php']['multi']['versions'] = []
-override['travis_php']['multi']['extensions'] = []
-override['travis_php']['multi']['prerequisite_recipes'] = %w(
-  bison
-  travis_phpbuild
-  travis_phpenv
+override['travis_php']['multi']['versions'] = %w(
+  5.6.15
+  5.5.30
+  5.4.45
 )
-override['travis_php']['multi']['postrequisite_recipes'] = %w(
-  composer
-  phpunit
-)
-override['travis_php']['multi']['binaries'] = []
-
-override['composer']['github_oauth_token'] = \
+override['travis_php']['multi']['aliases'] = {
+  '5.4' => '5.4.45',
+  '5.5' => '5.5.30',
+  '5.6' => '5.6.15'
+}
+override['travis_php']['composer']['github_oauth_token'] = \
   '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
 override['travis_perlbrew']['perls'] = [
