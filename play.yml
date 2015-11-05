@@ -1,7 +1,7 @@
 ---
 description: Travis play build env template
 variables:
-  travis_cookbooks_branch: "meat-sphinxsearch-ppa"
+  travis_cookbooks_branch: "meat-php-cleanup"
   travis_cookbooks_sha: ""
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-play-trusty-{{ timestamp }}"
@@ -28,6 +28,8 @@ provisioners:
   inline: sleep 10
   only:
   - googlecompute
+- type: shell
+  inline: apt-get update -yqq ; apt-get install -y gnupg2 build-essential autoconf
 - type: file
   source: packer-assets/ubuntu-trusty-normal-purge.txt
   destination: "/var/tmp/purge.txt"
@@ -42,6 +44,7 @@ provisioners:
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
+  execute_command: '{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} || echo "Oh Noes: exit $?"'
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
@@ -51,7 +54,7 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json: {}
   run_list:
-  - 'recipe[travis_sphinxsearch]'
+  - 'recipe[travis_php::multi]'
 - type: shell
   inline: while true ; do date -u ; echo tick ; sleep 1 ; done
   only:
