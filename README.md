@@ -2,9 +2,6 @@
 
 Collection of Packer templates used for various infrastructure layers.
 
-The documentation for a given template is adjacent to the template in a file of
-the same-ish name, a la: `ci-minimal.yml` :arrow_right: `CI_MINIMAL.md`.
-
 ## don't panic
 
 Each Packer template JSON file is generated from a corresponding ERB-filtered
@@ -19,7 +16,7 @@ Instead, edit the YAML file and then run `make`, or alternatively use inline fd
 docs for a slightly faster feedback loop, e.g.:
 
 ``` bash
-packer build -only=ci-minimal-vmx <(bin/yml2json < ci-minimal.yml)
+packer build -only=docker <(bin/yml2json < ci-minimal.yml)
 ```
 
 ## env config bits
