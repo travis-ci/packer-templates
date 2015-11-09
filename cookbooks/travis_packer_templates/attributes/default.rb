@@ -14,11 +14,14 @@ default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_DIR'] = \
   default['travis_packer_templates']['env'][attr_name] = attr_value
 end
 
+default['travis_packer_templates']['job_board']['dist'] = node['lsb']['codename']
+if default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
+   default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] == ''
+  default['travis_packer_templates']['job_board']['group'] = 'edge'
+else
+  default['travis_packer_templates']['job_board']['group'] = 'dev'
+end
 default['travis_packer_templates']['job_board']['languages'] = []
-default['travis_packer_templates']['job_board']['edge'] = (
-  default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
-  default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] == ''
-)
 
 default['travis_packer_templates']['packages'] = []
 default['travis_packer_templates']['packages_file'] = '/var/tmp/packages.txt'

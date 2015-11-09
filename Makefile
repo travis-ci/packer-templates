@@ -5,6 +5,7 @@ TEMPLATES := \
 	$(shell echo {jupiter-brain,play,worker}.json)
 
 JQ ?= jq
+SED ?= sed
 
 %.json: %.yml
 	@touch $@
@@ -13,4 +14,9 @@ JQ ?= jq
 	@bin/yml2json < $^ | $(JQ) . > $@
 	@chmod 0400 $@
 
+.PHONY: all
 all: $(TEMPLATES)
+
+.PHONY: langs
+langs:
+	@for f in ci-*.json ; do echo $$f | $(SED) 's/ci-//;s/\.json//' ; done
