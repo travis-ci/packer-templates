@@ -11,14 +11,11 @@ TEMPLATES := \
 	ci-php.json \
 	ci-python.json \
 	ci-ruby.json \
-	ci-standard.json \
 	internal-base.json \
 	internal-bastion.json \
 	internal-nat.json \
 	jupiter-brain.json \
 	play.json \
-	ubuntu-precise-base.json \
-	ubuntu-trusty-base.json \
 	worker.json
 
 JQ ?= jq
