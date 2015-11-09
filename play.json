@@ -1,7 +1,7 @@
 {
   "description": "Travis play build env template",
   "variables": {
-    "travis_cookbooks_branch": "meat-erlang-brushoff",
+    "travis_cookbooks_branch": "meat-android-brushoff",
     "travis_cookbooks_sha": "",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-play-precise-{{ timestamp }}",
@@ -76,9 +76,11 @@
       ],
       "json": {},
       "run_list": [
-        "recipe[kerl]",
-        "recipe[kiex]",
-        "recipe[rebar]"
+        "recipe[java]",
+        "recipe[ant]",
+        "recipe[maven]",
+        "recipe[gradle::tarball]",
+        "recipe[android-sdk]"
       ]
     },
     {
