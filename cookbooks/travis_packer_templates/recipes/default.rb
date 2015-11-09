@@ -37,8 +37,8 @@ ruby_block 'set group based on packer env vars' do
   block do
     env = node['travis_packer_templates']['env']
     if env['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
-        env['TRAVIS_COOKBOOKS_SHA'] == '' &&
-        env['PACKER_TEMPLATES_BRANCH'] == 'master'
+       env['TRAVIS_COOKBOOKS_SHA'] == '' &&
+       env['PACKER_TEMPLATES_BRANCH'] == 'master'
       node.set['travis_packer_templates']['job_board']['group'] = 'edge'
     end
   end
