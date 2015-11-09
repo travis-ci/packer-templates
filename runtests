@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -o errexit
 
-for f in $(git ls-files '*.json') ; do
+unset GEM_PATH
+
+for f in $(git ls-files | grep -v / | grep '.json$') ; do
   echo -en "$f "
   diff -q $f <(jq . < $f)
   echo "✓"
 done
+
+rubocop
+./run-foodcritic cookbooks
