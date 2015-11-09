@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 TEMPLATES := \
 	$(wildcard ci-*.json) \
 	$(wildcard internal-*.json) \
