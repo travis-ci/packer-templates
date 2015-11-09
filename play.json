@@ -1,7 +1,7 @@
 {
   "description": "Travis play build env template",
   "variables": {
-    "travis_cookbooks_branch": "meat-android-brushoff",
+    "travis_cookbooks_branch": "precise-stable",
     "travis_cookbooks_sha": "",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-play-precise-{{ timestamp }}",
@@ -30,11 +30,25 @@
   ],
   "provisioners": [
     {
+      "type": "shell-local",
+      "command": "git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch"
+    },
+    {
+      "type": "file",
+      "source": "tmp/packer-templates-branch",
+      "destination": "/var/tmp/packer-templates-branch"
+    },
+    {
       "type": "shell",
       "inline": "sleep 10",
       "only": [
         "googlecompute"
       ]
+    },
+    {
+      "type": "file",
+      "source": "packer-assets/ubuntu-precise-ci-packages.txt",
+      "destination": "/var/tmp/packages.txt"
     },
     {
       "type": "shell",
@@ -74,18 +88,24 @@
         "/tmp/chef-stuff/travis-cookbooks/community-cookbooks",
         "/tmp/chef-stuff/travis-cookbooks/ci_environment"
       ],
-      "json": {},
+      "json": {
+        "travis_packer_templates": {
+          "job_board": {
+            "languages": [
+              "ruby",
+              "python",
+              "whatever"
+            ]
+          }
+        }
+      },
       "run_list": [
-        "recipe[java]",
-        "recipe[ant]",
-        "recipe[maven]",
-        "recipe[gradle::tarball]",
-        "recipe[android-sdk]"
+        "recipe[travis_packer_templates]"
       ]
     },
     {
       "type": "shell",
-      "inline": "while true ; do date -u ; echo tick ; sleep 1 ; done",
+      "inline": "while true ; do date -u ; echo tick ; sleep 60 ; done",
       "only": [
         "googlecompute"
       ]

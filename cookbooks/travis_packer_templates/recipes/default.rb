@@ -22,6 +22,28 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+ruby_block 'import packer env vars' do
+  block do
+    ::Dir.glob("#{node['travis_packer_templates']['packer_env_dir']}/*") do |f|
+      attr_name = ::File.basename(f)
+      attr_value = ::File.read(f).strip
+      next if attr_value.empty?
+      node.set['travis_packer_templates']['env'][attr_name] = attr_value
+    end
+  end
+end
+
+ruby_block 'set group based on packer env vars' do
+  block do
+    env = node['travis_packer_templates']['env']
+    if env['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
+        env['TRAVIS_COOKBOOKS_SHA'] == '' &&
+        env['PACKER_TEMPLATES_BRANCH'] == 'master'
+      node.set['travis_packer_templates']['job_board']['group'] = 'edge'
+    end
+  end
+end
+
 template '/etc/default/job-board-register' do
   source 'etc-default-job-board-register.sh.erb'
   owner 'root'
@@ -34,14 +56,18 @@ template '/etc/default/job-board-register' do
   )
 end
 
-if ::File.exist?(node['travis_packer_templates']['packages_file'])
-  node.set['travis_packer_templates']['packages'] = ::File.read(
-    node['travis_packer_templates']['packages_file']
-  ).split(/\n/).map(&:strip).reject { |l| l =~ /^#/ }.uniq
-else
-  Chef::Log.info(
-    "No file found at #{node['travis_packer_templates']['packages_file']}"
-  )
+ruby_block 'load packages from travis_packer_templates.packages_file' do
+  block do
+    if ::File.exist?(node['travis_packer_templates']['packages_file'])
+      node.set['travis_packer_templates']['packages'] = ::File.read(
+        node['travis_packer_templates']['packages_file']
+      ).split(/\n/).map(&:strip).reject { |l| l =~ /^#/ }.uniq
+    else
+      Chef::Log.info(
+        "No file found at #{node['travis_packer_templates']['packages_file']}"
+      )
+    end
+  end
 end
 
 ruby_block 'set system_info.cookbooks_sha' do

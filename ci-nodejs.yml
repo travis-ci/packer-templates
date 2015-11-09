@@ -42,6 +42,11 @@ builders:
   - "/sbin/init"
   commit: true
 provisioners:
+- type: shell-local
+  command: git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch
+- type: file
+  source: tmp/packer-templates-branch
+  destination: "/var/tmp/packer-templates-branch"
 - type: shell
   inline: sleep 10
   only:
