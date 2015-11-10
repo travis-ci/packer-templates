@@ -73,6 +73,7 @@ provisioners:
         - whatever
   run_list:
   - recipe[travis_packer_templates]
+  - 'recipe[travis_build_environment::apt]'
 - type: shell
   inline: while true ; do date -u ; echo tick ; sleep 60 ; done
   only:
