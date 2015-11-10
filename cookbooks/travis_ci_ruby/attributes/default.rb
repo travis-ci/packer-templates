@@ -34,3 +34,17 @@ override['java']['alternate_versions'] = %w(
   openjdk7
   oraclejdk8
 )
+override['travis_packer_templates']['job_board']['languages'] = %w(
+  c
+  cpp
+  crystal
+  csharp
+  d
+  dart
+  default
+  haxe
+  julia
+  r
+  ruby
+  rust
+)
