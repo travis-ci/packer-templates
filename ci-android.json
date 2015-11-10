@@ -51,6 +51,15 @@
   ],
   "provisioners": [
     {
+      "type": "shell-local",
+      "command": "git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch"
+    },
+    {
+      "type": "file",
+      "source": "tmp/packer-templates-branch",
+      "destination": "/var/tmp/packer-templates-branch"
+    },
+    {
       "type": "shell",
       "inline": "sleep 10",
       "only": [
@@ -79,6 +88,7 @@
     {
       "type": "chef-solo",
       "config_template": "chef-solo.rb.tmpl",
+      "install_command": "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12",
       "cookbook_paths": [
         "cookbooks"
       ],

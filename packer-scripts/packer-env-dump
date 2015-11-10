@@ -8,3 +8,9 @@ mkdir -p /var/tmp/packer-env
 for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
   eval "echo \$$var" > /var/tmp/packer-env/$var
 done
+
+if [[ -f /var/tmp/packer-templates-branch ]] ; then
+  cp -v \
+    /var/tmp/packer-templates-branch \
+    /var/tmp/packer-env/PACKER_TEMPLATES_BRANCH
+fi

@@ -3,8 +3,11 @@ TEMPLATES := \
 	$(wildcard ci-*.json) \
 	$(wildcard internal-*.json) \
 	$(shell echo {jupiter-brain,play,worker}.json)
+BRANCH_FILE := tmp/packer-templates-branch
 
 JQ ?= jq
+SED ?= sed
+GIT ?= git
 
 %.json: %.yml
 	@touch $@
@@ -13,4 +16,12 @@ JQ ?= jq
 	@bin/yml2json < $^ | $(JQ) . > $@
 	@chmod 0400 $@
 
-all: $(TEMPLATES)
+.PHONY: all
+all: $(TEMPLATES) $(BRANCH_FILE)
+
+.PHONY: langs
+langs:
+	@for f in ci-*.json ; do echo $$f | $(SED) 's/ci-//;s/\.json//' ; done
+
+$(BRANCH_FILE): .git/HEAD
+	if [[ -f $^ ]] ; then $(GIT) rev-parse --abbrev-ref HEAD > $@ ; fi
