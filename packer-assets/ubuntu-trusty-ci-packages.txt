@@ -5,6 +5,7 @@ bash
 binutils-doc
 bison
 bsdmainutils
+btrfs-tools
 build-essential
 bzip2
 bzr
@@ -60,6 +61,7 @@ libxslt1-dev
 libyaml-0-2
 libyaml-dev
 lsof
+lvm2
 md5deep
 mercurial
 mingw32
@@ -80,9 +82,11 @@ software-properties-common
 sqlite3
 subversion
 sudo
+thin-provisioning-tools
 unzip
 vim
 wamerican
 wget
+xfsprogs
 zip
 zlib1g-dev
