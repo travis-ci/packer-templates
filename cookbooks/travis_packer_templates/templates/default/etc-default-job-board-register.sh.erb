@@ -1,6 +1,6 @@
 # Managed by Chef! :heart_eyes_cat:
 
-TAGS="dist:<%= @dist %>,group:<%= @group %>"
+TAGS="dist:<%= @dist %>,group:<%= @group %>,packer_templates_branch:<%= @branch %>"
 
 <% @languages.map(&:strip).reject(&:empty?).each do |lang| %>
 TAGS="$TAGS,language_<%= lang %>:true"
