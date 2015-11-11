@@ -7,15 +7,6 @@ override['travis_phpbuild']['prerequisite_recipes'] = []
 
 override['travis_php']['multi']['versions'] = []
 override['travis_php']['multi']['extensions'] = []
-override['travis_php']['multi']['prerequisite_recipes'] = %w(
-  bison
-  travis_phpbuild
-  travis_phpenv
-)
-override['travis_php']['multi']['postrequisite_recipes'] = %w(
-  composer
-  phpunit
-)
 override['travis_php']['multi']['binaries'] = []
 
 override['composer']['github_oauth_token'] = \
