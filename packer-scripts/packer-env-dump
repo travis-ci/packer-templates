@@ -9,14 +9,14 @@ for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
   eval "echo \$$var" > /var/tmp/packer-env/$var
 done
 
-if [[ -f /var/tmp/packer-templates-branch ]] ; then
+if [[ -f /var/tmp/git-meta/packer-templates-branch ]] ; then
   cp -v \
-    /var/tmp/packer-templates-branch \
+    /var/tmp/git-meta/packer-templates-branch \
     /var/tmp/packer-env/PACKER_TEMPLATES_BRANCH
 fi
 
-if [[ -f /var/tmp/packer-templates-sha ]] ; then
+if [[ -f /var/tmp/git-meta/packer-templates-sha ]] ; then
   cp -v \
-    /var/tmp/packer-templates-sha \
+    /var/tmp/git-meta/packer-templates-sha \
     /var/tmp/packer-env/PACKER_TEMPLATES_SHA
 fi
