@@ -1,5 +1,9 @@
 {
   "description": "Worker host image for Travis CI",
+  "push": {
+    "name": "travis-ci/worker-host",
+    "vcs": false
+  },
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
@@ -103,10 +107,6 @@
       ]
     }
   ],
-  "push": {
-    "name": "travis-ci/worker-host",
-    "vcs": false
-  },
   "provisioners": [
     {
       "type": "shell",
@@ -184,7 +184,7 @@
   "post-processors": [
     {
       "type": "atlas",
-      "artifact": "travis-ci/worker-host",
+      "artifact": "travis-ci/worker",
       "artifact_type": "aws.ami",
       "metadata": {
         "created_at": "{{ timestamp }}"
@@ -195,7 +195,7 @@
     },
     {
       "type": "atlas",
-      "artifact": "travis-ci/worker-host",
+      "artifact": "travis-ci/worker",
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "vmware_desktop",

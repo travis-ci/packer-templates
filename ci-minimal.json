@@ -1,5 +1,9 @@
 {
   "description": "Travis CI minimal build env template",
+  "push": {
+    "name": "travis-ci/ci-minimal",
+    "vcs": false
+  },
   "variables": {
     "travis_cookbooks_branch": "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}",
     "travis_cookbooks_sha": "{{ env `TRAVIS_COOKBOOKS_SHA` }}",

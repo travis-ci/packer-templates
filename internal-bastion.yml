@@ -1,4 +1,7 @@
 ---
+push:
+  name: travis-ci/internal-bastion
+  vcs: false
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
@@ -62,7 +65,7 @@ provisioners:
   - recipe[travis_internal_bastion]
 post-processors:
 - type: atlas
-  artifact: travis-ci/bastion
+  artifact: travis-ci/internal-bastion
   artifact_type: aws.ami
   metadata:
     created_at: "{{ timestamp }}"

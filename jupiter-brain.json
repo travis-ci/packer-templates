@@ -1,5 +1,9 @@
 {
   "description": "Jupiter Brain image",
+  "push": {
+    "name": "travis-ci/jupiter-brain",
+    "vcs": false
+  },
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
@@ -26,10 +30,6 @@
       "vpc_id": "{{ user `vpc_id` }}"
     }
   ],
-  "push": {
-    "name": "travis-ci/jupiter-brain",
-    "vcs": false
-  },
   "provisioners": [
     {
       "type": "file",
