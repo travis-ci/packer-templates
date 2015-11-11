@@ -38,9 +38,18 @@ ruby_block 'set group based on packer env vars' do
     env = node['travis_packer_templates']['env']
     if env['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
        env['TRAVIS_COOKBOOKS_SHA'] == '' &&
-       env['PACKER_TEMPLATES_BRANCH'] == 'master'
+       env['PACKER_TEMPLATES_BRANCH'] == 'master' &&
+       env['PACKER_TEMPLATES_SHA'] !~ /dirty/
       node.set['travis_packer_templates']['job_board']['group'] = 'edge'
     end
+  end
+end
+
+ruby_block 'set system_info.cookbooks_sha' do
+  block do
+    sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
+    Chef::Log.info("Setting system_info.cookbooks_sha to #{sha.inspect}")
+    node.set['system_info']['cookbooks_sha'] = sha
   end
 end
 
@@ -57,31 +66,28 @@ template '/etc/default/job-board-register' do
   )
 end
 
-ruby_block 'load packages from travis_packer_templates.packages_file' do
+ruby_block 'set travis_packer_templates.packages from ' \
+           'travis_packer_templates.packages_file' do
   block do
-    if ::File.exist?(node['travis_packer_templates']['packages_file'])
-      node.set['travis_packer_templates']['packages'] = ::File.read(
-        node['travis_packer_templates']['packages_file']
-      ).split(/\n/).map(&:strip).reject { |l| l =~ /^#/ }.uniq
+    packages_file = node['travis_packer_templates']['packages_file']
+    if ::File.exist?(packages_file)
+      packages_lines = ::File.readlines(packages_file)
+      packages = packages_lines.map(&:strip).reject { |l| l =~ /^#/ }.uniq
+      node.set['travis_packer_templates']['packages'] = packages
+      Chef::Log.info("Loaded #{packages.length} packages from #{packages_file}")
     else
-      Chef::Log.info(
-        "No file found at #{node['travis_packer_templates']['packages_file']}"
-      )
+      Chef::Log.info("No file found at #{packages_file}")
     end
   end
 end
 
-ruby_block 'set system_info.cookbooks_sha' do
+ruby_block 'install packages from travis_packer_templates.packages' do
   block do
-    sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
-    Chef::Log.info("Setting system_info.cookbooks_sha to #{sha.inspect}")
-    node.set['system_info']['cookbooks_sha'] = sha
-  end
-end
-
-Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
-  package slice do
-    retries 2
-    action [:install, :upgrade]
+    Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
+      resource = Chef::Resource::Package.new(slice, run_context)
+      resource.retries 2
+      resource.run_action(:install)
+      resource.run_action(:upgrade)
+    end
   end
 end

@@ -14,3 +14,9 @@ if [[ -f /var/tmp/packer-templates-branch ]] ; then
     /var/tmp/packer-templates-branch \
     /var/tmp/packer-env/PACKER_TEMPLATES_BRANCH
 fi
+
+if [[ -f /var/tmp/packer-templates-sha ]] ; then
+  cp -v \
+    /var/tmp/packer-templates-sha \
+    /var/tmp/packer-env/PACKER_TEMPLATES_SHA
+fi
