@@ -48,15 +48,10 @@ builders:
   commit: true
 provisioners:
 - type: shell-local
-  command: git rev-parse --abbrev-ref HEAD | tee tmp/packer-templates-branch
-- type: shell-local
-  command: git describe --always --dirty | tee tmp/packer-templates-sha
+  command: if [ -n $ATLAS_BUILD_ID ] ; then git checkout -- . ; fi ; ./bin/dump-git-meta
 - type: file
-  source: tmp/packer-templates-branch
-  destination: "/var/tmp/packer-templates-branch"
-- type: file
-  source: tmp/packer-templates-sha
-  destination: "/var/tmp/packer-templates-sha"
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
 - type: shell
   inline: sleep 10
   only:
