@@ -4,6 +4,7 @@ TEMPLATES := \
 	$(wildcard internal-*.json) \
 	$(shell echo {jupiter-brain,play,worker}.json)
 BRANCH_FILE := tmp/packer-templates-branch
+SHA_FILE := tmp/packer-templates-sha
 
 JQ ?= jq
 SED ?= sed
@@ -17,7 +18,7 @@ GIT ?= git
 	@chmod 0400 $@
 
 .PHONY: all
-all: $(TEMPLATES) $(BRANCH_FILE)
+all: $(TEMPLATES) $(BRANCH_FILE) $(SHA_FILE)
 
 .PHONY: langs
 langs:
@@ -25,3 +26,6 @@ langs:
 
 $(BRANCH_FILE): .git/HEAD
 	if [[ -f $^ ]] ; then $(GIT) rev-parse --abbrev-ref HEAD > $@ ; fi
+
+$(SHA_FILE): .git/HEAD
+	if [[ -f $^ ]] ; then $(GIT) describe --always --dirty > $@ ; fi
