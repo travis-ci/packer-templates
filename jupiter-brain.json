@@ -1,8 +1,7 @@
 {
   "description": "Jupiter Brain image",
   "push": {
-    "name": "travis-ci/jupiter-brain",
-    "vcs": false
+    "name": "travis-ci/jupiter-brain"
   },
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",

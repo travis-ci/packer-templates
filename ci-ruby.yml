@@ -2,7 +2,6 @@
 description: Travis CI ruby build env template
 push:
   name: travis-ci/ci-ruby
-  vcs: false
 variables:
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"

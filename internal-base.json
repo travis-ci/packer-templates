@@ -1,8 +1,7 @@
 {
   "description": "Base Ubuntu 14.04 image for Travis CI internal stuff",
   "push": {
-    "name": "travis-ci/base-image",
-    "vcs": false
+    "name": "travis-ci/base-image"
   },
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",

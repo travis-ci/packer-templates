@@ -2,7 +2,6 @@
 description: Worker host image for Travis CI
 push:
   name: travis-ci/worker
-  vcs: false
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
@@ -97,7 +96,6 @@ builders:
   - worker
 push:
   name: travis-ci/worker-host
-  vcs: false
 provisioners:
 - type: shell
   inline: sleep 10

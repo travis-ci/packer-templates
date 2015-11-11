@@ -1,8 +1,7 @@
 {
   "description": "Travis play build env template",
   "push": {
-    "name": "travis-ci/play",
-    "vcs": false
+    "name": "travis-ci/play"
   },
   "variables": {
     "travis_cookbooks_branch": "precise-stable",

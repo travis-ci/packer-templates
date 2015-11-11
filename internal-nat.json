@@ -1,7 +1,6 @@
 {
   "push": {
-    "name": "travis-ci/internal-nat",
-    "vcs": false
+    "name": "travis-ci/internal-nat"
   },
   "builders": [
     {
