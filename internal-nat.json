@@ -1,4 +1,7 @@
 {
+  "push": {
+    "name": "travis-ci/internal-nat"
+  },
   "builders": [
     {
       "type": "amazon-ebs",

@@ -1,10 +1,13 @@
 {
   "description": "Travis play build env template",
+  "push": {
+    "name": "travis-ci/play"
+  },
   "variables": {
     "travis_cookbooks_branch": "precise-stable",
     "travis_cookbooks_sha": "",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
-    "gce_image_name": "travis-play-precise-{{ timestamp }}",
+    "gce_image_name": "travis-play-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}"
   },
   "builders": [
@@ -17,7 +20,7 @@
       "image_description": "Travis play",
       "account_file": "{{ user `gce_account_file` }}",
       "project_id": "{{ user `gce_project_id` }}",
-      "source_image": "ubuntu-1204-precise-v20150910",
+      "source_image": "ubuntu-1404-trusty-v20150909a",
       "zone": "us-central1-a",
       "image_name": "{{ user `gce_image_name` }}",
       "machine_type": "n1-standard-4",
@@ -31,12 +34,12 @@
   "provisioners": [
     {
       "type": "shell-local",
-      "command": "git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch"
+      "command": "if [ -f .packer-template ] ; then git checkout -- . ; fi ; ./bin/dump-git-meta"
     },
     {
       "type": "file",
-      "source": "tmp/packer-templates-branch",
-      "destination": "/var/tmp/packer-templates-branch"
+      "source": "tmp/git-meta",
+      "destination": "/var/tmp/git-meta"
     },
     {
       "type": "shell",
@@ -100,8 +103,7 @@
         }
       },
       "run_list": [
-        "recipe[travis_packer_templates]",
-        "recipe[travis_build_environment::apt]"
+        "recipe[travis_packer_templates]"
       ]
     },
     {

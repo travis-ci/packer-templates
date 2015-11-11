@@ -1,5 +1,8 @@
 {
   "description": "Travis CI python build env template",
+  "push": {
+    "name": "travis-ci/ci-python"
+  },
   "variables": {
     "travis_cookbooks_branch": "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}",
     "travis_cookbooks_sha": "{{ env `TRAVIS_COOKBOOKS_SHA` }}",
@@ -52,12 +55,12 @@
   "provisioners": [
     {
       "type": "shell-local",
-      "command": "git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch"
+      "command": "if [ -n $ATLAS_BUILD_ID ] ; then git checkout -- . ; fi ; ./bin/dump-git-meta"
     },
     {
       "type": "file",
-      "source": "tmp/packer-templates-branch",
-      "destination": "/var/tmp/packer-templates-branch"
+      "source": "tmp/git-meta",
+      "destination": "/var/tmp/git-meta"
     },
     {
       "type": "shell",

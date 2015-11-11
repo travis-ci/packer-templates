@@ -1,4 +1,6 @@
 ---
+push:
+  name: travis-ci/internal-nat
 builders:
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"

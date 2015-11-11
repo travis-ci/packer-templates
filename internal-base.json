@@ -1,5 +1,8 @@
 {
   "description": "Base Ubuntu 14.04 image for Travis CI internal stuff",
+  "push": {
+    "name": "travis-ci/base-image"
+  },
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
@@ -72,10 +75,6 @@
       "tools_upload_flavor": "linux"
     }
   ],
-  "push": {
-    "name": "travis-ci/base-image",
-    "vcs": false
-  },
   "provisioners": [
     {
       "type": "file",
@@ -129,7 +128,7 @@
   "post-processors": [
     {
       "type": "atlas",
-      "artifact": "travis-ci/base-image",
+      "artifact": "travis-ci/internal-base",
       "artifact_type": "aws.ami",
       "metadata": {
         "created_at": "{{ timestamp }}"

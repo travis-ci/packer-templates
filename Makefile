@@ -3,8 +3,8 @@ TEMPLATES := \
 	$(wildcard ci-*.json) \
 	$(wildcard internal-*.json) \
 	$(shell echo {jupiter-brain,play,worker}.json)
-BRANCH_FILE := tmp/packer-templates-branch
-SHA_FILE := tmp/packer-templates-sha
+BRANCH_FILE := tmp/git-meta/packer-templates-branch
+SHA_FILE := tmp/git-meta/packer-templates-sha
 
 JQ ?= jq
 SED ?= sed
@@ -25,7 +25,7 @@ langs:
 	@for f in ci-*.json ; do echo $$f | $(SED) 's/ci-//;s/\.json//' ; done
 
 $(BRANCH_FILE): .git/HEAD
-	if [[ -f $^ ]] ; then $(GIT) rev-parse --abbrev-ref HEAD > $@ ; fi
+	./bin/dump-git-meta ./tmp/git-meta
 
 $(SHA_FILE): .git/HEAD
-	if [[ -f $^ ]] ; then $(GIT) describe --always --dirty > $@ ; fi
+	./bin/dump-git-meta ./tmp/git-meta

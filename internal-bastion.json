@@ -1,4 +1,10 @@
 {
+  "push": {
+    "name": "travis-ci/bastion",
+    "include": [
+      "internal-bastion.json"
+    ]
+  },
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
@@ -31,12 +37,6 @@
       "vpc_id": "{{ user `vpc_id` }}"
     }
   ],
-  "push": {
-    "name": "travis-ci/bastion",
-    "include": [
-      "internal-bastion.json"
-    ]
-  },
   "provisioners": [
     {
       "type": "shell",
@@ -82,7 +82,7 @@
   "post-processors": [
     {
       "type": "atlas",
-      "artifact": "travis-ci/bastion",
+      "artifact": "travis-ci/internal-bastion",
       "artifact_type": "aws.ami",
       "metadata": {
         "created_at": "{{ timestamp }}"

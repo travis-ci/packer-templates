@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+[[ $DEBUG ]] && set -o xtrace
+set -o errexit
+
+cd $(dirname $(dirname ${BASH_SOURCE[0]}))
+
+: ${DEST_DIR:=./tmp/git-meta}
+mkdir -p "${DEST_DIR}"
+git rev-parse --abbrev-ref HEAD | tee "${DEST_DIR}/packer-templates-branch"
+git describe --always --dirty | tee "${DEST_DIR}/packer-templates-sha"

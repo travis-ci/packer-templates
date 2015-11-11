@@ -15,3 +15,4 @@ packer_cache
 .kitchen
 /*.pem
 rabbitmqadmin
+.packer-template

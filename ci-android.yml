@@ -1,5 +1,7 @@
 ---
 description: Travis CI android build env template
+push:
+  name: travis-ci/ci-android
 variables:
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -43,10 +45,10 @@ builders:
   commit: true
 provisioners:
 - type: shell-local
-  command: git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch
+  command: if [ -n $ATLAS_BUILD_ID ] ; then git checkout -- . ; fi ; ./bin/dump-git-meta
 - type: file
-  source: tmp/packer-templates-branch
-  destination: "/var/tmp/packer-templates-branch"
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
 - type: shell
   inline: sleep 10
   only:
