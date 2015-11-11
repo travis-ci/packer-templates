@@ -26,6 +26,7 @@ lemon
 libbz2-dev
 libc-client2007e-dev
 libcurl4-gnutls-dev
+libevent-2.0-5
 libexpat1-dev
 libffi-dev
 libfreetype6-dev
