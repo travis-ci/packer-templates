@@ -38,7 +38,6 @@ unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker::compose'
 end
 
-include_recipe 'travis_libevent'
 include_recipe 'gimme'
 include_recipe 'wget'
 include_recipe 'networking_basic'
