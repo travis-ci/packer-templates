@@ -51,9 +51,9 @@ builders:
   commit: true
 provisioners:
 - type: shell-local
-  command: git rev-parse --abbrev-ref HEAD > tmp/packer-templates-branch
+  command: git rev-parse --abbrev-ref HEAD | tee tmp/packer-templates-branch
 - type: shell-local
-  command: git describe --always --dirty > tmp/packer-templates-sha
+  command: git describe --always --dirty | tee tmp/packer-templates-sha
 - type: file
   source: tmp/packer-templates-branch
   destination: "/var/tmp/packer-templates-branch"
