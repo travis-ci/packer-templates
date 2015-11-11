@@ -28,6 +28,7 @@ ruby_block 'import packer env vars' do
       attr_name = ::File.basename(f)
       attr_value = ::File.read(f).strip
       next if attr_value.empty?
+      Chef::Log.info("Setting travis_packer_templates.env.#{attr_name} = #{attr_value}")
       node.set['travis_packer_templates']['env'][attr_name] = attr_value
     end
   end
@@ -40,6 +41,7 @@ ruby_block 'set group based on packer env vars' do
        env['TRAVIS_COOKBOOKS_SHA'] == '' &&
        env['PACKER_TEMPLATES_BRANCH'] == 'master' &&
        env['PACKER_TEMPLATES_SHA'] !~ /dirty/
+      Chef::Log.info('Setting travis_packer_templates.job_board.group = edge')
       node.set['travis_packer_templates']['job_board']['group'] = 'edge'
     end
   end
@@ -48,7 +50,7 @@ end
 ruby_block 'set system_info.cookbooks_sha' do
   block do
     sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
-    Chef::Log.info("Setting system_info.cookbooks_sha to #{sha.inspect}")
+    Chef::Log.info("Setting system_info.cookbooks_sha = #{sha.inspect}")
     node.set['system_info']['cookbooks_sha'] = sha
   end
 end
