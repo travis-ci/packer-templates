@@ -57,7 +57,9 @@ end
 
 ruby_block 'write job-board-register metadata' do
   block do
-    template = Chef::Resource::Template.new('/etc/default/job-board-register')
+    template = Chef::Resource::Template.new(
+      '/etc/default/job-board-register', run_context
+    )
     template.source 'etc-default-job-board-register.sh.erb'
     template.owner 'root'
     template.group 'root'
