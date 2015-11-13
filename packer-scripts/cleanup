@@ -4,18 +4,19 @@ set -o errexit
 set -o xtrace
 
 rm -rf \
-  VBoxGuestAdditions_*.iso \
-  VBoxGuestAdditions_*.iso.? \
+  /etc/apparmor* \
+  /etc/ssh/ssh_host_* \
+  /etc/systemd \
+  /lib/recovery-mode \
   /opt/chef \
   /tmp/packer* \
-  /var/log/installer \
-  /var/lib/man-db \
+  /var/chef \
   /var/lib/apt/lists/* \
+  /var/lib/man-db \
+  /var/log/installer \
   /var/tmp/* \
-  /etc/ssh/ssh_host_* \
-  /etc/apparmor* \
-  /etc/systemd \
-  /lib/recovery-mode
+  VBoxGuestAdditions_*.iso \
+  VBoxGuestAdditions_*.iso.?
 
 if [[ -d /home/travis ]] ; then
   rm -f /home/travis/linux.iso /home/travis/shutdown.sh
