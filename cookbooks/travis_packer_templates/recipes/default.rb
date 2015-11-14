@@ -61,6 +61,7 @@ ruby_block 'write job-board-register metadata' do
       '/etc/default/job-board-register', run_context
     )
     template.source 'etc-default-job-board-register.sh.erb'
+    template.cookbook 'travis_packer_templates'
     template.owner 'root'
     template.group 'root'
     template.mode 0644
