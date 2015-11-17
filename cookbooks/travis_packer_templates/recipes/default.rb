@@ -55,17 +55,24 @@ ruby_block 'set system_info.cookbooks_sha' do
   end
 end
 
-template '/etc/default/job-board-register' do
-  source 'etc-default-job-board-register.sh.erb'
-  owner 'root'
-  group 'root'
-  mode 0644
-  variables(
-    dist: node['travis_packer_templates']['job_board']['dist'],
-    group: node['travis_packer_templates']['job_board']['group'],
-    branch: node['travis_packer_templates']['env']['PACKER_TEMPLATES_BRANCH'],
-    languages: node['travis_packer_templates']['job_board']['languages']
-  )
+ruby_block 'write job-board-register metadata' do
+  block do
+    template = Chef::Resource::Template.new(
+      '/etc/default/job-board-register', run_context
+    )
+    template.source 'etc-default-job-board-register.sh.erb'
+    template.cookbook 'travis_packer_templates'
+    template.owner 'root'
+    template.group 'root'
+    template.mode 0644
+    template.variables(
+      dist: node['travis_packer_templates']['job_board']['dist'],
+      group: node['travis_packer_templates']['job_board']['group'],
+      branch: node['travis_packer_templates']['env']['PACKER_TEMPLATES_BRANCH'],
+      languages: node['travis_packer_templates']['job_board']['languages']
+    )
+    template.run_action(:create)
+  end
 end
 
 ruby_block 'set travis_packer_templates.packages from ' \
