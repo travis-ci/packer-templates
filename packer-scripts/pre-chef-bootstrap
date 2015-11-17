@@ -17,6 +17,7 @@ apt-get update -yqq
 apt-get install -yqq \
   --no-install-suggests \
   --no-install-recommends \
+  ca-certificates \
   cron \
   curl \
   git \
