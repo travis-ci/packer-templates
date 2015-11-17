@@ -24,7 +24,7 @@ variables:
 builders:
 - type: docker
   name: docker
-  image: alpine
+  image: "ubuntu:14.04"
   commit: true
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"

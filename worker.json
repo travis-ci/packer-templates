@@ -27,7 +27,7 @@
     {
       "type": "docker",
       "name": "docker",
-      "image": "alpine",
+      "image": "ubuntu:14.04",
       "commit": true
     },
     {
