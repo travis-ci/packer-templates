@@ -129,7 +129,7 @@
     {
       "type": "atlas",
       "artifact": "travis-ci/worker",
-      "artifact_type": "aws.ami",
+      "artifact_type": "amazon.image",
       "metadata": {
         "created_at": "{{ timestamp }}"
       },
