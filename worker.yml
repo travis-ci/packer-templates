@@ -54,8 +54,6 @@ builders:
   machine_type: n1-standard-4
   tags:
   - worker
-push:
-  name: travis-ci/worker
 provisioners:
 - type: shell
   inline: sleep 10
