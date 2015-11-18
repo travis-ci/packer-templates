@@ -3,7 +3,7 @@ description: Travis play build env template
 push:
   name: travis-ci/play
 variables:
-  travis_cookbooks_branch: "precise-stable"
+  travis_cookbooks_branch: "meat-system-info-dynamic-execute"
   travis_cookbooks_sha: ""
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-play-trusty-{{ timestamp }}"
@@ -57,6 +57,11 @@ provisioners:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: packer-assets/minimal-system-info-commands.yml
+  destination: "/var/tmp/minimal-system-info-commands.yml"
+- type: shell
+  inline: chmod 0644 /var/tmp/minimal-system-info-commands.yml
 - type: chef-solo
   execute_command: '{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} || echo "Oh Noes: exit $?"'
   config_template: chef-solo.rb.tmpl
@@ -67,14 +72,11 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json:
-    travis_packer_templates:
-      job_board:
-        languages:
-        - ruby
-        - python
-        - whatever
+    travis_system_info:
+      commands_file: "/var/tmp/minimal-system-info-commands.yml"
   run_list:
   - recipe[travis_packer_templates]
+  - recipe[travis_system_info]
 - type: shell
   inline: while true ; do date -u ; echo tick ; sleep 60 ; done
   only:

@@ -29,8 +29,7 @@ override['nodejs']['versions'] = []
 override['nodejs']['aliases'] = {}
 override['nodejs']['default_modules'] = []
 
-override['system_info']['use_bundler'] = false
-override['system_info']['commands_file'] = \
+override['travis_system_info']['commands_file'] = \
   '/var/tmp/minimal-system-info-commands.yml'
 
 rubies = %w(
