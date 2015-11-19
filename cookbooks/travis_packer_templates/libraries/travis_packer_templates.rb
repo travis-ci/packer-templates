@@ -83,8 +83,7 @@ class TravisPackerTemplates
     Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
       resource = Chef::Resource::Package.new(slice, run_context)
       resource.retries 2
-      resource.run_action(:install)
-      resource.run_action(:upgrade)
+      resource.action [:install, :upgrade]
     end
   end
 end
