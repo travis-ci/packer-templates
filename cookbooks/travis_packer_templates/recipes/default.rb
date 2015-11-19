@@ -47,11 +47,11 @@ ruby_block 'set group based on packer env vars' do
   end
 end
 
-ruby_block 'set system_info.cookbooks_sha' do
+ruby_block 'set travis_system_info.cookbooks_sha' do
   block do
     sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
-    Chef::Log.info("Setting system_info.cookbooks_sha = #{sha.inspect}")
-    node.set['system_info']['cookbooks_sha'] = sha
+    Chef::Log.info("Setting travis_system_info.cookbooks_sha = #{sha.inspect}")
+    node.set['travis_system_info']['cookbooks_sha'] = sha
   end
 end
 

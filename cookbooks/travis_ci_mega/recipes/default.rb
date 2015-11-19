@@ -81,7 +81,7 @@ include_recipe 'travis_phantomjs'
 include_recipe 'travis_phantomjs::2'
 include_recipe 'emacs::nox'
 include_recipe 'vim'
-include_recipe 'system_info'
+include_recipe 'travis_system_info'
 include_recipe 'sweeper'
 
 include_recipe 'travis_python::devshm' unless

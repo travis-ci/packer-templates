@@ -1,4 +1,4 @@
-describe 'networking_basic installation' do
+describe 'basic networking tools' do
   describe command('lsof -v 2>&1 | head -2 | tail -1') do
     its(:stdout) { should match(/revision:/) }
     its(:exit_status) { should eq 0 }
