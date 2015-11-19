@@ -1,20 +1,17 @@
 require 'chef'
 
 class TravisPackerTemplates
-  attr_reader :node, :run_context
+  attr_reader :node
 
-  def initialize(node, run_context)
+  def initialize(node)
     @node = node
-    @run_context = run_context
   end
 
   def init!
     import_packer_env_vars
     set_group_based_on_packer_env_vars
     set_system_info_cookbooks_sha
-    write_job_board_register_metadata
     set_packages_from_packages_file
-    install_packages_from_packages
   end
 
   private
@@ -49,24 +46,6 @@ class TravisPackerTemplates
     node.set['system_info']['cookbooks_sha'] = sha
   end
 
-  def write_job_board_register_metadata
-    template = Chef::Resource::Template.new(
-      '/etc/default/job-board-register', run_context
-    )
-    template.source 'etc-default-job-board-register.sh.erb'
-    template.cookbook 'travis_packer_templates'
-    template.owner 'root'
-    template.group 'root'
-    template.mode 0644
-    template.variables(
-      dist: node['travis_packer_templates']['job_board']['dist'],
-      group: node['travis_packer_templates']['job_board']['group'],
-      branch: node['travis_packer_templates']['env']['PACKER_TEMPLATES_BRANCH'],
-      languages: node['travis_packer_templates']['job_board']['languages']
-    )
-    template.run_action(:create)
-  end
-
   def set_packages_from_packages_file
     packages_file = node['travis_packer_templates']['packages_file']
     if ::File.exist?(packages_file)
@@ -76,14 +55,6 @@ class TravisPackerTemplates
       Chef::Log.info("Loaded #{packages.length} packages from #{packages_file}")
     else
       Chef::Log.info("No file found at #{packages_file}")
-    end
-  end
-
-  def install_packages_from_packages
-    Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
-      resource = Chef::Resource::Package.new(slice, run_context)
-      resource.retries 2
-      resource.action [:install, :upgrade]
     end
   end
 end

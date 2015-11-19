@@ -22,4 +22,25 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-TravisPackerTemplates.new(node, run_context).init!
+TravisPackerTemplates.new(node).init!
+
+template '/etc/default/job-board-register' do
+  source 'etc-default-job-board-register.sh.erb'
+  cookbook 'travis_packer_templates'
+  owner 'root'
+  group 'root'
+  mode 0644
+  variables(
+    dist: node['travis_packer_templates']['job_board']['dist'],
+    group: node['travis_packer_templates']['job_board']['group'],
+    branch: node['travis_packer_templates']['env']['PACKER_TEMPLATES_BRANCH'],
+    languages: node['travis_packer_templates']['job_board']['languages']
+  )
+end
+
+Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
+  package slice do
+    retries 2
+    action [:install, :upgrade]
+  end
+end
