@@ -35,7 +35,7 @@ class TravisPackerTemplates
 
   def matches_edge_criteria?(env)
     env['TRAVIS_COOKBOOKS_BRANCH'] == 'master' &&
-      env['TRAVIS_COOKBOOKS_SHA'] == '' &&
+      env['TRAVIS_COOKBOOKS_SHA'] == !~ /dirty/ &&
       env['PACKER_TEMPLATES_BRANCH'] == 'master' &&
       env['PACKER_TEMPLATES_SHA'] !~ /dirty/
   end
