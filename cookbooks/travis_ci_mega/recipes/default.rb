@@ -40,7 +40,6 @@ end
 
 include_recipe 'gimme'
 include_recipe 'wget'
-include_recipe 'networking_basic'
 include_recipe 'openssl'
 include_recipe 'mercurial'
 include_recipe 'bazaar'
