@@ -40,7 +40,6 @@ end
 
 include_recipe 'gimme'
 include_recipe 'wget'
-include_recipe 'networking_basic'
 include_recipe 'openssl'
 include_recipe 'mercurial'
 include_recipe 'bazaar'
@@ -82,7 +81,7 @@ include_recipe 'travis_phantomjs'
 include_recipe 'travis_phantomjs::2'
 include_recipe 'emacs::nox'
 include_recipe 'vim'
-include_recipe 'system_info'
+include_recipe 'travis_system_info'
 include_recipe 'sweeper'
 
 include_recipe 'travis_python::devshm' unless

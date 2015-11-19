@@ -71,13 +71,13 @@
     },
     {
       "type": "file",
-      "source": "packer-assets/ubuntu-trusty-normal-purge.txt",
-      "destination": "/var/tmp/purge.txt"
+      "source": "packer-assets/ubuntu-trusty-ci-packages.txt",
+      "destination": "/var/tmp/packages.txt"
     },
     {
       "type": "file",
-      "source": "packer-assets/ubuntu-trusty-ci-packages.txt",
-      "destination": "/var/tmp/packages.txt"
+      "source": "packer-assets/ubuntu-trusty-normal-purge.txt",
+      "destination": "/var/tmp/purge.txt"
     },
     {
       "type": "shell",

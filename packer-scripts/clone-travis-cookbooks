@@ -6,9 +6,7 @@ set -o xtrace
 mkdir -p /tmp/chef-stuff
 cd /tmp/chef-stuff
 
-if [[ -d travis-cookbooks ]] ; then
-  rm -rf ./travis-cookbooks
-fi
+rm -rf ./travis-cookbooks
 
 git clone \
   --depth=10 \
