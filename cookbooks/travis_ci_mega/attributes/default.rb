@@ -138,12 +138,14 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   c
   clojure
   cpp
+  cplusplus
   go
   groovy
   java
   node_js
   perl
   python
+  pure_java
   ruby
   rust
   scala
