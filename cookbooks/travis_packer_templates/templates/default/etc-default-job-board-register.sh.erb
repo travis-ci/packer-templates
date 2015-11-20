@@ -1,6 +1,6 @@
 # Managed by Chef! :heart_eyes_cat:
 
-TAGS=""
+TAGS="packer_chef_solo_time:<%= Time.now.utc.iso8601 %>"
 
 <% @languages.map(&:strip).reject(&:empty?).each do |lang| %>
 TAGS="$TAGS,language_<%= lang %>:true"
