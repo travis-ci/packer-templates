@@ -119,7 +119,8 @@
         "JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}",
         "IMAGE_NAME={{ user `gce_image_name` }}",
         "SPEC_SUITES=travis_ci_standard",
-        "DISPLAY=:99.0"
+        "DISPLAY=:99.0",
+        "TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
