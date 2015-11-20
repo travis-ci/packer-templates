@@ -39,7 +39,8 @@ __group() {
 : ${DIST:=$(lsb_release -sc)}
 : ${BRANCH:=${PACKER_TEMPLATES_BRANCH}}
 
-TAGS="${TAGS},group:${GROUP},dist:${DIST},packer_templates_branch:${BRANCH}"
+TAGS="${TAGS},os:linux,group:${GROUP},dist:${DIST}"
+TAGS="${TAGS},packer_templates_branch:${BRANCH}"
 
 if [[ $PACKER_BUILD_NAME ]] ; then
   TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
