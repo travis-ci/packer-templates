@@ -8,7 +8,6 @@ version '0.1.0'
 
 depends 'apt'
 depends 'clang'
-depends 'gimme'
 depends 'jq'
 depends 'nodejs'
 depends 'postgresql'
