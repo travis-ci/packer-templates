@@ -34,13 +34,14 @@ __group() {
   echo dev
 }
 
+env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | sort
+
 : ${TAGS:=nonempty:true}
 : ${GROUP:=$(__group)}
 : ${DIST:=$(lsb_release -sc)}
-: ${BRANCH:=${PACKER_TEMPLATES_BRANCH}}
 
 TAGS="${TAGS},os:linux,group:${GROUP},dist:${DIST}"
-TAGS="${TAGS},packer_templates_branch:${BRANCH}"
+TAGS="${TAGS},packer_templates_branch:${PACKER_TEMPLATES_BRANCH}"
 
 if [[ $PACKER_BUILD_NAME ]] ; then
   TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
