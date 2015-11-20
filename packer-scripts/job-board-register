@@ -24,7 +24,7 @@ if [[ -d /.packer-env ]] ; then
 fi
 
 __group() {
-  if [[ $TRAVIS_COOKBOOKS_BRANCH = master && \
+  if [[ $TRAVIS_COOKBOOKS_BRANCH = ${TRAVIS_COOKBOOKS_EDGE_BRANCH:-master} && \
         ! ${TRAVIS_COOKBOOKS_SHA:-dirty} =~ dirty && \
         $PACKER_TEMPLATES_BRANCH = master && \
         ! ${PACKER_TEMPLATES_SHA:-dirty} =~ dirty ]] ; then
