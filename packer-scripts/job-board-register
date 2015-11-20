@@ -17,8 +17,8 @@ fi
   exit 1
 }
 
-if [[ -d /var/tmp/packer-env ]] ; then
-  for f in /var/tmp/packer-env/* ; do
+if [[ -d /.packer-env ]] ; then
+  for f in /.packer-env/* ; do
     eval "export $(basename $f)='$(cat $f)'"
   done
 fi

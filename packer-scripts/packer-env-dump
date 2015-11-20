@@ -3,20 +3,20 @@
 set -o errexit
 set -o xtrace
 
-mkdir -p /var/tmp/packer-env
+mkdir -p /.packer-env
 
 for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
-  eval "echo \$$var" > /var/tmp/packer-env/$var
+  eval "echo \$$var" > /.packer-env/$var
 done
 
 if [[ -f /var/tmp/git-meta/packer-templates-branch ]] ; then
   cp -v \
     /var/tmp/git-meta/packer-templates-branch \
-    /var/tmp/packer-env/PACKER_TEMPLATES_BRANCH
+    /.packer-env/PACKER_TEMPLATES_BRANCH
 fi
 
 if [[ -f /var/tmp/git-meta/packer-templates-sha ]] ; then
   cp -v \
     /var/tmp/git-meta/packer-templates-sha \
-    /var/tmp/packer-env/PACKER_TEMPLATES_SHA
+    /.packer-env/PACKER_TEMPLATES_SHA
 fi
