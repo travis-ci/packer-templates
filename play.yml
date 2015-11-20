@@ -3,7 +3,7 @@ description: Travis play build env template
 push:
   name: travis-ci/play
 variables:
-  travis_cookbooks_branch: "meat-system-info-dynamic-execute"
+  travis_cookbooks_branch: "master"
   travis_cookbooks_sha: ""
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-play-trusty-{{ timestamp }}"

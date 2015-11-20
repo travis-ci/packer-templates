@@ -7,8 +7,6 @@ default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_DIR'] = \
   '/tmp/chef-stuff/travis-cookbooks'
 default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] = ''
 
-default['travis_packer_templates']['job_board']['dist'] = node['lsb']['codename']
-default['travis_packer_templates']['job_board']['group'] = 'dev'
 default['travis_packer_templates']['job_board']['languages'] = []
 
 default['travis_packer_templates']['packages'] = []
