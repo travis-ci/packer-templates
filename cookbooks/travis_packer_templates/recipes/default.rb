@@ -31,9 +31,6 @@ template '/etc/default/job-board-register' do
   group 'root'
   mode 0644
   variables(
-    dist: node['travis_packer_templates']['job_board']['dist'],
-    group: node['travis_packer_templates']['job_board']['group'],
-    branch: node['travis_packer_templates']['env']['PACKER_TEMPLATES_BRANCH'],
     languages: node['travis_packer_templates']['job_board']['languages']
   )
 end

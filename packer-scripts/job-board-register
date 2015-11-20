@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -o errexit
+shopt -s nullglob
 
 if [[ -f /etc/default/job-board-register ]] ; then
   source /etc/default/job-board-register
@@ -16,7 +17,28 @@ fi
   exit 1
 }
 
-: ${TAGS:=group:dev}
+if [[ -d /var/tmp/packer-env ]] ; then
+  for f in /var/tmp/packer-env/* ; do
+    eval "export $(basename $f)='$(cat $f)'"
+  done
+fi
+
+__group() {
+  if [[ $TRAVIS_COOKBOOKS_BRANCH = master && \
+        ! ${TRAVIS_COOKBOOKS_SHA:-dirty} =~ dirty && \
+        $PACKER_TEMPLATES_BRANCH = master && \
+        ! ${PACKER_TEMPLATES_SHA:-dirty} =~ dirty ]] ; then
+    echo edge
+    return
+  fi
+  echo dev
+}
+
+: ${GROUP:=$(__group)}
+: ${DIST:=$(lsb_release -sc)}
+: ${BRANCH:=${PACKER_TEMPLATES_BRANCH}}
+
+: ${TAGS:=group:${GROUP},dist:${DIST},packer_templates_branch:${BRANCH}}
 
 if [[ $PACKER_BUILD_NAME ]] ; then
   TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
