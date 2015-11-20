@@ -29,6 +29,8 @@ class TravisPackerTemplates
     sha = node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
     Chef::Log.info("Setting travis_system_info.cookbooks_sha = #{sha.inspect}")
     node.set['travis_system_info']['cookbooks_sha'] = sha
+    Chef::Log.info("Setting system_info.cookbooks_sha = #{sha.inspect}")
+    node.set['system_info']['cookbooks_sha'] = sha
   end
 
   def set_packages_from_packages_file
