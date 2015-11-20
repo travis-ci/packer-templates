@@ -20,6 +20,6 @@ if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
 fi
 
 pushd travis-cookbooks
-pwd > /var/tmp/packer-env/TRAVIS_COOKBOOKS_DIR
-git log -1 --format=%h > /var/tmp/packer-env/TRAVIS_COOKBOOKS_SHA
+pwd > /.packer-env/TRAVIS_COOKBOOKS_DIR
+git log -1 --format=%h > /.packer-env/TRAVIS_COOKBOOKS_SHA
 popd
