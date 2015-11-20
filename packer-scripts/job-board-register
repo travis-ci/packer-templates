@@ -42,6 +42,9 @@ env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | sort
 
 TAGS="${TAGS},os:linux,group:${GROUP},dist:${DIST}"
 TAGS="${TAGS},packer_templates_branch:${PACKER_TEMPLATES_BRANCH}"
+TAGS="${TAGS},packer_templates_sha:${PACKER_TEMPLATES_SHA}"
+TAGS="${TAGS},travis_cookbooks_branch:${TRAVIS_COOKBOOKS_BRANCH}"
+TAGS="${TAGS},travis_cookbooks_sha:${TRAVIS_COOKBOOKS_SHA}"
 
 if [[ $PACKER_BUILD_NAME ]] ; then
   TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
