@@ -137,15 +137,23 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['languages'] = %w(
   c
   clojure
-  cpp
   cplusplus
+  cpp
+  crystal
+  csharp
+  d
+  dart
+  default
   go
   groovy
+  haxe
   java
+  julia
   node_js
   perl
-  python
   pure_java
+  python
+  r
   ruby
   rust
   scala
