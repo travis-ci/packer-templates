@@ -4,7 +4,7 @@
     "name": "travis-ci/play"
   },
   "variables": {
-    "travis_cookbooks_branch": "meat-preinstall-golang-libs",
+    "travis_cookbooks_branch": "meat-packer",
     "travis_cookbooks_sha": "",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-play-trusty-{{ timestamp }}",
@@ -102,7 +102,7 @@
       ],
       "json": {},
       "run_list": [
-        "recipe[travis_ci_mega]"
+        "recipe[travis_build_environment::packer]"
       ]
     },
     {
