@@ -152,6 +152,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   julia
   node_js
   perl
+  php
   pure_java
   python
   r
