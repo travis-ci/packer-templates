@@ -121,8 +121,6 @@ pythons.each do |full_name|
     python_aliases(full_name)
 end
 
-override['rabbitmq']['enabled_plugins'] = %w(rabbitmq_management)
-
 rubies = %w(
   jruby-9.0.1.0
   1.9.3-p551
