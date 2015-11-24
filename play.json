@@ -102,6 +102,7 @@
       ],
       "json": {},
       "run_list": [
+        "recipe[travis_packer_templates]",
         "recipe[travis_build_environment]",
         "recipe[travis_build_environment::packer]"
       ]
