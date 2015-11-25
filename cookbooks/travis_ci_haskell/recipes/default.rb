@@ -24,5 +24,5 @@
 
 include_recipe 'travis_ci_standard'
 include_recipe 'haskell::multi'
-include_recipe 'system_info'
+include_recipe 'travis_system_info'
 include_recipe 'sweeper'

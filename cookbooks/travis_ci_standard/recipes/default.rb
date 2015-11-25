@@ -84,6 +84,6 @@ include_recipe 'emacs::nox'
 include_recipe 'vim'
 
 if node['travis_ci_standard']['standalone']
-  include_recipe 'system_info'
+  include_recipe 'travis_system_info'
   include_recipe 'sweeper'
 end

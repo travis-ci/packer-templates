@@ -25,5 +25,5 @@
 include_recipe 'travis_ci_standard'
 include_recipe 'nodejs::multi'
 include_recipe 'nodejs::iojs'
-include_recipe 'system_info'
+include_recipe 'travis_system_info'
 include_recipe 'sweeper'

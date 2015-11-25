@@ -25,6 +25,6 @@
 include_recipe 'travis_ci_standard'
 include_recipe 'python::pyenv'
 include_recipe 'python::system'
-include_recipe 'system_info'
+include_recipe 'travis_system_info'
 include_recipe 'sweeper'
 include_recipe 'python::devshm'
