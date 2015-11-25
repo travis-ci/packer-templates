@@ -30,7 +30,7 @@ class TravisPackerTemplates
     Chef::Log.info("Setting travis_system_info.cookbooks_sha = #{sha.inspect}")
     node.set['travis_system_info']['cookbooks_sha'] = sha
     Chef::Log.info("Setting system_info.cookbooks_sha = #{sha.inspect}")
-    node.set['system_info']['cookbooks_sha'] = sha
+    node.set['system_info']['travis_cookbooks_sha'] = sha
   end
 
   def set_packages_from_packages_file
