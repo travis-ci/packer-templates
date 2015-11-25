@@ -8,5 +8,5 @@ version '0.1.0'
 
 depends 'gimme'
 depends 'sweeper'
-depends 'system_info'
+depends 'travis_system_info'
 depends 'travis_ci_standard'
