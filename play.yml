@@ -73,8 +73,7 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/ci_environment"
   json: {}
   run_list:
-  - 'recipe[travis_packer_templates]'
-  - 'recipe[system_info]'
+  - 'recipe[travis_ci_standard]'
 - type: shell
   inline: while true ; do date -u ; echo tick ; sleep 60 ; done
   only:

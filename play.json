@@ -92,8 +92,7 @@
       ],
       "json": {},
       "run_list": [
-        "recipe[travis_packer_templates]",
-        "recipe[system_info]"
+        "recipe[travis_ci_standard]"
       ]
     },
     {
