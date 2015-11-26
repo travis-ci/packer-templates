@@ -95,6 +95,7 @@
     },
     {
       "type": "chef-solo",
+      "execute_command": "{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} || echo \"Oh Noes: exit $?\"",
       "config_template": "chef-solo.rb.tmpl",
       "cookbook_paths": [
         "cookbooks"

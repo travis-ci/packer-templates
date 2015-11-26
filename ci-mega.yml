@@ -76,6 +76,7 @@ provisioners:
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
+  execute_command: '{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} || echo "Oh Noes: exit $?"'
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
