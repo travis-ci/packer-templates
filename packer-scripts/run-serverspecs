@@ -1,45 +1,49 @@
 #!/usr/bin/env bash
 
-set -o errexit
-set -o xtrace
-shopt -s nullglob
+main() {
+  set -o errexit
+  set -o xtrace
+  shopt -s nullglob
 
-export PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
-export DEBIAN_FRONTEND='noninteractive'
+  export PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+  export DEBIAN_FRONTEND='noninteractive'
 
-curl -sSL 'https://packagecloud.io/gpg.key' | apt-key add -
-apt-add-repository \
-  'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
-apt-get update -y
-apt-get install -y chefdk
+  curl -sSL 'https://packagecloud.io/gpg.key' | apt-key add -
+  apt-add-repository \
+    'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+  apt-get update -y
+  apt-get install -y chefdk
 
-chown -R travis:travis /tmp/packer-chef-solo /var/tmp
-cd /tmp/packer-chef-solo
+  chown -R travis:travis /tmp/packer-chef-solo /var/tmp
+  cd /tmp/packer-chef-solo
 
-for suite in $(echo ${SPEC_SUITES/,/ }) ; do
-  for d in $(find . -wholename "*${suite}/spec" -type d) ; do
-    pushd "$(dirname $d)"
+  for suite in $(echo ${SPEC_SUITES/,/ }) ; do
+    for d in $(find . -wholename "*${suite}/spec" -type d) ; do
+      local cookbook_dir="$(dirname $d)"
+      pushd "${cookbook_dir}" &>/dev/null
 
-    if [[ -d spec/bin ]] ; then
-      curl -sSL \
-        -o spec/bin/rabbitmqadmin \
-        http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
-      chmod +x spec/bin/rabbitmqadmin
-    fi
+      if [[ -d spec/bin ]] ; then
+        curl -sSL \
+          -o spec/bin/rabbitmqadmin \
+          http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
+        chmod +x spec/bin/rabbitmqadmin
+      fi
 
-    HOME=/home/travis sudo -u travis -- bash -l -c "
-      set -o xtrace
+      HOME=/home/travis sudo -u travis -- bash -lxec "
       export PATH=\"/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:\$PATH\"
       export TERM=xterm
       unset GEM_PATH
-      cd $(pwd)
+      cd ${cookbook_dir}
       sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
       rspec ${SPEC_ARGS}
-    "
+      "
 
-    popd
+      popd &>/dev/null
+    done
   done
-done
 
-apt-add-repository --remove \
-  'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+  apt-add-repository --remove \
+    'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+}
+
+main "$@"
