@@ -143,6 +143,8 @@
         }
       },
       "run_list": [
+        "recipe[apt]",
+        "recipe[travis_build_environment::apt]",
         "recipe[travis_packer_templates]",
         "recipe[travis_build_environment]",
         "recipe[travis_python::pyenv]",
