@@ -36,6 +36,7 @@ override['java']['alternate_versions'] = %w(
 )
 override['travis_packer_templates']['job_board']['languages'] = %w(
   c
+  c++
   cpp
   crystal
   csharp
