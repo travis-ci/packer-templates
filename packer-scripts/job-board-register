@@ -1,72 +1,92 @@
 #!/usr/bin/env bash
 
 set -o errexit
-shopt -s nullglob
 
-if [[ -f /etc/default/job-board-register ]] ; then
-  source /etc/default/job-board-register
-fi
+main() {
+  shopt -s nullglob
 
-[[ $JOB_BOARD_IMAGES_URL ]] || {
-  echo Missing \$JOB_BOARD_IMAGES_URL
-  exit 1
+  if [[ -f /etc/default/job-board-register ]] ; then
+    source /etc/default/job-board-register
+  fi
+
+  : ${PACKER_ENV_DIR:=/.packer-env}
+
+  [[ $JOB_BOARD_IMAGES_URL ]] || {
+    echo Missing \$JOB_BOARD_IMAGES_URL
+    exit 1
+  }
+
+  [[ $IMAGE_NAME ]] || {
+    echo Missing \$IMAGE_NAME
+    exit 1
+  }
+
+  if [[ -d ${PACKER_ENV_DIR} ]] ; then
+    for f in ${PACKER_ENV_DIR}/* ; do
+      eval "export $(basename $f)='$(cat $f)'"
+    done
+  fi
+
+  env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | sort
+
+  : ${TAGS:=nonempty:true}
+  : ${GROUP:=$(__group)}
+  : ${DIST:=$(__dist)}
+  : ${OS:=$(__uname)}
+
+  TAGS="${TAGS},os:${OS},group:${GROUP},dist:${DIST}"
+  TAGS="${TAGS},packer_templates_branch:${PACKER_TEMPLATES_BRANCH}"
+  TAGS="${TAGS},packer_templates_sha:${PACKER_TEMPLATES_SHA}"
+  TAGS="${TAGS},travis_cookbooks_branch:${TRAVIS_COOKBOOKS_BRANCH}"
+  TAGS="${TAGS},travis_cookbooks_sha:${TRAVIS_COOKBOOKS_SHA}"
+
+  if [[ $PACKER_BUILD_NAME ]] ; then
+    TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
+  fi
+
+  if [[ $PACKER_BUILDER_TYPE ]] ; then
+    TAGS="$TAGS,packer_builder_type:$PACKER_BUILDER_TYPE"
+
+    case "$PACKER_BUILDER_TYPE" in
+      googlecompute) IMAGE_INFRA=gce ;;
+      docker) IMAGE_INFRA=docker ;;
+      vmware) IMAGE_INFRA=jupiterbrain ;;
+    esac
+  fi
+
+  : ${IMAGE_INFRA:=local}
+
+  local curl_params="infra=$IMAGE_INFRA&name=$IMAGE_NAME&tags=$TAGS"
+
+  echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    "msg=\"registering with job board\"" \
+    "name=${IMAGE_NAME} infra=${IMAGE_INFRA} tags=${TAGS}"
+
+  curl -s -X POST "$JOB_BOARD_IMAGES_URL?${curl_params}" | jq .
 }
-
-[[ $IMAGE_NAME ]] || {
-  echo Missing \$IMAGE_NAME
-  exit 1
-}
-
-if [[ -d /.packer-env ]] ; then
-  for f in /.packer-env/* ; do
-    eval "export $(basename $f)='$(cat $f)'"
-  done
-fi
 
 __group() {
   if [[ $TRAVIS_COOKBOOKS_BRANCH = ${TRAVIS_COOKBOOKS_EDGE_BRANCH:-master} && \
-        ! ${TRAVIS_COOKBOOKS_SHA:-dirty} =~ dirty && \
-        $PACKER_TEMPLATES_BRANCH = master && \
-        ! ${PACKER_TEMPLATES_SHA:-dirty} =~ dirty ]] ; then
+    ! ${TRAVIS_COOKBOOKS_SHA:-dirty} =~ dirty && \
+    $PACKER_TEMPLATES_BRANCH = master && \
+    ! ${PACKER_TEMPLATES_SHA:-dirty} =~ dirty ]] ; then
     echo edge
     return
   fi
   echo dev
 }
 
-env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | sort
+__dist() {
+  lsb_release -sc 2>/dev/null || sw_vers -productVersion 2>/dev/null
+}
 
-: ${TAGS:=nonempty:true}
-: ${GROUP:=$(__group)}
-: ${DIST:=$(lsb_release -sc)}
+__uname() {
+  local uname_lower=$(uname | tr '[:upper:]' '[:lower:]')
+  if [[ $uname_lower = darwin ]] ; then
+    echo osx
+    return
+  fi
+  echo $uname_lower
+}
 
-TAGS="${TAGS},os:linux,group:${GROUP},dist:${DIST}"
-TAGS="${TAGS},packer_templates_branch:${PACKER_TEMPLATES_BRANCH}"
-TAGS="${TAGS},packer_templates_sha:${PACKER_TEMPLATES_SHA}"
-TAGS="${TAGS},travis_cookbooks_branch:${TRAVIS_COOKBOOKS_BRANCH}"
-TAGS="${TAGS},travis_cookbooks_sha:${TRAVIS_COOKBOOKS_SHA}"
-
-if [[ $PACKER_BUILD_NAME ]] ; then
-  TAGS="$TAGS,packer_build_name:$PACKER_BUILD_NAME"
-fi
-
-if [[ $PACKER_BUILDER_TYPE ]] ; then
-  TAGS="$TAGS,packer_builder_type:$PACKER_BUILDER_TYPE"
-
-  case "$PACKER_BUILDER_TYPE" in
-    googlecompute) IMAGE_INFRA=gce ;;
-    docker) IMAGE_INFRA=docker ;;
-    vmware) IMAGE_INFRA=jupiterbrain ;;
-  esac
-fi
-
-: ${IMAGE_INFRA:=local}
-
-echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-     "msg=\"registering with job board\"" \
-     "name=${IMAGE_NAME} infra=${IMAGE_INFRA} tags=${TAGS}"
-
-exec curl \
-  -s \
-  -X POST \
-  "$JOB_BOARD_IMAGES_URL?infra=$IMAGE_INFRA&name=$IMAGE_NAME&tags=$TAGS"
+main "$@"
