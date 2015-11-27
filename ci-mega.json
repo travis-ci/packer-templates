@@ -6,11 +6,6 @@
   "variables": {
     "travis_cookbooks_branch": "meat-mysql",
     "travis_cookbooks_sha": "{{ env `TRAVIS_COOKBOOKS_SHA` }}",
-    "docker_login_email": "{{ env `DOCKER_LOGIN_EMAIL` }}",
-    "docker_login_password": "{{ env `DOCKER_LOGIN_PASSWORD` }}",
-    "docker_login_server": "{{ env `DOCKER_LOGIN_SERVER` }}",
-    "docker_login_username": "{{ env `DOCKER_LOGIN_USERNAME` }}",
-    "docker_tag": "packer-{{ timestamp }}",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "trusty-ci-mega-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
@@ -30,26 +25,11 @@
       "zone": "us-central1-a",
       "image_name": "{{ user `gce_image_name` }}",
       "machine_type": "n1-standard-4",
-      "disk_size": 15,
+      "disk_size": 30,
       "tags": [
         "ci",
         "mega"
       ]
-    },
-    {
-      "type": "docker",
-      "name": "docker",
-      "ssh_pty": true,
-      "image": "ubuntu-upstart:14.04",
-      "run_command": [
-        "-d",
-        "-i",
-        "-t",
-        "--privileged=true",
-        "{{.Image}}",
-        "/sbin/init"
-      ],
-      "commit": true
     }
   ],
   "provisioners": [
@@ -140,38 +120,6 @@
       "only": [
         "googlecompute"
       ]
-    },
-    {
-      "type": "atlas",
-      "artifact": "travis-ci/ci-mega",
-      "artifact_type": "docker.image",
-      "metadata": {
-        "tag": "{{ user `docker_tag` }}"
-      },
-      "only": [
-        "docker"
-      ]
-    },
-    [
-      {
-        "type": "docker-tag",
-        "repository": "travisci/ci-mega",
-        "tag": "{{ user `docker_tag` }}",
-        "only": [
-          "docker"
-        ]
-      },
-      {
-        "type": "docker-push",
-        "login": true,
-        "login_email": "{{ user `docker_login_email` }}",
-        "login_username": "{{ user `docker_login_username` }}",
-        "login_password": "{{ user `docker_login_password` }}",
-        "login_server": "{{ user `docker_login_server` }}",
-        "only": [
-          "docker"
-        ]
-      }
-    ]
+    }
   ]
 }
