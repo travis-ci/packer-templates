@@ -56,11 +56,15 @@ main() {
 
   : ${IMAGE_INFRA:=local}
 
-  local curl_params="infra=$IMAGE_INFRA&name=$IMAGE_NAME&tags=$TAGS"
+  local curl_params="infra=$(__uri_esc "${IMAGE_INFRA}")"
+  curl_params="${curl_params}&name=$(__uri_esc "${IMAGE_NAME}")"
+  curl_params="${curl_params}&tags=$(__uri_esc "${TAGS}")"
 
   echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
     "msg=\"registering with job board\"" \
     "name=${IMAGE_NAME} infra=${IMAGE_INFRA} tags=${TAGS}"
+  echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    "curl_params=\"${curl_params}\""
 
   curl -s -X POST "$JOB_BOARD_IMAGES_URL?${curl_params}" | jq .
 }
@@ -87,6 +91,10 @@ __uname() {
     return
   fi
   echo $uname_lower
+}
+
+__uri_esc() {
+  echo "\"${1}\"" | jq -r '. | @uri'
 }
 
 main "$@"
