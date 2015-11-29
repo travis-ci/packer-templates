@@ -75,6 +75,7 @@
     },
     {
       "type": "chef-solo",
+      "execute_command": "{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} ; while true ; do date -u ; sleep 60 ; done",
       "config_template": "chef-solo.rb.tmpl",
       "cookbook_paths": [
         "cookbooks"
