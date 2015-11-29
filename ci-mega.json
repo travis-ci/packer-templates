@@ -6,7 +6,6 @@
   "variables": {
     "travis_cookbooks_branch": "meat-mysql",
     "travis_cookbooks_sha": "{{ env `TRAVIS_COOKBOOKS_SHA` }}",
-    "chef_log_level": "debug",
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "trusty-ci-mega-trusty-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
@@ -76,7 +75,6 @@
     },
     {
       "type": "chef-solo",
-      "execute_command": "{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} ; while true ; do date -u ; sleep 60 ; done",
       "config_template": "chef-solo.rb.tmpl",
       "cookbook_paths": [
         "cookbooks"
