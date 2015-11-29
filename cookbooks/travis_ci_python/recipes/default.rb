@@ -27,4 +27,5 @@ include_recipe 'python::pyenv'
 include_recipe 'python::system'
 include_recipe 'travis_system_info'
 include_recipe 'sweeper'
-include_recipe 'python::devshm'
+include_recipe 'python::devshm' unless
+  node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
