@@ -1,45 +1,83 @@
 #!/usr/bin/env bash
 
-set -o errexit
-set -o xtrace
-shopt -s nullglob
+main() {
+  set -o errexit
+  set -o xtrace
+  shopt -s nullglob
 
-export PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
-export DEBIAN_FRONTEND='noninteractive'
+  export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
+  export PATH="$CHEF_PATH:$PATH"
+  export DEBIAN_FRONTEND='noninteractive'
 
-curl -sSL 'https://packagecloud.io/gpg.key' | apt-key add -
-apt-add-repository \
-  'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
-apt-get update -y
-apt-get install -y chefdk
+  __install_chefdk
 
-chown -R travis:travis /tmp/packer-chef-solo /var/tmp
-cd /tmp/packer-chef-solo
+  chown -R travis:travis /tmp/packer-chef-solo /var/tmp
 
-for suite in $(echo ${SPEC_SUITES/,/ }) ; do
-  for d in $(find . -wholename "*${suite}/spec" -type d) ; do
-    pushd "$(dirname $d)"
-
-    if [[ -d spec/bin ]] ; then
-      curl -sSL \
-        -o spec/bin/rabbitmqadmin \
-        http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
-      chmod +x spec/bin/rabbitmqadmin
-    fi
-
-    HOME=/home/travis sudo -u travis -- bash -l -c "
-      set -o xtrace
-      export PATH=\"/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:\$PATH\"
-      export TERM=xterm
-      unset GEM_PATH
-      cd $(pwd)
-      sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
-      rspec ${SPEC_ARGS}
-    "
-
-    popd
+  for suite in $(echo ${SPEC_SUITES/,/ }) ; do
+    __run_suite "${suite}"
   done
-done
 
-apt-add-repository --remove \
-  'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+  __remove_chefdk
+}
+
+__install_chefdk() {
+  if [[ -f /opt/chefdk/embedded/bin/rspec ]] ; then
+    return
+  fi
+
+  curl -sSL 'https://packagecloud.io/gpg.key' | apt-key add -
+  apt-add-repository \
+    'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+  apt-get update -y
+  apt-get install -y chefdk
+}
+
+__remove_chefdk() {
+  apt-add-repository --remove \
+    'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+}
+
+__run_suite() {
+  local suite="${1}"
+  local cookbook_dir="$(__suite_cookbook_dir "${suite}")"
+  pushd "${cookbook_dir}" &>/dev/null
+
+  if [[ -d spec/bin ]] ; then
+    __populate_spec_bin
+  fi
+
+  __run_suite_as_travis "${cookbook_dir}"
+
+  popd &>/dev/null
+}
+
+__run_suite_as_travis() {
+  local cookbook_dir="${1}"
+
+  sudo -u travis HOME=/home/travis -- bash -lexc "
+    export PATH=\"${CHEF_PATH}:\$PATH\"
+    export TERM=xterm
+    unset GEM_PATH
+
+    cd ${cookbook_dir}
+    sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
+    rspec ${SPEC_ARGS}
+  "
+}
+
+__suite_cookbook_dir() {
+  local suite="${1}"
+  local spec_dir="$(
+    find /tmp/packer-chef-solo -wholename "*${suite}/spec" -type d | head -1
+  )"
+  dirname "${spec_dir}"
+}
+
+__populate_spec_bin() {
+  curl -sSL \
+    -o spec/bin/rabbitmqadmin \
+    http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
+  chmod +x spec/bin/rabbitmqadmin
+}
+
+main "$@"
