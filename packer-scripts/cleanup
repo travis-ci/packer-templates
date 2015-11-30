@@ -9,7 +9,7 @@ rm -rf \
   /etc/systemd \
   /lib/recovery-mode \
   /opt/chef \
-  /tmp/packer* \
+  /tmp/* \
   /var/chef \
   /var/lib/apt/lists/* \
   /var/lib/man-db \
