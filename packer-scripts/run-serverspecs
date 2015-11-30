@@ -55,7 +55,7 @@ __run_suite_as_travis() {
   local cookbook_dir="${1}"
 
   sudo -u travis HOME=/home/travis -- bash -lec "
-    if [[ ${DEBUG} ]] ; then
+    if [[ -n \"${DEBUG}\" ]] ; then
       set -o xtrace
     fi
 
