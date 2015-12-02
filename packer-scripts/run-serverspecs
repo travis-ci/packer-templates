@@ -56,10 +56,12 @@ __run_suite_as_travis() {
 
   set +o errexit
 
-  sudo -u travis HOME=/home/travis -- bash -lec "
-if [[ -n \"${DEBUG}\" ]] ; then
-  set -o xtrace
-fi
+  sudo -u travis HOME=/home/travis -- bash -lc "
+# if [[ -n \"${DEBUG}\" ]] ; then
+#   set -o xtrace
+# fi
+
+set -x
 
 export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
