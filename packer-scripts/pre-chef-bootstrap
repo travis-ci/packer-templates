@@ -8,6 +8,13 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
 
+  __install_packages
+  __setup_sshd
+  __setup_travis_user
+  __setup_tmpfs
+}
+
+__install_packages() {
   if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
@@ -25,10 +32,17 @@ main() {
     sudo \
     wget \
     ${APT_GET_INSTALL_PRE_CHEF}
+}
 
+__setup_sshd() {
   mkdir -p /var/run/sshd
-  echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
 
+  if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow ; then
+    echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
+  fi
+}
+
+__setup_travis_user() {
   if ! getent passwd travis &>/dev/null ; then
     useradd -p travis -s /bin/bash -m travis -u 1000
   fi
@@ -38,6 +52,11 @@ main() {
 
   echo 'Defaults !authenticate' >> /etc/sudoers
   sed -e 's/^%.*//' -i /etc/sudoers
+
+  if ! grep -q '#includedir /etc/sudoers.d' /etc/sudoers ; then
+    echo '#includedir /etc/sudoers.d' >> /etc/sudoers
+  fi
+
   mkdir -p /etc/sudoers.d
   echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis
   chmod 440 /etc/sudoers.d/travis
@@ -52,6 +71,20 @@ main() {
   chmod 0600 /home/travis/.ssh/authorized_keys
 
   chown -R travis:travis /home/travis
+}
+
+__setup_tmpfs() {
+  if [[ ${PACKER_BUILDER_TYPE} =~ docker ]] ; then
+    return
+  fi
+
+  local tmpfs_mount='none /tmp tmpfs defaults,size=1024m,noatime 0 2'
+
+  if ! grep -q "${tmpfs_mount}" /etc/fstab ; then
+    echo "${tmpfs_mount}" >> /etc/fstab
+  fi
+
+  mount /tmp || echo "Suppressing mount exit $?"
 }
 
 main "$@"

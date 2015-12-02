@@ -61,6 +61,7 @@ __run_suite_as_travis() {
 
     export PATH=\"${CHEF_PATH}:\$PATH\"
     export TERM=xterm
+    export PACKER_BUILDER_TYPE="${PACKER_BUILDER_TYPE}"
     unset GEM_PATH
 
     cd ${cookbook_dir}
