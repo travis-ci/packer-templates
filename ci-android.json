@@ -83,8 +83,8 @@
       "type": "shell",
       "scripts": [
         "packer-scripts/packer-env-dump",
-        "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/remove-default-users",
+        "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
