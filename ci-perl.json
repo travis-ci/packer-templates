@@ -75,6 +75,11 @@
       "destination": "/var/tmp/purge.txt"
     },
     {
+      "type": "file",
+      "source": "packer-assets/ubuntu-precise-ci-packages.txt",
+      "destination": "/var/tmp/packages.txt"
+    },
+    {
       "type": "shell",
       "scripts": [
         "packer-scripts/packer-env-dump",
