@@ -1,49 +1,57 @@
 #!/usr/bin/env bash
 
 set -o errexit
-set -o xtrace
 
-shopt -s nullglob
+main() {
+  set -o xtrace
+  shopt -s nullglob
 
-export DEBIAN_FRONTEND='noninteractive'
+  export DEBIAN_FRONTEND='noninteractive'
 
-if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
-  APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
-fi
+  if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
+    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
+  fi
 
-rm -vf /etc/apt/sources.list.d/partner.list
+  rm -vf /etc/apt/sources.list.d/partner.list
 
-apt-get update -yqq
-apt-get install -yqq \
-  --no-install-suggests \
-  --no-install-recommends \
-  ca-certificates \
-  cron \
-  curl \
-  git \
-  sudo \
-  wget \
-  ${APT_GET_INSTALL_PRE_CHEF}
+  apt-get update -yqq
+  apt-get install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    ca-certificates \
+    cron \
+    curl \
+    git \
+    sudo \
+    wget \
+    ${APT_GET_INSTALL_PRE_CHEF}
 
-mkdir -p /var/run/sshd
-echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
+  mkdir -p /var/run/sshd
+  echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
 
-getent passwd | grep -E '\btravis\b' || useradd -s /bin/bash -m travis
-echo travis:travis | chpasswd
+  if ! getent passwd travis &>/dev/null ; then
+    useradd -p travis -s /bin/bash -m travis -u 1000
+  fi
 
-echo 'Defaults !authenticate' >> /etc/sudoers
-sed -e 's/^%.*//' -i /etc/sudoers
-mkdir -p /etc/sudoers.d
-echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis
-chmod 440 /etc/sudoers.d/travis
+  echo travis:travis | chpasswd
+  usermod -u 1000 travis
 
-mkdir -p /home/travis/.ssh
-chmod 0700 /home/travis/.ssh
+  echo 'Defaults !authenticate' >> /etc/sudoers
+  sed -e 's/^%.*//' -i /etc/sudoers
+  mkdir -p /etc/sudoers.d
+  echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis
+  chmod 440 /etc/sudoers.d/travis
 
-touch /home/travis/.ssh/authorized_keys
-for f in /var/tmp/*_rsa.pub ; do
-  cat $f >> /home/travis/.ssh/authorized_keys
-done
-chmod 0600 /home/travis/.ssh/authorized_keys
+  mkdir -p /home/travis/.ssh
+  chmod 0700 /home/travis/.ssh
 
-chown -R travis:travis /home/travis
+  touch /home/travis/.ssh/authorized_keys
+  for f in /var/tmp/*_rsa.pub ; do
+    cat "${f}" >> /home/travis/.ssh/authorized_keys
+  done
+  chmod 0600 /home/travis/.ssh/authorized_keys
+
+  chown -R travis:travis /home/travis
+}
+
+main "$@"

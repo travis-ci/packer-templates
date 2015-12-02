@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o xtrace
+
+main() {
+  for u in ${DEFAULT_USERS:-vagrant ubuntu} ; do
+    if ! getent passwd "${u}" &>/dev/null ; then
+      continue
+    fi
+    killall -9 -u "${u}"
+    deluser "${u}"
+    rm -rf "/home/${u}"
+  done
+}
+
+main "$@"
