@@ -16,7 +16,7 @@ main() {
     fi
 
     ps -Fwww -u "${u}"
-    killall -9 -u "${u}"
+    killall -TERM -w -v -u "${u}"
     deluser "${u}"
     rm -rf "/home/${u}"
   done
