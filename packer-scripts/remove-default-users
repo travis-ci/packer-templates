@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  set -o xtrace
+
+  for u in ${DEFAULT_USERS:-vagrant ubuntu} ; do
+    __remove_user "${u}"
+  done
+}
+
+__remove_user() {
+  local u="${1}"
+
+  if [[ $(whoami) = ${u} ]] ; then
+    echo 'Refusing to remove myself' >&2
+    return
+  fi
+
+  if ! getent passwd "${u}" &>/dev/null ; then
+    return
+  fi
+
+  ps -Fwww -u "${u}" || echo "Suppressing ps exit $?"
+  killall -TERM -w -v -u "${u}" || echo "Suppressing killall exit $?"
+  deluser "${u}" || echo "Suppressing deluser exit $?"
+  rm -rf "/home/${u}"
+}
+
+main "$@"

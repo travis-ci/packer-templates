@@ -63,7 +63,7 @@ provisioners:
   scripts:
   - packer-scripts/packer-env-dump
   - packer-scripts/pre-chef-bootstrap
-  - packer-scripts/remove-vagrant-user
+  - packer-scripts/remove-default-users
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}

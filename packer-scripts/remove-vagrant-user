@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-deluser vagrant || true
-rm -rf /home/vagrant

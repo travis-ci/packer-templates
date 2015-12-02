@@ -78,7 +78,7 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/internal-base-setup
-  - packer-scripts/remove-vagrant-user
+  - packer-scripts/remove-default-users
   - packer-scripts/internal-pre-chef-bootstrap
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
