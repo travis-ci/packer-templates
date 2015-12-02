@@ -87,8 +87,6 @@ openjdk-6-jdk
 openjdk-6-jre-headless
 openjdk-7-jdk
 openssh-server
-oracle-java7-installer
-oracle-java8-installer
 pkg-config
 python
 python-dev
