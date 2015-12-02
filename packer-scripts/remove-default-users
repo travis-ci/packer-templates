@@ -5,9 +5,15 @@ set -o xtrace
 
 main() {
   for u in ${DEFAULT_USERS:-vagrant ubuntu} ; do
+    if [[ $(whoami) = ${u} ]] ; then
+      echo 'Refusing to remove myself' >&2
+      continue
+    fi
+
     if ! getent passwd "${u}" &>/dev/null ; then
       continue
     fi
+
     killall -9 -u "${u}"
     deluser "${u}"
     rm -rf "/home/${u}"
