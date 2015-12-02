@@ -57,11 +57,7 @@ __run_suite_as_travis() {
   set +o errexit
 
   sudo -u travis HOME=/home/travis -- bash -lc "
-# if [[ -n \"${DEBUG}\" ]] ; then
-#   set -o xtrace
-# fi
-
-set -x
+set -o xtrace
 
 export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
@@ -70,6 +66,8 @@ unset GEM_PATH
 
 cd ${cookbook_dir}
 sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
+
+set -o errexit
 rspec ${SPEC_ARGS}
 "
   local exit_code="$?"
