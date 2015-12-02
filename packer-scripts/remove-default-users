@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 set -o errexit
-set -o xtrace
 
 main() {
+  set -o xtrace
+
   for u in ${DEFAULT_USERS:-vagrant ubuntu} ; do
     if [[ $(whoami) = ${u} ]] ; then
       echo 'Refusing to remove myself' >&2
@@ -14,6 +15,7 @@ main() {
       continue
     fi
 
+    ps -Fwww -u "${u}"
     killall -9 -u "${u}"
     deluser "${u}"
     rm -rf "/home/${u}"
