@@ -42,16 +42,14 @@ libfreetype6
 libgcc1
 libgdbm-dev
 libgdk-pixbuf2.0-0
-libgeos++-dev
 libglib2.0-0
 libgtk2.0-0
 libicu-dev
-libldap-2.4.2
+libldap-2.4-2
 libldap2-dev
 liblzma-dev
 libmagickwand-dev
 libmysql++-dev
-libncurses-dev
 libncurses5-dev
 libncursesw5-dev
 libnotify4
@@ -71,7 +69,6 @@ libx11-6
 libxext6
 libxml2-dev
 libxrender1
-libxslt-dev
 libxslt1-dev
 libxt6
 libyaml-0-2
