@@ -17,8 +17,8 @@ describe 'ragel installation' do
         sh('ragel -R ./spec/files/hello_world.rl')
       end
 
-      describe command('cat ./spec/files/hello_world.rb') do
-        its(:stdout) { should match(/^puts "Hello World"/) }
+      describe file('./spec/files/hello_world.rb') do
+        its(:content) { should match(/^puts "Hello World"/) }
       end
     end
   end

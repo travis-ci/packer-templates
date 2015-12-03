@@ -54,19 +54,30 @@ __run_suite() {
 __run_suite_as_travis() {
   local cookbook_dir="${1}"
 
-  sudo -u travis HOME=/home/travis -- bash -lec "
-    if [[ -n \"${DEBUG}\" ]] ; then
-      set -o xtrace
-    fi
+  set +o errexit
 
-    export PATH=\"${CHEF_PATH}:\$PATH\"
-    export TERM=xterm
-    unset GEM_PATH
+  sudo -u travis HOME=/home/travis -- bash -lc "
+set -o xtrace
 
-    cd ${cookbook_dir}
-    sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
-    rspec ${SPEC_ARGS}
-  "
+export PATH=\"${CHEF_PATH}:\$PATH\"
+export TERM=xterm
+export PACKER_BUILDER_TYPE="${PACKER_BUILDER_TYPE}"
+unset GEM_PATH
+
+cd ${cookbook_dir}
+sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
+
+set -o errexit
+rspec ${SPEC_ARGS}
+"
+  local exit_code="$?"
+
+  if [[ $exit_code != 0 ]] ; then
+    echo "Spec suite exited with ${exit_code}" >&2
+    exit ${exit_code}
+  fi
+
+  set -o errexit
 }
 
 __suite_cookbook_dir() {
