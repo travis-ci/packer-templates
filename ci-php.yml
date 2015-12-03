@@ -57,7 +57,7 @@ provisioners:
   source: packer-assets/ubuntu-precise-normal-purge.txt
   destination: "/var/tmp/purge.txt"
 - type: file
-  source: packer-assets/ubuntu-precise-ci-packages.txt
+  source: packer-assets/ubuntu-precise-ci-php-packages.txt
   destination: "/var/tmp/packages.txt"
 - type: shell
   scripts:

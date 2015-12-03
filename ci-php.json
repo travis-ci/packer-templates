@@ -76,7 +76,7 @@
     },
     {
       "type": "file",
-      "source": "packer-assets/ubuntu-precise-ci-packages.txt",
+      "source": "packer-assets/ubuntu-precise-ci-php-packages.txt",
       "destination": "/var/tmp/packages.txt"
     },
     {
