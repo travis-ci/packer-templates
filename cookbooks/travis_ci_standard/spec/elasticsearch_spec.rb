@@ -1,9 +1,7 @@
 describe 'elasticsearch installation', sudo: true do
   before :all do
     sh('sudo service elasticsearch start')
-    sleep 5
-    sh('curl -X GET http://localhost:9200/')
-    sleep 8
+    tcpwait('localhost', 9200, 30)
     sh('curl -X PUT \'http://localhost:9200/twitter/user/kimchy\' ' \
        '-d \'{ "name" : "Shay Banon" }\'')
     sh(
