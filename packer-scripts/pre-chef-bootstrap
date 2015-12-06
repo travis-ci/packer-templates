@@ -50,17 +50,32 @@ __setup_travis_user() {
   echo travis:travis | chpasswd
   usermod -u 1000 travis
 
-  echo 'Defaults !authenticate' >> /etc/sudoers
-  sed -e 's/^%.*//' -i /etc/sudoers
+  __setup_sudoers
+  __setup_travis_ssh
 
-  if ! grep -q '#includedir /etc/sudoers.d' /etc/sudoers ; then
-    echo '#includedir /etc/sudoers.d' >> /etc/sudoers
-  fi
+  chown -R travis:travis /home/travis
+}
+
+__setup_sudoers() {
+  sed -i '/^%/d;/^# /d;/^$/d;/^#$/d;/^#includedir/d' /etc/sudoers
+  echo '#includedir /etc/sudoers.d' >> /etc/sudoers
 
   mkdir -p /etc/sudoers.d
-  echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis
-  chmod 440 /etc/sudoers.d/travis
 
+  if [[ -f /var/tmp/sudoers.d-travis ]] ; then
+    cp -v /var/tmp/sudoers.d-travis /etc/sudoers.d/travis
+  else
+    cat > /etc/sudoers.d/travis <<EOF
+travis ALL=(ALL) NOPASSWD:ALL
+Defaults !authenticate
+Defaults !env_reset
+Defaults !mail_badpass
+EOF
+  fi
+  chmod 440 /etc/sudoers.d/travis
+}
+
+__setup_travis_ssh() {
   mkdir -p /home/travis/.ssh
   chmod 0700 /home/travis/.ssh
 
@@ -69,8 +84,6 @@ __setup_travis_user() {
     cat "${f}" >> /home/travis/.ssh/authorized_keys
   done
   chmod 0600 /home/travis/.ssh/authorized_keys
-
-  chown -R travis:travis /home/travis
 }
 
 __setup_tmpfs() {
@@ -78,7 +91,9 @@ __setup_tmpfs() {
     return
   fi
 
-  local tmpfs_mount='none /tmp tmpfs defaults,size=1024m,noatime 0 2'
+  : ${TMP_SIZE:=1024m}
+
+  local tmpfs_mount="none /tmp tmpfs defaults,size=${TMP_SIZE},noatime 0 2"
 
   if ! grep -q "${tmpfs_mount}" /etc/fstab ; then
     echo "${tmpfs_mount}" >> /etc/fstab
