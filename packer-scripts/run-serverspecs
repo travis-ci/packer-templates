@@ -10,6 +10,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
 
   __install_chefdk
+  __create_sudo_bash
 
   chown -R travis:travis /tmp/packer-chef-solo /var/tmp
 
@@ -30,6 +31,14 @@ __install_chefdk() {
     'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
   apt-get update -y
   apt-get install -y chefdk
+}
+
+__create_sudo_bash() {
+  cat > /tmp/sudo-bash <<EOF
+#!/usr/bin/env bash
+exec sudo -- bash "$@"
+EOF
+  chmod 0755 /tmp/sudo-bash
 }
 
 __remove_chefdk() {
