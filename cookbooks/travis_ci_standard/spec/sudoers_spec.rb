@@ -1,15 +1,6 @@
 describe 'sudoers setup' do
-  before do
-    RSpec.configure do |c|
-      set :shell, '/tmp/sudo-bash'
-    end
-  end
-
-  after do
-    RSpec.configure do |c|
-      set :shell, '/bin/bash'
-    end
-  end
+  before { RSpec.configure { set :shell, '/tmp/sudo-bash' } }
+  after { RSpec.configure { set :shell, '/bin/bash' } }
 
   describe file('/etc/sudoers') do
     it { should exist }
