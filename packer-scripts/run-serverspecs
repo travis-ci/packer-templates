@@ -36,7 +36,7 @@ __install_chefdk() {
 __create_sudo_bash() {
   cat > /tmp/sudo-bash <<EOF
 #!/usr/bin/env bash
-exec sudo -- bash "$@"
+exec sudo -- bash "\$@"
 EOF
   chmod 0755 /tmp/sudo-bash
 }
