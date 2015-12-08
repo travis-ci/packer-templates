@@ -1,13 +1,3 @@
-describe file('/tmp'), docker: false do
-  it do
-    should be_mounted.with(
-      device: 'none',
-      type: 'tmpfs',
-      options: {
-        rw: true,
-        noatime: true,
-        size: '1024m'
-      }
-    )
-  end
+describe file('/var/ramfs'), docker: false do
+  it { should be_mounted.with(type: 'tmpfs') }
 end
