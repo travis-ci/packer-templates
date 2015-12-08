@@ -10,7 +10,7 @@ describe 'couchdb installation' do
   describe 'couchdb commands', sudo: true do
     before :all do
       sh('sudo service couchdb start')
-      sleep 5
+      tcpwait('127.0.0.1', 5984)
       sh('curl -X PUT http://127.0.0.1:5984/baseball')
       sh('curl -X PUT http://127.0.0.1:5984/baseball/bat ' \
          '-H \'Content-Type: application/json\' -d \'{"Name":"Testname"}\'')

@@ -4,7 +4,7 @@ describe 'clang installation' do
   end
 
   describe 'clang command' do
-    describe command('clang -help; sleep 5') do
+    describe command('clang -help') do
       its(:stdout) { should include('OVERVIEW: clang LLVM compiler', 'OPTIONS:') }
     end
   end

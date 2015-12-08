@@ -7,7 +7,7 @@ describe 'mongodb installation' do
   describe 'mongo commands', sudo: true do
     before :all do
       sh('sudo service mongodb start')
-      sleep 10
+      tcpwait('127.0.0.1', 27_017)
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
     end
 

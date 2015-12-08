@@ -6,7 +6,7 @@ describe 'neo4j installation' do
   describe 'neo4j commands', sudo: true do
     before :all do
       sh('sudo neo4j start')
-      sleep 10
+      tcpwait('127.0.0.1', 7474)
     end
 
     describe service('neo4j') do
