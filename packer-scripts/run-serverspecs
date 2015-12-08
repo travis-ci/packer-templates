@@ -83,6 +83,13 @@ rspec ${SPEC_ARGS}
 
   if [[ $exit_code != 0 ]] ; then
     echo "Spec suite exited with ${exit_code}" >&2
+    if [[ -n ${SPEC_FAILURE_SLEEP_FOREVER} ]] ; then
+      while true ; do
+        date -u
+        echo tick
+        sleep ${SLEEPYTIME:-60}
+      done
+    fi
     exit ${exit_code}
   fi
 

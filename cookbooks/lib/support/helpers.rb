@@ -9,7 +9,7 @@ module Support
         begin
           TCPSocket.new(host, port)
           break
-        rescue Errno::ECONNREFUSED => e
+        rescue Errno::ECONNREFUSED, Errno::EINVAL => e
           raise e if (Time.now - now >= timeout)
           sleep 0.1
         end
