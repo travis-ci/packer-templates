@@ -4,7 +4,7 @@ describe 'git installation' do
   end
 
   describe command('git --version') do
-    its(:stdout) { should match(/^git version (2\.|1\.[89])/ }
+    its(:stdout) { should match(/^git version (2\.|1\.[89])/) }
     its(:exit_status) { should eq 0 }
   end
 
