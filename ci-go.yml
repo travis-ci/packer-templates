@@ -95,8 +95,6 @@ provisioners:
   - SPEC_SUITES=travis_ci_standard
   - DISPLAY=:99.0
   - TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable
-  # HACK: debugging time
-  - SPEC_FAILURE_SLEEP_FOREVER=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
 - type: atlas
