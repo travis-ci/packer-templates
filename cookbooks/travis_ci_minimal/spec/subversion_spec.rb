@@ -8,7 +8,7 @@ describe 'subversion installation' do
   describe 'subversion commands are executed' do
     before do
       FileUtils.rm_rf('svn-project')
-      system('svnadmin create svn-project', [:out, :err] => '/dev/null')
+      sh('svnadmin create svn-project')
     end
 
     describe file('svn-project/README.txt') do
