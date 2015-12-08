@@ -11,7 +11,7 @@ describe 'memcached installation' do
   describe 'memcached commands', sudo: true do
     before :all do
       sh('sudo service memcached start')
-      tcpwait('127.0.0.1', 11211)
+      tcpwait('127.0.0.1', 11_211)
     end
 
     describe service('memcached') do
