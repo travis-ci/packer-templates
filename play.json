@@ -97,7 +97,9 @@
     },
     {
       "type": "shell",
-      "inline": "while true ; do date -u ; echo tick ; sleep 60 ; done",
+      "scripts": [
+        "packer-scripts/sleep-tick-forever"
+      ],
       "only": [
         "googlecompute"
       ]
