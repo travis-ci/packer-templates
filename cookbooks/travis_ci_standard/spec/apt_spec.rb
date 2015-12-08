@@ -9,7 +9,7 @@ describe 'apt installation' do
 
   describe command('
     shopt -s nullglob ;
-    for f in /var/lib/apt/lists/*Packages ; do
+    for f in /var/lib/apt/lists/*Packages* ; do
       echo $f ;
     done
   ') do

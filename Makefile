@@ -38,3 +38,7 @@ $(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
 .PHONY: test
 test:
 	./runtests
+
+.PHONY: hackcheck
+hackcheck:
+	if $(GIT) grep -q \H\A\C\K ; then exit 1 ; fi

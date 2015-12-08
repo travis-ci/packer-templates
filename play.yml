@@ -75,6 +75,7 @@ provisioners:
   run_list:
   - 'recipe[travis_ci_standard]'
 - type: shell
-  inline: while true ; do date -u ; echo tick ; sleep 60 ; done
+  scripts:
+  - packer-scripts/sleep-tick-forever
   only:
   - googlecompute

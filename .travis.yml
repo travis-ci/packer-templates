@@ -12,6 +12,7 @@ addons:
     - chefdk
 
 script:
+- make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
