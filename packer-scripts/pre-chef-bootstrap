@@ -11,7 +11,6 @@ main() {
   __install_packages
   __setup_sshd
   __setup_travis_user
-  __setup_tmpfs
 }
 
 __install_packages() {
@@ -84,22 +83,6 @@ __setup_travis_ssh() {
     cat "${f}" >> /home/travis/.ssh/authorized_keys
   done
   chmod 0600 /home/travis/.ssh/authorized_keys
-}
-
-__setup_tmpfs() {
-  if [[ ${PACKER_BUILDER_TYPE} =~ docker ]] ; then
-    return
-  fi
-
-  : ${TMP_SIZE:=1024m}
-
-  local tmpfs_mount="none /tmp tmpfs defaults,size=${TMP_SIZE},noatime 0 2"
-
-  if ! grep -q "${tmpfs_mount}" /etc/fstab ; then
-    echo "${tmpfs_mount}" >> /etc/fstab
-  fi
-
-  mount /tmp || echo "Suppressing mount exit $?"
 }
 
 main "$@"
