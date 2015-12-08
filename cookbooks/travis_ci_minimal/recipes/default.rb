@@ -36,6 +36,7 @@ include_recipe 'travis_build_environment::packer'
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker'
   include_recipe 'travis_docker::compose'
+  include_recipe 'ramfs'
 end
 
 include_recipe 'travis_java::multi'

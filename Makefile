@@ -34,3 +34,7 @@ $(SHA_FILE): .git/HEAD
 $(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
 	$(SED) 's/libcurl4-openssl-dev/libcurl4-gnutls-dev/' < $^ > $@
 	chmod 0400 $@
+
+.PHONY: test
+test:
+	./runtests
