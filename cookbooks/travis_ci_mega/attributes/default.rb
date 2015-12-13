@@ -6,6 +6,9 @@ default['travis_ci_mega']['prerequisite_packages'] = %w(
   wget
 )
 
+override['travis_system_info']['commands_file'] = \
+  '/var/tmp/system-info-commands.yml'
+
 override['travis_php']['multi']['versions'] = %w(
   5.6.15
   5.5.30
