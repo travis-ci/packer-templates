@@ -17,6 +17,7 @@ chromium-browser
 cmake
 curl
 debconf-utils
+fglrx
 flex
 gawk
 gcc
