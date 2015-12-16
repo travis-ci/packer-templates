@@ -11,7 +11,7 @@ describe file('/etc/cloud/templates') do
   it { should be_directory }
 end
 
-describe filename('/etc/cloud/cloud.cfg') do
+describe file('/etc/cloud/cloud.cfg') do
   its(:content) { should match(/managed by chef/i) }
   its(:content) { should match(/travis_build_environment/i) }
 end
