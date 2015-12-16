@@ -14,6 +14,7 @@ ccache
 cron
 curl
 dosemu
+fglrx
 flex
 gawk
 gettext
