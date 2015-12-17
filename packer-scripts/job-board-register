@@ -28,8 +28,11 @@ main() {
     done
   fi
 
-  if [[ $PACKER_BUILDER_TYPE =~ $SKIP_ON_BUILDER_TYPE ]] ; then
+  if [[ "x${PACKER_BUILDER_TYPE}" != 'x' && \
+        "x${SKIP_ON_BUILDER_TYPE}" != 'x' && \
+        "x${PACKER_BUILDER_TYPE}" == "x${SKIP_ON_BUILDER_TYPE}" ]] ; then
     echo Skipping registration on $PACKER_BUILDER_TYPE
+    set +o errexit
     exit 0
   fi
 
