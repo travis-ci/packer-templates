@@ -17,6 +17,7 @@ dosemu
 fglrx
 flex
 gawk
+gcc
 gettext
 git
 gnupg2
