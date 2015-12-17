@@ -147,6 +147,8 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   d
   dart
   default
+  elixir
+  erlang
   go
   groovy
   haxe
