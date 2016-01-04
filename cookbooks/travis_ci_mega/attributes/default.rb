@@ -142,6 +142,10 @@ override['travis_build_environment']['otp_releases'] = %w(
   17.3
   17.4
   17.5
+  18.0
+  18.1
+  18.2
+  18.2.1
   R14B02
   R14B03
   R14B04
