@@ -136,7 +136,7 @@ rubies = %w(
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
-override['travis_kerl']['releases'] = %w(
+override['travis_build_environment']['otp_releases'] = %w(
   17.0
   17.1
   17.3
@@ -155,6 +155,11 @@ override['travis_kerl']['releases'] = %w(
   R16B03
   R16B03-1
 )
+override['travis_build_environment']['elixir_versions'] = %w(
+  1.0.3
+  1.0.4
+)
+override['travis_build_environment']['default_elixir_version'] = '1.0.4'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
