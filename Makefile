@@ -7,9 +7,10 @@ BRANCH_FILE := tmp/git-meta/packer-templates-branch
 SHA_FILE := tmp/git-meta/packer-templates-sha
 PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
 
-JQ ?= jq
-SED ?= sed
 GIT ?= git
+JQ ?= jq
+PACKER ?= packer
+SED ?= sed
 
 %.json: %.yml
 	@touch $@
@@ -42,3 +43,7 @@ test:
 .PHONY: hackcheck
 hackcheck:
 	if $(GIT) grep -q \H\A\C\K ; then exit 1 ; fi
+
+.PHONY: pushall
+pushall:
+	for lang in $(shell $(MAKE) langs) ; do $(PACKER) push ci-$${lang}.json ; done
