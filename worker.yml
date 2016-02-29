@@ -16,6 +16,7 @@ variables:
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   opsmatic_integration_token: "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}"
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
+  travis_cookbooks_url: "{{ env `TRAVIS_COOKBOOKS_URL` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
@@ -65,6 +66,7 @@ provisioners:
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
+  - TRAVIS_COOKBOOKS_URL={{ user `travis_cookbooks_url` }}
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
