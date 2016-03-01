@@ -2,7 +2,7 @@ SHELL := /bin/bash
 TEMPLATES := \
 	$(wildcard ci-*.json) \
 	$(wildcard internal-*.json) \
-	$(shell echo {jupiter-brain,play,worker}.json)
+	$(shell echo {jupiter-brain,play,worker,tmate-edge}.json)
 BRANCH_FILE := tmp/git-meta/packer-templates-branch
 SHA_FILE := tmp/git-meta/packer-templates-sha
 PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
