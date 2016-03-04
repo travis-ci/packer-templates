@@ -54,7 +54,6 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump
-  - packer-scripts/remove-default-users
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
@@ -85,4 +84,5 @@ provisioners:
   - packer-scripts/purge
   - packer-scripts/cleanup
   - packer-scripts/minimize
+  - packer-scripts/remove-default-users
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
