@@ -11,7 +11,6 @@
     "gce_image_name": "travis-tmate-edge-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
     "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
-    "papertrail_remote_host": "{{ env `PAPERTRAIL_REMOTE_HOST` }}",
     "papertrail_remote_port": "{{ env `PAPERTRAIL_REMOTE_PORT` }}",
     "travis_cookbooks_url": "{{ env `TRAVIS_COOKBOOKS_URL` }}",
     "travis_cookbooks_branch": "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}",
@@ -67,14 +66,14 @@
       "type": "shell",
       "scripts": [
         "packer-scripts/packer-env-dump",
-        "packer-scripts/remove-default-users",
         "packer-scripts/pre-chef-bootstrap",
         "packer-scripts/clone-travis-cookbooks"
       ],
       "environment_vars": [
         "TRAVIS_COOKBOOKS_URL={{ user `travis_cookbooks_url` }}",
         "TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}",
-        "TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}"
+        "TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}",
+        "TRAVIS_UID_1000=noforce"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
@@ -95,7 +94,6 @@
           "integration_token": "{{ user `opsmatic_integration_token` }}"
         },
         "papertrail": {
-          "remote_host": "{{ user `papertrail_remote_host` }}",
           "remote_port": "{{ user `papertrail_remote_port` }}"
         }
       },
@@ -109,7 +107,7 @@
       "scripts": [
         "packer-scripts/purge",
         "packer-scripts/cleanup",
-        "packer-scripts/minimize"
+        "packer-scripts/remove-default-users"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     }
@@ -131,6 +129,7 @@
       "artifact": "travis-ci/tmate-edge",
       "artifact_type": "google.image",
       "metadata": {
+        "project_id": "{{ user `gce_project_id` }}",
         "name": "{{ user `gce_image_name` }}"
       },
       "only": [
