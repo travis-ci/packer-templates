@@ -95,6 +95,27 @@
         },
         "papertrail": {
           "remote_port": "{{ user `papertrail_remote_port` }}"
+        },
+        "tmate_remote_tmux": {
+          "has_proxy": true
+        },
+        "tmate_proxy": {
+          "config": {
+            "tmate": {
+              "master": {
+                "enabled": false,
+                "nodes": false
+              },
+              "daemon": {
+                "hmac_key": "TMATE_HMAC_KEY_PLACEHOLDER"
+              },
+              "webhook": {
+                "urls": [
+                  "TMATE_WEBHOOK_URL_PLACEHOLDER"
+                ]
+              }
+            }
+          }
         }
       },
       "run_list": [
