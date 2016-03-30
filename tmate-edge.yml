@@ -77,6 +77,7 @@ provisioners:
   run_list:
   - recipe[travis_internal_base]
   - recipe[tmate_remote_tmux]
+  - recipe[tmate_proxy]
 - type: shell
   scripts:
   - packer-scripts/purge
