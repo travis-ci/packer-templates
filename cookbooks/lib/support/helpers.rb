@@ -10,7 +10,7 @@ module Support
           TCPSocket.new(host, port)
           break
         rescue Errno::ECONNREFUSED, Errno::EINVAL => e
-          raise e if (Time.now - now >= timeout)
+          raise e if Time.now - now >= timeout
           sleep 0.1
         end
       end
@@ -22,7 +22,7 @@ module Support
       loop do
         procs = `ps aux`.split(/\n/).map(&:strip)
         break if procs.grep(proc_pattern).any?
-        fail TimesUp if (Time.now - now >= timeout)
+        raise TimesUp if Time.now - now >= timeout
         sleep 0.1
       end
     end
