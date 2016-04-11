@@ -49,15 +49,5 @@
         "sudo touch /etc/default/jupiter-brain"
       ]
     }
-  ],
-  "post-processors": [
-    {
-      "type": "atlas",
-      "artifact": "travis-ci/jupiter-brain",
-      "artifact_type": "aws.ami",
-      "metadata": {
-        "created_at": "{{ timestamp }}"
-      }
-    }
   ]
 }

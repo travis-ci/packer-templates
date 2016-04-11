@@ -100,10 +100,3 @@ provisioners:
   - packer-scripts/minimize
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
-- type: atlas
-  artifact: travis-ci/internal-base
-  artifact_type: aws.ami
-  metadata:
-    created_at: "{{ timestamp }}"
-  only:
-  - amazon-ebs

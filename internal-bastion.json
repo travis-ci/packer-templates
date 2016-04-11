@@ -78,15 +78,5 @@
         "recipe[travis_internal_bastion]"
       ]
     }
-  ],
-  "post-processors": [
-    {
-      "type": "atlas",
-      "artifact": "travis-ci/internal-bastion",
-      "artifact_type": "aws.ami",
-      "metadata": {
-        "created_at": "{{ timestamp }}"
-      }
-    }
   ]
 }

@@ -54,10 +54,6 @@
   ],
   "provisioners": [
     {
-      "type": "shell-local",
-      "command": "if [ -n $ATLAS_BUILD_ID ] ; then git checkout -- . ; fi ; ./bin/dump-git-meta"
-    },
-    {
       "type": "file",
       "source": "tmp/git-meta",
       "destination": "/var/tmp/git-meta"
@@ -131,28 +127,6 @@
     }
   ],
   "post-processors": [
-    {
-      "type": "atlas",
-      "artifact": "travis-ci/ci-erlang",
-      "artifact_type": "google.image",
-      "metadata": {
-        "name": "{{ user `gce_image_name` }}"
-      },
-      "only": [
-        "googlecompute"
-      ]
-    },
-    {
-      "type": "atlas",
-      "artifact": "travis-ci/ci-erlang",
-      "artifact_type": "docker.image",
-      "metadata": {
-        "tag": "{{ user `docker_tag` }}"
-      },
-      "only": [
-        "docker"
-      ]
-    },
     [
       {
         "type": "docker-tag",
