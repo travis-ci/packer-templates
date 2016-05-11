@@ -1,19 +1,8 @@
 language: generic
+sudo: true
+dist: trusty
 
-env:
-  global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
-
-addons:
-  apt:
-    sources:
-    - chef-stable-precise
-    packages:
-    - chefdk
-
-script:
-- make hackcheck
-- make
-- git diff --exit-code
-- git diff --cached --exit-code
-- ./runtests
+install:
+- wget https://releases.hashicorp.com/packer/0.10.1/packer_0.10.1_linux_amd64.zip
+- sudo unzip packer_0.10.1_linux_amd64.zip -d /usr/local/packer
+- export PATH=$PATH:/usr/local/packer
