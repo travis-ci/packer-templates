@@ -88,6 +88,11 @@ override['users'] = [
     'id' => 'igor',
     'shell' => '/bin/zsh',
     'github_username' => 'igorwwwwwwwwwwwwwwwwwwww'
+  },
+  {
+    'id' => 'carmen',
+    'shell' => '/bin/zsh',
+    'github_username' => 'Lyoness'
   }
 ]
 
