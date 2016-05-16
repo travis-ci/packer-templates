@@ -8,5 +8,4 @@ install:
 - export PATH=$PATH:/usr/local/packer
 
 script:
-- export P_TEMP=$(git log -n 1 | grep .yml)
-- echo $P_TEMP
+- export YML=$(git log --name-only --oneline -n 1 | grep .yml) && if [[ ! -z $YML ]]; then echo "make $YML"; else exit 0; fi make min.yml
