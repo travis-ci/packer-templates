@@ -9,4 +9,4 @@ install:
 
 script:
 - export P_TEMP=$(git log -n 1 | grep .yml)
-- make build $P_TEMP
+- echo $P_TEMP
