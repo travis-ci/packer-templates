@@ -6,3 +6,7 @@ install:
 - wget https://releases.hashicorp.com/packer/0.10.1/packer_0.10.1_linux_amd64.zip
 - sudo unzip packer_0.10.1_linux_amd64.zip -d /usr/local/packer
 - export PATH=$PATH:/usr/local/packer
+
+script:
+- export P_TEMP=$(git log -n 1 | grep .yml)
+- make build $P_TEMP
