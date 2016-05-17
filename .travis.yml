@@ -10,9 +10,4 @@ install:
 script:
 - export YML=$(git log --name-only --oneline -n 1 | grep .yml) && if [[ ! -z $YML ]]; then echo "make $YML"; else exit 0; fi
 - packer build --only=$PACKER_BUILDER <(bin/yml2json < $YML)
-
-matrix:
-  include:
-    - env PACKER_BUILDER="amazon-ebs"
-    - env PACKER_BUILDER="docker"
-    - env PACKER_BUILDER="googlecompute"
+- make min.yml
