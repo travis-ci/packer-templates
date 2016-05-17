@@ -4,12 +4,12 @@ variables:
   ssh_private_key: "{{ env `SSH_PRIVATE_KEY`}}"
 builders:
 - type: "null"
-  name: "null"
+  name: "null1"
   ssh_host: 127.0.0.1
   ssh_username: carmen
   ssh_private_key_file: "{{ user `ssh_private_key`}}"
 - type: "null"
-  name: "null"
+  name: "null2"
   ssh_host: 127.0.0.1
 
 provisioners:
@@ -17,5 +17,4 @@ provisioners:
   inline: echo "hi"
 - type: shell
   scripts:
-    -foo.sh
-    
+    #-foo.sh

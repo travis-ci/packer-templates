@@ -79,4 +79,3 @@ provisioners:
   - packer-scripts/sleep-tick-forever
   only:
   - googlecompute
-#cha testing last-modified
