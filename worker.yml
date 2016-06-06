@@ -5,7 +5,7 @@ push:
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
-  base_ami: "{{ env `TRAVIS_CI_BASE_AMI` }}"
+  base_ami: "ami-55fe133e"
   docker_login_email: "{{ env `DOCKER_LOGIN_EMAIL` }}"
   docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
   docker_login_server: "{{ env `DOCKER_LOGIN_SERVER` }}"
@@ -67,6 +67,7 @@ provisioners:
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
   cookbook_paths:
@@ -103,4 +104,3 @@ post-processors:
     login_server: "{{ user `docker_login_server` }}"
     only:
     - docker
-#test modification for travis.yml test
