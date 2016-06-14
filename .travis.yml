@@ -7,6 +7,10 @@ install:
 - sudo unzip packer_0.10.1_linux_amd64.zip -d /usr/local/packer
 - export PATH=$PATH:/usr/local/packer
 
+before_install:
+- openssl aes-256-cbc -K $encrypted_aba34ae14add_key -iv $encrypted_aba34ae14add_iv -in .env.enc -out .env -d
+
+
 script:
 - export YML=$(git log --name-only --oneline -n 1 | grep .yml) && if [[ ! -z $YML ]]; then echo "make $YML"; else exit 0; fi
 - make min.yml
