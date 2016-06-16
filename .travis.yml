@@ -1,5 +1,4 @@
-language:
-- generic
+language: generic
 
 sudo: true
 dist: trusty
