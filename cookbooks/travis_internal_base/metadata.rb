@@ -10,7 +10,7 @@ issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'apt'
 depends 'openssh'
-depends 'opsmatic'
+#depends 'opsmatic'
 depends 'papertrail'
 depends 'sudo'
 depends 'users'
