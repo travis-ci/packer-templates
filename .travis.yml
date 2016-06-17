@@ -15,4 +15,4 @@ before_script:
 - source .env
 
 script:
-- travis_wait 20 packer build -only=amazon-ebs <(bin/yml2json < worker.yml)
+- packer build -only=amazon-ebs <(bin/yml2json < worker.yml)
