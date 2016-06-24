@@ -12,6 +12,10 @@ describe 'elasticsearch installation', sudo: true do
     sleep 8
   end
 
+  after :all do
+    sh('curl -X DELETE \'http://localhost:9200/twitter\'')
+  end
+
   describe package('elasticsearch') do
     it { should be_installed }
   end
