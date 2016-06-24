@@ -7,7 +7,8 @@ describe 'elasticsearch installation', sudo: true do
     sh(
       'curl -X PUT \'http://localhost:9200/twitter/tweet/1\' ' \
       '-d \' { "user": "kimchy", "postDate": "2009-11-15T13:12:00", ' \
-      '"message": "Trying out Elasticsearch" }\'')
+      '"message": "Trying out Elasticsearch" }\''
+    )
     sleep 8
   end
 
