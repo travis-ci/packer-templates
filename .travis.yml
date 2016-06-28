@@ -12,5 +12,5 @@ before_install:
 before_script:
 - source .env
 
- script:
+script:
 - packer build -only=googlecompute <(bin/yml2json < worker.yml)
