@@ -22,4 +22,4 @@ packer build -only=docker <(bin/yml2json < ci-minimal.yml)
 ## env config bits
 
 Most of the templates in here require some env vars.  Take a look at
-[`.example.env`](./.example.env) for an example.
+[`.example.env`](./.example.env) for an example. This repository uses a directory-based env called autoenv. https://github.com/kennethreitz/autoenv
