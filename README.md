@@ -2,7 +2,7 @@
 
 Collection of Packer templates used for various infrastructure layers.
 
-## don't panic
+## YML to JSON 
 
 Each Packer template JSON file is generated from a corresponding ERB-filtered
 YAML file.  The primary reason for this is YAML's support for comments,
