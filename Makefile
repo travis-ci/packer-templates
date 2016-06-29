@@ -43,7 +43,3 @@ test:
 .PHONY: hackcheck
 hackcheck:
 	if $(GIT) grep -q \H\A\C\K ; then exit 1 ; fi
-
-.PHONY: pushall
-pushall:
-	for lang in $(shell $(MAKE) langs) ; do $(PACKER) push ci-$${lang}.json ; done
