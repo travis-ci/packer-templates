@@ -1,5 +1,3 @@
-default['travis_internal_base']['opsmatic_disabled'] = false
-
 override['openssh']['server']['password_authentication'] = 'no'
 override['openssh']['server']['pubkey_authentication'] = 'yes'
 override['openssh']['server']['permit_root_login'] = 'no'

@@ -1,20 +1,20 @@
 ---
 description: minimal test
 variables:
-  ssh_private_key: "{{ env `SSH_PRIVATE_KEY`}}"
+  ssh_private_key: "{{ env `SSH_KEY_PATH`}}"
+  ssh_username: "{{ env `SSH_USERNAME` }}"
 builders:
 - type: "null"
   name: "null1"
   ssh_host: 127.0.0.1
-  ssh_username: carmen
+  ssh_username: "{{ user `ssh_username` }}"
   ssh_private_key_file: "{{ user `ssh_private_key`}}"
 - type: "null"
   name: "null2"
   ssh_host: 127.0.0.1
+  ssh_username: "{{ user `ssh_username` }}"
+  ssh_private_key_file: "{{ user `ssh_private_key`}}"
 
 provisioners:
 - type: shell
   inline: echo "hi"
-- type: shell
-  scripts:
-    #-foo.sh

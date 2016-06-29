@@ -8,6 +8,7 @@ variables:
   subnet_id: "{{ env `JUPITER_BRAIN_SUBNET_ID` }}"
   vpc_id: "{{ env `JUPITER_BRAIN_VPC_ID` }}"
   base_ami: "{{ env `TRAVIS_CI_BASE_AMI` }}"
+  jupiter_brain_binary: "{{ env `JUPITER_BRAIN_BINARY` }}"
 builders:
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
@@ -27,7 +28,7 @@ push:
   name: travis-ci/jupiter-brain
 provisioners:
 - type: file
-  source: "/packer/jupiter-brain/jb-server"
+  source: "{{ user `jupiter_brain_binary` }}"
   destination: "/tmp/jb-server"
 - type: file
   source: packer-assets/jupiter-brain.conf

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -o errexit
+set -o pipefail
 
 unset GEM_PATH
 
@@ -12,7 +13,13 @@ done
 for f in $(git ls-files '*.yml') ; do
   echo -en "$f "
   ruby -ryaml -e "YAML.load_file('$f')"
-  echo "✓"
+  if grep -q ^builders: "$f" ; then
+    echo -en "(packer validate ...) "
+    packer validate <(bin/yml2json < "$f")
+    echo "\`--> ✓"
+  else
+    echo "✓"
+  fi
 done
 
 for f in $(git grep -l '^#!/usr/bin/env bash') ; do
