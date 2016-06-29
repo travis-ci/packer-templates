@@ -36,18 +36,18 @@ builders:
   tags:
   - ci
   - mega
-  - type: docker
-    name: docker
-    ssh_pty: true
-    image: "ubuntu-upstart:14.04"
-    run_command:
-    - "-d"
-    - "-i"
-    - "-t"
-    - "--privileged=true"
-    - "{{.Image}}"
-    - "/sbin/init"
-    commit: true
+- type: docker
+  name: docker
+  ssh_pty: true
+  image: "ubuntu-upstart:14.04"
+  run_command:
+  - "-d"
+  - "-i"
+  - "-t"
+  - "--privileged=true"
+  - "{{.Image}}"
+  - "/sbin/init"
+  commit: true
 provisioners:
 - type: file
   source: tmp/git-meta
