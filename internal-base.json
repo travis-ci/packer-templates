@@ -6,7 +6,6 @@
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
-    "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
     "papertrail_remote_port": "{{ env `PAPERTRAIL_REMOTE_PORT` }}",
     "travis_subnet_id": "{{ env `TRAVIS_SUBNET_ID` }}",
     "travis_vpc_id": "{{ env `TRAVIS_VPC_ID` }}",
@@ -105,9 +104,6 @@
         "/tmp/chef-stuff/cookbooks"
       ],
       "json": {
-        "opsmatic": {
-          "integration_token": "{{ user `opsmatic_integration_token` }}"
-        },
         "papertrail": {
           "remote_port": "{{ user `papertrail_remote_port` }}"
         }

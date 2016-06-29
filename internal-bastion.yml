@@ -8,7 +8,6 @@ variables:
   vpc_id: "{{ env `BASTION_VPC_ID` }}"
   ubuntu_trusty_ami: "{{ env `UBUNTU_TRUSTY_AMI` }}"
   github_oauth_token: "{{ env `GITHUB_OAUTH_TOKEN` }}"
-  opsmatic_integration_token: "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}"
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   duo_integration_key: "{{ env `DUO_INTEGRATION_KEY` }}"
   duo_secret_key: "{{ env `DUO_SECRET_KEY` }}"
@@ -43,8 +42,6 @@ provisioners:
   - git clone --branch=v0.14.1 git://github.com/opscode-cookbooks/iptables.git /tmp/chef-stuff/cookbooks/iptables
   - git clone --branch=v2.6.1 git://github.com/opscode-cookbooks/apt.git /tmp/chef-stuff/cookbooks/apt
   - git clone --branch=v1.1.6 git://github.com/opscode-cookbooks/chef_handler.git /tmp/chef-stuff/cookbooks/chef_handler
-  - git clone git://github.com/opsmatic/opsmatic-cookbook.git /tmp/chef-stuff/cookbooks/opsmatic
-  - git --git-dir=/tmp/chef-stuff/cookbooks/opsmatic/.git --work-tree=/tmp/chef-stuff/cookbooks/opsmatic checkout fc363cb7f1f624599b0bbda15a0c6904497bfc48
   - git clone git://github.com/travis-infrastructure/users-cookbook.git /tmp/chef-stuff/cookbooks/users
   - git clone --branch=hh-duo-security git://github.com/travis-ci/travis-cookbooks.git /tmp/chef-stuff/travis-cookbooks
 - type: chef-solo
@@ -52,8 +49,6 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/worker_host"
   - "/tmp/chef-stuff/cookbooks"
   json:
-    opsmatic:
-      integration_token: "{{ user `opsmatic_integration_token` }}"
     duo_unix:
       integration_key: "{{ user `duo_integration_key` }}"
       secret_key: "{{ user `duo_secret_key` }}"

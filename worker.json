@@ -6,7 +6,7 @@
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
-    "base_ami": "{{ env `TRAVIS_CI_BASE_AMI` }}",
+    "base_ami": "{{ env `TRAVIS_WORKER_AMI` }}",
     "docker_login_email": "{{ env `DOCKER_LOGIN_EMAIL` }}",
     "docker_login_password": "{{ env `DOCKER_LOGIN_PASSWORD` }}",
     "docker_login_server": "{{ env `DOCKER_LOGIN_SERVER` }}",
@@ -15,7 +15,6 @@
     "gce_account_file": "{{ env `GCE_ACCOUNT_FILE` }}",
     "gce_image_name": "travis-worker-{{ timestamp }}",
     "gce_project_id": "{{ env `GCE_PROJECT_ID` }}",
-    "opsmatic_integration_token": "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}",
     "papertrail_remote_port": "{{ env `PAPERTRAIL_REMOTE_PORT` }}",
     "travis_cookbooks_branch": "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}",
     "travis_cookbooks_sha": "{{ env `TRAVIS_COOKBOOKS_SHA` }}",
@@ -82,7 +81,8 @@
       ],
       "environment_vars": [
         "TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}",
-        "TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}"
+        "TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}",
+        "TRAVIS_UID_1000=noforce"
       ],
       "execute_command": "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
     },
@@ -96,12 +96,6 @@
         "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
       ],
       "json": {
-        "travis_internal_base": {
-          "opsmatic_disabled": true
-        },
-        "opsmatic": {
-          "integration_token": "{{ user `opsmatic_integration_token` }}"
-        },
         "papertrail": {
           "remote_port": "{{ user `papertrail_remote_port` }}"
         }

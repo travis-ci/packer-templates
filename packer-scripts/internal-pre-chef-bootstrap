@@ -29,10 +29,8 @@ git clone --branch=v1.3.4 git://github.com/opscode-cookbooks/openssh.git /tmp/ch
 git clone --branch=v2.7.0 git://github.com/opscode-cookbooks/apt.git /tmp/chef-stuff/cookbooks/apt
 git clone --branch=v1.1.6 git://github.com/opscode-cookbooks/chef_handler.git /tmp/chef-stuff/cookbooks/chef_handler
 git clone --branch=v2.7.1 git://github.com/opscode-cookbooks/sudo.git /tmp/chef-stuff/cookbooks/sudo
-git clone git://github.com/opsmatic/opsmatic-cookbook.git /tmp/chef-stuff/cookbooks/opsmatic
 git clone git://github.com/travis-infrastructure/users-cookbook.git /tmp/chef-stuff/cookbooks/users
 git clone git://github.com/travis-ci/travis-cookbooks.git /tmp/chef-stuff/travis-cookbooks
 
-git --git-dir=/tmp/chef-stuff/cookbooks/opsmatic/.git --work-tree=/tmp/chef-stuff/cookbooks/opsmatic checkout 0f57aaba28897d148dd2b96e4d95b4c1bf82c02c
 git --git-dir=/tmp/chef-stuff/cookbooks/users/.git --work-tree=/tmp/chef-stuff/cookbooks/users checkout 9b807fc8a131383d3b43b9a92a17be7f35520d52
 git --git-dir=/tmp/chef-stuff/travis-cookbooks/.git --work-tree=/tmp/chef-stuff/travis-cookbooks checkout 5d4d4dea02071bcbf52a73c80bab40e6b480b134
