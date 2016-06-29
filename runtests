@@ -4,12 +4,6 @@ set -o pipefail
 
 unset GEM_PATH
 
-for f in $(git ls-files '*.json' | grep -v /) ; do
-  echo -en "$f "
-  diff -q $f <(jq . < $f)
-  echo "✓"
-done
-
 for f in $(git ls-files '*.yml') ; do
   echo -en "$f "
   ruby -ryaml -e "YAML.load_file('$f')"
