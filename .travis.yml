@@ -1,8 +1,13 @@
 language: generic
 
+dist: trusty
+
+sudo: true
+
 env:
   global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:/usr/local/packer:$PATH"
+  - PACKER_VERSION="0.10.1"
 
 addons:
   apt:
@@ -11,9 +16,15 @@ addons:
     packages:
     - chefdk
 
+install:
+- curl -sSL -o packer.zip  "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
+- sudo unzip packer.zip -d /usr/local/packer
+
 script:
 - make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
+- source .example.env
+- unset PACKER_LOG
 - ./runtests

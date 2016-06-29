@@ -24,13 +24,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-def opsmatic_disabled?
-  node['travis_internal_base']['opsmatic_disabled']
-end
-
 include_recipe 'apt'
 include_recipe 'openssh'
-include_recipe 'opsmatic::agent' unless opsmatic_disabled?
 include_recipe 'papertrail'
 include_recipe 'users'
 include_recipe 'sudo'

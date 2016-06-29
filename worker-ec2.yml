@@ -78,7 +78,8 @@ provisioners:
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
-  - recipe[travis_worker_wrapper]
+  - recipe[ec2_docker_worker]
+  - recipe[travis_docker]
 - type: shell
   scripts:
   - packer-scripts/cleanup

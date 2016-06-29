@@ -43,11 +43,14 @@ __setup_sshd() {
 
 __setup_travis_user() {
   if ! getent passwd travis &>/dev/null ; then
-    useradd -p travis -s /bin/bash -m travis -u 1000
+    if [[ "$TRAVIS_UID_1000" == noforce ]]; then
+      useradd -p travis -s /bin/bash -m travis
+    else
+      useradd -p travis -s /bin/bash -m travis -u 1000
+    fi
   fi
 
   echo travis:travis | chpasswd
-  usermod -u 1000 travis
 
   __setup_sudoers
   __setup_travis_ssh

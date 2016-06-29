@@ -6,12 +6,11 @@ push:
 variables:
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
-# FIXME: Atlas docker env lacks the disk space
-#   docker_login_email: "{{ env `DOCKER_LOGIN_EMAIL` }}"
-#   docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
-#   docker_login_server: "{{ env `DOCKER_LOGIN_SERVER` }}"
-#   docker_login_username: "{{ env `DOCKER_LOGIN_USERNAME` }}"
-#   docker_tag: "packer-{{ timestamp }}"
+  docker_login_email: "{{ env `docker_login_email` }}"
+  docker_login_password: "{{ env `docker_login_password` }}"
+  docker_login_server: "{{ env `docker_login_server` }}"
+  docker_login_username: "{{ env `docker_login_username` }}"
+  docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-ci-mega-<%= @dist %>-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
@@ -26,7 +25,7 @@ builders:
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   <% if @dist == 'trusty' %>
-  source_image: ubuntu-1404-trusty-v20150909a
+  source_image: ubuntu-1404-trusty-v20160627
   <% else %>
   source_image: busted-busted-busted-nope
   <% end %>
@@ -37,19 +36,18 @@ builders:
   tags:
   - ci
   - mega
-# FIXME: Atlas docker env lacks the disk space
-# - type: docker
-#   name: docker
-#   ssh_pty: true
-#   image: "ubuntu-upstart:14.04"
-#   run_command:
-#   - "-d"
-#   - "-i"
-#   - "-t"
-#   - "--privileged=true"
-#   - "{{.Image}}"
-#   - "/sbin/init"
-#   commit: true
+- type: docker
+  name: docker
+  ssh_pty: true
+  image: "ubuntu-upstart:14.04"
+  run_command:
+  - "-d"
+  - "-i"
+  - "-t"
+  - "--privileged=true"
+  - "{{.Image}}"
+  - "/sbin/init"
+  commit: true
 provisioners:
 - type: file
   source: tmp/git-meta
@@ -111,18 +109,17 @@ provisioners:
   - DISPLAY=:99.0
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
-# FIXME: Atlas docker env lacks the disk space
-# -
-#   - type: docker-tag
-#     repository: travisci/ci-mega
-#     tag: "{{ user `docker_tag` }}"
-#     only:
-#     - docker
-#   - type: docker-push
-#     login: true
-#     login_email: "{{ user `docker_login_email` }}"
-#     login_username: "{{ user `docker_login_username` }}"
-#     login_password: "{{ user `docker_login_password` }}"
-#     login_server: "{{ user `docker_login_server` }}"
-#     only:
-#     - docker
+-
+  - type: docker-tag
+    repository: travisci/ci-mega
+    tag: "{{ user `docker_tag` }}"
+    only:
+    - docker
+  - type: docker-push
+    login: true
+    login_email: "{{ user `docker_login_email` }}"
+    login_username: "{{ user `docker_login_username` }}"
+    login_password: "{{ user `docker_login_password` }}"
+    login_server: "{{ user `docker_login_server` }}"
+    only:
+    - docker

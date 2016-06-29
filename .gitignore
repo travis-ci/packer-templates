@@ -9,6 +9,7 @@ tmp/*
 .vagrant
 .env*
 *env
+gce-packer-acct.json
 packer_cache
 /output-*
 /*.box
