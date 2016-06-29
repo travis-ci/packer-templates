@@ -3,10 +3,15 @@ BRANCH_FILE := tmp/git-meta/packer-templates-branch
 SHA_FILE := tmp/git-meta/packer-templates-sha
 PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
 
+BUILDER ?= googlecompute
+
 GIT ?= git
 JQ ?= jq
 PACKER ?= packer
 SED ?= sed
+
+%: %.yml
+	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
 
 .PHONY: all
 all: $(BRANCH_FILE) $(SHA_FILE) $(PHP_PACKAGES_FILE)
