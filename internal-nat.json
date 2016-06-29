@@ -2,6 +2,11 @@
   "push": {
     "name": "travis-ci/internal-nat"
   },
+  "variables": {
+    "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
+    "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
+    "ubuntu_trusty_ami": "{{ env `UBUNTU_TRUSTY_AMI` }}"
+  },
   "builders": [
     {
       "type": "amazon-ebs",

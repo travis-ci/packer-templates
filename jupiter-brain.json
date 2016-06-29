@@ -8,7 +8,8 @@
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "subnet_id": "{{ env `JUPITER_BRAIN_SUBNET_ID` }}",
     "vpc_id": "{{ env `JUPITER_BRAIN_VPC_ID` }}",
-    "base_ami": "{{ env `TRAVIS_CI_BASE_AMI` }}"
+    "base_ami": "{{ env `TRAVIS_CI_BASE_AMI` }}",
+    "jupiter_brain_binary": "{{ env `JUPITER_BRAIN_BINARY` }}"
   },
   "builders": [
     {
@@ -32,7 +33,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "/packer/jupiter-brain/jb-server",
+      "source": "{{ user `jupiter_brain_binary` }}",
       "destination": "/tmp/jb-server"
     },
     {
