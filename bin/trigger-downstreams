@@ -55,7 +55,8 @@ def make_request
     'https://api.travis-ci.org/repo/travis-ci%2Fpacker-build/requests'
   ]
 
-  system command.join(' ')
+  %x{#{command.join(' ')}}
+  $CHILD_STATUS.exitstatus
 end
 
-main if $PROGRAM_NAME == __FILE__
+exit(main) if $PROGRAM_NAME == __FILE__
