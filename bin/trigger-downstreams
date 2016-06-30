@@ -1,37 +1,43 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-set -o errexit
+require 'json'
+require 'English'
 
-main() {
-	__make_request
-}
+def main
+  make_request
+end
 
-__make_request() {
-	local body='{
-"request": {
-  "message": "Hello To You Human",
-  "branch": "ci-minimal",
-  "config": {
-    "env": {
-      "matrix": [
-        "BUILDER=googlecompute",
+def make_request
+  body = {
+    request: {
+      message: "Hello To You Human",
+      branch: "ci-minimal",
+      config: {
+        env: {
+          matrix: [
+            'BUILDER=googlecompute',
+          ]
+        },
+      },
+      script: [
+        'cd packer-templates',
+        'make',
+        'make ci-minimal'
       ]
-    },
-    "script": [
-      "cd packer-templates",
-      "make",
-      "make ci-minimal"
-    ]
+    }
   }
-}'
 
-	curl -s -X POST \
-	  -H "Content-Type: application/json" \
-	  -H "Accept: application/json" \
-	  -H "Travis-API-Version: 3" \
-	  -H "Authorization: token ${TRAVIS_API_TOKEN}" \
-	  -d "$body" \
-	  https://api.travis-ci.org/repo/travis-ci%2Fpacker-build/requests
-}
+  command = [
+    'curl -s -X POST',
+    '-H "Content-Type: application/json"',
+    '-H "Accept: application/json"',
+    '-H "Travis-API-Version: 3"',
+    "-H 'Authorization: token #{ENV['TRAVIS_API_TOKEN']}'",
+    "-d '#{JSON.dump(body)}'",
+    'https://api.travis-ci.org/repo/travis-ci%2Fpacker-build/requests'
+  ]
 
-main "$@"
+  system command.join(' ')
+end
+
+main if $PROGRAM_NAME == __FILE__
