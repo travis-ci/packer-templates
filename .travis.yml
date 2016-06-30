@@ -21,7 +21,5 @@ script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- source .example.env
-- unset PACKER_LOG
-- ./runtests
+- env -i HOME=$HOME bash -l -c 'source .example.env && unset PACKER_LOG && ./runtests'
 - make ci-minimal
