@@ -8,7 +8,7 @@ env:
 addons:
   apt:
     sources:
-    - chef-stable-precise
+    - chef-stable-trusty
     packages:
     - chefdk
 install:
@@ -22,4 +22,4 @@ script:
 - source .example.env
 - unset PACKER_LOG
 - ./runtests
-- make ci-minimal`
+- make ci-minimal
