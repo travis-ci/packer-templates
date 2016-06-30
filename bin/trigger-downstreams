@@ -8,21 +8,35 @@ def main
 end
 
 def make_request
+  # TODO: define these dynamically
+  packer_builders = %w(amazon-ebs)
+  packer_template_name = 'worker'
+
   body = {
     request: {
       message: ":lemon: :bomb: origin-commit=#{ENV['TRAVIS_COMMIT']}",
-      branch: 'ci-minimal',
+      branch: packer_template_name,
       config: {
         env: {
-          matrix: [
-            'BUILDER=googlecompute'
-          ]
+          global: [
+            'GCE_ACCOUNT_FILE=tmp/gce.json',
+            "GCE_ACCOUNT_FILE_B64_BZ2=#{ENV['GCE_ACCOUNT_FILE_B64_BZ2']}",
+            "GCE_PROJECT_ID=#{ENV['GCE_PROJECT_ID']}",
+            "JOB_BOARD_IMAGES_URL=#{ENV['JOB_BOARD_IMAGES_URL']}"
+          ],
+          matrix: packer_builders.map { |b| "BUILDER=#{b}" }
         }
       },
+      install: [
+        'git clone --depth=50 https://github.com/travis-ci/packer-templates.git',
+        "git checkout -qf #{ENV['TRAVIS_COMMIT']}",
+        'mkdir -p packer-templates/tmp',
+        'echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > packer-templates/tmp/gce.json'
+      ],
       script: [
         'cd packer-templates',
         'make',
-        'make ci-minimal'
+        "make #{packer_template_name}"
       ]
     }
   }
