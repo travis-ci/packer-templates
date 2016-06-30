@@ -11,7 +11,7 @@ rm -rf ./travis-cookbooks
 git clone \
   --depth=10 \
   --branch=${TRAVIS_COOKBOOKS_BRANCH:-master} \
-  ${COOKBOOKS_URL:-https://github.com/travis-ci/travis-cookbooks.git}
+  ${TRAVIS_COOKBOOKS_URL:-https://github.com/travis-ci/travis-cookbooks.git}
 
 if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
   pushd travis-cookbooks

@@ -20,6 +20,7 @@ __install_packages() {
 
   rm -vf /etc/apt/sources.list.d/partner.list
 
+  rm -rf /var/lib/apt/lists/*
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
