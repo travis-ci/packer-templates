@@ -37,3 +37,7 @@ test:
 .PHONY: hackcheck
 hackcheck:
 	if $(GIT) grep -q \H\A\C\K ; then exit 1 ; fi
+
+.PHONY: downstreams
+downstreams:
+	@echo NOT YET
