@@ -10,7 +10,7 @@ end
 def make_request
   body = {
     request: {
-      message: 'Hello To You Human',
+      message: ":lemon: :bomb: origin-commit=#{ENV['TRAVIS_COMMIT']}",
       branch: 'ci-minimal',
       config: {
         env: {

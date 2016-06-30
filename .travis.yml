@@ -1,10 +1,7 @@
 language: generic
 dist: trusty
+group: edge
 sudo: true
-env:
-  global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:/usr/local/packer:$PATH"
-  - PACKER_VERSION="0.10.1"
 addons:
   apt:
     sources:
@@ -12,8 +9,6 @@ addons:
     packages:
     - chefdk
 install:
-- curl -sSL -o packer.zip  "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
-- sudo unzip packer.zip -d /usr/local/packer
 - mkdir -p tmp
 - echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > tmp/gce.json
 script:
