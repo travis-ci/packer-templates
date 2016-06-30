@@ -17,6 +17,10 @@ def make_request
       message: ":lemon: :bomb: origin-commit=#{ENV['TRAVIS_COMMIT']}",
       branch: packer_template_name,
       config: {
+        language: 'generic',
+        dist: 'trusty',
+        group: 'edge',
+        sudo: true,
         env: {
           global: [
             'GCE_ACCOUNT_FILE=tmp/gce.json',
@@ -25,19 +29,19 @@ def make_request
             "JOB_BOARD_IMAGES_URL=#{ENV['JOB_BOARD_IMAGES_URL']}"
           ],
           matrix: packer_builders.map { |b| "BUILDER=#{b}" }
-        }
-      },
-      install: [
-        'git clone --depth=50 https://github.com/travis-ci/packer-templates.git',
-        "git checkout -qf #{ENV['TRAVIS_COMMIT']}",
-        'mkdir -p packer-templates/tmp',
-        'echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > packer-templates/tmp/gce.json'
-      ],
-      script: [
-        'cd packer-templates',
-        'make',
-        "make #{packer_template_name}"
-      ]
+        },
+        install: [
+          'git clone --depth=50 https://github.com/travis-ci/packer-templates.git',
+          "git checkout -qf #{ENV['TRAVIS_COMMIT']}",
+          'mkdir -p packer-templates/tmp',
+          'echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > packer-templates/tmp/gce.json'
+        ],
+        script: [
+          'cd packer-templates',
+          'make',
+          "make #{packer_template_name}"
+        ]
+      }
     }
   }
 
