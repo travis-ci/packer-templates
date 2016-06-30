@@ -10,14 +10,14 @@ end
 def make_request
   body = {
     request: {
-      message: "Hello To You Human",
-      branch: "ci-minimal",
+      message: 'Hello To You Human',
+      branch: 'ci-minimal',
       config: {
         env: {
           matrix: [
-            'BUILDER=googlecompute',
+            'BUILDER=googlecompute'
           ]
-        },
+        }
       },
       script: [
         'cd packer-templates',
