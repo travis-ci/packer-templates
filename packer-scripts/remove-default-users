@@ -22,10 +22,7 @@ __remove_user() {
     return
   fi
 
-  ps -Fwww -u "${u}" || echo "Suppressing ps exit $?"
-  killall -TERM -w -v -u "${u}" || echo "Suppressing killall exit $?"
-  deluser "${u}" || echo "Suppressing deluser exit $?"
-  rm -rf "/home/${u}"
+  userdel -fr "${u}" || echo "Suppressing userdel exit $?"
 }
 
 main "$@"
