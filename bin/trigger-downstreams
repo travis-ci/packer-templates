@@ -4,10 +4,6 @@ require 'json'
 require 'English'
 
 def main
-  make_request
-end
-
-def make_request
   # TODO: define these dynamically
   packer_builders = %w(amazon-ebs)
   packer_template_name = 'worker'
@@ -22,12 +18,6 @@ def make_request
         group: 'edge',
         sudo: true,
         env: {
-          global: [
-            'GCE_ACCOUNT_FILE=tmp/gce.json',
-            "GCE_ACCOUNT_FILE_B64_BZ2=#{ENV['GCE_ACCOUNT_FILE_B64_BZ2']}",
-            "GCE_PROJECT_ID=#{ENV['GCE_PROJECT_ID']}",
-            "JOB_BOARD_IMAGES_URL=#{ENV['JOB_BOARD_IMAGES_URL']}"
-          ],
           matrix: packer_builders.map { |b| "BUILDER=#{b}" }
         },
         install: [
@@ -55,7 +45,7 @@ def make_request
     'https://api.travis-ci.org/repo/travis-ci%2Fpacker-build/requests'
   ]
 
-  %x{#{command.join(' ')}}
+  `#{command.join(' ')}`
   $CHILD_STATUS.exitstatus
 end
 
