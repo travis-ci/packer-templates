@@ -23,14 +23,9 @@ def main
         install: [
           'git clone --depth=50 https://github.com/travis-ci/packer-templates.git',
           "pushd packer-templates && git checkout -qf #{ENV['TRAVIS_COMMIT']} ; popd",
-          'mkdir -p packer-templates/tmp',
-          'echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > packer-templates/tmp/gce.json'
+          './packer-templates/bin/packer-build-install'
         ],
-        script: [
-          'cd packer-templates',
-          'make',
-          "make #{packer_template_name}"
-        ]
+        script: "./packer-templates/bin/packer-build-script #{packer_template_name}"
       }
     }
   }

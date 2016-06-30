@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+make -C "$(dirname $(dirname ${BASH_SOURCE[0]}))" ${1}

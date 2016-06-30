@@ -18,4 +18,4 @@ script:
 - git diff --cached --exit-code
 - env -i HOME=$HOME PATH=$PATH
     bash -l -c 'source .example.env && unset PACKER_LOG && ./runtests'
-- make downstreams
+- ./bin/trigger-downstreams
