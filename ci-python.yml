@@ -69,7 +69,7 @@ provisioners:
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
-  install_command: "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12"
+  install_command: "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12.9"
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:

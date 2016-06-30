@@ -12,7 +12,7 @@ main() {
   __install_chefdk
   __create_sudo_bash
 
-  chown -R travis:travis /tmp/packer-chef-solo /var/tmp
+  chown -R travis:travis /tmp/packer-chef-* /var/tmp
 
   for suite in $(echo ${SPEC_SUITES/,/ }) ; do
     __run_suite "${suite}"
@@ -26,9 +26,10 @@ __install_chefdk() {
     return
   fi
 
-  curl -sSL 'https://packagecloud.io/gpg.key' | apt-key add -
-  apt-add-repository \
-    'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+  curl -sSL 'https://downloads.chef.io/packages-chef-io-public.key' | \
+    apt-key add -
+  echo "deb https://packages.chef.io/current-apt $(lsb_release -cs) main" \
+    > /etc/apt/sources.list.d/chef-current.list
   apt-get update -y
   apt-get install -y chefdk
 }
@@ -42,8 +43,8 @@ EOF
 }
 
 __remove_chefdk() {
-  apt-add-repository --remove \
-    'deb https://packagecloud.io/chef/current/ubuntu/ trusty main'
+  rm -f /etc/apt/sources.list.d/chef-current.list
+  apt-get update -y
 }
 
 __run_suite() {
@@ -99,7 +100,7 @@ rspec ${SPEC_ARGS}
 __suite_cookbook_dir() {
   local suite="${1}"
   local spec_dir="$(
-    find /tmp/packer-chef-solo -wholename "*${suite}/spec" -type d | head -1
+    find /tmp/packer-chef-* -wholename "*${suite}/spec" -type d | head -1
   )"
   dirname "${spec_dir}"
 }
