@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+	__make_request
+}
+
+__make_request() {
+	local body='{
+"request": {
+  "message": "Hello To You Human",
+  "branch": "ci-minimal",
+  "config": {
+    "env": {
+      "matrix": [
+        "BUILDER=googlecompute",
+      ]
+    },
+    "script": [
+      "cd packer-templates",
+      "make",
+      "make ci-minimal"
+    ]
+  }
+}'
+
+	curl -s -X POST \
+	  -H "Content-Type: application/json" \
+	  -H "Accept: application/json" \
+	  -H "Travis-API-Version: 3" \
+	  -H "Authorization: token ${TRAVIS_API_TOKEN}" \
+	  -d "$body" \
+	  https://api.travis-ci.org/repo/travis-ci%2Fpacker-build/requests
+}
+
+main "$@"

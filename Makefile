@@ -40,4 +40,4 @@ hackcheck:
 
 .PHONY: downstreams
 downstreams:
-	@echo NOT YET
+	./bin/trigger-downstreams
