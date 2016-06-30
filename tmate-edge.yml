@@ -1,7 +1,5 @@
 ---
 description: tmate edge image for Travis CI
-push:
-  name: travis-ci/tmate-edge
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
@@ -84,19 +82,3 @@ provisioners:
   - packer-scripts/cleanup
   - packer-scripts/remove-default-users
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-post-processors:
-- type: atlas
-  artifact: travis-ci/tmate-edge
-  artifact_type: amazon.image
-  metadata:
-    created_at: "{{ timestamp }}"
-  only:
-  - amazon-ebs
-- type: atlas
-  artifact: travis-ci/tmate-edge
-  artifact_type: google.image
-  metadata:
-    project_id: "{{ user `gce_project_id` }}"
-    name: "{{ user `gce_image_name` }}"
-  only:
-  - googlecompute
