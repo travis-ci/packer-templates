@@ -110,6 +110,7 @@ class Downstreams
     files = []
     last_commit_name_status.each do |filename, status|
       next unless %w(M A).include?(status)
+      next if filename.start_with?('.')
       next if filename.include?('/')
       files << filename if filename =~ /\.yml$/
     end

@@ -19,12 +19,17 @@ describe Downstreams do
         'rotten-kid-on-the-corner.txt' => 'M',
         'deep/inside/ur/code/.kitchen.yml' => 'M',
         'birthday-cake.yml' => 'A',
-        'bouncy-castle.yml' => 'M'
+        'bouncy-castle.yml' => 'M',
+        '.travis.yml' => 'M'
       }
     end
 
     it 'excludes deleted files' do
       expect(subject.send(:templates)).to_not include(/horrible-idea/)
+    end
+
+    it 'excludes yml files starting with a dot' do
+      expect(subject.send(:templates)).to_not include(/\.travis\.yml/)
     end
 
     it 'excludes non-yml files' do
