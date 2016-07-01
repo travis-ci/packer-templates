@@ -33,6 +33,7 @@ include_recipe 'travis_git::ppa'
 include_recipe 'jq'
 include_recipe 'travis_build_environment::packer'
 include_recipe 'travis_build_environment::bats'
+include_recipe 'travis_build_environment::heroku_toolbelt'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker'
