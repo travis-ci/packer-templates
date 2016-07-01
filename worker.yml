@@ -1,5 +1,4 @@
 ---
-# JUST KIDDING COMMENT HELLO
 description: Worker image for Travis CI
 push:
   name: travis-ci/worker

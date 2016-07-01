@@ -3,6 +3,7 @@
 @image_prefix = ENV.fetch('CI_MINIMAL_IMAGE_PREFIX', 'travis')
 %>
 ---
+# Hello hello!
 description: Travis CI minimal build env template
 push:
   name: travis-ci/ci-minimal
