@@ -24,4 +24,6 @@ script:
 - ./runtests --env .example.env
 - if [[ $TRAVIS_PULL_REQUEST = false ]] ; then
     ./bin/trigger-downstreams ;
+  else
+    echo '✮✮✮ Skip trigger-downstreams for pull request builds ✮✮✮' ;
   fi
