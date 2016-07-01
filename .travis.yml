@@ -12,6 +12,7 @@ addons:
     packages:
     - chefdk
 install:
+- unset GEM_PATH
 - mkdir -p tmp
 - echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > tmp/gce.json
 script:
