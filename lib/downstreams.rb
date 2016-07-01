@@ -11,28 +11,33 @@ class Downstreams
   end
 
   def trigger
-    response = build_http.request(build_request)
-    if response.code > '299'
+    ret = 0
+    http = build_http
+    build_requests.each do |request|
+      response = http.request(request)
+      next unless response.code > '299'
       if response.content_type =~ /\bjson\b/
         puts JSON.parse(response.body).fetch('error', '???')
       else
         puts response.body
       end
-      return 1
+      ret = 1
     end
-    0
+    ret
   end
 
-  def build_request
-    request = Net::HTTP::Post.new(
-      File.join('/repo', URI.escape(repo_slug, '/'), 'requests'),
-      'Content-Type' => 'application/json',
-      'Accept' => 'application/json',
-      'Travis-API-Version' => '3',
-      'Authorization' => "token #{travis_api_token}"
-    )
-    request.body = JSON.dump(body)
-    request
+  def build_requests
+    templates.map do |template|
+      request = Net::HTTP::Post.new(
+        File.join('/repo', URI.escape(repo_slug, '/'), 'requests'),
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+        'Travis-API-Version' => '3',
+        'Authorization' => "token #{travis_api_token}"
+      )
+      request.body = JSON.dump(body(template))
+      request
+    end
   end
 
   def build_http
@@ -46,7 +51,7 @@ class Downstreams
 
   private
 
-  def body
+  def body(template)
     {
       message: ":lemon: :bomb: origin-commit=#{commit}",
       branch: template,
@@ -59,7 +64,7 @@ class Downstreams
           matrix: builders.map { |b| "BUILDER=#{b}" }
         },
         install: [
-          'git clone --depth=50 ' \
+          "git clone --branch=#{branch} " \
             'https://github.com/travis-ci/packer-templates.git',
           "pushd packer-templates && git checkout -qf #{commit} ; popd",
           './packer-templates/bin/packer-build-install'
@@ -86,13 +91,17 @@ class Downstreams
     ENV['TRAVIS_COMMIT']
   end
 
-  def builders
-    # TODO: define this dynamically
-    %w(amazon-ebs)
+  def branch
+    ENV['TRAVIS_BRANCH']
   end
 
-  def template
+  def builders
     # TODO: define this dynamically
-    'worker'
+    %w(amazon-ebs googlecompute docker)
+  end
+
+  def templates
+    # TODO: define this dynamically
+    %w(worker ci-minimal)
   end
 end

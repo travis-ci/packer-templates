@@ -8,42 +8,54 @@ describe Downstreams do
   before :each do
     allow(subject).to receive(:travis_api_token).and_return(api_token)
     allow(subject).to receive(:commit).and_return('fafafaf')
-    allow(subject).to receive(:template).and_return('wooker')
+    allow(subject).to receive(:templates).and_return(%w(wooker dippity))
     allow(subject).to receive(:builders).and_return(%w(fribble schnozzle))
   end
 
   it { respond_to(:trigger!) }
   it { respond_to(:trigger) }
 
-  describe 'request' do
-    let(:request) { subject.build_request }
+  describe 'requests' do
+    let(:requests) { subject.build_requests }
+
+    it 'creates a request for each template' do
+      expect(requests.size).to eq(2)
+    end
 
     it 'is has a body' do
-      expect(request.body).to_not be_empty
+      requests.each do |request|
+        expect(request.body).to_not be_empty
+      end
     end
 
     it 'is json' do
-      expect(request['Content-Type']).to eq('application/json')
+      requests.each do |request|
+        expect(request['Content-Type']).to eq('application/json')
+      end
     end
 
     it 'specifies API version 3' do
-      expect(request['Travis-API-Version']).to eq('3')
+      requests.each do |request|
+        expect(request['Travis-API-Version']).to eq('3')
+      end
     end
 
     it 'includes authorization' do
-      expect(request['Authorization']).to eq('token flubber')
+      requests.each do |request|
+        expect(request['Authorization']).to eq('token flubber')
+      end
     end
   end
 
   describe 'body' do
-    let(:body) { subject.send(:body) }
+    let(:body) { subject.send(:body, 'flurb') }
 
     it 'has a message with commit' do
       expect(body[:message]).to match(/origin-commit=fafafaf/)
     end
 
     it 'specifies a branch' do
-      expect(body[:branch]).to eq('wooker')
+      expect(body[:branch]).to eq('flurb')
     end
 
     it 'stubs in some config bits' do
@@ -55,7 +67,7 @@ describe Downstreams do
       )
     end
 
-    it 'contains an env matrix with each builder' do
+    it 'contains an env matrix with each builder and template' do
       expect(body[:config][:env][:matrix])
         .to eq(%w(BUILDER=fribble BUILDER=schnozzle))
     end
@@ -77,7 +89,7 @@ describe Downstreams do
 
     it 'contains a script step that runs bin/packer-build-script' do
       expect(body[:config][:script]).to eq(
-        './packer-templates/bin/packer-build-script wooker'
+        './packer-templates/bin/packer-build-script flurb'
       )
     end
   end
