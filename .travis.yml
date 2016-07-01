@@ -16,6 +16,7 @@ script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
+- rspec
 - env -i HOME=$HOME PATH=$PATH
     bash -l -c 'source .example.env && unset PACKER_LOG && ./runtests'
 - ./bin/trigger-downstreams
