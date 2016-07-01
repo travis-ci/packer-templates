@@ -22,4 +22,6 @@ script:
 - git diff --cached --exit-code
 - rspec
 - ./runtests --env .example.env
-- ./bin/trigger-downstreams
+- if [[ $TRAVIS_PULL_REQUEST = false ]] ; then
+    ./bin/trigger-downstreams ;
+  fi
