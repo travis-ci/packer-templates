@@ -7,4 +7,4 @@ cd $(dirname $(dirname ${BASH_SOURCE[0]}))
 mkdir -p tmp/
 echo "${GCE_ACCOUNT_FILE_B64_BZ2}" | \
   base64 -d | \
-  bunzip2 > packer-templates/tmp/gce.json
+  bunzip2 > tmp/gce.json

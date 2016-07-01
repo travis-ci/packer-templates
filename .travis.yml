@@ -13,14 +13,12 @@ addons:
     - chefdk
 install:
 - unset GEM_PATH
-- mkdir -p tmp
-- echo $GCE_ACCOUNT_FILE_B64_BZ2 | base64 -d | bunzip2 > tmp/gce.json
+- ./bin/packer-build-install
 script:
 - make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
 - rspec
-- env -i HOME=$HOME PATH=$PATH
-    bash -l -c 'source .example.env && unset PACKER_LOG && ./runtests'
+- ./runtests --env .example.env
 - ./bin/trigger-downstreams
