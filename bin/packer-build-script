@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
+: ${AWS_ACCESS_KEY:=$AWS_ACCESS_KEY_ID}
+: ${AWS_SECRET_KEY:=$AWS_SECRET_ACCESS_KEY}
 make -C "$(dirname $(dirname ${BASH_SOURCE[0]}))" ${1}
