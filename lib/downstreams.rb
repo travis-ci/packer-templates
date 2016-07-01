@@ -26,12 +26,10 @@ class Downstreams
   def build_request
     request = Net::HTTP::Post.new(
       File.join('/repo', URI.escape(repo_slug, '/'), 'requests'),
-      {
-        'Content-Type' => 'application/json',
-        'Accept' => 'application/json',
-        'Travis-API-Version' => '3',
-        'Authorization' => "token #{travis_api_token}"
-      }
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json',
+      'Travis-API-Version' => '3',
+      'Authorization' => "token #{travis_api_token}"
     )
     request.body = JSON.dump(body)
     request

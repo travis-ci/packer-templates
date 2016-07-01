@@ -56,10 +56,8 @@ describe Downstreams do
     end
 
     it 'contains an env matrix with each builder' do
-      expect(body[:config][:env][:matrix]).to eq([
-        'BUILDER=fribble',
-        'BUILDER=schnozzle'
-      ])
+      expect(body[:config][:env][:matrix])
+        .to eq(%w(BUILDER=fribble BUILDER=schnozzle))
     end
 
     it 'contains an install step that clones packer-templates' do
