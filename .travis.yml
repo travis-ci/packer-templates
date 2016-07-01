@@ -13,6 +13,7 @@ addons:
     - chefdk
 install:
 - unset GEM_PATH
+- gem install git
 - ./bin/packer-build-install
 script:
 - make hackcheck
