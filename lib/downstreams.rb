@@ -4,6 +4,7 @@ require 'json'
 require 'net/https'
 require 'optparse'
 require 'uri'
+require 'logger'
 
 require 'git'
 
@@ -14,11 +15,15 @@ class Downstreams
 
   def trigger
     ret = 0
+    triggered = 0
+    errored = 0
     http = build_http
+
     build_requests.each do |template, request|
       response = http.request(request)
       if response.code < '299'
-        puts "Triggered template=#{template} repo=#{repo_slug}"
+        log.info "Triggered template=#{template} repo=#{repo_slug}"
+        triggered += 1
         next
       end
 
@@ -27,8 +32,11 @@ class Downstreams
       else
         puts response.body
       end
+      errored += 1
       ret = 1
     end
+
+    log.info "All done! triggered=#{triggered} errored=#{errored}"
     ret
   end
 
@@ -124,5 +132,14 @@ class Downstreams
 
   def git
     Git.open(File.expand_path('../../', __FILE__))
+  end
+
+  def log
+    @log ||= Logger.new($stdout).tap do |l|
+      l.progname = File.basename($PROGRAM_NAME)
+      l.formatter = proc do |_, _, progname, msg|
+        "#{progname}: #{msg}\n"
+      end
+    end
   end
 end
