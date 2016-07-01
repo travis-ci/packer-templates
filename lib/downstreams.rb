@@ -15,9 +15,13 @@ class Downstreams
   def trigger
     ret = 0
     http = build_http
-    build_requests.each do |request|
+    build_requests.each do |template, request|
       response = http.request(request)
-      next unless response.code > '299'
+      if response.code < '299'
+        puts "Triggered template=#{template} repo=#{repo_slug}"
+        next
+      end
+
       if response.content_type =~ /\bjson\b/
         puts JSON.parse(response.body).fetch('error', '???')
       else
@@ -38,7 +42,7 @@ class Downstreams
         'Authorization' => "token #{travis_api_token}"
       )
       request.body = JSON.dump(body(template))
-      request
+      [template, request]
     end
   end
 

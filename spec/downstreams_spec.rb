@@ -65,25 +65,25 @@ describe Downstreams do
       end
 
       it 'is has a body' do
-        requests.each do |request|
+        requests.each do |_, request|
           expect(request.body).to_not be_empty
         end
       end
 
       it 'is json' do
-        requests.each do |request|
+        requests.each do |_, request|
           expect(request['Content-Type']).to eq('application/json')
         end
       end
 
       it 'specifies API version 3' do
-        requests.each do |request|
+        requests.each do |_, request|
           expect(request['Travis-API-Version']).to eq('3')
         end
       end
 
       it 'includes authorization' do
-        requests.each do |request|
+        requests.each do |_, request|
           expect(request['Authorization']).to eq('token flubber')
         end
       end
