@@ -82,7 +82,7 @@ class LilChef
     def find_cookbooks(run_list, cookbook_path)
       Array(run_list).map do |cb|
         find_dependency_cookbooks(
-          cb.gsub(/^recipe\[/, '').gsub(/\]/, ''),
+          cb.gsub(/^recipe\[/, '').delete(']'),
           cookbook_path
         )
       end.flatten.sort.uniq
@@ -108,7 +108,7 @@ class LilChef
                   }
                 }
               }
-              self.instance_eval(File.read(recipe_rb))
+              instance_eval(File.read(recipe_rb))
               deps += @included_recipes
             rescue => e
               $stderr.puts "lil_chef ERROR: #{e}"
@@ -147,7 +147,7 @@ class LilChef
     # * if a git commit path is inside a found cookbook, then append
     #   the affected template to a list (which is returned later)
     to_trigger = []
-    filenames.map! { |f| f.gsub(/^[.\/]+/, '') }
+    filenames.map! { |f| f.gsub(%r{^[./]+}, '') }
 
     packer_templates.each do |template, run_list_cookbooks|
       run_list_cookbooks.each do |cb|
