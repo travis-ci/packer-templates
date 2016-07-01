@@ -25,6 +25,8 @@ script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
+- mkdir -p tmp
+- echo '{}' > tmp/gce.json
 - source .example.env
 - unset PACKER_LOG
 - ./runtests
