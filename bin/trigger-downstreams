@@ -3,4 +3,4 @@ libdir = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'downstreams'
-exit Downstreams.trigger! if $PROGRAM_NAME == __FILE__
+exit Downstreams::Trigger.run! if $PROGRAM_NAME == __FILE__

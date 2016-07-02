@@ -1,39 +1,8 @@
-require 'English'
 require 'find'
 require 'thread'
 require 'yaml'
 
-class LilChef
-  class Cookbooks
-    def self.load(cookbooks_dir)
-      inst = new
-      inst.load(cookbooks_dir)
-      inst
-    end
-
-    def initialize
-      @rec = {}
-    end
-
-    def load(cookbooks_dir)
-      Dir.foreach(cookbooks_dir) do |f|
-        if File.exist?(File.join(cookbooks_dir, f, 'metadata.rb'))
-          @rec[f] = load_files(File.join(cookbooks_dir, f))
-        end
-      end
-    end
-
-    def files(cookbook)
-      @rec[cookbook]
-    end
-
-    private
-
-    def load_files(cookbook)
-      Find.find(cookbook).select { |f| File.file?(f) }
-    end
-  end
-
+module Downstreams
   class PackerTemplates
     def self.load(cookbook_path, packer_templates_dir)
       inst = new
@@ -75,7 +44,7 @@ class LilChef
       parsed = YAML.load_file(filename)
       %w(variables builders provisioners).all? { |k| parsed.include?(k) }
     rescue => e
-      $stderr.puts "lil_chef ERROR: #{e}"
+      $stderr.puts "ERROR: #{e}"
       false
     end
 
@@ -111,7 +80,7 @@ class LilChef
               instance_eval(File.read(recipe_rb))
               deps += @included_recipes
             rescue => e
-              $stderr.puts "lil_chef ERROR: #{e}"
+              $stderr.puts "ERROR: #{e}"
             end
           end
         end
@@ -126,53 +95,4 @@ class LilChef
 
     attr_reader :node
   end
-
-  def initialize(cookbooks_dir, packer_templates_dir)
-    @cookbooks_dir = cookbooks_dir
-    @packer_templates_dir = packer_templates_dir
-  end
-
-  def self.hacketytest!(argv: ARGV)
-    new(argv.shift, argv.shift).dostuff(argv)
-    0
-  end
-
-  def dostuff(filenames)
-    # * walk the @packer_templates_dir, get list of packer templates
-    # * for each packer template, if it contains a chef-solo provisioner,
-    #   read the members of the run_list
-    # * for each member of the run_list, evaluate/read the relevant
-    #   recipe, looking for `include_recipe`.
-    # * follow the `include_recipe` bits until (condition??)
-    # * if a git commit path is inside a found cookbook, then append
-    #   the affected template to a list (which is returned later)
-    to_trigger = []
-    filenames.map! { |f| f.gsub(%r{^[./]+}, '') }
-
-    packer_templates.each do |template, run_list_cookbooks|
-      run_list_cookbooks.each do |cb|
-        cb_files = Array(cookbooks.files(cb))
-        next if cb_files.empty?
-        to_trigger << template unless (filenames & cb_files).empty?
-      end
-    end
-
-    puts to_trigger
-  end
-
-  private
-
-  attr_reader :cookbooks_dir, :packer_templates_dir
-
-  def packer_templates
-    @packer_templates ||= PackerTemplates.load(
-      [cookbooks_dir], packer_templates_dir
-    )
-  end
-
-  def cookbooks
-    @cookbooks ||= Cookbooks.load(cookbooks_dir)
-  end
 end
-
-exit(LilChef.hacketytest!) if $PROGRAM_NAME == __FILE__
