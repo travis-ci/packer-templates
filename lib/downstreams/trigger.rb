@@ -49,7 +49,7 @@ module Downstreams
     end
 
     def build_requests
-      templates.map do |template|
+      detector.detect(changed_files).map do |template|
         request = Net::HTTP::Post.new(
           File.join('/repo', URI.escape(options.repo_slug, '/'), 'requests'),
           'Content-Type' => 'application/json',
@@ -93,6 +93,12 @@ module Downstreams
           options.git_working_copy = File.expand_path(v.strip)
         end
 
+        opts.on('-XFILENAMES', '--trigger-paths=FILENAMES',
+                'File names to force triggering, overriding git ' \
+                "(\":\"-delimited). default=#{options.trigger_paths}") do |v|
+          options.trigger_paths = parse_path(v.strip)
+        end
+
         opts.on('-rREPO', '--repo-slug=REPO',
                 'Repo slug to which triggered builds should be sent. ' \
                 "default=#{options.repo_slug}") do |v|
@@ -100,8 +106,8 @@ module Downstreams
         end
 
         opts.on('-uURL', '--travis-api-url=URL',
-                'URL of the Travis API to which triggered builds should be sent. ' \
-                "default=#{options.travis_api}") do |v|
+                'URL of the Travis API to which triggered builds should ' \
+                "be sent. default=#{options.travis_api}") do |v|
           options.travis_api = URI(v)
         end
 
@@ -160,6 +166,7 @@ module Downstreams
             File.expand_path('../../../', __FILE__)
           )
         ),
+        parse_path(ENV.fetch('TRIGGER_PATHS', '')),
         ENV.fetch('REPO_SLUG', 'travis-ci/packer-build'),
         URI(ENV.fetch('TRAVIS_API_URL', 'https://api.travis-ci.org')),
         ENV.fetch('TRAVIS_API_TOKEN', ''),
@@ -207,15 +214,15 @@ module Downstreams
       }
     end
 
-    def templates
-      detector.detect(changed_files)
-    end
-
     def changed_files
+      return options.trigger_paths unless options.trigger_paths.empty?
+
       # TODO: replace this with better diff check?  Account for PR?
       last_commit_name_status.select do |_, status|
         %w(M A).include?(status)
-      end.map { |filename, _| filename }
+      end.map do |filename, _|
+        File.expand_path(filename, options.git_working_copy)
+      end
     end
 
     def last_commit_name_status
@@ -241,6 +248,7 @@ module Downstreams
     :cookbook_path,
     :packer_templates_path,
     :git_working_copy,
+    :trigger_paths,
     :repo_slug,
     :travis_api,
     :travis_api_token,

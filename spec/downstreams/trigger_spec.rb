@@ -37,10 +37,13 @@ describe Downstreams::Trigger do
   end
 
   context 'with stubbed templates and builders' do
+    let(:fake_detector) { double('fake_detector') }
+
     before :each do
       allow(subject.send(:options)).to receive(:builders)
         .and_return(%w(fribble schnozzle))
-      allow(subject).to receive(:templates).and_return(%w(wooker dippity))
+      allow(subject).to receive(:detector).and_return(fake_detector)
+      allow(fake_detector).to receive(:detect).and_return(%w(wooker dippity))
     end
 
     it 'may be run via .run!' do

@@ -11,11 +11,11 @@ module Downstreams
     end
 
     def initialize
-      @rec = {}
+      @packer_template_cookbooks = {}
     end
 
     def each(&block)
-      @rec.each(&block)
+      @packer_template_cookbooks.each(&block)
     end
 
     def load(cookbook_path, packer_templates_path)
@@ -24,8 +24,10 @@ module Downstreams
         Array(parsed['provisioners']).each do |provisioner|
           next unless provisioner['type'] =~ /chef/
           next if Array(provisioner.fetch('run_list', [])).empty?
-          key = File.basename(filename, '.yml')
-          @rec[key] = find_cookbooks(provisioner['run_list'], cookbook_path)
+          key = PackerTemplate.new(filename)
+          @packer_template_cookbooks[key] = find_cookbooks(
+            provisioner['run_list'], cookbook_path
+          )
         end
       end
     end
@@ -67,23 +69,6 @@ module Downstreams
           sem.synchronize do
             begin
               @included_recipes = []
-              @node = {
-                'travis_ci_standard' => {
-                  'standalone' => false
-                },
-                'travis_packer_templates' => {
-                  'env' => {
-                    'PACKER_BUILDER_TYPE' => 'lilchef'
-                  }
-                },
-                tmate_remote_tmux: {},
-                tmate_proxy: {},
-                'ec2_docker_worker' => {
-                  'docker' => {
-                    'languages' => []
-                  }
-                }
-              }
               instance_eval(File.read(recipe_rb))
               deps += @included_recipes
             rescue => e
@@ -96,8 +81,15 @@ module Downstreams
       deps.compact.uniq
     end
 
-    attr_reader :node
-
     include FakeRecipeMethods
+  end
+
+  class PackerTemplate
+    def initialize(filename)
+      @name = File.basename(filename, '.yml')
+      @filename = filename
+    end
+
+    attr_reader :name, :filename
   end
 end

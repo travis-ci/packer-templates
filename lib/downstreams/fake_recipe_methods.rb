@@ -25,11 +25,22 @@ module Downstreams
       user
     ).each { |m| define_method(m) { |*| } }
 
+    def node
+      @node ||= ForeverHash.new
+    end
+
     module Chef
-      class Config < Hash
+      class Config
         def self.file_cache_path
           Dir.tmpdir
         end
+      end
+    end
+
+    class ForeverHash < Hash
+      def [](key)
+        self[key] = ForeverHash.new unless key?(key)
+        fetch(key)
       end
     end
   end

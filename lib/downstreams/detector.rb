@@ -20,17 +20,19 @@ module Downstreams
       # * if a git commit path is inside a found cookbook, then append
       #   the affected template to a list (which is returned later)
       to_trigger = []
-      filenames.map! { |f| f.gsub(%r{^[./]+}, '') }
+      filenames.map! { |f| File.expand_path(f) }
 
       packer_templates.each do |template, run_list_cookbooks|
+        to_trigger << template.name if filenames.include?(template.filename)
+
         run_list_cookbooks.each do |cb|
           cb_files = Array(cookbooks.files(cb))
           next if cb_files.empty?
-          to_trigger << template unless (filenames & cb_files).empty?
+          to_trigger << template.name unless (filenames & cb_files).empty?
         end
       end
 
-      to_trigger
+      to_trigger.sort.uniq
     end
 
     private
