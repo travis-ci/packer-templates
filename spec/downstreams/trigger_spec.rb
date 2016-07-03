@@ -1,66 +1,55 @@
 require 'downstreams'
 
-describe Downstreams do
+describe Downstreams::Trigger do
   subject { described_class.new }
 
   let(:api_token) { 'flubber' }
   let(:git_name_status) { {} }
-
-  before :each do
-    allow(subject).to receive(:travis_api_token).and_return(api_token)
-    allow(subject).to receive(:commit).and_return('fafafaf')
-    allow(subject).to receive(:last_commit_name_status).and_return(git_name_status)
+  let(:here) { File.expand_path('../../../', __FILE__) }
+  let(:argv) do
+    %W(
+      --quiet
+      --cookbook-path=#{here}/cookbooks
+      --packer-templates-path=#{here}
+      --git-working-copy=#{here}
+      --repo-slug=serious-business/verybigapplication
+      --travis-api-url=https://bogus.example.com:9999
+      --travis-api-token=SOVERYSECRET
+      --commit=fafafaf
+      --branch=twig
+      --builders=bob,wendy,pickles
+    )
+  end
+  let(:fake_http) { double('fake_http') }
+  let(:fake_response) do
+    double('fake_response', code: '201')
   end
 
-  describe 'templates' do
-    let :git_name_status do
-      {
-        'horrible-idea.yml' => 'D',
-        'rotten-kid-on-the-corner.txt' => 'M',
-        'deep/inside/ur/code/.kitchen.yml' => 'M',
-        'birthday-cake.yml' => 'A',
-        'bouncy-castle.yml' => 'M',
-        '.travis.yml' => 'M'
-      }
-    end
-
-    it 'excludes deleted files' do
-      expect(subject.send(:templates)).to_not include(/horrible-idea/)
-    end
-
-    it 'excludes yml files starting with a dot' do
-      expect(subject.send(:templates)).to_not include(/\.travis\.yml/)
-    end
-
-    it 'excludes non-yml files' do
-      expect(subject.send(:templates)).to_not include(/rotten-kid-on-the-corner/)
-    end
-
-    it 'excludes yml files in directories' do
-      expect(subject.send(:templates)).to_not include(%r{deep/inside/ur/code/\.kitchen\.yml})
-    end
-
-    it 'includes modified yml files' do
-      expect(subject.send(:templates)).to include('bouncy-castle')
-    end
-
-    it 'includes added yml files' do
-      expect(subject.send(:templates)).to include('birthday-cake')
-    end
-
-    it 'returns basenames in an array' do
-      expect(subject.send(:templates)).to eq(%w(birthday-cake bouncy-castle))
-    end
+  before :each do
+    allow(subject.send(:options))
+      .to receive(:travis_api_token).and_return(api_token)
+    allow(subject.send(:options))
+      .to receive(:commit).and_return('fafafaf')
+    allow(subject).to receive(:last_commit_name_status)
+      .and_return(git_name_status)
+    allow(subject).to receive(:build_http).and_return(fake_http)
+    allow(fake_http).to receive(:request).and_return(fake_response)
   end
 
   context 'with stubbed templates and builders' do
     before :each do
-      allow(subject).to receive(:builders).and_return(%w(fribble schnozzle))
+      allow(subject.send(:options)).to receive(:builders)
+        .and_return(%w(fribble schnozzle))
       allow(subject).to receive(:templates).and_return(%w(wooker dippity))
     end
 
-    it { respond_to(:trigger!) }
-    it { respond_to(:trigger) }
+    it 'may be run via .run!' do
+      expect(described_class.run!(argv: argv)).to eq(0)
+    end
+
+    it 'may be run via #run' do
+      expect(subject.run(argv: argv)).to eq(0)
+    end
 
     describe 'requests' do
       let(:requests) { subject.build_requests }

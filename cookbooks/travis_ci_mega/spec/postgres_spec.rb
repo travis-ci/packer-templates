@@ -15,8 +15,8 @@ describe 'postgres installation' do
 
     describe command(
       %w(
-        psql -c "CREATE TABLE test_table();" test_db ;
-        psql -tAc "\dt" test_db
+        psql -c CREATE TABLE test_table(); test_db ;
+        psql -tAc \dt test_db
       ).join(' ')
     ) do
       its(:stdout) { should match(/^public\|test_table\|/) }

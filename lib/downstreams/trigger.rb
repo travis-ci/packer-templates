@@ -10,41 +10,12 @@ require 'git'
 
 module Downstreams
   class Trigger
-    Options = Struct.new(
-      :cookbook_path,
-      :packer_templates,
-      :noop,
-      :git_working_copy
-    )
-
     def self.run!(argv: ARGV)
       new.run(argv: argv)
     end
 
     def run(argv: ARGV)
-      OptionParser.new do |opts|
-        opts.on('-pPATH', '--cookbook-path=PATH',
-                'Cookbook path (":"-delimited). ' \
-                "default=#{options.cookbook_path}") do |v|
-          options.cookbook_path = parse_cookbook_path(v)
-        end
-
-        opts.on('-tDIR', '--packer-templates=DIR',
-                'Packer templates base directory. ' \
-                "default=#{options.packer_templates}") do |v|
-          options.packer_templates = File.expand_path(v.strip)
-        end
-
-        opts.on('-n', '--noop', 'Do not do') do
-          options.noop = true
-        end
-
-        opts.on('-gDIR', '--git-working-copy=DIR',
-                'Root of git working copy to check. ' \
-                "default=#{options.git_working_copy}") do |v|
-          options.git_working_copy = File.expand_path(v.strip)
-        end
-      end.parse!(argv)
+      parse_args(argv)
 
       ret = 0
       triggered = 0
@@ -53,13 +24,13 @@ module Downstreams
 
       build_requests.each do |template, request|
         if options.noop
-          log.info "Not triggering template=#{template} repo=#{repo_slug}"
+          log.info "Not triggering template=#{template} repo=#{options.repo_slug}"
           next
         end
 
         response = http.request(request)
         if response.code < '299'
-          log.info "Triggered template=#{template} repo=#{repo_slug}"
+          log.info "Triggered template=#{template} repo=#{options.repo_slug}"
           triggered += 1
           next
         end
@@ -80,11 +51,11 @@ module Downstreams
     def build_requests
       templates.map do |template|
         request = Net::HTTP::Post.new(
-          File.join('/repo', URI.escape(repo_slug, '/'), 'requests'),
+          File.join('/repo', URI.escape(options.repo_slug, '/'), 'requests'),
           'Content-Type' => 'application/json',
           'Accept' => 'application/json',
           'Travis-API-Version' => '3',
-          'Authorization' => "token #{travis_api_token}"
+          'Authorization' => "token #{options.travis_api_token}"
         )
         request.body = JSON.dump(body(template))
         [template, request]
@@ -92,8 +63,8 @@ module Downstreams
     end
 
     def build_http
-      Net::HTTP.new(travis_api.host, travis_api.port).tap do |http|
-        if travis_api.scheme == 'https'
+      Net::HTTP.new(options.travis_api.host, options.travis_api.port).tap do |http|
+        if options.travis_api.scheme == 'https'
           http.use_ssl = true
           http.verify_mode = OpenSSL::SSL::VERIFY_PEER
         end
@@ -102,31 +73,105 @@ module Downstreams
 
     private
 
+    def parse_args(argv)
+      OptionParser.new do |opts|
+        opts.on('-pPATH', '--cookbook-path=PATH',
+                'Cookbook path (":"-delimited). ' \
+                "default=#{options.cookbook_path}") do |v|
+          options.cookbook_path = parse_path(v)
+        end
+
+        opts.on('-tPATH', '--packer-templates-path=PATH',
+                'Packer templates path (":"-delimited). ' \
+                "default=#{options.packer_templates_path}") do |v|
+          options.packer_templates_path = parse_path(v)
+        end
+
+        opts.on('-gDIR', '--git-working-copy=DIR',
+                'Root of git working copy to check. ' \
+                "default=#{options.git_working_copy}") do |v|
+          options.git_working_copy = File.expand_path(v.strip)
+        end
+
+        opts.on('-rREPO', '--repo-slug=REPO',
+                'Repo slug to which triggered builds should be sent. ' \
+                "default=#{options.repo_slug}") do |v|
+          options.repo_slug = v.strip
+        end
+
+        opts.on('-uURL', '--travis-api-url=URL',
+                'URL of the Travis API to which triggered builds should be sent. ' \
+                "default=#{options.travis_api}") do |v|
+          options.travis_api = URI(v)
+        end
+
+        opts.on('-TTOKEN', '--travis-api-token=TOKEN',
+                'API token for use with Travis API. ' \
+                "default=#{options.travis_api_token}") do |v|
+          options.travis_api_token = v.strip
+        end
+
+        opts.on('-CCOMMIT', '--commit=COMMIT',
+                'Commit tree-ish to set REPO in triggered build. ' \
+                "default=#{options.commit}") do |v|
+          options.commit = v.strip
+        end
+
+        opts.on('-BBRANCH', '--branch=BRANCH',
+                'Branch name to clone of REPO in triggered build. ' \
+                "default=#{options.branch}") do |v|
+          options.branch = v.strip
+        end
+
+        opts.on('-bBUILDERS', '--builders=BUILDERS',
+                'Packer builder names for which Travis jobs should ' \
+                'be triggered (","-delimited). ' \
+                "default=#{options.builders}") do |v|
+          options.builders = v.split(',').map(&:strip)
+        end
+
+        opts.on('-n', '--noop', 'Do not do') do
+          options.noop = true
+        end
+
+        opts.on('-q', '--quiet', 'Simmer down the logging') do
+          options.quiet = true
+        end
+      end.parse!(argv)
+    end
+
     def options
-      @options ||= Options.new(
-        parse_cookbook_path(
+      @options ||= TriggerOptions.new(
+        parse_path(
           ENV.fetch(
             'COOKBOOK_PATH',
             File.expand_path('../../../cookbooks', __FILE__)
           )
         ),
-        File.expand_path(
+        parse_path(
           ENV.fetch(
             'PACKER_TEMPLATES',
             File.expand_path('../../../', __FILE__)
           )
         ),
-        false,
         File.expand_path(
           ENV.fetch(
             'GIT_WORKING_DIR',
             File.expand_path('../../../', __FILE__)
           )
-        )
+        ),
+        ENV.fetch('REPO_SLUG', 'travis-ci/packer-build'),
+        URI(ENV.fetch('TRAVIS_API_URL', 'https://api.travis-ci.org')),
+        ENV.fetch('TRAVIS_API_TOKEN', ''),
+        ENV.fetch('TRAVIS_COMMIT', ''),
+        ENV.fetch('TRAVIS_BRANCH', ''),
+        ENV.fetch('BUILDERS', 'amazon-ebs,googlecompute,docker').split(',').map(&:strip),
+        ENV['NOOP'] == '1',
+        ENV['QUIET'] == '1'
       )
     end
 
-    def parse_cookbook_path(string)
+    def parse_path(string)
       string.split(':').map do |p|
         File.expand_path(p.strip)
       end
@@ -135,13 +180,13 @@ module Downstreams
     def detector
       @detector ||= Downstreams::Detector.new(
         options.cookbook_path,
-        options.packer_templates
+        options.packer_templates_path
       )
     end
 
     def body(template)
       {
-        message: ":lemon: :bomb: origin-commit=#{commit}",
+        message: ":lemon: :bomb: origin-commit=#{options.commit}",
         branch: template,
         config: {
           language: 'generic',
@@ -149,43 +194,17 @@ module Downstreams
           group: 'edge',
           sudo: true,
           env: {
-            matrix: builders.map { |b| "BUILDER=#{b}" }
+            matrix: options.builders.map { |b| "BUILDER=#{b}" }
           },
           install: [
-            "git clone --branch=#{branch} " \
+            "git clone --branch=#{options.branch} " \
               'https://github.com/travis-ci/packer-templates.git',
-            "pushd packer-templates && git checkout -qf #{commit} ; popd",
+            "pushd packer-templates && git checkout -qf #{options.commit} ; popd",
             './packer-templates/bin/packer-build-install'
           ],
           script: "./packer-templates/bin/packer-build-script #{template}"
         }
       }
-    end
-
-    def repo_slug
-      # TODO: make configurable?
-      'travis-ci/packer-build'
-    end
-
-    def travis_api
-      @travis_api ||= URI(ENV.fetch('TRAVIS_API_URL', 'https://api.travis-ci.org'))
-    end
-
-    def travis_api_token
-      ENV['TRAVIS_API_TOKEN']
-    end
-
-    def commit
-      ENV['TRAVIS_COMMIT']
-    end
-
-    def branch
-      ENV['TRAVIS_BRANCH']
-    end
-
-    def builders
-      # TODO: define this dynamically
-      %w(amazon-ebs googlecompute docker)
     end
 
     def templates
@@ -209,6 +228,7 @@ module Downstreams
 
     def log
       @log ||= Logger.new($stdout).tap do |l|
+        l.level = Logger::FATAL if options.quiet
         l.progname = File.basename($PROGRAM_NAME)
         l.formatter = proc do |_, _, progname, msg|
           "#{progname}: #{msg}\n"
@@ -216,4 +236,18 @@ module Downstreams
       end
     end
   end
+
+  TriggerOptions = Struct.new(
+    :cookbook_path,
+    :packer_templates_path,
+    :git_working_copy,
+    :repo_slug,
+    :travis_api,
+    :travis_api_token,
+    :commit,
+    :branch,
+    :builders,
+    :noop,
+    :quiet
+  )
 end

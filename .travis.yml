@@ -2,6 +2,7 @@ language: generic
 dist: trusty
 group: edge
 sudo: true
+cache: bundler
 env:
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
@@ -13,14 +14,14 @@ addons:
     - chefdk
 install:
 - unset GEM_PATH
-- gem install git
+- bundle install --path vendor/bundle
 - ./bin/packer-build-install
 script:
 - make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- rspec
+- bundle exec rspec
 - ./runtests --env .example.env
 - if [[ $TRAVIS_PULL_REQUEST = false ]] ; then
     ./bin/trigger-downstreams ;

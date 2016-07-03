@@ -4,9 +4,9 @@ require 'yaml'
 
 module Downstreams
   class PackerTemplates
-    def self.load(cookbook_path, packer_templates_dir)
+    def self.load(cookbook_path, packer_templates_path)
       inst = new
-      inst.load(cookbook_path, packer_templates_dir)
+      inst.load(cookbook_path, packer_templates_path)
       inst
     end
 
@@ -18,8 +18,8 @@ module Downstreams
       @rec.each(&block)
     end
 
-    def load(cookbook_path, packer_templates_dir)
-      packer_templates(packer_templates_dir).each do |filename|
+    def load(cookbook_path, packer_templates_path)
+      packer_templates(packer_templates_path).each do |filename|
         parsed = YAML.load_file(filename)
         Array(parsed['provisioners']).each do |provisioner|
           next unless provisioner['type'] =~ /chef/
@@ -32,19 +32,19 @@ module Downstreams
 
     private
 
-    def packer_templates(packer_templates_dir)
-      Find.find(packer_templates_dir).map do |f|
-        packer_template?(f) ? f : nil
-      end.compact.sort
+    def packer_templates(packer_templates_path)
+      packer_templates_path.map do |packer_templates_dir|
+        Dir.glob(File.join(packer_templates_dir, '*.yml')).select do |f|
+          packer_template?(f)
+        end
+      end.flatten.compact.sort
     end
 
     def packer_template?(filename)
-      return false unless File.basename(filename).end_with?('.yml')
-      return false if File.basename(filename).start_with?('.')
       parsed = YAML.load_file(filename)
       %w(variables builders provisioners).all? { |k| parsed.include?(k) }
     rescue => e
-      $stderr.puts "ERROR: #{e}"
+      $stderr.puts "ERROR: #{e}\n#{e.backtrace.join("\n")}"
       false
     end
 
@@ -75,12 +75,19 @@ module Downstreams
                   'env' => {
                     'PACKER_BUILDER_TYPE' => 'lilchef'
                   }
+                },
+                tmate_remote_tmux: {},
+                tmate_proxy: {},
+                'ec2_docker_worker' => {
+                  'docker' => {
+                    'languages' => []
+                  }
                 }
               }
               instance_eval(File.read(recipe_rb))
               deps += @included_recipes
             rescue => e
-              $stderr.puts "ERROR: #{e}"
+              $stderr.puts "ERROR:#{recipe_rb.sub("#{cookbooks_dir}/", '')}: #{e}"
             end
           end
         end
@@ -89,10 +96,8 @@ module Downstreams
       deps.compact.uniq
     end
 
-    def include_recipe(name)
-      @included_recipes << name
-    end
-
     attr_reader :node
+
+    include FakeRecipeMethods
   end
 end

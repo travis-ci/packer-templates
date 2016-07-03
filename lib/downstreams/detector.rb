@@ -5,13 +5,13 @@ require 'yaml'
 
 module Downstreams
   class Detector
-    def initialize(cookbooks_dir, packer_templates_dir)
-      @cookbooks_dir = cookbooks_dir
-      @packer_templates_dir = packer_templates_dir
+    def initialize(cookbooks_path, packer_templates_path)
+      @cookbooks_path = cookbooks_path
+      @packer_templates_path = packer_templates_path
     end
 
     def detect(filenames)
-      # * walk the @packer_templates_dir, get list of packer templates
+      # * walk the @packer_templates_path, get list of packer templates
       # * for each packer template, if it contains a chef-solo provisioner,
       #   read the members of the run_list
       # * for each member of the run_list, evaluate/read the relevant
@@ -35,16 +35,16 @@ module Downstreams
 
     private
 
-    attr_reader :cookbooks_dir, :packer_templates_dir
+    attr_reader :cookbooks_path, :packer_templates_path
 
     def packer_templates
       @packer_templates ||= PackerTemplates.load(
-        [cookbooks_dir], packer_templates_dir
+        cookbooks_path, packer_templates_path
       )
     end
 
     def cookbooks
-      @cookbooks ||= Cookbooks.load(cookbooks_dir)
+      @cookbooks ||= Cookbooks.load(cookbooks_path)
     end
   end
 end
