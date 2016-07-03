@@ -48,5 +48,3 @@ module Downstreams
     end
   end
 end
-
-exit(LilChef.hacketytest!) if $PROGRAM_NAME == __FILE__
