@@ -41,7 +41,7 @@ module Downstreams
           next
         end
 
-        if response.content_type =~ /\bjson\b/
+        if response.headers['Content-Type'] =~ /\bjson\b/
           puts JSON.parse(response.body).fetch('error', '???')
         else
           puts response.body
