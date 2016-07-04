@@ -6,6 +6,7 @@ require 'optparse'
 require 'uri'
 require 'logger'
 
+require 'faraday'
 require 'git'
 
 module Downstreams
@@ -28,8 +29,13 @@ module Downstreams
           next
         end
 
-        response = http.request(request)
-        if response.code < '299'
+        response = http.post do |req|
+          req.url request.url
+          req.headers.merge!(request.headers)
+          req.body = request.body
+        end
+
+        if response.status < 299
           log.info "Triggered template=#{template} repo=#{options.repo_slug}"
           triggered += 1
           next
@@ -50,25 +56,20 @@ module Downstreams
 
     def build_requests
       detector.detect(changed_files).map do |template|
-        request = Net::HTTP::Post.new(
+        request = TriggerRequest.new(
           File.join('/repo', URI.escape(options.repo_slug, '/'), 'requests'),
+          JSON.dump(body(template)),
           'Content-Type' => 'application/json',
           'Accept' => 'application/json',
           'Travis-API-Version' => '3',
           'Authorization' => "token #{options.travis_api_token}"
         )
-        request.body = JSON.dump(body(template))
         [template, request]
       end
     end
 
     def build_http
-      Net::HTTP.new(options.travis_api.host, options.travis_api.port).tap do |http|
-        if options.travis_api.scheme == 'https'
-          http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        end
-      end
+      Faraday.new(url: options.travis_api)
     end
 
     private
@@ -257,5 +258,11 @@ module Downstreams
     :builders,
     :noop,
     :quiet
+  )
+
+  TriggerRequest = Struct.new(
+    :url,
+    :body,
+    :headers
   )
 end

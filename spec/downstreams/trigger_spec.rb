@@ -6,7 +6,8 @@ describe Downstreams::Trigger do
   let(:api_token) { 'flubber' }
   let(:git_name_status) { {} }
   let(:here) { File.expand_path('../../../', __FILE__) }
-  let(:argv) do
+
+  let :argv do
     %W(
       --quiet
       --cookbook-path=#{here}/cookbooks
@@ -20,20 +21,29 @@ describe Downstreams::Trigger do
       --builders=bob,wendy,pickles
     )
   end
-  let(:fake_http) { double('fake_http') }
-  let(:fake_response) do
-    double('fake_response', code: '201')
+
+  let :test_http do
+    Faraday.new do |faraday|
+      faraday.adapter :test, http_stubs
+    end
+  end
+
+  let :http_stubs do
+    Faraday::Adapter::Test::Stubs.new
   end
 
   before :each do
+    allow_any_instance_of(described_class)
+      .to receive(:build_http).and_return(test_http)
     allow(subject.send(:options))
       .to receive(:travis_api_token).and_return(api_token)
     allow(subject.send(:options))
       .to receive(:commit).and_return('fafafaf')
     allow(subject).to receive(:last_commit_name_status)
       .and_return(git_name_status)
-    allow(subject).to receive(:build_http).and_return(fake_http)
-    allow(fake_http).to receive(:request).and_return(fake_response)
+    http_stubs.post('/repo/serious-business%2Fverybigapplication/requests') do |_env|
+      [201, { 'Content-Type' => 'application/json' }, '{"yey":true}']
+    end
   end
 
   context 'with stubbed templates and builders' do
@@ -69,19 +79,19 @@ describe Downstreams::Trigger do
 
       it 'is json' do
         requests.each do |_, request|
-          expect(request['Content-Type']).to eq('application/json')
+          expect(request.headers['Content-Type']).to eq('application/json')
         end
       end
 
       it 'specifies API version 3' do
         requests.each do |_, request|
-          expect(request['Travis-API-Version']).to eq('3')
+          expect(request.headers['Travis-API-Version']).to eq('3')
         end
       end
 
       it 'includes authorization' do
         requests.each do |_, request|
-          expect(request['Authorization']).to eq('token flubber')
+          expect(request.headers['Authorization']).to eq('token flubber')
         end
       end
     end

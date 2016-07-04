@@ -23,7 +23,7 @@ module Downstreams
     end
 
     def files(cookbook)
-      @cookbook_files[cookbook]
+      @cookbook_files.fetch(cookbook, [])
     end
 
     private

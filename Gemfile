@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'faraday'
 gem 'foodcritic', group: %i(development test)
 gem 'git'
 gem 'pry', group: %i(development test)
