@@ -6,6 +6,7 @@ module Downstreams
   autoload :FileDetector, 'downstreams/file_detector'
   autoload :PackerTemplate, 'downstreams/packer_template'
   autoload :PackerTemplates, 'downstreams/packer_templates'
+  autoload :ShellDetector, 'downstreams/shell_detector'
   autoload :Trigger, 'downstreams/trigger'
   autoload :YamlLoader, 'downstreams/yaml_loader'
 end

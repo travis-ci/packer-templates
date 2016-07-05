@@ -211,6 +211,10 @@ module Downstreams
         Downstreams::FileDetector.new(
           options.packer_templates_path,
           options.git_working_copy
+        ),
+        Downstreams::ShellDetector.new(
+          options.packer_templates_path,
+          options.git_working_copy
         )
       ]
     end
