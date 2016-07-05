@@ -1,32 +1,33 @@
 language: generic
-
 dist: trusty
-
+group: edge
 sudo: true
-
+cache: bundler
 env:
   global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:/usr/local/packer:$PATH"
-  - PACKER_VERSION="0.10.1"
-
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+  - COOKBOOK_PATH="cookbooks:tmp/travis-cookbooks-master/cookbooks:tmp/travis-cookbooks-precise-stable/ci_environment:tmp/travis-cookbooks-precise-stable/worker_host"
+  - PACKER_TEMPLATES_PATH="$TRAVIS_BUILD_DIR"
 addons:
   apt:
     sources:
-    - chef-stable-precise
+    - chef-stable-trusty
     packages:
     - chefdk
-
 install:
-- curl -sSL -o packer.zip  "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
-- sudo unzip packer.zip -d /usr/local/packer
-
+- unset GEM_PATH
+- bundle install --path vendor/bundle
+- ./bin/packer-build-install
+- make upstream-cookbooks
 script:
 - make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- mkdir -p tmp
-- echo '{}' > tmp/gce.json
-- source .example.env
-- unset PACKER_LOG
-- ./runtests
+- bundle exec rspec
+- make test
+- if [[ $TRAVIS_PULL_REQUEST = false ]] ; then
+    ./bin/trigger-downstreams ;
+  else
+    echo '✮✮✮ Skip trigger-downstreams for pull request builds ✮✮✮' ;
+  fi

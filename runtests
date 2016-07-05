@@ -4,6 +4,15 @@ set -o pipefail
 
 unset GEM_PATH
 
+if [[ $# > 1 && $1 = --env ]] ; then
+  echo "Running isolated with env ${2}"
+  exec env -i HOME=$HOME PATH=$PATH \
+    bash -c "source '${2}' && \\
+      unset PACKER_LOG && \\
+      bash ${BASH_SOURCE[0]}
+    "
+fi
+
 for f in $(git ls-files '*.yml') ; do
   echo -en "$f "
   ruby -ryaml -e "YAML.load_file('$f')"

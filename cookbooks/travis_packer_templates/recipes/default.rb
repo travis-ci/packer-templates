@@ -29,7 +29,7 @@ template '/etc/default/job-board-register' do
   cookbook 'travis_packer_templates'
   owner 'root'
   group 'root'
-  mode 0644
+  mode 0o644
   variables(
     languages: node['travis_packer_templates']['job_board']['languages']
   )

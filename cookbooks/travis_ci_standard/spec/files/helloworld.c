@@ -1,6 +1,7 @@
-// for testing scons
+/* for testing scons for reeeeal */
 #include <stdio.h>
 
-int main() {
+int main()
+{
   printf("Hello World.\n");
 }
