@@ -53,7 +53,7 @@ module Downstreams
     def find_cookbooks(run_list, cookbook_path)
       Array(run_list).map do |cb|
         find_dependency_cookbooks(
-          cb.gsub(/^recipe\[/, '').delete(']'),
+          cb.gsub(/^recipe\[/, '').delete(']').gsub(/::.*/, ''),
           cookbook_path
         )
       end.flatten.sort.uniq
@@ -70,7 +70,7 @@ module Downstreams
             begin
               @included_recipes = []
               instance_eval(File.read(recipe_rb))
-              deps += @included_recipes
+              deps += @included_recipes.map { |n| n.gsub(/::.*/, '') }
             rescue => e
               $stderr.puts "ERROR:#{recipe_rb.sub("#{cookbooks_dir}/", '')}: #{e}"
             end
