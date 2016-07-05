@@ -59,7 +59,7 @@ module Downstreams
     def build_requests
       requests = []
       triggerable_templates.each do |template|
-        request = TriggerRequest.new.tap do |req|
+        request = Request.new.tap do |req|
           req.url = File.join(
             '/repo', URI.escape(options.repo_slug, '/'), 'requests'
           )
@@ -156,7 +156,7 @@ module Downstreams
     end
 
     def options
-      @options ||= TriggerOptions.new.tap do |opts|
+      @options ||= Options.new.tap do |opts|
         opts.git_working_copy = File.expand_path(
           ENV.fetch('GIT_WORKING_COPY', Dir.getwd)
         )
@@ -274,16 +274,16 @@ module Downstreams
         end
       end
     end
-  end
 
-  class TriggerOptions
-    attr_accessor :chef_cookbook_path, :packer_templates_path,
-                  :git_working_copy, :trigger_paths, :repo_slug,
-                  :travis_api_url, :travis_api_token, :branch,
-                  :commit_range, :builders, :noop, :quiet
-  end
+    class Options
+      attr_accessor :chef_cookbook_path, :packer_templates_path,
+                    :git_working_copy, :trigger_paths, :repo_slug,
+                    :travis_api_url, :travis_api_token, :branch,
+                    :commit_range, :builders, :noop, :quiet
+    end
 
-  class TriggerRequest
-    attr_accessor :url, :body, :headers
+    class Request
+      attr_accessor :url, :body, :headers
+    end
   end
 end

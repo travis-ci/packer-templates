@@ -27,13 +27,13 @@ module Downstreams
     end
 
     def provisioner_files(provisioners)
-      provisioners.select do |p|
-        p['type'] == 'shell' &&
-          (p.key?('scripts') || p.key?('script'))
+      shell_provisioners = provisioners.select do |p|
+        p['type'] == 'shell' && (p.key?('scripts') || p.key?('script'))
       end
-                  .map { |p| Array(p['scripts']) + Array(p['script']) }
-                  .flatten
-                  .map { |f| File.expand_path(f, git_working_copy) }
+
+      shell_provisioners.map { |p| Array(p['scripts']) + Array(p['script']) }
+                        .flatten
+                        .map { |f| File.expand_path(f, git_working_copy) }
     end
   end
 end
