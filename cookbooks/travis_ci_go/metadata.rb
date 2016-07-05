@@ -8,7 +8,6 @@ version '0.1.0'
 source_url 'https://github.com/travis-ci/packer-templates'
 issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
-
 depends 'gimme'
 depends 'sweeper'
 depends 'travis_system_info'
