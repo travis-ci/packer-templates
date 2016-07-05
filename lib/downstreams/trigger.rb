@@ -90,6 +90,12 @@ module Downstreams
           options.git_working_copy = File.expand_path(v.strip)
         end
 
+        opts.on('--packer-templates-path=PATH',
+                'Packer templates path (":"-delimited). ' \
+                "default=#{options.packer_templates_path}") do |v|
+          options.packer_templates_path = parse_path(v)
+        end
+
         opts.on('-XFILENAMES', '--trigger-paths=FILENAMES',
                 'File names to force triggering, overriding git ' \
                 "(\":\"-delimited). default=#{options.trigger_paths}") do |v|
@@ -146,12 +152,6 @@ module Downstreams
                 "default=#{options.chef_cookbook_path}") do |v|
           options.chef_cookbook_path = parse_path(v)
         end
-
-        opts.on('--chef-packer-templates-path=PATH',
-                'Packer templates path (":"-delimited). ' \
-                "default=#{options.chef_packer_templates_path}") do |v|
-          options.chef_packer_templates_path = parse_path(v)
-        end
       end.parse!(argv)
     end
 
@@ -187,9 +187,9 @@ module Downstreams
             File.expand_path('../../../cookbooks', __FILE__)
           )
         )
-        opts.chef_packer_templates_path = parse_path(
+        opts.packer_templates_path = parse_path(
           ENV.fetch(
-            'CHEF_PACKER_TEMPLATES_PATH',
+            'PACKER_TEMPLATES_PATH',
             File.expand_path('../../../', __FILE__)
           )
         )
@@ -206,7 +206,11 @@ module Downstreams
       @detectors ||= [
         Downstreams::ChefDetector.new(
           options.chef_cookbook_path,
-          options.chef_packer_templates_path
+          options.packer_templates_path
+        ),
+        Downstreams::FileDetector.new(
+          options.packer_templates_path,
+          options.git_working_copy
         )
       ]
     end
@@ -269,7 +273,7 @@ module Downstreams
   end
 
   class TriggerOptions
-    attr_accessor :chef_cookbook_path, :chef_packer_templates_path,
+    attr_accessor :chef_cookbook_path, :packer_templates_path,
                   :git_working_copy, :trigger_paths, :repo_slug,
                   :travis_api_url, :travis_api_token, :branch,
                   :commit_range, :builders, :noop, :quiet

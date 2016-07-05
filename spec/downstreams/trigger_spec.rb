@@ -12,7 +12,7 @@ describe Downstreams::Trigger do
     %W(
       --quiet
       --chef-cookbook-path=#{here}/cookbooks
-      --chef-packer-templates-path=#{here}
+      --packer-templates-path=#{here}
       --git-working-copy=#{here}
       --repo-slug=serious-business/verybigapplication
       --travis-api-url=https://bogus.example.com:9999

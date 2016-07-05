@@ -20,7 +20,7 @@ module Downstreams
 
     def load(cookbook_path, packer_templates_path)
       packer_templates(packer_templates_path).each do |filename|
-        parsed = YAML.load_file(filename)
+        parsed = Downstreams::YamlLoader.load(filename)
         Array(parsed['provisioners']).each do |provisioner|
           next unless provisioner['type'] =~ /chef/
           next if Array(provisioner.fetch('run_list', [])).empty?
@@ -43,7 +43,7 @@ module Downstreams
     end
 
     def packer_template?(filename)
-      parsed = YAML.load_file(filename)
+      parsed = Downstreams::YamlLoader.load(filename)
       %w(variables builders provisioners).all? { |k| parsed.include?(k) }
     rescue => e
       $stderr.puts "ERROR: #{e}\n#{e.backtrace.join("\n")}"

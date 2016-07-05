@@ -1,4 +1,3 @@
-require 'English'
 require 'find'
 require 'thread'
 require 'yaml'
@@ -12,7 +11,6 @@ module Downstreams
 
     def detect(filenames)
       to_trigger = []
-      filenames.map! { |f| File.expand_path(f) }
 
       packer_templates.each do |template, run_list_cookbooks|
         to_trigger << template.name if filenames.include?(template.filename)
