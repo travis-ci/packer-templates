@@ -3,7 +3,7 @@ require 'thread'
 require 'yaml'
 
 module Downstreams
-  class PackerTemplates
+  class ChefPackerTemplates
     def self.load(cookbook_path, packer_templates_path)
       inst = new
       inst.load(cookbook_path, packer_templates_path)
@@ -24,7 +24,7 @@ module Downstreams
         Array(parsed['provisioners']).each do |provisioner|
           next unless provisioner['type'] =~ /chef/
           next if Array(provisioner.fetch('run_list', [])).empty?
-          key = PackerTemplate.new(filename)
+          key = ChefPackerTemplate.new(filename)
           @packer_template_cookbooks[key] = find_cookbooks(
             provisioner['run_list'], cookbook_path
           )
@@ -81,10 +81,10 @@ module Downstreams
       deps.compact.uniq
     end
 
-    include FakeRecipeMethods
+    include ChefFakeRecipeMethods
   end
 
-  class PackerTemplate
+  class ChefPackerTemplate
     def initialize(filename)
       @name = File.basename(filename, '.yml')
       @filename = filename

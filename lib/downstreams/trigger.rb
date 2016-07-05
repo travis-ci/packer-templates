@@ -25,7 +25,8 @@ module Downstreams
 
       build_requests.each do |template, request|
         if options.noop
-          log.info "Not triggering template=#{template} repo=#{options.repo_slug}"
+          log.info "Not triggering template=#{template} " \
+                   "repo=#{options.repo_slug}"
           next
         end
 
@@ -36,7 +37,8 @@ module Downstreams
         end
 
         if response.status < 299
-          log.info "Triggered template=#{template} repo=#{options.repo_slug}"
+          log.info "Triggered template=#{template} " \
+                   "repo=#{options.repo_slug}"
           triggered += 1
           next
         end
@@ -55,39 +57,33 @@ module Downstreams
     end
 
     def build_requests
-      detector.detect(changed_files).map do |template|
-        request = TriggerRequest.new(
-          File.join('/repo', URI.escape(options.repo_slug, '/'), 'requests'),
-          JSON.dump(body(template)),
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/json',
-          'Travis-API-Version' => '3',
-          'Authorization' => "token #{options.travis_api_token}"
-        )
-        [template, request]
+      requests = []
+      triggerable_templates.each do |template|
+        request = TriggerRequest.new.tap do |req|
+          req.url = File.join(
+            '/repo', URI.escape(options.repo_slug, '/'), 'requests'
+          )
+          req.body = JSON.dump(body(template))
+          req.headers = {
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Travis-API-Version' => '3',
+            'Authorization' => "token #{options.travis_api_token}"
+          }
+        end
+        requests << [template, request]
       end
+      requests
     end
 
     def build_http
-      Faraday.new(url: options.travis_api)
+      Faraday.new(url: options.travis_api_url)
     end
 
     private
 
     def parse_args(argv)
       OptionParser.new do |opts|
-        opts.on('-pPATH', '--cookbook-path=PATH',
-                'Cookbook path (":"-delimited). ' \
-                "default=#{options.cookbook_path}") do |v|
-          options.cookbook_path = parse_path(v)
-        end
-
-        opts.on('-tPATH', '--packer-templates-path=PATH',
-                'Packer templates path (":"-delimited). ' \
-                "default=#{options.packer_templates_path}") do |v|
-          options.packer_templates_path = parse_path(v)
-        end
-
         opts.on('-gDIR', '--git-working-copy=DIR',
                 'Root of git working copy to check. ' \
                 "default=#{options.git_working_copy}") do |v|
@@ -108,8 +104,8 @@ module Downstreams
 
         opts.on('-uURL', '--travis-api-url=URL',
                 'URL of the Travis API to which triggered builds should ' \
-                "be sent. default=#{options.travis_api}") do |v|
-          options.travis_api = URI(v)
+                "be sent. default=#{options.travis_api_url}") do |v|
+          options.travis_api_url = URI(v)
         end
 
         opts.on('-TTOKEN', '--travis-api-token=TOKEN',
@@ -118,10 +114,10 @@ module Downstreams
           options.travis_api_token = v.strip
         end
 
-        opts.on('-CCOMMIT', '--commit=COMMIT',
-                'Commit tree-ish to set REPO in triggered build. ' \
-                "default=#{options.commit}") do |v|
-          options.commit = v.strip
+        opts.on('-CCOMMIT_RANGE', '--commit-range=COMMIT_RANGE',
+                'Commit range to check for changed paths. ' \
+                "default=#{options.commit_range}") do |v|
+          options.commit_range = v.strip.split('...').map(&:strip)
         end
 
         opts.on('-BBRANCH', '--branch=BRANCH',
@@ -144,39 +140,60 @@ module Downstreams
         opts.on('-q', '--quiet', 'Simmer down the logging') do
           options.quiet = true
         end
+
+        opts.on('--chef-cookbook-path=PATH',
+                'Cookbook path (":"-delimited). ' \
+                "default=#{options.chef_cookbook_path}") do |v|
+          options.chef_cookbook_path = parse_path(v)
+        end
+
+        opts.on('--chef-packer-templates-path=PATH',
+                'Packer templates path (":"-delimited). ' \
+                "default=#{options.chef_packer_templates_path}") do |v|
+          options.chef_packer_templates_path = parse_path(v)
+        end
       end.parse!(argv)
     end
 
     def options
-      @options ||= TriggerOptions.new(
-        parse_path(
+      @options ||= TriggerOptions.new.tap do |opts|
+        opts.git_working_copy = File.expand_path(
+          ENV.fetch('GIT_WORKING_COPY', Dir.getwd)
+        )
+        opts.trigger_paths = parse_path(ENV.fetch('TRIGGER_PATHS', ''))
+        opts.repo_slug = ENV.fetch('REPO_SLUG', 'travis-ci/packer-build')
+        opts.travis_api_url = URI(
+          ENV.fetch('TRAVIS_API_URL', 'https://api.travis-ci.org')
+        )
+        opts.travis_api_token = ENV.fetch('TRAVIS_API_TOKEN', '')
+
+        opts.commit_range = ENV.fetch(
+          'COMMIT_RANGE',
           ENV.fetch(
-            'COOKBOOK_PATH',
+            'TRAVIS_COMMIT_RANGE',
+            '@...@' # <--- the empty range
+          )
+        ).split('...').map(&:strip)
+
+        opts.branch = ENV.fetch('BRANCH', ENV.fetch('TRAVIS_BRANCH', ''))
+        opts.builders = ENV.fetch(
+          'BUILDERS', 'amazon-ebs,googlecompute,docker'
+        ).split(',').map(&:strip)
+        opts.noop = ENV['NOOP'] == '1'
+        opts.quiet = ENV['QUIET'] == '1'
+        opts.chef_cookbook_path = parse_path(
+          ENV.fetch(
+            'CHEF_COOKBOOK_PATH',
             File.expand_path('../../../cookbooks', __FILE__)
           )
-        ),
-        parse_path(
+        )
+        opts.chef_packer_templates_path = parse_path(
           ENV.fetch(
-            'PACKER_TEMPLATES',
+            'CHEF_PACKER_TEMPLATES_PATH',
             File.expand_path('../../../', __FILE__)
           )
-        ),
-        File.expand_path(
-          ENV.fetch(
-            'GIT_WORKING_DIR',
-            File.expand_path('../../../', __FILE__)
-          )
-        ),
-        parse_path(ENV.fetch('TRIGGER_PATHS', '')),
-        ENV.fetch('REPO_SLUG', 'travis-ci/packer-build'),
-        URI(ENV.fetch('TRAVIS_API_URL', 'https://api.travis-ci.org')),
-        ENV.fetch('TRAVIS_API_TOKEN', ''),
-        ENV.fetch('TRAVIS_COMMIT', ''),
-        ENV.fetch('TRAVIS_BRANCH', ''),
-        ENV.fetch('BUILDERS', 'amazon-ebs,googlecompute,docker').split(',').map(&:strip),
-        ENV['NOOP'] == '1',
-        ENV['QUIET'] == '1'
-      )
+        )
+      end
     end
 
     def parse_path(string)
@@ -185,16 +202,19 @@ module Downstreams
       end
     end
 
-    def detector
-      @detector ||= Downstreams::Detector.new(
-        options.cookbook_path,
-        options.packer_templates_path
-      )
+    def detectors
+      @detectors ||= [
+        Downstreams::ChefDetector.new(
+          options.chef_cookbook_path,
+          options.chef_packer_templates_path
+        )
+      ]
     end
 
     def body(template)
       {
-        message: ":lemon: :bomb: origin-commit=#{options.commit}",
+        message: ':lemon: :bomb: ' \
+          "commit-range=#{options.commit_range.join('...')}",
         branch: template,
         config: {
           language: 'generic',
@@ -207,7 +227,9 @@ module Downstreams
           install: [
             "git clone --branch=#{options.branch} " \
               'https://github.com/travis-ci/packer-templates.git',
-            "pushd packer-templates && git checkout -qf #{options.commit} ; popd",
+            'pushd packer-templates && ' \
+              "git checkout -qf #{options.commit_range.last} ; " \
+              'popd',
             './packer-templates/bin/packer-build-install'
           ],
           script: "./packer-templates/bin/packer-build-script #{template}"
@@ -215,19 +237,20 @@ module Downstreams
       }
     end
 
-    def changed_files
-      return options.trigger_paths unless options.trigger_paths.empty?
-
-      # TODO: replace this with better diff check?  Account for PR?
-      last_commit_name_status.select do |_, status|
-        %w(M A).include?(status)
-      end.map do |filename, _|
-        File.expand_path(filename, options.git_working_copy)
-      end
+    def triggerable_templates
+      detectors.map { |d| d.detect(changed_files) }.flatten.sort.uniq
     end
 
-    def last_commit_name_status
-      git.log(1).first.diff_parent.name_status
+    def changed_files
+      return options.trigger_paths unless options.trigger_paths.empty?
+      commit_range_diff_files
+    end
+
+    def commit_range_diff_files
+      git.gtree(options.commit_range.first)
+         .diff(options.commit_range.last)
+         .name_status.select { |_, status| %w(M A).include?(status) }
+         .map { |f, _| File.expand_path(f, options.git_working_copy) }
     end
 
     def git
@@ -245,24 +268,14 @@ module Downstreams
     end
   end
 
-  TriggerOptions = Struct.new(
-    :cookbook_path,
-    :packer_templates_path,
-    :git_working_copy,
-    :trigger_paths,
-    :repo_slug,
-    :travis_api,
-    :travis_api_token,
-    :commit,
-    :branch,
-    :builders,
-    :noop,
-    :quiet
-  )
+  class TriggerOptions
+    attr_accessor :chef_cookbook_path, :chef_packer_templates_path,
+                  :git_working_copy, :trigger_paths, :repo_slug,
+                  :travis_api_url, :travis_api_token, :branch,
+                  :commit_range, :builders, :noop, :quiet
+  end
 
-  TriggerRequest = Struct.new(
-    :url,
-    :body,
-    :headers
-  )
+  class TriggerRequest
+    attr_accessor :url, :body, :headers
+  end
 end

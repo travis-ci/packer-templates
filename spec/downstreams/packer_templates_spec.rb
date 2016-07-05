@@ -1,4 +1,4 @@
 require 'downstreams'
 
-describe Downstreams::PackerTemplates do
+describe Downstreams::ChefPackerTemplates do
 end

@@ -1,6 +1,6 @@
 require 'downstreams'
 
-describe Downstreams::Cookbooks do
+describe Downstreams::ChefCookbooks do
   let :cookbook_dir_entries do
     %w(
       bytecoind
@@ -28,7 +28,8 @@ describe Downstreams::Cookbooks do
     allow(File).to receive(:file?) do |f|
       cookbook_files.include?(f)
     end
-    allow(Find).to receive(:find).with('somewhere/bytecoind').and_return(cookbook_files)
+    allow(Find).to receive(:find).with('somewhere/bytecoind')
+      .and_return(cookbook_files)
   end
 
   it 'may be loaded via .load' do

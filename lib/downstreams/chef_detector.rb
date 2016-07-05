@@ -4,7 +4,7 @@ require 'thread'
 require 'yaml'
 
 module Downstreams
-  class Detector
+  class ChefDetector
     def initialize(cookbooks_path, packer_templates_path)
       @cookbooks_path = cookbooks_path
       @packer_templates_path = packer_templates_path
@@ -32,13 +32,13 @@ module Downstreams
     attr_reader :cookbooks_path, :packer_templates_path
 
     def packer_templates
-      @packer_templates ||= PackerTemplates.load(
+      @packer_templates ||= ChefPackerTemplates.load(
         cookbooks_path, packer_templates_path
       )
     end
 
     def cookbooks
-      @cookbooks ||= Cookbooks.load(cookbooks_path)
+      @cookbooks ||= ChefCookbooks.load(cookbooks_path)
     end
   end
 end

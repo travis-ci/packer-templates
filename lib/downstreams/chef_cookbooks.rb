@@ -1,7 +1,7 @@
 require 'find'
 
 module Downstreams
-  class Cookbooks
+  class ChefCookbooks
     def self.load(cookbook_path)
       inst = new
       inst.load(cookbook_path)
