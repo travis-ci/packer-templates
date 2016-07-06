@@ -1,10 +1,11 @@
 require 'English'
 
+require 'fileutils'
 require 'json'
+require 'logger'
 require 'net/https'
 require 'optparse'
 require 'uri'
-require 'logger'
 
 require 'faraday'
 require 'git'
@@ -16,7 +17,7 @@ module Downstreams
     end
 
     def run(argv: ARGV)
-      parse_args(argv)
+      setup(argv)
 
       ret = 0
       triggered = 0
@@ -26,7 +27,7 @@ module Downstreams
       build_requests.each do |template, request|
         if options.noop
           log.info "Not triggering template=#{template} " \
-                   "repo=#{options.repo_slug}"
+                   "repo=#{options.target_repo_slug}"
           next
         end
 
@@ -38,7 +39,7 @@ module Downstreams
 
         if response.status < 299
           log.info "Triggered template=#{template} " \
-                   "repo=#{options.repo_slug}"
+                   "repo=#{options.target_repo_slug}"
           triggered += 1
           next
         end
@@ -56,12 +57,14 @@ module Downstreams
       ret
     end
 
+    private
+
     def build_requests
       requests = []
       triggerable_templates.each do |template|
         request = Request.new.tap do |req|
           req.url = File.join(
-            '/repo', URI.escape(options.repo_slug, '/'), 'requests'
+            '/repo', URI.escape(options.target_repo_slug, '/'), 'requests'
           )
           req.body = JSON.dump(body(template))
           req.headers = {
@@ -80,59 +83,76 @@ module Downstreams
       Faraday.new(url: options.travis_api_url)
     end
 
-    private
+    def setup(argv)
+      return if @setup
+      parse_args(argv)
+      options.packer_templates_path ||= default_packer_templates_path
+      options.chef_cookbook_path ||= default_chef_cookbook_path
+      if options.root_repo.nil? || options.root_repo.empty?
+        options.root_repo_dir =
+          options.packer_templates_path.first.repo.repo.path
+      end
+      @setup = true
+    end
 
     def parse_args(argv)
       OptionParser.new do |opts|
-        opts.on('-gDIR', '--git-working-copy=DIR',
-                'Root of git working copy to check. ' \
-                "default=#{options.git_working_copy}") do |v|
-          options.git_working_copy = File.expand_path(v.strip)
+        opts.on('-r GIT_REMOTE', '--root-repo GIT_REMOTE',
+                'Git remote of root repository to check commit range. ' \
+                'defaults to the first entry of --packer-templates-path') do |v|
+          options.root_repo = v.strip
         end
 
-        opts.on('--packer-templates-path=PATH',
-                'Packer templates path (":"-delimited). ' \
-                "default=#{options.packer_templates_path}") do |v|
-          options.packer_templates_path = parse_path(v)
+        opts.on('-R GIT_DIR', '--root-repo-dir GIT_DIR',
+                'Git dir of root repository to check commit range. ' \
+                'defaults to the first entry of --packer-template-path') do |v|
+          options.root_repo_dir = File.expand_path(v.strip)
         end
 
-        opts.on('-XFILENAMES', '--trigger-paths=FILENAMES',
-                'File names to force triggering, overriding git ' \
-                "(\":\"-delimited). default=#{options.trigger_paths}") do |v|
-          options.trigger_paths = parse_path(v.strip)
+        opts.on('-P GITFUL_PATH', '--packer-templates-path GITFUL_PATH',
+                'Packer templates path. ' \
+                "default=#{default_packer_templates_path_string}") do |v|
+          options.packer_templates_path = parse_git_remote_path(
+            v, options.clone_tmp
+          )
         end
 
-        opts.on('-rREPO', '--repo-slug=REPO',
-                'Repo slug to which triggered builds should be sent. ' \
-                "default=#{options.repo_slug}") do |v|
-          options.repo_slug = v.strip
+        opts.on('-t REPO', '--target-repo-slug REPO',
+                'Target repo slug to which triggered builds should be sent. ' \
+                "default=#{options.target_repo_slug}") do |v|
+          options.target_repo_slug = v.strip
         end
 
-        opts.on('-uURL', '--travis-api-url=URL',
+        opts.on('-u URL', '--travis-api-url URL',
                 'URL of the Travis API to which triggered builds should ' \
                 "be sent. default=#{options.travis_api_url}") do |v|
           options.travis_api_url = URI(v)
         end
 
-        opts.on('-TTOKEN', '--travis-api-token=TOKEN',
-                'API token for use with Travis API. ' \
-                "default=#{options.travis_api_token}") do |v|
+        opts.on('-T TOKEN', '--travis-api-token TOKEN',
+                'API token for use with Travis API.') do |v|
           options.travis_api_token = v.strip
         end
 
-        opts.on('-CCOMMIT_RANGE', '--commit-range=COMMIT_RANGE',
+        opts.on('-C COMMIT_RANGE', '--commit-range COMMIT_RANGE',
                 'Commit range to check for changed paths. ' \
                 "default=#{options.commit_range}") do |v|
           options.commit_range = v.strip.split('...').map(&:strip)
         end
 
-        opts.on('-BBRANCH', '--branch=BRANCH',
-                'Branch name to clone of REPO in triggered build. ' \
+        opts.on('-B BRANCH', '--branch BRANCH',
+                'Branch name to clone of root repository in triggered build. ' \
                 "default=#{options.branch}") do |v|
           options.branch = v.strip
         end
 
-        opts.on('-bBUILDERS', '--builders=BUILDERS',
+        opts.on('-D CLONE_TMP', '--clone-tmp CLONE_TMP',
+                'Temporary directory for git clones. ' \
+                "default=#{options.clone_tmp}") do |v|
+          options.clone_tmp = v.strip
+        end
+
+        opts.on('-b BUILDERS', '--builders BUILDERS',
                 'Packer builder names for which Travis jobs should ' \
                 'be triggered (","-delimited). ' \
                 "default=#{options.builders}") do |v|
@@ -147,21 +167,47 @@ module Downstreams
           options.quiet = true
         end
 
-        opts.on('--chef-cookbook-path=PATH',
-                'Cookbook path (":"-delimited). ' \
-                "default=#{options.chef_cookbook_path}") do |v|
-          options.chef_cookbook_path = parse_path(v)
+        opts.on('-c GITFUL_PATH', '--chef-cookbook-path GITFUL_PATH',
+                'Cookbook path. ' \
+                "default=#{default_chef_cookbook_path_string}") do |v|
+          options.chef_cookbook_path = parse_git_remote_path(
+            v, options.clone_tmp
+          )
+        end
+
+        opts.on_tail('-h', '--help', 'Show this message') do
+          puts opts
+          puts "\n\n"
+          puts <<-EOF.gsub(/^\s+> ?/, '')
+            > Options that accept a `GITFUL_PATH` type expect the string
+            > arguments to contain whitespace-separated tokens of the format:
+            >
+            >     <git-repo-remote>:[prefix],[prefix...]
+            >
+            > e.g.:
+            >
+            >     https://github.com/repo/remote.git::cookbooks,other-cookbooks
+            >     git@github.com:other/remote.git::
+            >
+            > This allows for arguments like packer templates paths and cookbook
+            > paths to contain multiple entries for a given git repository,
+            > while retaining a prefix "namespace" for purposes of matching file
+            > paths.
+            >
+            > Leading '/' characters are automatically stripped from repository
+            > prefixes, as git lists files without leading slashes.
+          EOF
+          exit 0
         end
       end.parse!(argv)
     end
 
     def options
       @options ||= Options.new.tap do |opts|
-        opts.git_working_copy = File.expand_path(
-          ENV.fetch('GIT_WORKING_COPY', Dir.getwd)
+        opts.root_repo = ENV.fetch('ROOT_REPO', '')
+        opts.target_repo_slug = ENV.fetch(
+          'TARGET_REPO_SLUG', 'travis-ci/packer-build'
         )
-        opts.trigger_paths = parse_path(ENV.fetch('TRIGGER_PATHS', ''))
-        opts.repo_slug = ENV.fetch('REPO_SLUG', 'travis-ci/packer-build')
         opts.travis_api_url = URI(
           ENV.fetch('TRAVIS_API_URL', 'https://api.travis-ci.org')
         )
@@ -176,30 +222,79 @@ module Downstreams
         ).split('...').map(&:strip)
 
         opts.branch = ENV.fetch('BRANCH', ENV.fetch('TRAVIS_BRANCH', ''))
+        opts.clone_tmp = ENV.fetch(
+          'CLONE_TMP', File.join(Dir.tmpdir, 'downstreams-clones')
+        )
+
         opts.builders = ENV.fetch(
           'BUILDERS', 'amazon-ebs,googlecompute,docker'
         ).split(',').map(&:strip)
         opts.noop = ENV['NOOP'] == '1'
         opts.quiet = ENV['QUIET'] == '1'
-        opts.chef_cookbook_path = parse_path(
-          ENV.fetch(
-            'CHEF_COOKBOOK_PATH',
-            File.expand_path('../../../cookbooks', __FILE__)
-          )
-        )
-        opts.packer_templates_path = parse_path(
-          ENV.fetch(
-            'PACKER_TEMPLATES_PATH',
-            File.expand_path('../../../', __FILE__)
-          )
-        )
       end
     end
 
-    def parse_path(string)
-      string.split(':').map do |p|
-        File.expand_path(p.strip)
+    def parse_git_remote_path(string, clone_tmp)
+      entries = string.split(/\s+/).map do |segment|
+        repo_remote, paths = segment.split('::')
+        paths = '/' unless paths
+        local_clone = File.join(repo_remote, '.git')
+
+        if File.directory?(local_clone)
+          repo_remote = Git.bare(local_clone).remotes
+                           .select { |remote| remote.name == 'origin' }
+                           .first.url
+        else
+          local_clone = File.join(
+            clone_tmp, clone_basename(repo_remote)
+          )
+        end
+
+        if File.directory?(local_clone)
+          git = Git.bare(local_clone)
+          git.fetch
+        else
+          git = Git.clone(repo_remote, local_clone, bare: true)
+        end
+
+        paths.split(',').map do |path_entry|
+          Downstreams::GitPath.new(git, path_entry.strip.sub(%r{^/}, ''))
+        end
       end
+
+      entries.flatten
+    end
+
+    def default_packer_templates_path
+      parse_git_remote_path(
+        default_packer_templates_path_string, options.clone_tmp
+      )
+    end
+
+    def default_packer_templates_path_string
+      ENV.fetch(
+        'PACKER_TEMPLATES_PATH',
+        "#{File.expand_path('../../../', __FILE__)}::"
+      )
+    end
+
+    def default_chef_cookbook_path
+      parse_git_remote_path(
+        default_chef_cookbook_path_string, options.clone_tmp
+      )
+    end
+
+    def default_chef_cookbook_path_string
+      ENV.fetch(
+        'CHEF_COOKBOOK_PATH',
+        "#{File.expand_path('../../../', __FILE__)}::cookbooks"
+      )
+    end
+
+    def default_root_repo_dir
+      File.expand_path(
+        ENV.fetch('ROOT_REPO_DIR', File.join(Dir.getwd, '.git'))
+      )
     end
 
     def detectors
@@ -209,12 +304,10 @@ module Downstreams
           options.packer_templates_path
         ),
         Downstreams::FileDetector.new(
-          options.packer_templates_path,
-          options.git_working_copy
+          options.packer_templates_path
         ),
         Downstreams::ShellDetector.new(
-          options.packer_templates_path,
-          options.git_working_copy
+          options.packer_templates_path
         )
       ]
     end
@@ -250,19 +343,54 @@ module Downstreams
     end
 
     def changed_files
-      return options.trigger_paths unless options.trigger_paths.empty?
-      commit_range_diff_files
+      root_repo_commit_range_diff_files
     end
 
-    def commit_range_diff_files
-      git.gtree(options.commit_range.first)
-         .diff(options.commit_range.last)
-         .name_status.select { |_, status| %w(M A).include?(status) }
-         .map { |f, _| File.expand_path(f, options.git_working_copy) }
+    def root_repo_commit_range_diff_files
+      root_repo_git.gtree(options.commit_range.first)
+                   .diff(options.commit_range.last)
+                   .name_status.select { |_, status| %w(M A).include?(status) }
+                   .map do |f, _|
+        Downstreams::GitPath.new(root_repo_git, f, options.commit_range.last)
+      end
     end
 
-    def git
-      Git.open(options.git_working_copy)
+    def root_repo_git
+      Git.bare(root_repo_dir)
+    end
+
+    def root_repo_dir
+      return options.root_repo_dir if options.root_repo_dir &&
+                                      File.exist?(options.root_repo_dir)
+      clone_root_repo
+    end
+
+    def root_repo_origin_url
+      root_repo_git.remotes
+                   .select { |remote| remote.name == 'origin' }.first.url
+    end
+
+    def clone_basename(repo_remote)
+      URI.escape(repo_remote, '@:/.') + '.git'
+    end
+
+    def clone_root_repo
+      dest = File.join(clone_tmp, '__root__.git')
+
+      if File.directory?(dest)
+        Git.bare(dest).fetch('origin')
+        return dest
+      end
+
+      Git.clone(options.root_repo, dest, bare: true)
+
+      dest
+    end
+
+    def clone_tmp
+      return @clone_tmp if @clone_tmp && File.directory?(@clone_tmp)
+      FileUtils.mkdir_p(options.clone_tmp)
+      @clone_tmp = options.clone_tmp
     end
 
     def log
@@ -277,9 +405,9 @@ module Downstreams
 
     class Options
       attr_accessor :chef_cookbook_path, :packer_templates_path,
-                    :git_working_copy, :trigger_paths, :repo_slug,
+                    :root_repo, :root_repo_dir, :target_repo_slug,
                     :travis_api_url, :travis_api_token, :branch,
-                    :commit_range, :builders, :noop, :quiet
+                    :commit_range, :clone_tmp, :builders, :noop, :quiet
     end
 
     class Request

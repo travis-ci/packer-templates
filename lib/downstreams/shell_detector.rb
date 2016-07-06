@@ -1,8 +1,7 @@
 module Downstreams
   class ShellDetector
-    def initialize(packer_templates_path, git_working_copy)
+    def initialize(packer_templates_path)
       @packer_templates_path = packer_templates_path
-      @git_working_copy = git_working_copy
     end
 
     def detect(filenames)
@@ -20,7 +19,7 @@ module Downstreams
 
     private
 
-    attr_reader :packer_templates_path, :git_working_copy
+    attr_reader :packer_templates_path
 
     def packer_templates
       @packer_templates ||= PackerTemplates.new(packer_templates_path)
@@ -31,9 +30,16 @@ module Downstreams
         p['type'] == 'shell' && (p.key?('scripts') || p.key?('script'))
       end
 
-      shell_provisioners.map { |p| Array(p['scripts']) + Array(p['script']) }
-                        .flatten
-                        .map { |f| File.expand_path(f, git_working_copy) }
+      script_files = shell_provisioners.map do |p|
+        Array(p['scripts']) + Array(p['script'])
+      end
+
+      script_files.flatten!
+      script_files.map! do |f|
+        packer_templates_path.map { |entry| entry.files(/#{f}/) || nil }
+      end
+
+      script_files.flatten.compact.sort.uniq
     end
   end
 end

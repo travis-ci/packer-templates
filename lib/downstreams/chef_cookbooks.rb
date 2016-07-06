@@ -21,19 +21,14 @@ module Downstreams
     def load_all_cookbook_files
       loaded = {}
 
-      cookbook_path.each do |cookbooks_dir|
-        Dir.foreach(cookbooks_dir) do |f|
-          if File.exist?(File.join(cookbooks_dir, f, 'metadata.rb'))
-            loaded[f] = load_files(File.join(cookbooks_dir, f))
-          end
+      cookbook_path.each do |entry|
+        entry.files(%r{.+/metadata\.rb$})
+             .map { |p| File.dirname(p) }.uniq.each do |prefix|
+          loaded[File.basename(prefix)] = entry.files(%r{#{prefix}/.+})
         end
       end
 
       loaded
-    end
-
-    def load_files(cookbook)
-      Find.find(cookbook).select { |f| File.file?(f) }
     end
   end
 end

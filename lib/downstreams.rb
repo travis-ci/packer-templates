@@ -5,6 +5,7 @@ module Downstreams
   autoload :ChefFakeRecipeMethods, 'downstreams/chef_fake_recipe_methods'
   autoload :ChefPackerTemplates, 'downstreams/chef_packer_templates'
   autoload :FileDetector, 'downstreams/file_detector'
+  autoload :GitPath, 'downstreams/git_path'
   autoload :PackerTemplate, 'downstreams/packer_template'
   autoload :PackerTemplates, 'downstreams/packer_templates'
   autoload :ShellDetector, 'downstreams/shell_detector'

@@ -11,10 +11,9 @@ describe Downstreams::Trigger do
   let :argv do
     %W(
       --quiet
-      --chef-cookbook-path=#{here}/cookbooks
-      --packer-templates-path=#{here}
-      --git-working-copy=#{here}
-      --repo-slug=serious-business/verybigapplication
+      --chef-cookbook-path=#{here}/.git::cookbooks
+      --packer-templates-path=#{here}/.git::cookbooks
+      --target-repo-slug=serious-business/verybigapplication
       --travis-api-url=https://bogus.example.com:9999
       --travis-api-token=SOVERYSECRET
       --commit-range=fafafaf...afafafa
@@ -41,7 +40,7 @@ describe Downstreams::Trigger do
     allow(subject.send(:options))
       .to receive(:commit_range).and_return(%w(fafafaf afafafa))
     allow_any_instance_of(described_class)
-      .to receive(:commit_range_diff_files).and_return(git_diff_files)
+      .to receive(:root_repo_commit_range_diff_files).and_return(git_diff_files)
     http_stubs.post(
       '/repo/serious-business%2Fverybigapplication/requests'
     ) do |_env|
@@ -62,7 +61,10 @@ describe Downstreams::Trigger do
   end
 
   describe 'requests' do
-    let(:requests) { subject.build_requests }
+    let :requests do
+      subject.send(:setup, argv)
+      subject.send(:build_requests)
+    end
 
     it 'creates a request for each template' do
       expect(requests.size).to eq(2)

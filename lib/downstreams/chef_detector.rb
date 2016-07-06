@@ -9,7 +9,8 @@ module Downstreams
       @packer_templates_path = packer_templates_path
     end
 
-    def detect(filenames)
+    def detect(git_paths)
+      filenames = git_paths.map(&:path)
       to_trigger = []
 
       packer_templates.each do |template, run_list_cookbooks|
