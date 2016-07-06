@@ -37,6 +37,5 @@ module Downstreams
 
       loaded
     end
-
   end
 end
