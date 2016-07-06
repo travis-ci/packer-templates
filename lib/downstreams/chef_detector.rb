@@ -1,10 +1,9 @@
-require 'English'
 require 'find'
 require 'thread'
 require 'yaml'
 
 module Downstreams
-  class Detector
+  class ChefDetector
     def initialize(cookbooks_path, packer_templates_path)
       @cookbooks_path = cookbooks_path
       @packer_templates_path = packer_templates_path
@@ -12,7 +11,6 @@ module Downstreams
 
     def detect(filenames)
       to_trigger = []
-      filenames.map! { |f| File.expand_path(f) }
 
       packer_templates.each do |template, run_list_cookbooks|
         to_trigger << template.name if filenames.include?(template.filename)
@@ -32,13 +30,13 @@ module Downstreams
     attr_reader :cookbooks_path, :packer_templates_path
 
     def packer_templates
-      @packer_templates ||= PackerTemplates.load(
+      @packer_templates ||= ChefPackerTemplates.new(
         cookbooks_path, packer_templates_path
       )
     end
 
     def cookbooks
-      @cookbooks ||= Cookbooks.load(cookbooks_path)
+      @cookbooks ||= ChefCookbooks.new(cookbooks_path)
     end
   end
 end

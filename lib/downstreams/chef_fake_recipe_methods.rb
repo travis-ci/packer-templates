@@ -1,7 +1,7 @@
 require 'tmpdir'
 
 module Downstreams
-  module FakeRecipeMethods
+  module ChefFakeRecipeMethods
     def include_recipe(name)
       @included_recipes ||= []
       @included_recipes << name
