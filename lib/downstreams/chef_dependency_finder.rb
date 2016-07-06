@@ -5,7 +5,6 @@ module Downstreams
     def initialize(run_list, cookbook_path)
       @run_list = Array(run_list)
       @cookbook_path = cookbook_path
-      @dependencies = []
     end
 
     def find
@@ -19,7 +18,7 @@ module Downstreams
 
     private
 
-    attr_reader :run_list, :cookbook_path, :dependencies
+    attr_reader :run_list, :cookbook_path
 
     def find_dependency_cookbooks(cookbook_name)
       deps = [cookbook_name]
