@@ -4,24 +4,30 @@ module Downstreams
   class PackerTemplates
     def initialize(packer_templates_path)
       @packer_templates_path = packer_templates_path
-      @templates_by_name = {}
     end
 
     def each(&block)
-      @templates_by_name.each(&block)
-    end
-
-    def populate!
-      packer_template_files.each do |filename|
-        template = PackerTemplate.new(filename)
-        @templates_by_name[template.name] = template
-      end
-      self
+      templates_by_name.each(&block)
     end
 
     private
 
     attr_reader :packer_templates_path
+
+    def templates_by_name
+      @templates_by_name ||= load_templates_by_name
+    end
+
+    def load_templates_by_name
+      loaded = {}
+
+      packer_template_files.each do |filename|
+        template = PackerTemplate.new(filename)
+        loaded[template.name] = template
+      end
+
+      loaded
+    end
 
     def packer_template_files
       packer_templates_path.map do |packer_templates_dir|

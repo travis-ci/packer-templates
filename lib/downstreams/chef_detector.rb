@@ -32,11 +32,11 @@ module Downstreams
     def packer_templates
       @packer_templates ||= ChefPackerTemplates.new(
         cookbooks_path, packer_templates_path
-      ).populate!
+      )
     end
 
     def cookbooks
-      @cookbooks ||= ChefCookbooks.new(cookbooks_path).populate!
+      @cookbooks ||= ChefCookbooks.new(cookbooks_path)
     end
   end
 end

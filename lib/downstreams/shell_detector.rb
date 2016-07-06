@@ -23,7 +23,7 @@ module Downstreams
     attr_reader :packer_templates_path, :git_working_copy
 
     def packer_templates
-      @packer_templates ||= PackerTemplates.new(packer_templates_path).populate!
+      @packer_templates ||= PackerTemplates.new(packer_templates_path)
     end
 
     def provisioner_files(provisioners)

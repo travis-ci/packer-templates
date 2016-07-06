@@ -36,12 +36,7 @@ describe Downstreams::ChefCookbooks do
       .and_return(cookbook_files)
   end
 
-  it 'is empty on initialization' do
-    expect(subject.files('bytecoind')).to be_empty
-  end
-
-  it 'is non-empty after #populate!' do
-    subject.populate!
+  it 'lazily loads cookbook files' do
     expect(subject.files('bytecoind')).to_not be_empty
   end
 
