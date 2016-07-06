@@ -186,7 +186,7 @@ module Downstreams
             >
             > e.g.:
             >
-            >     https://github.com/repo/remote.git::cookbooks,other-cookbooks
+            >     https://github.com/repo/remote.git::cookbooks@master,ci_environment@precise-stable
             >     git@github.com:other/remote.git::
             >
             > This allows for arguments like packer templates paths and cookbook
@@ -258,7 +258,9 @@ module Downstreams
         end
 
         paths.split(',').map do |path_entry|
-          Downstreams::GitPath.new(git, path_entry.strip.sub(%r{^/}, ''))
+          entry, ref = path_entry.split('@').map(&:strip)
+          ref = 'HEAD' unless ref
+          Downstreams::GitPath.new(git, entry.sub(%r{^/}, ''), ref)
         end
       end
 

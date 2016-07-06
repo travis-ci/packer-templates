@@ -23,14 +23,14 @@ module Downstreams
       deps = [cookbook_name]
       sem = Mutex.new
       cookbook_path.each do |entry|
-        entry.files(%r{.+/#{cookbook_name}/recipes/[^/]+\.rb}).map do |rb, _|
+        entry.files(%r{.+/#{cookbook_name}/recipes/[^/]+\.rb}).map do |p|
           sem.synchronize do
             begin
               @included_recipes = []
-              instance_eval(entry.repo.show('HEAD', rb))
+              instance_eval(p.show)
               deps += @included_recipes.map { |n| n.gsub(/::.*/, '') }
             rescue => e
-              $stderr.puts "ERROR:#{rb}: #{e}"
+              $stderr.puts "ERROR:#{p.namespaced_path}: #{e}"
             end
           end
         end

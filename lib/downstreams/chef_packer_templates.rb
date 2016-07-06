@@ -24,12 +24,10 @@ module Downstreams
       loaded = {}
 
       PackerTemplates.new(packer_templates_path).each do |_, t|
-        parsed = Downstreams::YamlLoader.load(t.filename)
-        Array(parsed['provisioners']).each do |provisioner|
+        Array(t['provisioners']).each do |provisioner|
           next unless provisioner['type'] =~ /chef/
           next if Array(provisioner.fetch('run_list', [])).empty?
-          key = PackerTemplate.new(t.filename)
-          loaded[key] = Downstreams::ChefDependencyFinder.new(
+          loaded[t] = Downstreams::ChefDependencyFinder.new(
             provisioner['run_list'], cookbook_path
           ).find
         end

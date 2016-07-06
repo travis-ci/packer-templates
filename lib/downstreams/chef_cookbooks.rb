@@ -23,7 +23,7 @@ module Downstreams
 
       cookbook_path.each do |entry|
         entry.files(%r{.+/metadata\.rb$})
-             .map { |p| File.dirname(p) }.uniq.each do |prefix|
+             .map { |p| File.dirname(p.path) }.uniq.each do |prefix|
           loaded[File.basename(prefix)] = entry.files(%r{#{prefix}/.+})
         end
       end

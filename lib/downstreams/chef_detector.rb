@@ -10,14 +10,14 @@ module Downstreams
     end
 
     def detect(git_paths)
-      filenames = git_paths.map(&:path)
+      filenames = git_paths.map(&:namespaced_path)
       to_trigger = []
 
       packer_templates.each do |template, run_list_cookbooks|
         to_trigger << template.name if filenames.include?(template.filename)
 
         run_list_cookbooks.each do |cb|
-          cb_files = Array(cookbooks.files(cb))
+          cb_files = Array(cookbooks.files(cb)).map(&:namespaced_path)
           next if cb_files.empty?
           to_trigger << template.name unless (filenames & cb_files).empty?
         end

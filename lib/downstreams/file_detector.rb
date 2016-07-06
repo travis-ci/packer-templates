@@ -4,7 +4,8 @@ module Downstreams
       @packer_templates_path = packer_templates_path
     end
 
-    def detect(filenames)
+    def detect(git_paths)
+      filenames = git_paths.map(&:namespaced_path)
       to_trigger = []
 
       packer_templates.each do |_, template|
@@ -28,10 +29,11 @@ module Downstreams
     def provisioner_files(provisioners)
       files = provisioners.select { |p| p['type'] == 'file' }.map do |p|
         packer_templates_path.map do |entry|
-          entry.files(/#{p['source']}/) || nil
+          matching_files = entry.files(/#{p['source']}/)
+          matching_files.empty? ? nil : matching_files
         end
       end
-      files.flatten.compact.sort.uniq
+      files.flatten.compact.map(&:namespaced_path).sort.uniq
     end
   end
 end

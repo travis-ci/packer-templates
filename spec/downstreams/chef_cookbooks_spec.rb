@@ -5,7 +5,7 @@ describe Downstreams::ChefCookbooks do
   let :cookbook_metadata_files do
     %w(
       cookbooks/bytecoind/metadata.rb
-    )
+    ).map { |f| Downstreams::GitPath.new(nil, f) }
   end
 
   let :cookbook_bytecoind_files do
@@ -13,7 +13,7 @@ describe Downstreams::ChefCookbooks do
       cookbooks/bytecoind/metadata.rb
       cookbooks/bytecoind/recipes/default.rb
       cookbooks/bytecoind/attributes/default.rb
-    )
+    ).map { |f| Downstreams::GitPath.new(nil, f) }
   end
 
   subject do

@@ -21,8 +21,8 @@ module Downstreams
     def load_templates_by_name
       loaded = {}
 
-      packer_template_files.each do |filename|
-        template = PackerTemplate.new(filename)
+      packer_template_files.each do |filename, string|
+        template = PackerTemplate.new(filename, string)
         loaded[template.name] = template
       end
 
@@ -30,11 +30,15 @@ module Downstreams
     end
 
     def packer_template_files
-      packer_templates_path.map do |entry|
-        entry.files(/.*\.yml$/).map { |f, _| f }.select do |f|
-          packer_template?(entry.repo.show('HEAD', f))
+      files = packer_templates_path.map do |entry|
+        entry.files(/.*\.yml$/).select do |f|
+          packer_template?(entry.repo.show('HEAD', f.path))
         end
-      end.flatten.compact.sort
+      end
+
+      files.flatten.compact.sort_by(&:namespaced_path).map do |p|
+        [p.namespaced_path, p.show]
+      end
     end
 
     def packer_template?(file_contents)
