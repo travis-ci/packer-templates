@@ -31,8 +31,8 @@ module Downstreams
 
     def packer_template_files
       files = packer_templates_path.map do |entry|
-        entry.files(/.*\.yml$/).select do |f|
-          packer_template?(entry.repo.show('HEAD', f.path))
+        entry.files(/.*\.yml$/).select do |p|
+          packer_template?(p.show)
         end
       end
 
