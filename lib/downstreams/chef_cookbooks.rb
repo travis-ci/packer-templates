@@ -2,17 +2,12 @@ require 'find'
 
 module Downstreams
   class ChefCookbooks
-    def self.load(cookbook_path)
-      inst = new
-      inst.load(cookbook_path)
-      inst
-    end
-
-    def initialize
+    def initialize(cookbook_path)
+      @cookbook_path = cookbook_path
       @cookbook_files = {}
     end
 
-    def load(cookbook_path)
+    def populate!
       cookbook_path.each do |cookbooks_dir|
         Dir.foreach(cookbooks_dir) do |f|
           if File.exist?(File.join(cookbooks_dir, f, 'metadata.rb'))
@@ -20,6 +15,7 @@ module Downstreams
           end
         end
       end
+      self
     end
 
     def files(cookbook)
@@ -27,6 +23,8 @@ module Downstreams
     end
 
     private
+
+    attr_reader :cookbook_path
 
     def load_files(cookbook)
       Find.find(cookbook).select { |f| File.file?(f) }

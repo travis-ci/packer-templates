@@ -18,6 +18,10 @@ describe Downstreams::ChefCookbooks do
     )
   end
 
+  subject do
+    described_class.new(%w(somewhere))
+  end
+
   before :each do
     allow(Dir).to receive(:foreach) do |&block|
       cookbook_dir_entries.each(&block)
@@ -32,22 +36,16 @@ describe Downstreams::ChefCookbooks do
       .and_return(cookbook_files)
   end
 
-  it 'may be loaded via .load' do
-    inst = described_class.load(%w(somewhere))
-    expect(inst.files('bytecoind')).to_not be_empty
-  end
-
-  it 'may be loaded via #load' do
-    subject.load(%w(somewhere))
-    expect(subject.files('bytecoind')).to_not be_empty
-  end
-
-  it 'is empty after initialization' do
+  it 'is empty on initialization' do
     expect(subject.files('bytecoind')).to be_empty
   end
 
+  it 'is non-empty after #populate!' do
+    subject.populate!
+    expect(subject.files('bytecoind')).to_not be_empty
+  end
+
   it 'returns an empty array for unknown cookbooks' do
-    subject.load(%w(somewhere))
     expect(subject.files('blokus')).to eq([])
   end
 end

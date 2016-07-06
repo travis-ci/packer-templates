@@ -30,13 +30,13 @@ module Downstreams
     attr_reader :cookbooks_path, :packer_templates_path
 
     def packer_templates
-      @packer_templates ||= ChefPackerTemplates.load(
+      @packer_templates ||= ChefPackerTemplates.new(
         cookbooks_path, packer_templates_path
-      )
+      ).populate!
     end
 
     def cookbooks
-      @cookbooks ||= ChefCookbooks.load(cookbooks_path)
+      @cookbooks ||= ChefCookbooks.new(cookbooks_path).populate!
     end
   end
 end

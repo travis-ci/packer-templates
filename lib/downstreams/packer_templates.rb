@@ -2,13 +2,8 @@ require 'find'
 
 module Downstreams
   class PackerTemplates
-    def self.load(packer_templates_path)
-      inst = new
-      inst.load(packer_templates_path)
-      inst
-    end
-
-    def initialize
+    def initialize(packer_templates_path)
+      @packer_templates_path = packer_templates_path
       @templates_by_name = {}
     end
 
@@ -16,16 +11,19 @@ module Downstreams
       @templates_by_name.each(&block)
     end
 
-    def load(packer_templates_path)
-      packer_template_files(packer_templates_path).each do |filename|
+    def populate!
+      packer_template_files.each do |filename|
         template = PackerTemplate.new(filename)
         @templates_by_name[template.name] = template
       end
+      self
     end
 
     private
 
-    def packer_template_files(packer_templates_path)
+    attr_reader :packer_templates_path
+
+    def packer_template_files
       packer_templates_path.map do |packer_templates_dir|
         Dir.glob(File.join(packer_templates_dir, '*.yml')).select do |f|
           packer_template?(f)
