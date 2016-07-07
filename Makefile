@@ -3,9 +3,17 @@ BRANCH_FILE := tmp/git-meta/packer-templates-branch
 SHA_FILE := tmp/git-meta/packer-templates-sha
 META_FILES := $(BRANCH_FILE) $(SHA_FILE)
 PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
+TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
+TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
+CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
+	$(TRAVIS_COOKBOOKS_GIT)::cookbooks@master \
+	$(TRAVIS_COOKBOOKS_GIT)::community-cookbooks@master \
+	$(TRAVIS_COOKBOOKS_GIT)::ci_environment@precise-stable \
+	$(TRAVIS_COOKBOOKS_GIT)::worker_host@precise-stable
 
 BUILDER ?= googlecompute
 
+BUNDLE ?= bundle
 GIT ?= git
 JQ ?= jq
 PACKER ?= packer
@@ -24,6 +32,13 @@ langs:
 .PHONY: test
 test:
 	./runtests --env .example.env
+
+.PHONY: packer-build-trigger
+packer-build-trigger:
+	$(BUNDLE) exec travis-packer-build \
+		--chef-cookbook-path="$(shell echo $(CHEF_COOKBOOK_PATH))" \
+		--packer-templates-path="$(PWD)/.git::" \
+		--commit-range="$(TRAVIS_COMMIT_RANGE)"
 
 .PHONY: hackcheck
 hackcheck:
