@@ -22,6 +22,7 @@ module Downstreams
       ret = 0
       triggered = 0
       errored = 0
+      req_count = 0
       http = build_http
 
       build_requests.each do |template, request|
@@ -30,6 +31,13 @@ module Downstreams
                    "repo=#{options.target_repo_slug}"
           next
         end
+
+        unless req_count == 0
+          log.info "Sleeping interval=#{options.request_interval}s"
+          sleep options.request_interval
+        end
+
+        req_count += 1
 
         response = http.post do |req|
           req.url request.url
@@ -117,23 +125,6 @@ module Downstreams
           )
         end
 
-        opts.on('-t REPO', '--target-repo-slug REPO',
-                'Target repo slug to which triggered builds should be sent. ' \
-                "default=#{options.target_repo_slug}") do |v|
-          options.target_repo_slug = v.strip
-        end
-
-        opts.on('-u URL', '--travis-api-url URL',
-                'URL of the Travis API to which triggered builds should ' \
-                "be sent. default=#{options.travis_api_url}") do |v|
-          options.travis_api_url = URI(v)
-        end
-
-        opts.on('-T TOKEN', '--travis-api-token TOKEN',
-                'API token for use with Travis API.') do |v|
-          options.travis_api_token = v.strip
-        end
-
         opts.on('-C COMMIT_RANGE', '--commit-range COMMIT_RANGE',
                 'Commit range to check for changed paths. ' \
                 "default=#{options.commit_range}") do |v|
@@ -152,6 +143,37 @@ module Downstreams
           options.clone_tmp = v.strip
         end
 
+        opts.on('-c GITFUL_PATH', '--chef-cookbook-path GITFUL_PATH',
+                'Cookbook path. ' \
+                "default=#{default_chef_cookbook_path_string}") do |v|
+          options.chef_cookbook_path = parse_git_remote_path(
+            v, options.clone_tmp
+          )
+        end
+
+        opts.on('-t REPO', '--target-repo-slug REPO',
+                'Target repo slug to which triggered builds should be sent. ' \
+                "default=#{options.target_repo_slug}") do |v|
+          options.target_repo_slug = v.strip
+        end
+
+        opts.on('-u URL', '--travis-api-url URL',
+                'URL of the Travis API to which triggered builds should ' \
+                "be sent. default=#{options.travis_api_url}") do |v|
+          options.travis_api_url = URI(v)
+        end
+
+        opts.on('-T TOKEN', '--travis-api-token TOKEN',
+                'API token for use with Travis API.') do |v|
+          options.travis_api_token = v.strip
+        end
+
+        opts.on('-I REQUEST_INTERVAL', '--request-interval REQUEST_INTERVAL',
+                Integer, 'Interval (in seconds) at which Travis API ' \
+                'requests will be made. ') do |v|
+          options.request_interval = v
+        end
+
         opts.on('-b BUILDERS', '--builders BUILDERS',
                 'Packer builder names for which Travis jobs should ' \
                 'be triggered (","-delimited). ' \
@@ -159,20 +181,14 @@ module Downstreams
           options.builders = v.split(',').map(&:strip)
         end
 
+        opts.separator 'Usual Suspects'
+
         opts.on('-n', '--noop', 'Do not do') do
           options.noop = true
         end
 
         opts.on('-q', '--quiet', 'Simmer down the logging') do
           options.quiet = true
-        end
-
-        opts.on('-c GITFUL_PATH', '--chef-cookbook-path GITFUL_PATH',
-                'Cookbook path. ' \
-                "default=#{default_chef_cookbook_path_string}") do |v|
-          options.chef_cookbook_path = parse_git_remote_path(
-            v, options.clone_tmp
-          )
         end
 
         opts.on_tail('-h', '--help', 'Show this message') do
@@ -229,6 +245,9 @@ module Downstreams
         opts.builders = ENV.fetch(
           'BUILDERS', 'amazon-ebs,googlecompute,docker'
         ).split(',').map(&:strip)
+
+        opts.request_interval = Integer(ENV.fetch('REQUEST_INTERVAL', '1'))
+
         opts.noop = ENV['NOOP'] == '1'
         opts.quiet = ENV['QUIET'] == '1'
       end
@@ -425,7 +444,8 @@ module Downstreams
       attr_accessor :chef_cookbook_path, :packer_templates_path,
                     :root_repo, :root_repo_dir, :target_repo_slug,
                     :travis_api_url, :travis_api_token, :branch,
-                    :commit_range, :clone_tmp, :builders, :noop, :quiet
+                    :request_interval, :commit_range, :clone_tmp, :builders,
+                    :noop, :quiet
     end
 
     class Request
