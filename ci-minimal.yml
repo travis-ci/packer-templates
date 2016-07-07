@@ -30,7 +30,7 @@ builders:
   <% if @dist == 'trusty' %>
   source_image: ubuntu-1404-trusty-v20160627
   <% else %>
-  source_image: ubuntu-1204-precise-v20150910
+  source_image: ubuntu-1204-precise-v20160627
   <% end %>
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"

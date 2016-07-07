@@ -1,7 +1,7 @@
 # Cookbook Name:: travis_ci_minimal
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH <contact+packer-templates@travis-ci.org>
+# Copyright 2016, Travis CI GmbH <contact+packer-templates@travis-ci.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
