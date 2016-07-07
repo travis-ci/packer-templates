@@ -259,7 +259,7 @@ module Downstreams
 
         paths.split(',').map do |path_entry|
           entry, ref = path_entry.split('@').map(&:strip)
-          ref = 'HEAD' unless ref
+          ref = '@' unless ref
           Downstreams::GitPath.new(git, entry.sub(%r{^/}, ''), ref)
         end
       end
@@ -317,7 +317,7 @@ module Downstreams
     def body(template)
       {
         message: ':lemon: :bomb: ' \
-          "commit-range=#{options.commit_range.join('...')}",
+          "commit-range=#{commit_range.join('...')}",
         branch: template,
         config: {
           language: 'generic',
@@ -331,7 +331,7 @@ module Downstreams
             "git clone --branch=#{options.branch} " \
               'https://github.com/travis-ci/packer-templates.git',
             'pushd packer-templates && ' \
-              "git checkout -qf #{options.commit_range.last} ; " \
+              "git checkout -qf #{commit_range.last} ; " \
               'popd',
             './packer-templates/bin/packer-build-install'
           ],
@@ -349,11 +349,11 @@ module Downstreams
     end
 
     def root_repo_commit_range_diff_files
-      root_repo_git.gtree(options.commit_range.first)
-                   .diff(options.commit_range.last)
+      root_repo_git.gtree(commit_range.first)
+                   .diff(commit_range.last)
                    .name_status.select { |_, status| %w(M A).include?(status) }
                    .map do |f, _|
-        Downstreams::GitPath.new(root_repo_git, f, options.commit_range.last)
+        Downstreams::GitPath.new(root_repo_git, f, commit_range.last)
       end
     end
 
@@ -374,6 +374,15 @@ module Downstreams
 
     def clone_basename(repo_remote)
       URI.escape(repo_remote, '@:/.') + '.git'
+    end
+
+    def commit_range
+      @commit_range ||= begin
+                          [
+                            options.commit_range.first,
+                            options.commit_range.last
+                          ].map { |v| v.nil? || v.to_s.empty? ? '@' : v }
+                        end
     end
 
     def clone_root_repo
