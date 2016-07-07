@@ -32,7 +32,7 @@ module Downstreams
           next
         end
 
-        unless req_count == 0
+        unless req_count.zero?
           log.info "Sleeping interval=#{options.request_interval}s"
           sleep options.request_interval
         end
@@ -322,13 +322,14 @@ module Downstreams
       @detectors ||= [
         Downstreams::ChefDetector.new(
           options.chef_cookbook_path,
-          options.packer_templates_path
+          options.packer_templates_path,
+          log
         ),
         Downstreams::FileDetector.new(
-          options.packer_templates_path
+          options.packer_templates_path, log
         ),
         Downstreams::ShellDetector.new(
-          options.packer_templates_path
+          options.packer_templates_path, log
         )
       ]
     end
