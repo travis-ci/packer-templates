@@ -241,7 +241,7 @@ module Downstreams
         local_clone = File.join(repo_remote, '.git')
 
         if File.directory?(local_clone)
-          repo_remote = Git.bare(local_clone).remotes
+          repo_remote = Git.bare(local_clone, log: git_logger).remotes
                            .select { |remote| remote.name == 'origin' }
                            .first.url
         else
@@ -251,7 +251,7 @@ module Downstreams
         end
 
         if File.directory?(local_clone)
-          git = Git.bare(local_clone)
+          git = Git.bare(local_clone, log: git_logger)
           git.fetch
         else
           git = Git.clone(repo_remote, local_clone, bare: true)
@@ -358,7 +358,7 @@ module Downstreams
     end
 
     def root_repo_git
-      Git.bare(root_repo_dir)
+      Git.bare(root_repo_dir, log: git_logger)
     end
 
     def root_repo_dir
@@ -380,7 +380,7 @@ module Downstreams
       dest = File.join(clone_tmp, '__root__.git')
 
       if File.directory?(dest)
-        Git.bare(dest).fetch('origin')
+        Git.bare(dest, log: git_logger).fetch('origin')
         return dest
       end
 
@@ -402,6 +402,13 @@ module Downstreams
         l.formatter = proc do |_, _, progname, msg|
           "#{progname}: #{msg}\n"
         end
+      end
+    end
+
+    def git_logger
+      @git_logger ||= Logger.new($stderr).tap do |l|
+        l.level = Logger::FATAL
+        l.level = Logger::DEBUG if ENV['DEBUG_GIT']
       end
     end
 

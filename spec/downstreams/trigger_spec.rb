@@ -53,7 +53,8 @@ describe Downstreams::Trigger do
   end
 
   it 'may be run via .run!' do
-    expect(described_class.run!(argv: argv)).to eq(0)
+    allow_any_instance_of(described_class).to receive(:run).and_return(86)
+    expect(described_class.run!(argv: argv)).to eq(86)
   end
 
   it 'may be run via #run' do
