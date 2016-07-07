@@ -20,7 +20,14 @@ if [[ $PACKER_BUILDER_TYPE != docker ]] ; then
   fi
 fi
 
+(
+  while true ; do
+    echo 'still zeroing...'
+    sleep 60
+  done
+) &
 dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit $? suppressed"
+wait
 rm -f /EMPTY
 sync
 
