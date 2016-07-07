@@ -25,8 +25,5 @@ script:
 - git diff --cached --exit-code
 - bundle exec rspec
 - make test
-- if [[ $TRAVIS_PULL_REQUEST = false ]] ; then
-    ./bin/trigger-downstreams ;
-  else
-    echo '✮✮✮ Skip trigger-downstreams for pull request builds ✮✮✮' ;
-  fi
+- echo $TRAVIS_COMMIT_RANGE
+- ./bin/trigger-downstreams
