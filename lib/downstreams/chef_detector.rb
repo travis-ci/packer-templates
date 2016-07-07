@@ -4,9 +4,10 @@ require 'yaml'
 
 module Downstreams
   class ChefDetector
-    def initialize(cookbooks_path, packer_templates_path)
+    def initialize(cookbooks_path, packer_templates_path, log)
       @cookbooks_path = cookbooks_path
       @packer_templates_path = packer_templates_path
+      @log = log
     end
 
     def detect(git_paths)
@@ -14,6 +15,7 @@ module Downstreams
       to_trigger = []
 
       packer_templates.each do |template, run_list_cookbooks|
+        log.info "Detecting type=chef template=#{template.name}"
         to_trigger << template.name if filenames.include?(template.filename)
 
         run_list_cookbooks.each do |cb|
@@ -28,7 +30,7 @@ module Downstreams
 
     private
 
-    attr_reader :cookbooks_path, :packer_templates_path
+    attr_reader :cookbooks_path, :packer_templates_path, :log
 
     def packer_templates
       @packer_templates ||= ChefPackerTemplates.new(

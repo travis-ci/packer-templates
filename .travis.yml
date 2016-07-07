@@ -6,7 +6,7 @@ cache: bundler
 env:
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
-  - CHEF_COOKBOOK_PATH="$TRAVIS_BUILD_DIR/.git::cookbooks https://github.com/travis-ci/travis-cookbooks.git::cookbooks@master,ci_environment@precise-stable,worker_host@precise-stable"
+  - CHEF_COOKBOOK_PATH="$TRAVIS_BUILD_DIR/.git::cookbooks https://github.com/travis-ci/travis-cookbooks.git::cookbooks@master,community-cookbooks@master,ci_environment@precise-stable,worker_host@precise-stable"
   - PACKER_TEMPLATES_PATH="$TRAVIS_BUILD_DIR/.git::"
 addons:
   apt:
@@ -25,8 +25,5 @@ script:
 - git diff --cached --exit-code
 - bundle exec rspec
 - make test
-- if [[ $TRAVIS_PULL_REQUEST = false ]] ; then
-    ./bin/trigger-downstreams ;
-  else
-    echo '✮✮✮ Skip trigger-downstreams for pull request builds ✮✮✮' ;
-  fi
+- echo $TRAVIS_COMMIT_RANGE
+- ./bin/trigger-downstreams
