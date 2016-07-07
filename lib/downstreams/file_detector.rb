@@ -1,11 +1,11 @@
 module Downstreams
   class FileDetector
-    def initialize(packer_templates_path, git_working_copy)
+    def initialize(packer_templates_path)
       @packer_templates_path = packer_templates_path
-      @git_working_copy = git_working_copy
     end
 
-    def detect(filenames)
+    def detect(git_paths)
+      filenames = git_paths.map(&:namespaced_path)
       to_trigger = []
 
       packer_templates.each do |_, template|
@@ -20,15 +20,20 @@ module Downstreams
 
     private
 
-    attr_reader :packer_templates_path, :git_working_copy
+    attr_reader :packer_templates_path
 
     def packer_templates
       @packer_templates ||= PackerTemplates.new(packer_templates_path)
     end
 
     def provisioner_files(provisioners)
-      provisioners.select { |p| p['type'] == 'file' }
-                  .map { |p| File.expand_path(p['source'], git_working_copy) }
+      files = provisioners.select { |p| p['type'] == 'file' }.map do |p|
+        packer_templates_path.map do |entry|
+          matching_files = entry.files(/#{p['source']}/)
+          matching_files.empty? ? nil : matching_files
+        end
+      end
+      files.flatten.compact.map(&:namespaced_path).sort.uniq
     end
   end
 end

@@ -21,8 +21,8 @@ module Downstreams
     def load_templates_by_name
       loaded = {}
 
-      packer_template_files.each do |filename|
-        template = PackerTemplate.new(filename)
+      packer_template_files.each do |filename, string|
+        template = PackerTemplate.new(filename, string)
         loaded[template.name] = template
       end
 
@@ -30,15 +30,19 @@ module Downstreams
     end
 
     def packer_template_files
-      packer_templates_path.map do |packer_templates_dir|
-        Dir.glob(File.join(packer_templates_dir, '*.yml')).select do |f|
-          packer_template?(f)
+      files = packer_templates_path.map do |entry|
+        entry.files(/.*\.yml$/).select do |p|
+          packer_template?(p.show)
         end
-      end.flatten.compact.sort
+      end
+
+      files.flatten.compact.sort_by(&:namespaced_path).map do |p|
+        [p.namespaced_path, p.show]
+      end
     end
 
-    def packer_template?(filename)
-      parsed = Downstreams::YamlLoader.load(filename)
+    def packer_template?(file_contents)
+      parsed = Downstreams::YamlLoader.load_string(file_contents)
       %w(variables builders provisioners).all? { |k| parsed.include?(k) }
     rescue => e
       $stderr.puts "ERROR: #{e}\n#{e.backtrace.join("\n")}"

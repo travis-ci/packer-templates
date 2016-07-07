@@ -4,26 +4,7 @@ AllCops:
   Exclude:
     - 'tmp/**/*'
     - 'vendor/**/*'
+    - 'run-foodcritic'
 
 Style/Documentation:
   Enabled: false
-
-Style/FileName:
-  Exclude:
-    - 'run-foodcritic'
-
-Metrics/AbcSize:
-  Exclude:
-    - 'run-foodcritic'
-
-Metrics/CyclomaticComplexity:
-  Exclude:
-    - 'run-foodcritic'
-
-Metrics/MethodLength:
-  Exclude:
-    - 'run-foodcritic'
-
-Metrics/PerceivedComplexity:
-  Exclude:
-    - 'run-foodcritic'

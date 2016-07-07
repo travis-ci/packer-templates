@@ -6,8 +6,8 @@ cache: bundler
 env:
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
-  - COOKBOOK_PATH="cookbooks:tmp/travis-cookbooks-master/cookbooks:tmp/travis-cookbooks-precise-stable/ci_environment:tmp/travis-cookbooks-precise-stable/worker_host"
-  - PACKER_TEMPLATES_PATH="$TRAVIS_BUILD_DIR"
+  - CHEF_COOKBOOK_PATH="$TRAVIS_BUILD_DIR/.git::cookbooks https://github.com/travis-ci/travis-cookbooks.git::cookbooks@master,ci_environment@precise-stable,worker_host@precise-stable"
+  - PACKER_TEMPLATES_PATH="$TRAVIS_BUILD_DIR/.git::"
 addons:
   apt:
     sources:
@@ -18,7 +18,6 @@ install:
 - unset GEM_PATH
 - bundle install --path vendor/bundle
 - ./bin/packer-build-install
-- make upstream-cookbooks
 script:
 - make hackcheck
 - make

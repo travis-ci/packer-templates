@@ -4,10 +4,10 @@ module Downstreams
   class PackerTemplate
     extend Forwardable
 
-    def initialize(filename)
-      @name = File.basename(filename, '.yml')
+    def initialize(filename, string)
+      @name = File.basename(filename.sub(/.*::/, ''), '.yml')
       @filename = filename
-      @parsed = Downstreams::YamlLoader.load(filename)
+      @parsed = Downstreams::YamlLoader.load_string(string)
     end
 
     attr_reader :name, :filename, :parsed
