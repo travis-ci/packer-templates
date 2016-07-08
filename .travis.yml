@@ -6,6 +6,7 @@ cache: bundler
 env:
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+  - REQUEST_INTERVAL=30
 addons:
   apt:
     sources:
