@@ -22,14 +22,14 @@ fi
 
 dd if=/dev/zero of=/EMPTY bs=1M &
 export DD_PID="$!"
-echo 'snoozing a bit here for dd'
-sleep 3
+echo 'snoozing a bit here for dd mkay'
+sleep 5
 
 trap "kill -9 $DD_PID &>/dev/null || true" EXIT QUIT TERM INT
 
 while pgrep dd ; do
   kill -USR1 "$DD_PID" || true
-  sleep 1
+  sleep 5
 done
 
 rm -f /EMPTY
