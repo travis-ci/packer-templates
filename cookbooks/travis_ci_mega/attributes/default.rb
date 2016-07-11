@@ -93,6 +93,12 @@ override['nodejs']['versions'] = node_versions
 override['nodejs']['aliases']['0.10'] = '0.1'
 override['nodejs']['aliases']['0.11.16'] = 'node-unstable'
 override['nodejs']['default'] = node_versions.max
+override['nodejs']['default_modules'] = [
+  {
+    'module' => 'grunt-cli',
+    'required' => '0.10'
+  }
+]
 
 pythons = %w(
   2.6.9
