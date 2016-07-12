@@ -2,7 +2,7 @@
 # Cookbook Name:: travis_internal_base
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH
+# Copyright 2016, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,13 +24,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-def opsmatic_disabled?
-  node['travis_internal_base']['opsmatic_disabled']
-end
-
 include_recipe 'apt'
 include_recipe 'openssh'
-include_recipe 'opsmatic::agent' unless opsmatic_disabled?
 include_recipe 'papertrail'
 include_recipe 'users'
 include_recipe 'sudo'

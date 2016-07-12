@@ -10,9 +10,9 @@ describe 'couchdb installation' do
   describe 'couchdb commands', sudo: true do
     before :all do
       sh('sudo service couchdb start')
-      sleep 5
-      sh('curl -X PUT http://127.0.0.1:5984/baseball')
-      sh('curl -X PUT http://127.0.0.1:5984/baseball/bat ' \
+      tcpwait('127.0.0.1', 5984)
+      sh('curl -X PUT http://127.0.0.1:5984/bicycle')
+      sh('curl -X PUT http://127.0.0.1:5984/bicycle/bell ' \
          '-H \'Content-Type: application/json\' -d \'{"Name":"Testname"}\'')
     end
 
@@ -21,11 +21,11 @@ describe 'couchdb installation' do
     end
 
     describe command('curl -X GET http://127.0.0.1:5984/_all_dbs') do
-      its(:stdout) { should match 'baseball' }
+      its(:stdout) { should match 'bicycle' }
     end
 
-    describe command('curl -X GET http://127.0.0.1:5984/baseball/bat') do
-      its(:stdout) { should include('_id', 'bat', 'Name', 'Testname') }
+    describe command('curl -X GET http://127.0.0.1:5984/bicycle/bell') do
+      its(:stdout) { should include('_id', 'bell', 'Name', 'Testname') }
     end
   end
 end

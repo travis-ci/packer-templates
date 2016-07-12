@@ -2,21 +2,28 @@
 
 set -o errexit
 set -o xtrace
+shopt -s nullglob
 
 rm -rf \
   /etc/apparmor* \
   /etc/ssh/ssh_host_* \
   /etc/systemd \
   /lib/recovery-mode \
-  /opt/chef \
-  /tmp/packer* \
+  /opt/chef* \
+  /tmp/* \
   /var/chef \
-  /var/lib/apt/lists/* \
-  /var/lib/man-db \
   /var/log/installer \
   /var/tmp/* \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.?
+
+if [[ $CLEANUP_APT_LISTS ]] ; then
+  rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
+fi
+
+if [[ $CLEANUP_MAN_DB ]] ; then
+  rm -rf /var/lib/man-db || echo "Suppressing exit $?"
+fi
 
 if [[ -d /home/travis ]] ; then
   rm -f /home/travis/linux.iso /home/travis/shutdown.sh

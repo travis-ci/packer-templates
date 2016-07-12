@@ -1,18 +1,26 @@
 language: generic
-
+dist: trusty
+group: edge
+sudo: true
+cache: bundler
 env:
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
-
+  - REQUEST_INTERVAL=4
 addons:
   apt:
     sources:
-    - chef-stable-precise
+    - chef-stable-trusty
     packages:
     - chefdk
-
+install:
+- unset GEM_PATH
+- bundle install --path vendor/bundle
+- ./bin/packer-build-install
 script:
+- make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- ./runtests
+- make test
+- make packer-build-trigger

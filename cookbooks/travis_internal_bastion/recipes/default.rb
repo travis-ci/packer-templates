@@ -2,7 +2,7 @@
 # Cookbook Name:: travis_internal_bastion
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH
+# Copyright 2016, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,6 +29,5 @@ include_recipe 'apt'
 include_recipe 'iptables'
 include_recipe 'openssh'
 include_recipe 'openssh::iptables'
-include_recipe 'opsmatic::agent'
 include_recipe 'users'
 include_recipe 'duo_unix'

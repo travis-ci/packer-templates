@@ -2,7 +2,7 @@
 # Cookbook Name:: travis_ci_standard
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH
+# Copyright 2016, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -65,14 +65,15 @@ include_recipe 'python::pyenv'
 include_recipe 'python::system'
 include_recipe 'nodejs::multi'
 include_recipe 'postgresql'
+include_recipe 'mysql::server'
 include_recipe 'redis'
 include_recipe 'riak'
 include_recipe 'mongodb'
-include_recipe 'couchdb::ppa'
 include_recipe 'memcached'
 include_recipe 'neo4j-server::tarball'
 include_recipe 'cassandra::tarball'
 include_recipe 'rabbitmq::with_management_plugin'
+include_recipe 'couchdb::ppa'
 include_recipe 'zeromq::ppa'
 include_recipe 'elasticsearch'
 include_recipe 'sphinx::all'

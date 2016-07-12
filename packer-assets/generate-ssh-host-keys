@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -e
 
 # http://anonscm.debian.org/cgit/pkg-ssh/openssh.git/tree/debian/openssh-server.postinst?id=c77724ca2355dec905cfa1e18930c79e32db2d4e

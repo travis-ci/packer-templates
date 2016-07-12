@@ -5,7 +5,6 @@ push:
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
-  opsmatic_integration_token: "{{ env `OPSMATIC_INTEGRATION_TOKEN` }}"
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
@@ -78,7 +77,7 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/internal-base-setup
-  - packer-scripts/remove-vagrant-user
+  - packer-scripts/remove-default-users
   - packer-scripts/internal-pre-chef-bootstrap
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
@@ -88,8 +87,6 @@ provisioners:
   - "/tmp/chef-stuff/travis-cookbooks/worker_host"
   - "/tmp/chef-stuff/cookbooks"
   json:
-    opsmatic:
-      integration_token: "{{ user `opsmatic_integration_token` }}"
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
@@ -100,10 +97,3 @@ provisioners:
   - packer-scripts/minimize
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
-- type: atlas
-  artifact: travis-ci/internal-base
-  artifact_type: aws.ami
-  metadata:
-    created_at: "{{ timestamp }}"
-  only:
-  - amazon-ebs

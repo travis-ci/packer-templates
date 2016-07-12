@@ -6,6 +6,9 @@ default['travis_ci_mega']['prerequisite_packages'] = %w(
   wget
 )
 
+override['travis_system_info']['commands_file'] = \
+  '/var/tmp/system-info-commands.yml'
+
 override['travis_php']['multi']['versions'] = %w(
   5.6.15
   5.5.30
@@ -52,8 +55,9 @@ gimme_versions = %w(
   1.1.2
   1.2.2
   1.3.3
-  1.4.2
-  1.5.1
+  1.4.3
+  1.5.2
+  1.6beta1
 )
 
 override['gimme']['versions'] = gimme_versions
@@ -131,6 +135,36 @@ rubies = %w(
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
+
+override['travis_build_environment']['otp_releases'] = %w(
+  17.0
+  17.1
+  17.3
+  17.4
+  17.5
+  18.0
+  18.1
+  18.2
+  18.2.1
+  R14B02
+  R14B03
+  R14B04
+  R15B
+  R15B01
+  R15B02
+  R15B03
+  R16B
+  R16B01
+  R16B02
+  R16B03
+  R16B03-1
+)
+override['travis_build_environment']['elixir_versions'] = %w(
+  1.0.3
+  1.0.4
+)
+override['travis_build_environment']['default_elixir_version'] = '1.0.4'
+
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['languages'] = %w(
@@ -144,6 +178,8 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   d
   dart
   default
+  elixir
+  erlang
   go
   groovy
   haxe

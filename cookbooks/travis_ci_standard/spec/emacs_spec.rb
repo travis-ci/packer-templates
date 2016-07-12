@@ -9,8 +9,8 @@ describe 'emacs installation' do
          '\'(insert "Butterblume")\' -f save-buffer')
     end
 
-    describe command('cat ./spec/files/flower.txt') do
-      its(:stdout) { should match 'Butterblume' }
+    describe file('./spec/files/flower.txt') do
+      its(:content) { should match 'Butterblume' }
     end
   end
 end

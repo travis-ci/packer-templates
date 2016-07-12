@@ -28,9 +28,9 @@ builders:
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   <% if @dist == 'trusty' %>
-  source_image: ubuntu-1404-trusty-v20150909a
+  source_image: ubuntu-1404-trusty-v20160627
   <% else %>
-  source_image: ubuntu-1204-precise-v20150910
+  source_image: ubuntu-1204-precise-v20160627
   <% end %>
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"
@@ -52,8 +52,6 @@ builders:
   - "/sbin/init"
   commit: true
 provisioners:
-- type: shell-local
-  command: if [ -n $ATLAS_BUILD_ID ] ; then git checkout -- . ; fi ; ./bin/dump-git-meta
 - type: file
   source: tmp/git-meta
   destination: /var/tmp/git-meta
@@ -70,8 +68,8 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump
+  - packer-scripts/remove-default-users
   - packer-scripts/pre-chef-bootstrap
-  - packer-scripts/remove-vagrant-user
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
@@ -114,20 +112,6 @@ provisioners:
   - DISPLAY=:99.0
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
-- type: atlas
-  artifact: "travis-ci/ci-minimal"
-  artifact_type: "google.image"
-  metadata:
-    name: "{{ user `gce_image_name` }}"
-  only:
-  - googlecompute
-- type: atlas
-  artifact: "travis-ci/ci-minimal"
-  artifact_type: "docker.image"
-  metadata:
-    tag: "{{ user `docker_tag` }}"
-  only:
-  - docker
 -
   - type: docker-tag
     repository: travisci/ci-minimal

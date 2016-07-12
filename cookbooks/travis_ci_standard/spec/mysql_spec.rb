@@ -6,8 +6,8 @@ describe 'mysql installation' do
 
   describe 'mysql commands' do
     before do
-      system('mysql < ./spec/files/mysql-reset.sql')
-      system('mysql travis < ./spec/files/mysql-schema.sql')
+      sh('mysql < ./spec/files/mysql-reset.sql')
+      sh('mysql travis < ./spec/files/mysql-schema.sql')
     end
 
     describe command('echo "SHOW DATABASES" | mysql') do

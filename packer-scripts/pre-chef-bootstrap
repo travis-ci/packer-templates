@@ -1,49 +1,92 @@
 #!/usr/bin/env bash
 
 set -o errexit
-set -o xtrace
 
-shopt -s nullglob
+main() {
+  set -o xtrace
+  shopt -s nullglob
 
-export DEBIAN_FRONTEND='noninteractive'
+  export DEBIAN_FRONTEND='noninteractive'
 
-if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
-  APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
-fi
+  __install_packages
+  __setup_sshd
+  __setup_travis_user
+}
 
-rm -vf /etc/apt/sources.list.d/partner.list
+__install_packages() {
+  if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
+    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
+  fi
 
-apt-get update -yqq
-apt-get install -yqq \
-  --no-install-suggests \
-  --no-install-recommends \
-  ca-certificates \
-  cron \
-  curl \
-  git \
-  sudo \
-  wget \
-  ${APT_GET_INSTALL_PRE_CHEF}
+  rm -vf /etc/apt/sources.list.d/partner.list
 
-mkdir -p /var/run/sshd
-echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
+  rm -rf /var/lib/apt/lists/*
+  apt-get update -yqq
+  apt-get install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    ca-certificates \
+    cron \
+    curl \
+    git \
+    sudo \
+    wget \
+    ${APT_GET_INSTALL_PRE_CHEF}
+}
 
-getent passwd | grep -E '\btravis\b' || useradd -s /bin/bash -m travis
-echo travis:travis | chpasswd
+__setup_sshd() {
+  mkdir -p /var/run/sshd
 
-echo 'Defaults !authenticate' >> /etc/sudoers
-sed -e 's/^%.*//' -i /etc/sudoers
-mkdir -p /etc/sudoers.d
-echo 'travis ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/travis
-chmod 440 /etc/sudoers.d/travis
+  if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow ; then
+    echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
+  fi
+}
 
-mkdir -p /home/travis/.ssh
-chmod 0700 /home/travis/.ssh
+__setup_travis_user() {
+  if ! getent passwd travis &>/dev/null ; then
+    if [[ "$TRAVIS_UID_1000" == noforce ]]; then
+      useradd -p travis -s /bin/bash -m travis
+    else
+      useradd -p travis -s /bin/bash -m travis -u 1000
+    fi
+  fi
 
-touch /home/travis/.ssh/authorized_keys
-for f in /var/tmp/*_rsa.pub ; do
-  cat $f >> /home/travis/.ssh/authorized_keys
-done
-chmod 0600 /home/travis/.ssh/authorized_keys
+  echo travis:travis | chpasswd
 
-chown -R travis:travis /home/travis
+  __setup_sudoers
+  __setup_travis_ssh
+
+  chown -R travis:travis /home/travis
+}
+
+__setup_sudoers() {
+  sed -i '/^%/d;/^# /d;/^$/d;/^#$/d;/^#includedir/d' /etc/sudoers
+  echo '#includedir /etc/sudoers.d' >> /etc/sudoers
+
+  mkdir -p /etc/sudoers.d
+
+  if [[ -f /var/tmp/sudoers.d-travis ]] ; then
+    cp -v /var/tmp/sudoers.d-travis /etc/sudoers.d/travis
+  else
+    cat > /etc/sudoers.d/travis <<EOF
+travis ALL=(ALL) NOPASSWD:ALL
+Defaults !authenticate
+Defaults !env_reset
+Defaults !mail_badpass
+EOF
+  fi
+  chmod 440 /etc/sudoers.d/travis
+}
+
+__setup_travis_ssh() {
+  mkdir -p /home/travis/.ssh
+  chmod 0700 /home/travis/.ssh
+
+  touch /home/travis/.ssh/authorized_keys
+  for f in /var/tmp/*_rsa.pub ; do
+    cat "${f}" >> /home/travis/.ssh/authorized_keys
+  done
+  chmod 0600 /home/travis/.ssh/authorized_keys
+}
+
+main "$@"

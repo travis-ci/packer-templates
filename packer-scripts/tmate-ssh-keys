@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o xtrace
+
+gen_key() {
+  keytype=$1
+  ks="${keytype}_"
+  key="/etc/ssh/tmate-keys/ssh_host_${ks}key"
+  if [ ! -e "${key}" ] ; then
+    ssh-keygen -t ${keytype} -f "${key}" -N ''
+    return $?
+  fi
+}
+
+mkdir -p /etc/ssh/tmate-keys
+gen_key rsa && gen_key ecdsa || exit 1

@@ -5,10 +5,10 @@ tmp/*
 *.rbc
 #~
 ~*
-/Gemfile.lock
 .vagrant
 .env*
 *env
+gce-packer-acct.json
 packer_cache
 /output-*
 /*.box
@@ -16,3 +16,6 @@ packer_cache
 /*.pem
 rabbitmqadmin
 .packer-template
+/coverage/
+/vendor/
+/.bundle/

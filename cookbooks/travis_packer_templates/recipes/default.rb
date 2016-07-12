@@ -1,7 +1,7 @@
 # Cookbook Name:: travis_packer_templates
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH
+# Copyright 2016, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -22,14 +22,14 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-TravisPackerTemplates.new(node).init!
+TravisPackerTemplates.new(node).init! if defined?(TravisPackerTemplates)
 
 template '/etc/default/job-board-register' do
   source 'etc-default-job-board-register.sh.erb'
   cookbook 'travis_packer_templates'
   owner 'root'
   group 'root'
-  mode 0644
+  mode 0o644
   variables(
     languages: node['travis_packer_templates']['job_board']['languages']
   )

@@ -1,7 +1,7 @@
 # Cookbook Name:: travis_ci_minimal
 # Recipe:: default
 #
-# Copyright 2015, Travis CI GmbH <contact+packer-templates@travis-ci.org>
+# Copyright 2016, Travis CI GmbH <contact+packer-templates@travis-ci.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -32,10 +32,13 @@ include_recipe 'sysctl'
 include_recipe 'travis_git::ppa'
 include_recipe 'jq'
 include_recipe 'travis_build_environment::packer'
+include_recipe 'travis_build_environment::bats'
+include_recipe 'travis_build_environment::heroku_toolbelt'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker'
   include_recipe 'travis_docker::compose'
+  include_recipe 'travis_build_environment::ramfs'
 end
 
 include_recipe 'travis_java::multi'
