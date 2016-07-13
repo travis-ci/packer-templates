@@ -112,7 +112,9 @@ __suite_cookbook_dir() {
   local suite="${1}"
   local packer_chef_prefix="${2}"
   local spec_dir="$(
-    find ${packer_chef_prefix}/packer-chef-* -wholename "*${suite}/spec" -type d | head -1
+    find ${packer_chef_prefix}/packer-chef-*/* \
+      -wholename "*${suite}/spec" \
+      -type d | head -1
   )"
   dirname "${spec_dir}"
 }
