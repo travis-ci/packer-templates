@@ -10,13 +10,15 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   export RUBYOPT='-W0'
 
+  : ${PACKER_CHEF_PREFIX:=/tmp}
+  : ${SPEC_RUN_WRAPPER:=sudo -u travis HOME=/home/travis --}
+
   __install_chefdk
   __create_sudo_bash
-
-  chown -R travis:travis /tmp/packer-chef-* /var/tmp
+  __chown_travis_dirs ${PACKER_CHEF_PREFIX}
 
   for suite in $(echo ${SPEC_SUITES/,/ }) ; do
-    __run_suite "${suite}"
+    __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUN_WRAPPER}"
   done
 
   __remove_chefdk
@@ -50,24 +52,29 @@ __remove_chefdk() {
 
 __run_suite() {
   local suite="${1}"
-  local cookbook_dir="$(__suite_cookbook_dir "${suite}")"
+  local packer_chef_prefix="${2}"
+  local run_wrapper="${3}"
+  local cookbook_dir="$(
+    __suite_cookbook_dir "${suite}" "${packer_chef_prefix}"
+  )"
   pushd "${cookbook_dir}" &>/dev/null
 
   if [[ -d spec/bin ]] ; then
     __populate_spec_bin
   fi
 
-  __run_suite_as_travis "${cookbook_dir}"
+  __run_suite_as_travis "${cookbook_dir}" "${run_wrapper}"
 
   popd &>/dev/null
 }
 
 __run_suite_as_travis() {
   local cookbook_dir="${1}"
+  local run_wrapper="${2}"
 
   set +o errexit
 
-  sudo -u travis HOME=/home/travis -- bash -lc "
+  ${run_wrapper} bash -lc "
 set -o xtrace
 
 export PATH=\"${CHEF_PATH}:\$PATH\"
@@ -101,8 +108,10 @@ rspec ${SPEC_ARGS}
 
 __suite_cookbook_dir() {
   local suite="${1}"
+  local packer_chef_prefix="${2}"
   local spec_dir="$(
-    find /tmp/packer-chef-* -wholename "*${suite}/spec" -type d | head -1
+    find ${packer_chef_prefix}/packer-chef-* \
+      -wholename "*${suite}/spec" -type d | head -1
   )"
   dirname "${spec_dir}"
 }
@@ -112,6 +121,10 @@ __populate_spec_bin() {
     -o spec/bin/rabbitmqadmin \
     http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
   chmod +x spec/bin/rabbitmqadmin
+}
+
+__chown_travis_dirs() {
+  chown -R travis:travis ${1}/packer-chef-* /var/tmp
 }
 
 main "$@"

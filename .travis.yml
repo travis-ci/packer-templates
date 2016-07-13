@@ -1,12 +1,16 @@
-language: generic
+language: ruby
 dist: trusty
 group: edge
 sudo: true
 cache: bundler
 env:
   global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:$PATH"
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${PATH}"
   - REQUEST_INTERVAL=5
+  - SPEC_SUITES='travis_ci_minimal,travis_ci_mega'
+  - SPEC_ARGS='--tag ~dev'
+  - SPEC_RUN_WRAPPER=''
+  - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
 addons:
   apt:
     sources:
@@ -17,10 +21,12 @@ install:
 - unset GEM_PATH
 - bundle install --path vendor/bundle
 - ./bin/packer-build-install
+- ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
 script:
 - make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
 - make test
+- sudo packer-scripts/run-serverspecs
 - make packer-build-trigger
