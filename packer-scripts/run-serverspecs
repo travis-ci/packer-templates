@@ -8,6 +8,7 @@ main() {
   export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
+  export RUBYOPT='-W0'
 
   __install_chefdk
   __create_sudo_bash
@@ -72,6 +73,7 @@ set -o xtrace
 export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
 export PACKER_BUILDER_TYPE="${PACKER_BUILDER_TYPE}"
+export RUBYOPT="${RUBYOPT}"
 unset GEM_PATH
 
 cd ${cookbook_dir}
