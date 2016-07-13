@@ -9,13 +9,17 @@ describe 'postgres installation' do
       sh('dropdb test_db || true ; createdb test_db')
     end
 
+    after do
+      sh('dropdb test_db || true')
+    end
+
     describe command('psql -ltA') do
       its(:stdout) { should match(/^test_db\|/) }
     end
 
     describe command(
-      'psql -c "CREATE TABLE test_table();" test_db ;' \
-      'psql -tAc \dt test_db'
+      'psql -c "CREATE TABLE test_table();" test_db ; ' \
+      'psql -tAc "\dt" test_db'
     ) do
       its(:stdout) { should match(/^public\|test_table\|/) }
     end
