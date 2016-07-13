@@ -131,8 +131,10 @@ pythons.each do |full_name|
     python_aliases(full_name)
 end
 
+# FIXME: rvm installation within docker fails???
+# rubies = %w(
+#   jruby-9.0.1.0
 rubies = %w(
-  jruby-9.0.1.0
   1.9.3-p551
   2.0.0-p647
   2.1.7
