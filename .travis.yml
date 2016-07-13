@@ -30,4 +30,5 @@ script:
 - git diff --cached --exit-code
 - make test
 - sudo packer-scripts/run-serverspecs
+after_success:
 - make packer-build-trigger
