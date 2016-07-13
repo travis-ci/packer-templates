@@ -10,6 +10,7 @@ env:
   - SPEC_SUITES='travis_ci_minimal,travis_ci_mega'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUN_WRAPPER=''
+  - SKIP_CHEFDK_REMOVAL='1'
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
 addons:
   apt:

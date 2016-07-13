@@ -21,7 +21,9 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUN_WRAPPER}"
   done
 
-  __remove_chefdk
+  if [[ -z ${SKIP_CHEFDK_REMOVAL} ]] ; then
+    __remove_chefdk
+  fi
 }
 
 __install_chefdk() {
@@ -110,8 +112,7 @@ __suite_cookbook_dir() {
   local suite="${1}"
   local packer_chef_prefix="${2}"
   local spec_dir="$(
-    find ${packer_chef_prefix}/packer-chef-* \
-      -wholename "*${suite}/spec" -type d | head -1
+    find ${packer_chef_prefix}/packer-chef-* -wholename "*${suite}/spec" -type d | head -1
   )"
   dirname "${spec_dir}"
 }
