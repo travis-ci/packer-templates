@@ -9,7 +9,7 @@ env:
   - REQUEST_INTERVAL=5
   - SPEC_SUITES='travis_ci_minimal,travis_ci_mega'
   - SPEC_ARGS='--tag ~dev'
-  - SPEC_RUN_WRAPPER=''
+  - SPEC_RUNNER='bash -lc'
   - SKIP_CHEFDK_REMOVAL='1'
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
 addons:

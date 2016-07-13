@@ -11,14 +11,14 @@ main() {
   export RUBYOPT='-W0'
 
   : ${PACKER_CHEF_PREFIX:=/tmp}
-  : ${SPEC_RUN_WRAPPER:=sudo -u travis HOME=/home/travis --}
+  : ${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}
 
   __install_chefdk
   __create_sudo_bash
   __chown_travis_dirs ${PACKER_CHEF_PREFIX}
 
   for suite in $(echo ${SPEC_SUITES/,/ }) ; do
-    __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUN_WRAPPER}"
+    __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
   if [[ -z ${SKIP_CHEFDK_REMOVAL} ]] ; then
@@ -55,7 +55,7 @@ __remove_chefdk() {
 __run_suite() {
   local suite="${1}"
   local packer_chef_prefix="${2}"
-  local run_wrapper="${3}"
+  local runner="${3}"
   local cookbook_dir="$(
     __suite_cookbook_dir "${suite}" "${packer_chef_prefix}"
   )"
@@ -65,18 +65,18 @@ __run_suite() {
     __populate_spec_bin
   fi
 
-  __run_suite_as_travis "${cookbook_dir}" "${run_wrapper}"
+  __run_suite_as_travis "${cookbook_dir}" "${runner}"
 
   popd &>/dev/null
 }
 
 __run_suite_as_travis() {
   local cookbook_dir="${1}"
-  local run_wrapper="${2}"
+  local runner="${2}"
 
   set +o errexit
 
-  ${run_wrapper} bash -lc "
+  ${runner} "
 set -o xtrace
 
 export PATH=\"${CHEF_PATH}:\$PATH\"
