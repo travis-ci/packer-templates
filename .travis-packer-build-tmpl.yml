@@ -1,0 +1,24 @@
+---
+message: ":tada: :bomb: commit-range=%{commit_range_string}"
+branch: "%{template}"
+config:
+  language: generic
+  dist: trusty
+  group: edge
+  sudo: true
+  before_install:
+  - if [[ $BUILDER = docker ]] ; then
+      sudo stop docker ;
+      sudo cat /etc/default/docker ;
+      echo 'DOCKER_OPTS="$DOCKER_OPTS --storage-opt dm.basesize=20G"' | sudo tee -a /etc/default/docker ;
+      sudo cat /etc/default/docker ;
+      sudo start docker ;
+      sleep 5 ;
+      sudo docker version ;
+    fi
+  install:
+  - git clone --branch="%{branch}" "https://github.com/travis-ci/packer-templates.git"
+  - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
+  - "./packer-templates/bin/packer-build-install"
+  script:
+  - "./packer-templates/bin/packer-build-script %{template}"

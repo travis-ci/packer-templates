@@ -40,7 +40,7 @@ packer-build-trigger:
 		--packer-templates-path="$(PWD)/.git::" \
 		--commit-range="$(TRAVIS_COMMIT_RANGE)" \
 		--target-repo-slug=travis-infrastructure/packer-build \
-		--body-json-tmpl=$(PWD)/.travis-packer-build-tmpl.json
+		--body-tmpl=$(PWD)/.travis-packer-build-tmpl.yml
 
 .PHONY: hackcheck
 hackcheck:
