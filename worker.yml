@@ -59,9 +59,15 @@ provisioners:
   only:
   - googlecompute
 - type: shell
+  inline:
+    sudo rm -rf /var/lib/apt/lists* ;
+    sudo apt-get update -yqq ;
+    sudo apt-get install -f
+  only:
+  - amazon-ebs
+- type: shell
   scripts:
   - packer-scripts/packer-env-dump
-  - packer-scripts/remove-default-users
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
@@ -71,6 +77,7 @@ provisioners:
   - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
+  config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
@@ -81,6 +88,24 @@ provisioners:
       remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
   - recipe[travis_worker_wrapper]
+  except:
+  - amazon-ebs
+- type: chef-solo
+  config_template: chef-solo.rb.tmpl
+  cookbook_paths:
+  - cookbooks
+  remote_cookbook_paths:
+  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
+  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
+  json:
+    papertrail:
+      remote_port: "{{ user `papertrail_remote_port` }}"
+    travis_worker_wrapper:
+      local_docker: true
+  run_list:
+  - recipe[travis_worker_wrapper]
+  only:
+  - amazon-ebs
 - type: shell
   scripts:
   - packer-scripts/cleanup
