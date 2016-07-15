@@ -61,7 +61,10 @@ provisioners:
   only:
   - googlecompute
 - type: shell
-  inline: sudo rm -rf /var/lib/apt/lists* || echo "whatebber $?"
+  inline:
+    sudo rm -rf /var/lib/apt/lists* ;
+    sudo apt-get update -yqq ;
+    sudo apt-get install -f
   only:
   - amazon-ebs
 - type: shell
@@ -77,6 +80,7 @@ provisioners:
   - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
+  config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
@@ -90,6 +94,7 @@ provisioners:
   except:
   - amazon-ebs
 - type: chef-solo
+  config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
