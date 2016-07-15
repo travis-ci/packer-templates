@@ -139,6 +139,9 @@ rubies = %w(
   2.2.3
 )
 
+# FIXME: rvm is choking on jruby... but why???
+rubies.reject! { |r| r =~ /jruby/ }
+
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
