@@ -61,7 +61,7 @@ provisioners:
   only:
   - googlecompute
 - type: shell
-  inline: rm -rf /var/lib/apt/lists* || echo "whatebber $?"
+  inline: sudo rm -rf /var/lib/apt/lists* || echo "whatebber $?"
   only:
   - amazon-ebs
 - type: shell
