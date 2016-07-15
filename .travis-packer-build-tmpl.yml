@@ -1,6 +1,6 @@
 ---
 message: ":tada: :bomb: commit-range=%{commit_range_string}"
-branch: "%{template}"
+branch: "%{template_name}"
 config:
   language: generic
   dist: trusty
@@ -21,4 +21,4 @@ config:
   - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
   - "./packer-templates/bin/packer-build-install"
   script:
-  - "./packer-templates/bin/packer-build-script %{template}"
+  - "./packer-templates/bin/packer-build-script %{template_name}"
