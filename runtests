@@ -15,7 +15,7 @@ fi
 
 for f in $(git ls-files '*.yml') ; do
   echo -en "$f "
-  ruby -ryaml -e "YAML.load_file('$f')"
+  ./bin/yml2json < $f | ./bin/json2yml &>/dev/null
   if grep -q ^builders: "$f" ; then
     echo -en "(packer validate ...) "
     packer validate <(bin/yml2json < "$f")

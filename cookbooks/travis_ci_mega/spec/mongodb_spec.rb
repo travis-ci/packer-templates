@@ -11,10 +11,6 @@ describe 'mongodb installation' do
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
     end
 
-    describe file('/var/log/mongodb/mongodb.log') do
-      its(:content) { should match(/\[initandlisten\] waiting for connections on port/) }
-    end
-
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
       its(:stdout) { should match(/{ "_id" : ObjectId\("[\w]+"\), "x" : 6 }/) }
     end

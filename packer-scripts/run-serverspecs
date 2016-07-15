@@ -8,17 +8,22 @@ main() {
   export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
+  export RUBYOPT='-W0'
+
+  : ${PACKER_CHEF_PREFIX:=/tmp}
+  : ${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}
 
   __install_chefdk
   __create_sudo_bash
-
-  chown -R travis:travis /tmp/packer-chef-* /var/tmp
+  __chown_travis_dirs ${PACKER_CHEF_PREFIX}
 
   for suite in $(echo ${SPEC_SUITES/,/ }) ; do
-    __run_suite "${suite}"
+    __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  __remove_chefdk
+  if [[ -z ${SKIP_CHEFDK_REMOVAL} ]] ; then
+    __remove_chefdk
+  fi
 }
 
 __install_chefdk() {
@@ -49,29 +54,35 @@ __remove_chefdk() {
 
 __run_suite() {
   local suite="${1}"
-  local cookbook_dir="$(__suite_cookbook_dir "${suite}")"
+  local packer_chef_prefix="${2}"
+  local runner="${3}"
+  local cookbook_dir="$(
+    __suite_cookbook_dir "${suite}" "${packer_chef_prefix}"
+  )"
   pushd "${cookbook_dir}" &>/dev/null
 
   if [[ -d spec/bin ]] ; then
     __populate_spec_bin
   fi
 
-  __run_suite_as_travis "${cookbook_dir}"
+  __run_suite_as_travis "${cookbook_dir}" "${runner}"
 
   popd &>/dev/null
 }
 
 __run_suite_as_travis() {
   local cookbook_dir="${1}"
+  local runner="${2}"
 
   set +o errexit
 
-  sudo -u travis HOME=/home/travis -- bash -lc "
+  ${runner} "
 set -o xtrace
 
 export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
 export PACKER_BUILDER_TYPE="${PACKER_BUILDER_TYPE}"
+export RUBYOPT="${RUBYOPT}"
 unset GEM_PATH
 
 cd ${cookbook_dir}
@@ -99,8 +110,11 @@ rspec ${SPEC_ARGS}
 
 __suite_cookbook_dir() {
   local suite="${1}"
+  local packer_chef_prefix="${2}"
   local spec_dir="$(
-    find /tmp/packer-chef-* -wholename "*${suite}/spec" -type d | head -1
+    find ${packer_chef_prefix}/packer-chef-*/* \
+      -wholename "*${suite}/spec" \
+      -type d | head -1
   )"
   dirname "${spec_dir}"
 }
@@ -110,6 +124,10 @@ __populate_spec_bin() {
     -o spec/bin/rabbitmqadmin \
     http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
   chmod +x spec/bin/rabbitmqadmin
+}
+
+__chown_travis_dirs() {
+  chown -R travis:travis ${1}/packer-chef-* /var/tmp
 }
 
 main "$@"

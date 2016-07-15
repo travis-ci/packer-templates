@@ -38,7 +38,9 @@ packer-build-trigger:
 	$(BUNDLE) exec travis-packer-build \
 		--chef-cookbook-path="$(shell echo $(CHEF_COOKBOOK_PATH))" \
 		--packer-templates-path="$(PWD)/.git::" \
-		--commit-range="$(TRAVIS_COMMIT_RANGE)"
+		--commit-range="$(TRAVIS_COMMIT_RANGE)" \
+		--target-repo-slug=travis-infrastructure/packer-build \
+		--body-tmpl=$(PWD)/.travis-packer-build-tmpl.yml
 
 .PHONY: hackcheck
 hackcheck:

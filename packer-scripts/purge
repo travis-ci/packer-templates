@@ -10,6 +10,7 @@ _purge_packages() {
     grep -v -- "${2:-^$}" | xargs apt-get -y purge
 }
 
+rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
 apt-get -y update
 
 if [[ $APT_GET_UPGRADE_DURING_CLEANUP ]] ; then
