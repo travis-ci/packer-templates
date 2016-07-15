@@ -59,9 +59,13 @@ provisioners:
   only:
   - googlecompute
 - type: shell
+  inline: rm -rf /var/lib/apt/lists* || echo "whatebber $?"
+  only:
+  - amazon-ebs
+- type: shell
   scripts:
   - packer-scripts/packer-env-dump
-  - packer-scripts/remove-default-users
+  # - packer-scripts/remove-default-users
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
