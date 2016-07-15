@@ -16,7 +16,9 @@ variables:
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   travis_cookbooks_url: "{{ env `TRAVIS_COOKBOOKS_URL` }}"
-  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  # FIXME: Back this out
+  travis_cookbooks_branch: "meat-worker-cleanup"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
@@ -85,6 +87,23 @@ provisioners:
       remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
   - recipe[travis_worker_wrapper]
+  except:
+  - amazon-ebs
+- type: chef-solo
+  cookbook_paths:
+  - cookbooks
+  remote_cookbook_paths:
+  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
+  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
+  json:
+    papertrail:
+      remote_port: "{{ user `papertrail_remote_port` }}"
+    travis_worker_wrapper:
+      local_docker: true
+  run_list:
+  - recipe[travis_worker_wrapper]
+  only:
+  - amazon-ebs
 - type: shell
   scripts:
   - packer-scripts/cleanup
