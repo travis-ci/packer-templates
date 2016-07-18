@@ -34,3 +34,4 @@ done
 
 rubocop
 ./run-foodcritic cookbooks
+./bin/check-language-tags

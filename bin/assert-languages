@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+require 'logger'
+
+def main(argv: ARGV)
+  op, base, other = parse_args(argv: argv)
+  if op !~ /excl|incl/
+    $stderr.puts "unknown op #{op.inspect}"
+    return 2
+  end
+
+  if assert_languages(op, base, other)
+    $stdout.puts 'OK'
+    return 0
+  end
+  $stdout.puts "NOT OK: #{op} #{base} #{other}"
+  1
+end
+
+def assert_languages(op, base, other)
+  loaded_base = load_languages(base)
+  loaded_other = load_languages(other)
+  intersection = loaded_base & loaded_other
+
+  return false if op == 'excl' && !intersection.empty?
+  return false if op == 'incl' && intersection.empty?
+  true
+end
+
+def parse_args(argv: ARGV)
+  op, base, other = argv
+  base = ENV['BASE'] unless base
+  other = ENV['OTHER'] unless other
+  [op, base, other]
+end
+
+def load_languages(attributes_filename)
+  FakeAttributes.new(attributes_filename).eval!.languages
+end
+
+class ForeverHash < Hash
+  def [](key)
+    self[key] = ForeverHash.new unless key?(key)
+    fetch(key)
+  end
+end
+
+class FakeAttributes < ForeverHash
+  def initialize(attributes_filename)
+    @attributes_filename = attributes_filename
+  end
+
+  def eval!
+    instance_eval(File.read(attributes_filename))
+    self
+  end
+
+  def default
+    self
+  end
+
+  def override
+    self
+  end
+
+  def languages
+    fetch('travis_packer_templates').fetch('job_board').fetch('languages')
+  end
+
+  private
+
+  attr_reader :attributes_filename
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__

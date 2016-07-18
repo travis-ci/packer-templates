@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))"
+set -o errexit
+
+prog="$(basename "${0}")"
+
+for cmd in incl:sugilite:amethyst incl:sugilite:garnet \
+           excl:sugilite:connie excl:amethyst:connie \
+           excl:garnet:connie excl:garnet:amethyst ; do
+  parts=(${cmd//:/ })
+  echo -en "${prog}: ${parts[@]} -> "
+  ./bin/assert-languages "${parts[0]}" \
+    ./cookbooks/travis_ci_${parts[1]}/attributes/default.rb \
+    ./cookbooks/travis_ci_${parts[2]}/attributes/default.rb
+done
