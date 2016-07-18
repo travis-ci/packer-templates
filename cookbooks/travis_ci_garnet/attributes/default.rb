@@ -7,57 +7,21 @@ default['travis_ci_garnet']['prerequisite_packages'] = %w(
 )
 
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/system-info-commands.yml'
+  '/var/tmp/garnet-system-info-commands.yml'
 
 override['travis_php']['multi']['versions'] = %w(
-  5.6.15
-  5.5.30
-  5.4.45
+  5.6.22
+  7.0.7
 )
 override['travis_php']['multi']['aliases'] = {
-  '5.4' => '5.4.45',
-  '5.5' => '5.5.30',
-  '5.6' => '5.6.15'
+  '5.6' => '5.6.22',
+  '7.0' => '7.0.7'
 }
 override['travis_php']['composer']['github_oauth_token'] = \
   '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
-override['travis_perlbrew']['perls'] = [
-  { name: '5.10', version: 'perl-5.10.1' },
-  { name: '5.12', version: 'perl-5.12.5' },
-  { name: '5.14', version: 'perl-5.14.4' },
-  { name: '5.16', version: 'perl-5.16.3' },
-  { name: '5.18', version: 'perl-5.18.4' },
-  { name: '5.20', version: 'perl-5.20.0' },
-  { name: '5.20-extras', version: 'perl-5.20.3',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.20-shrplib' },
-  { name: '5.22', version: 'perl-5.22.0' },
-  { name: '5.22-extras', version: 'perl-5.22.0',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.22-shrplib' },
-  { name: '5.8', version: 'perl-5.8.8' }
-]
-override['travis_perlbrew']['modules'] = %w(
-  Dist::Zilla
-  Dist::Zilla::Plugin::Bootstrap::lib
-  ExtUtils::MakeMaker
-  LWP
-  Module::Install
-  Moose
-  Test::Exception
-  Test::Most
-  Test::Pod
-  Test::Pod::Coverage
-)
-override['travis_perlbrew']['prerequisite_packages'] = []
-
 gimme_versions = %w(
-  1.0.3
-  1.1.2
-  1.2.2
-  1.3.3
-  1.4.3
-  1.5.2
-  1.6beta1
+  1.6.2
 )
 
 override['gimme']['versions'] = gimme_versions
@@ -70,10 +34,7 @@ override['java']['oracle']['jce']['enabled'] = true
 
 override['travis_java']['default_version'] = 'oraclejdk8'
 override['travis_java']['alternate_versions'] = %w(
-  openjdk6
-  openjdk7
   openjdk8
-  oraclejdk7
   oraclejdk9
 )
 
@@ -81,34 +42,21 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 node_versions = %w(
-  0.6.21
-  0.8.28
-  0.10.40
-  0.11.16
-  0.12.7
-  4.1.2
+  4.4.7
+  6.3.0
 )
 
 override['nodejs']['versions'] = node_versions
-override['nodejs']['aliases']['0.10'] = '0.1'
-override['nodejs']['aliases']['0.11.16'] = 'node-unstable'
 override['nodejs']['default'] = node_versions.max
 override['nodejs']['default_modules'] = [
   {
-    'module' => 'grunt-cli',
-    'required' => '0.10'
+    'module' => 'grunt-cli'
   }
 ]
 
 pythons = %w(
-  2.6.9
-  2.7.10
-  3.2.6
-  3.3.6
-  3.4.3
-  3.5.0
-  pypy-2.6.1
-  pypy3-2.4.0
+  2.7.12
+  3.5.2
 )
 
 # Reorder pythons so that default python2 and python3 come first
@@ -132,44 +80,12 @@ pythons.each do |full_name|
 end
 
 rubies = %w(
-  jruby-9.0.1.0
-  1.9.3-p551
-  2.0.0-p647
-  2.1.7
-  2.2.3
+  jruby-9.1.2.0
+  2.3.1
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
-
-override['travis_build_environment']['otp_releases'] = %w(
-  17.0
-  17.1
-  17.3
-  17.4
-  17.5
-  18.0
-  18.1
-  18.2
-  18.2.1
-  R14B02
-  R14B03
-  R14B04
-  R15B
-  R15B01
-  R15B02
-  R15B03
-  R16B
-  R16B01
-  R16B02
-  R16B03
-  R16B03-1
-)
-override['travis_build_environment']['elixir_versions'] = %w(
-  1.0.3
-  1.0.4
-)
-override['travis_build_environment']['default_elixir_version'] = '1.0.4'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false

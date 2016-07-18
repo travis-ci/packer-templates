@@ -63,7 +63,7 @@ provisioners:
   source: packer-assets/ubuntu-<%= @dist %>-normal-purge.txt
   destination: "/var/tmp/purge.txt"
 - type: file
-  source: packer-assets/ubuntu-<%= @dist %>-ci-packages.txt
+  source: packer-assets/ubuntu-<%= @dist %>-ci-amethyst-packages.txt
   destination: "/var/tmp/packages.txt"
 - type: shell
   scripts:
