@@ -1,5 +1,5 @@
 ---
-description: connie test
+description: min test
 variables:
   ssh_private_key: "{{ env `SSH_KEY_PATH`}}"
   ssh_username: "{{ env `SSH_USERNAME` }}"
