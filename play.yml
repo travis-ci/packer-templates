@@ -58,10 +58,10 @@ provisioners:
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
-  source: packer-assets/minimal-system-info-commands.yml
-  destination: "/var/tmp/minimal-system-info-commands.yml"
+  source: packer-assets/connie-system-info-commands.yml
+  destination: "/var/tmp/connie-system-info-commands.yml"
 - type: shell
-  inline: chmod 0644 /var/tmp/minimal-system-info-commands.yml
+  inline: chmod 0644 /var/tmp/connie-system-info-commands.yml
 - type: chef-solo
   execute_command: '{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} || echo "Oh Noes: exit $?"'
   config_template: chef-solo.rb.tmpl
