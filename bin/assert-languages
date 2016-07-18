@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'logger'
+require 'optparse'
 
 def main(argv: ARGV)
   op, base, other = parse_args(argv: argv)
@@ -20,18 +20,37 @@ end
 def assert_languages(op, base, other)
   loaded_base = load_languages(base)
   loaded_other = load_languages(other)
-  intersection = loaded_base & loaded_other
 
-  return false if op == 'excl' && !intersection.empty?
-  return false if op == 'incl' && intersection.empty?
+  return false if op == 'excl' && !(loaded_base & loaded_other).empty?
+  return false if op == 'incl' && (loaded_base & loaded_other) != loaded_other
+
   true
 end
 
 def parse_args(argv: ARGV)
-  op, base, other = argv
-  base = ENV['BASE'] unless base
-  other = ENV['OTHER'] unless other
-  [op, base, other]
+  parsed = {
+    op: 'incl',
+    base: ENV['BASE'],
+    other: ENV['OTHER']
+  }
+
+  OptionParser.new do |opts|
+    opts.on('-o OP', '--op OP', String, 'language set operator') do |v|
+      parsed[:op] = v.strip
+    end
+
+    opts.on('-b BASE', '--base BASE', String,
+            'base filename for language set comparison') do |v|
+      parsed[:base] = v.strip
+    end
+
+    opts.on('-O OTHER', '--other OTHER', String,
+            'other filename for language set comparison') do |v|
+      parsed[:other] = v.strip
+    end
+  end.parse!(argv)
+
+  [parsed[:op], parsed[:base], parsed[:other]]
 end
 
 def load_languages(attributes_filename)
@@ -64,7 +83,8 @@ class FakeAttributes < ForeverHash
   end
 
   def languages
-    fetch('travis_packer_templates').fetch('job_board').fetch('languages')
+    fetch('travis_packer_templates')
+      .fetch('job_board').fetch('languages')
   end
 
   private
