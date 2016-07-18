@@ -3,7 +3,8 @@ description: Travis CI mega build env template
 push:
   name: travis-ci/ci-mega
 variables:
-  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_branch: "meat-mysql"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 #   docker_login_email: "{{ env `docker_login_email` }}"
 #   docker_login_password: "{{ env `docker_login_password` }}"
@@ -75,6 +76,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/system-info-commands.yml
 - type: chef-solo
+  # execute_command: "{{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} ; while true ; do date -u ; sleep 60 ; done"
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
