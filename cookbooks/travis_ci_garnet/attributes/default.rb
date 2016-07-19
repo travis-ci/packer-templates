@@ -80,7 +80,7 @@ pythons.each do |full_name|
 end
 
 rubies = %w(
-  jruby-9.1.2.0
+  2.2.5
   2.3.1
 )
 
