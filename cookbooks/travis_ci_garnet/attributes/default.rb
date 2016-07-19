@@ -21,7 +21,7 @@ override['travis_php']['composer']['github_oauth_token'] = \
   '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
 gimme_versions = %w(
-  1.6.2
+  1.6.3
 )
 
 override['gimme']['versions'] = gimme_versions

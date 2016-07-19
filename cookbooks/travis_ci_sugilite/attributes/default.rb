@@ -56,8 +56,8 @@ gimme_versions = %w(
   1.2.2
   1.3.3
   1.4.3
-  1.5.2
-  1.6beta1
+  1.5.4
+  1.6.3
 )
 
 override['gimme']['versions'] = gimme_versions
