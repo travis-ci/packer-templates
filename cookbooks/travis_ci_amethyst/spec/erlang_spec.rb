@@ -1,10 +1,7 @@
 describe 'erlang versions' do
   %w(
-    17.5
-    18.2.1
-    R14B04
-    R15B03
-    R16B03-1
+    19.0
+    18.3
   ).each do |otp_release|
     describe file("/home/travis/otp/#{otp_release}/activate") do
       it { should exist }
