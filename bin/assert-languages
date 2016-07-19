@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# vim:fileencoding=utf-8
 
 require 'optparse'
 
@@ -10,10 +11,10 @@ def main(argv: ARGV)
   end
 
   if assert_languages(op, base, other)
-    $stdout.puts 'OK'
+    $stdout.puts '✔︎'
     return 0
   end
-  $stdout.puts "NOT OK: #{op} #{base} #{other}"
+  $stdout.puts "✘: #{op} #{base} #{other}"
   1
 end
 
@@ -84,7 +85,9 @@ class FakeAttributes < ForeverHash
 
   def languages
     fetch('travis_packer_templates')
-      .fetch('job_board').fetch('languages')
+      .fetch('job_board')
+      .fetch('languages')
+      .reject { |lang| lang =~ /^__[a-z]+__/ }
   end
 
   private

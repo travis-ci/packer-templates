@@ -173,7 +173,10 @@ override['travis_build_environment']['default_elixir_version'] = '1.0.4'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
+override['travis_packer_templates']['job_board']['codename'] = 'sugilite'
 override['travis_packer_templates']['job_board']['languages'] = %w(
+  __sugilite__
+  android
   c
   c++
   clojure
@@ -188,11 +191,14 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   erlang
   go
   groovy
+  haskell
   haxe
   java
   julia
+  mega
   node_js
   perl
+  perl6
   php
   pure_java
   python
@@ -200,4 +206,5 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   ruby
   rust
   scala
+  universe
 )

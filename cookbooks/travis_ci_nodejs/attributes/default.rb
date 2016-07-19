@@ -8,4 +8,5 @@ override['nodejs']['versions'] = %w(
 override['nodejs']['aliases']['0.10'] = '0.1'
 override['nodejs']['aliases']['0.11.15'] = 'node-unstable'
 override['nodejs']['default'] = '0.10.36'
+override['travis_packer_templates']['job_board']['codename'] = 'nodejs'
 override['travis_packer_templates']['job_board']['languages'] = %w(node_js)
