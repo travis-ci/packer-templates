@@ -34,14 +34,6 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 override['gimme']['versions'] = []
 override['gimme']['default_version'] = ''
 
-override['java']['jdk_version'] = '8'
-override['java']['install_flavor'] = 'oracle'
-override['java']['oracle']['accept_oracle_download_terms'] = true
-override['java']['oracle']['jce']['enabled'] = true
-
-override['travis_java']['default_version'] = 'oraclejdk8'
-override['travis_java']['alternate_versions'] = []
-
 node_versions = %w(
   4.4.7
 )
