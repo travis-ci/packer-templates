@@ -42,7 +42,6 @@ end
 
 include_recipe 'travis_java::multi'
 include_recipe 'nodejs::multi'
-include_recipe 'travis_php::multi'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'postgresql::pgdg'
 include_recipe 'travis_python::pyenv'
