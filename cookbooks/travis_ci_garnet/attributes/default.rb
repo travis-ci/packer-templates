@@ -10,11 +10,11 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/garnet-system-info-commands.yml'
 
 override['travis_php']['multi']['versions'] = %w(
-  5.6.22
+  5.6.23
   7.0.7
 )
 override['travis_php']['multi']['aliases'] = {
-  '5.6' => '5.6.22',
+  '5.6' => '5.6.23',
   '7.0' => '7.0.7'
 }
 override['travis_php']['composer']['github_oauth_token'] = \
