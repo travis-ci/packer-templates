@@ -30,6 +30,6 @@ script:
 - git diff --cached --exit-code
 - make test
 - sudo packer-scripts/run-serverspecs
-- jq . < ~/.rspec.json
+- for f in ~/.*_rspec.json ; do jq . < $f ; done
 after_success:
 - make packer-build-trigger
