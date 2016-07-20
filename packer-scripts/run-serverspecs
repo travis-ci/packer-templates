@@ -89,7 +89,10 @@ cd ${cookbook_dir}
 sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
 
 set -o errexit
-rspec ${SPEC_ARGS}
+rspec ${SPEC_ARGS} \\
+  --format documentation \\
+  --format json \\
+  --out /home/travis/.rspec.json
 "
   local exit_code="$?"
 
