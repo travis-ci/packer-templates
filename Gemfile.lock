@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-packer-build.git
-  revision: 913e72c72eaffeba193461a28ecf40c6e3aea4e3
+  revision: ccbc35c0a8c2ff0f265271288c632a9bbb868f96
   branch: meat-body-var-rework
   specs:
     travis-packer-build (0.1.0)
