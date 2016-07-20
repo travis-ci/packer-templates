@@ -7,7 +7,7 @@ env:
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${PATH}"
   - REQUEST_INTERVAL=5
-  - SPEC_SUITES='travis_ci_minimal,travis_ci_mega'
+  - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
   - SKIP_CHEFDK_REMOVAL='1'

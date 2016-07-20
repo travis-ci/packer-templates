@@ -1,0 +1,16 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+  cookbook_path: cookbooks
+
+platforms:
+- name: ubuntu-14.04
+
+suites:
+- name: default
+  run_list:
+  - recipe[travis_ci_sugilite::default]
+  attributes:

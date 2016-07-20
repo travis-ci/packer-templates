@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+# vim:fileencoding=utf-8
+
+require 'optparse'
+
+def main(argv: ARGV)
+  op, base, other = parse_args(argv: argv)
+  if op !~ /excl|incl/
+    $stderr.puts "unknown op #{op.inspect}"
+    return 2
+  end
+
+  if assert_languages(op, base, other)
+    $stdout.puts '✔︎'
+    return 0
+  end
+  $stdout.puts "✘: #{op} #{base} #{other}"
+  1
+end
+
+def assert_languages(op, base, other)
+  loaded_base = load_languages(base)
+  loaded_other = load_languages(other)
+
+  return false if op == 'excl' && !(loaded_base & loaded_other).empty?
+  return false if op == 'incl' && (loaded_base & loaded_other) != loaded_other
+
+  true
+end
+
+def parse_args(argv: ARGV)
+  parsed = {
+    op: 'incl',
+    base: ENV['BASE'],
+    other: ENV['OTHER']
+  }
+
+  OptionParser.new do |opts|
+    opts.on('-o OP', '--op OP', String, 'language set operator') do |v|
+      parsed[:op] = v.strip
+    end
+
+    opts.on('-b BASE', '--base BASE', String,
+            'base filename for language set comparison') do |v|
+      parsed[:base] = v.strip
+    end
+
+    opts.on('-O OTHER', '--other OTHER', String,
+            'other filename for language set comparison') do |v|
+      parsed[:other] = v.strip
+    end
+  end.parse!(argv)
+
+  [parsed[:op], parsed[:base], parsed[:other]]
+end
+
+def load_languages(attributes_filename)
+  FakeAttributes.new(attributes_filename).eval!.languages
+end
+
+class ForeverHash < Hash
+  def [](key)
+    self[key] = ForeverHash.new unless key?(key)
+    fetch(key)
+  end
+end
+
+class FakeAttributes < ForeverHash
+  def initialize(attributes_filename)
+    @attributes_filename = attributes_filename
+  end
+
+  def eval!
+    instance_eval(File.read(attributes_filename))
+    self
+  end
+
+  def default
+    self
+  end
+
+  def override
+    self
+  end
+
+  def languages
+    fetch('travis_packer_templates')
+      .fetch('job_board')
+      .fetch('languages')
+      .reject { |lang| lang =~ /^__[a-z]+__/ }
+  end
+
+  private
+
+  attr_reader :attributes_filename
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__

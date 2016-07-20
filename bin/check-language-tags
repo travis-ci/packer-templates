@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))"
+set -o errexit
+
+prog="$(basename "${0}")"
+
+
+COMBOS=(
+  incl:sugilite:amethyst
+  incl:sugilite:garnet
+  excl:sugilite:connie
+  excl:amethyst:connie
+  excl:garnet:connie
+  excl:garnet:amethyst
+)
+
+for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
+  if [[ $lang != ruby ]] ; then
+    # Ruby is the "default" image on precise, but some of the languages covered
+    # by the ruby precise image are covered by the connie image on trusty, so we
+    # can't enforce the inclusive relationship with sugilite.
+    COMBOS+=(incl:sugilite:$lang)
+  fi
+  for excl in android erlang go haskell jvm nodejs perl php python ruby ; do
+    if [[ $lang = $excl ]] ; then
+      continue
+    fi
+    COMBOS+=(excl:$lang:$excl)
+  done
+done
+
+for cmd in ${COMBOS[@]} ; do
+  parts=(${cmd//:/ })
+  echo -en "${prog}: ${parts[@]} "
+  ./bin/assert-languages -o "${parts[0]}" \
+    -b ./cookbooks/travis_ci_${parts[1]}/attributes/default.rb \
+    -O ./cookbooks/travis_ci_${parts[2]}/attributes/default.rb
+done
