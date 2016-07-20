@@ -3,7 +3,7 @@ describe 'sphinx installation' do
     its(:stdout) { should match 'Sphinx' }
   end
 
-  describe 'shpinx files are there' do
+  describe 'sphinx files are there' do
     Dir.glob('/usr/local/sphinx-*/bin/indexer') do |indexer|
       describe command(indexer) do
         its(:stdout) { should match(/Sphinx /) }
