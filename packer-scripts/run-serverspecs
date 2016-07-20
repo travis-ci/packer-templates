@@ -65,14 +65,15 @@ __run_suite() {
     __populate_spec_bin
   fi
 
-  __run_suite_as_travis "${cookbook_dir}" "${runner}"
+  __run_suite_as_travis "${suite}" "${cookbook_dir}" "${runner}"
 
   popd &>/dev/null
 }
 
 __run_suite_as_travis() {
-  local cookbook_dir="${1}"
-  local runner="${2}"
+  local suite="${1}"
+  local cookbook_dir="${2}"
+  local runner="${3}"
 
   set +o errexit
 
@@ -89,7 +90,10 @@ cd ${cookbook_dir}
 sh -e /etc/init.d/xvfb start || echo \"ignoring exit \$? from xvfb\"
 
 set -o errexit
-rspec ${SPEC_ARGS}
+rspec ${SPEC_ARGS} \\
+  --format documentation \\
+  --format json \\
+  --out /home/travis/.${suite}_rspec.json
 "
   local exit_code="$?"
 
