@@ -10,7 +10,6 @@ issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'apt'
 depends 'clang'
-depends 'jq'
 depends 'nodejs'
 depends 'postgresql'
 depends 'sweeper'
