@@ -9,14 +9,18 @@ default['travis_ci_garnet']['prerequisite_packages'] = %w(
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/garnet-system-info-commands.yml'
 
-override['travis_php']['multi']['versions'] = %w(
+php_versions = %w(
   5.6.23
   7.0.7
 )
+override['travis_php']['multi']['versions'] = php_versions
 override['travis_php']['multi']['aliases'] = {
   '5.6' => '5.6.23',
   '7.0' => '7.0.7'
 }
+override['travis_php']['multi']['extensions']['apc']['versions'] = []
+override['travis_php']['multi']['extensions']['memcached']['versions'] = []
+override['travis_php']['multi']['extensions']['zmq-beta']['versions'] = []
 override['travis_php']['composer']['github_oauth_token'] = \
   '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
