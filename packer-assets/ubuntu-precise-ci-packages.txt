@@ -29,6 +29,7 @@ imagemagick
 iptables
 ivy
 jsvc
+language-pack-en
 libasound2
 libatk1.0-0
 libbz2-dev
