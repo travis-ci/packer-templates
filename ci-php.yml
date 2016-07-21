@@ -44,13 +44,17 @@ builders:
   - "/sbin/init"
   commit: true
 provisioners:
-- type: file
-  source: tmp/git-meta
-  destination: /var/tmp/git-meta
 - type: shell
   inline: sleep 10
   only:
   - googlecompute
+- type: shell
+  inline: apt-get update -yqq && apt-get install sudo -yqq
+  only:
+  - docker
+- type: file
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
 - type: file
   source: packer-assets/ubuntu-precise-normal-purge.txt
   destination: "/var/tmp/purge.txt"
