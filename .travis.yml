@@ -21,9 +21,7 @@ addons:
     - chefdk
 matrix:
   include:
-  - env:
-      matrix:
-      - SPEC_SUITES='travis_ci_standard'
+  - env: SPEC_SUITES='travis_ci_standard'
     dist: precise
     group: edge
     sudo: required
