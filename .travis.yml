@@ -2,13 +2,16 @@ language: ruby
 dist: trusty
 group: edge
 sudo: required
-cache: bundler
+cache:
+  bundler: true
+  directories:
+  - ${HOME}/bin
 rvm: 2.3.1
 env:
   matrix:
   - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
   global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${PATH}"
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
@@ -40,6 +43,7 @@ script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
+- if ! packer version &>/dev/null ; then make install-packer ; fi
 - make test
 - sudo packer-scripts/run-serverspecs
 - for f in ~/.*_rspec.json ; do jq . < $f ; done
