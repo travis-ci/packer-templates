@@ -32,6 +32,6 @@ for f in $(git grep -l '^#!/usr/bin/env bash') ; do
   echo "✓"
 done
 
-rubocop
+${RUBOCOP_EXE:-rubocop}
 ./run-foodcritic cookbooks
 ./bin/check-language-tags

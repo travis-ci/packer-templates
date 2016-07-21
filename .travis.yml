@@ -26,6 +26,8 @@ addons:
 matrix:
   include:
   - env: SPEC_SUITES='travis_ci_standard'
+         RUBOCOP_EXE='bundle exec rubocop'
+         FOODCRITIC_EXE='bundle exec foodcritic'
     gemfile: Gemfile.precise
     dist: precise
     group: edge
