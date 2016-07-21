@@ -34,7 +34,7 @@ builders:
 - type: docker
   name: docker
   ssh_pty: true
-  image: "travisci/ubuntu-upstart:12.04"
+  image: "ubuntu:12.04"
   run_command:
   - "-d"
   - "-i"
