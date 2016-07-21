@@ -5,13 +5,6 @@ override['travis_phpenv']['prerequisite_recipes'] = []
 
 override['travis_phpbuild']['prerequisite_recipes'] = []
 
-override['travis_php']['multi']['versions'] = []
-override['travis_php']['multi']['extensions'] = []
-override['travis_php']['multi']['binaries'] = []
-
-override['composer']['github_oauth_token'] = \
-  '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
-
 override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []

@@ -14,17 +14,12 @@ php_versions = %w(
   5.5.30
   5.6.15
 )
-override['travis_php']['multi']['versions'] = php_versions
-override['travis_php']['multi']['aliases'] = {
+override['travis_build_environment']['php_versions'] = php_versions
+override['travis_build_environment']['php_aliases'] = {
   '5.4' => '5.4.45',
   '5.5' => '5.5.30',
   '5.6' => '5.6.15'
 }
-override['travis_php']['multi']['extensions']['apc']['versions'] = php_versions.select { |v| v =~ /^5\.4/ }
-override['travis_php']['multi']['extensions']['memcached']['versions'] = php_versions.select { |v| v =~ /^5/ }
-override['travis_php']['multi']['extensions']['zmq-beta']['versions'] = php_versions.select { |v| v =~ /^5/ }
-override['travis_php']['composer']['github_oauth_token'] = \
-  '2d8490a1060eb8e8a1ae9588b14e3a039b9e01c6'
 
 override['travis_perlbrew']['perls'] = [
   { name: '5.10', version: 'perl-5.10.1' },

@@ -1,5 +1,5 @@
 ---
-message: ":tada: :bomb: commit-range=%{commit_range_string}"
+message: "%{source_commit_message}\n:tada: :bomb: commit-range=%{commit_range_string}"
 branch: "%{template_name}"
 config:
   language: generic
