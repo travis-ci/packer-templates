@@ -33,6 +33,9 @@ matrix:
       apt:
         sources:
         - chef-stable-precise
+before_install:
+- if ! rubocop --version 2>/dev/null ; then gem install rubocop -v 0.39.0 ; fi
+- if ! foodcritic --version 2>/dev/null ; then gem install foodcritic -v 6.3.0 ; fi
 install:
 - unset GEM_PATH
 - bundle install --path vendor/bundle
