@@ -30,8 +30,6 @@ matrix:
       apt:
         sources:
         - chef-stable-precise
-    before_install:
-    - gem install bundler
 install:
 - unset GEM_PATH
 - bundle install --path vendor/bundle
