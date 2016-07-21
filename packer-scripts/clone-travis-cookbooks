@@ -8,10 +8,13 @@ cd /tmp/chef-stuff
 
 rm -rf ./travis-cookbooks
 
+: ${TRAVIS_COOKBOOKS_BRANCH:=${TRAVIS_COOKBOOKS_EDGE_BRANCH}}
+: ${TRAVIS_COOKBOOKS_BRANCH:=master}
+: ${TRAVIS_COOKBOOKS_URL:=https://github.com/travis-ci/travis-cookbooks.git}
+
 git clone \
   --depth=10 \
-  --branch=${TRAVIS_COOKBOOKS_BRANCH:-master} \
-  ${TRAVIS_COOKBOOKS_URL:-https://github.com/travis-ci/travis-cookbooks.git}
+  --branch="${TRAVIS_COOKBOOKS_BRANCH}" "${TRAVIS_COOKBOOKS_URL}"
 
 if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
   pushd travis-cookbooks
