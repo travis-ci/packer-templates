@@ -24,6 +24,7 @@ gnupg2
 gzip
 imagemagick
 iptables
+language-pack-en
 lemon
 libbz2-dev
 libc-client2007e-dev
