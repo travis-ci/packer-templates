@@ -34,7 +34,7 @@ builders:
 - type: docker
   name: docker
   ssh_pty: true
-  image: "travisci/ubuntu-upstart:12.04"
+  image: "ubuntu:12.04"
   run_command:
   - "-d"
   - "-i"
@@ -65,6 +65,7 @@ provisioners:
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
@@ -87,12 +88,12 @@ provisioners:
   - packer-scripts/job-board-register
   - packer-scripts/minimize
   environment_vars:
-  - TRAVIS_OBFUSCATE_PASSWORD=1
-  - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
-  - IMAGE_NAME={{ user `gce_image_name` }}
-  - SPEC_SUITES=travis_ci_standard,travis_ci_php
   - DISPLAY=:99.0
+  - IMAGE_NAME={{ user `gce_image_name` }}
+  - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
+  - SPEC_SUITES=travis_ci_standard,travis_ci_php
   - TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable
+  - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
 -

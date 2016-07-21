@@ -31,6 +31,7 @@ __install_packages() {
     git \
     sudo \
     wget \
+    python \
     ${APT_GET_INSTALL_PRE_CHEF}
 }
 
