@@ -1,13 +1,14 @@
 language: ruby
 dist: trusty
 group: edge
-sudo: true
+sudo: required
 cache: bundler
 env:
+  matrix:
+  - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${PATH}"
   - REQUEST_INTERVAL=5
-  - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
   - SKIP_CHEFDK_REMOVAL='1'
@@ -18,6 +19,18 @@ addons:
     - chef-stable-trusty
     packages:
     - chefdk
+matrix:
+  include:
+  - env:
+      matrix:
+      - SPEC_SUITES='travis_ci_standard'
+    dist: precise
+    group: edge
+    sudo: required
+    addons:
+      apt:
+        sources:
+        - chef-stable-precise
 install:
 - unset GEM_PATH
 - bundle install --path vendor/bundle
