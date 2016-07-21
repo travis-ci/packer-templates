@@ -3,6 +3,7 @@ dist: trusty
 group: edge
 sudo: required
 cache: bundler
+rvm: 2.3.1
 env:
   matrix:
   - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
