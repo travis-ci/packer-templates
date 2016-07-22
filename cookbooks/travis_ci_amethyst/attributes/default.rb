@@ -68,6 +68,11 @@ override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
+
+override['travis_sphinxsearch']['ppas'] = %w(
+  ppa:builds/sphinxsearch-rel22
+)
+
 override['travis_packer_templates']['job_board']['codename'] = 'amethyst'
 override['travis_packer_templates']['job_board']['languages'] = %w(
   __amethyst__
