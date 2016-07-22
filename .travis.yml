@@ -36,4 +36,6 @@ script:
 - for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
 - git fetch --unshallow
 after_success:
-- bundle exec make packer-build-trigger
+- if [[ $SPEC_SUITES =~ sugilite ]] ; then
+    bundle exec make packer-build-trigger
+  fi
