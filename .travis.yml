@@ -1,35 +1,43 @@
 language: ruby
 dist: trusty
 group: edge
-sudo: true
-cache: bundler
+sudo: required
+cache:
+  bundler: true
+  directories:
+  - ${HOME}/bin
+rvm: 2.3.1
 env:
-  global:
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${PATH}"
-  - REQUEST_INTERVAL=5
+  matrix:
   - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
+  global:
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
+  - REQUEST_INTERVAL=5
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
   - SKIP_CHEFDK_REMOVAL='1'
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
-addons:
-  apt:
-    sources:
-    - chef-stable-trusty
-    packages:
-    - chefdk
+matrix:
+  include:
+  - env: SPEC_SUITES='travis_ci_standard'
+    dist: precise
+    group: edge
 install:
-- unset GEM_PATH
 - bundle install --path vendor/bundle
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
 script:
-- make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- make test
-- sudo packer-scripts/run-serverspecs
-- for f in ~/.*_rspec.json ; do jq . < $f ; done
+- if ! packer version &>/dev/null ; then make install-packer ; fi
+- bundle exec make test
+- bundle exec sudo packer-scripts/run-serverspecs
+- for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
+- git fetch --unshallow
 after_success:
-- make packer-build-trigger
+- if [[ $SPEC_SUITES =~ sugilite ]] ; then
+    bundle exec make packer-build-trigger ;
+  else
+    echo 'no packer-build-trigger for you' ;
+  fi

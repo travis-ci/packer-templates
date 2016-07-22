@@ -30,10 +30,15 @@ for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
   done
 done
 
+BATCH_INPUT=""
 for cmd in ${COMBOS[@]} ; do
   parts=(${cmd//:/ })
-  echo -en "${prog}: ${parts[@]} "
-  ./bin/assert-languages -o "${parts[0]}" \
-    -b ./cookbooks/travis_ci_${parts[1]}/attributes/default.rb \
-    -O ./cookbooks/travis_ci_${parts[2]}/attributes/default.rb
+  rec="${parts[0]}"
+  rec="${rec}:./cookbooks/travis_ci_${parts[1]}/attributes/default.rb"
+  rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
+  BATCH_INPUT="$BATCH_INPUT
+${rec}
+"
 done
+
+echo "${BATCH_INPUT}" | ./bin/assert-languages -i

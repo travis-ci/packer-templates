@@ -6,24 +6,24 @@ describe 'postgres installation' do
 
   describe 'psql commands' do
     before do
-      sh('dropdb test_db || true')
-      sh('createdb test_db')
+      sh('dropdb -U travis test_db || true')
+      sh('createdb -U travis test_db')
     end
 
     after do
-      sh('dropdb test_db || true')
+      sh('dropdb -U travis test_db || true')
     end
 
-    describe command('psql -ltA') do
+    describe command('psql -U travis -ltA') do
       its(:stdout) { should match(/^test_db\|/) }
     end
 
     context 'with a test table' do
       before do
-        sh('psql -c "CREATE TABLE test_table();" test_db')
+        sh('psql -U travis -c "CREATE TABLE test_table();" test_db')
       end
 
-      describe command("psql -tAc '\\dt' test_db") do
+      describe command("psql -U travis -tA -c '\\dt' test_db") do
         its(:stdout) { should match(/^public\|test_table\|/) }
         its(:stderr) { should be_empty }
       end
