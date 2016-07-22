@@ -10,12 +10,12 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/garnet-system-info-commands.yml'
 
 php_versions = %w(
-  5.6.23
+  5.6.24
   7.0.7
 )
 override['travis_build_environment']['php_versions'] = php_versions
 override['travis_build_environment']['php_aliases'] = {
-  '5.6' => '5.6.23',
+  '5.6' => '5.6.24',
   '7.0' => '7.0.7'
 }
 
