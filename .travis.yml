@@ -34,5 +34,6 @@ script:
 - bundle exec make test
 - bundle exec sudo packer-scripts/run-serverspecs
 - for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
+- git fetch --unshallow
 after_success:
 - bundle exec make packer-build-trigger
