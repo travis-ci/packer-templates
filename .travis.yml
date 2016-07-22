@@ -37,5 +37,7 @@ script:
 - git fetch --unshallow
 after_success:
 - if [[ $SPEC_SUITES =~ sugilite ]] ; then
-    bundle exec make packer-build-trigger
+    bundle exec make packer-build-trigger ;
+  else
+    echo 'no packer-build-trigger for you' ;
   fi
