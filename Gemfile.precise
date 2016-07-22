@@ -1,6 +1,0 @@
-# vim:filetype=ruby
-source 'https://rubygems.org'
-
-gem 'travis-packer-build', github: 'travis-ci/travis-packer-build'
-gem 'rubocop', '0.39.0'
-gem 'foodcritic', '6.3.0'

@@ -7,6 +7,11 @@ unset GEM_PATH
 if [[ $# > 1 && $1 = --env ]] ; then
   echo "Running isolated with env ${2}"
   exec env -i HOME=$HOME PATH=$PATH \
+              BUNDLE_GEMFILE=$BUNDLE_GEMFILE \
+              BUNDLE_BIN_PATH=$BUNDLE_BIN_PATH \
+              BUNDLE_ORIG_PATH=$BUNDLE_ORIG_PATH \
+              RUBYLIB=$RUBYLIB \
+              RUBYOPT=$RUBYOPT \
     bash -c "source '${2}' && \\
       unset PACKER_LOG && \\
       bash ${BASH_SOURCE[0]}
@@ -32,17 +37,6 @@ for f in $(git grep -l '^#!/usr/bin/env bash') ; do
   echo "✓"
 done
 
-if ${RUBOCOP_EXE:-rubocop} --version 2>/dev/null ; then
-  ${RUBOCOP_EXE:-rubocop}
-else
-  BUNDLE_GEMFILE=Gemfile.nochefdk bundle exec rubocop
-fi
-
-if ${FOODCRITIC_EXE:-foodcritic} --version 2>/dev/null ; then
-  ./run-foodcritic cookbooks
-else
-  BUNDLE_GEMFILE=Gemfile.nochefdk FOODCRITIC_EXE='bundle exec foodcritic' \
-    ./run-foodcritic cookbooks
-fi
-
+rubocop
+./run-foodcritic cookbooks
 ./bin/check-language-tags

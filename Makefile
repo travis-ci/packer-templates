@@ -14,7 +14,6 @@ UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
 BUILDER ?= googlecompute
 
-BUNDLE ?= bundle
 CURL ?= curl
 GIT ?= git
 JQ ?= jq
@@ -38,16 +37,12 @@ test:
 
 .PHONY: packer-build-trigger
 packer-build-trigger:
-	$(BUNDLE) exec travis-packer-build \
+	travis-packer-build \
 		--chef-cookbook-path="$(shell echo $(CHEF_COOKBOOK_PATH))" \
 		--packer-templates-path="$(PWD)/.git::" \
 		--commit-range="$(TRAVIS_COMMIT_RANGE)" \
 		--target-repo-slug=travis-infrastructure/packer-build \
 		--body-tmpl=$(PWD)/.travis-packer-build-tmpl.yml
-
-.PHONY: hackcheck
-hackcheck:
-	if $(GIT) grep -q \H\A\C\K ; then exit 1 ; fi
 
 .PHONY: install-packer
 install-packer: tmp/packer.zip

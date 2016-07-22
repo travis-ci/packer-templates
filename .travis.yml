@@ -17,36 +17,22 @@ env:
   - SPEC_RUNNER='bash -lc'
   - SKIP_CHEFDK_REMOVAL='1'
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
-addons:
-  apt:
-    sources:
-    - chef-stable-trusty
-    packages:
-    - chefdk
 matrix:
   include:
   - env: SPEC_SUITES='travis_ci_standard'
-    gemfile: Gemfile.nochefdk
     dist: precise
     group: edge
-    sudo: required
-    addons:
-      apt:
-        sources:
-        - chef-stable-precise
 install:
-- unset GEM_PATH
 - bundle install --path vendor/bundle
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
 script:
-- make hackcheck
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
 - if ! packer version &>/dev/null ; then make install-packer ; fi
-- make test
-- sudo packer-scripts/run-serverspecs
-- for f in ~/.*_rspec.json ; do jq . < $f ; done
+- bundle exec make test
+- bundle exec sudo packer-scripts/run-serverspecs
+- for f in ~/.*_rspec.json ; do jq . < $f &>/dev/null ; done
 after_success:
-- make packer-build-trigger
+- bundle exec make packer-build-trigger
