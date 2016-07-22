@@ -4,18 +4,42 @@
 require 'optparse'
 
 def main(argv: ARGV)
-  op, base, other = parse_args(argv: argv)
-  if op !~ /excl|incl/
-    $stderr.puts "unknown op #{op.inspect}"
-    return 2
+  parsed = parse_args(argv: argv)
+  assertions = [
+    [parsed[:op], parsed[:base], parsed[:other]]
+  ]
+
+  assertions = stdin_assertions if parsed[:stdin]
+
+  any_failed = false
+  assertions.each do |op, base, other|
+    if op !~ /excl|incl/
+      $stderr.puts "unknown op #{op.inspect}"
+      any_failed = true
+      next
+    end
+
+    if assert_languages(op, base, other)
+      $stdout.puts "✔︎: #{op} #{base} #{other}"
+      next
+    end
+    $stdout.puts "✘: #{op} #{base} #{other}"
+    any_failed = true
   end
 
-  if assert_languages(op, base, other)
-    $stdout.puts '✔︎'
-    return 0
+  return 1 if any_failed
+  0
+end
+
+def stdin_assertions(stream = $stdin)
+  assertions = []
+
+  stream.each_line do |line|
+    op, base, other = line.split(':').map(&:strip)
+    assertions << [op, base, other] if op && base && other
   end
-  $stdout.puts "✘: #{op} #{base} #{other}"
-  1
+
+  assertions
 end
 
 def assert_languages(op, base, other)
@@ -32,7 +56,8 @@ def parse_args(argv: ARGV)
   parsed = {
     op: 'incl',
     base: ENV['BASE'],
-    other: ENV['OTHER']
+    other: ENV['OTHER'],
+    stdin: false
   }
 
   OptionParser.new do |opts|
@@ -49,13 +74,20 @@ def parse_args(argv: ARGV)
             'other filename for language set comparison') do |v|
       parsed[:other] = v.strip
     end
+
+    opts.on('-i', '--stdin', 'read args from stdin') do
+      parsed[:stdin] = true
+    end
   end.parse!(argv)
 
-  [parsed[:op], parsed[:base], parsed[:other]]
+  parsed
 end
 
+@languages_cache = {}
+
 def load_languages(attributes_filename)
-  FakeAttributes.new(attributes_filename).eval!.languages
+  @languages_cache[attributes_filename] ||=
+    FakeAttributes.new(attributes_filename).eval!.languages
 end
 
 class ForeverHash < Hash

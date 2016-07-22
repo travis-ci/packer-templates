@@ -26,7 +26,7 @@ describe 'apt installation' do
     end
 
     describe command('sudo apt-get install -y language-pack-pt') do
-      its(:stdout) { should match(/Setting up /) }
+      its(:stdout) { should match(/Reading state/) }
     end
   end
 end
