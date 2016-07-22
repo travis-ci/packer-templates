@@ -32,6 +32,16 @@ for f in $(git grep -l '^#!/usr/bin/env bash') ; do
   echo "✓"
 done
 
-${RUBOCOP_EXE:-rubocop}
-./run-foodcritic cookbooks
+if ${RUBOCOP_EXE:-rubocop} --version 2>/dev/null ; then
+  ${RUBOCOP_EXE:-rubocop}
+else
+  bundle exec rubocop
+fi
+
+if ${FOODCRITIC_EXE:-foodcritic} --version 2>/dev/null ; then
+  ./run-foodcritic cookbooks
+else
+  FOODCRITIC_EXE='bundle exec foodcritic' ./run-foodcritic cookbooks
+fi
+
 ./bin/check-language-tags
