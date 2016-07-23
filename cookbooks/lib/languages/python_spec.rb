@@ -1,35 +1,46 @@
+def source_virtualenv_activate
+  return @sva if @sva
+  venv_activate = File.expand_path('~/virtualenv/python2.7/bin/activate')
+  @sva = "source #{venv_activate}" if File.exist?(venv_activate)
+  @sva = 'true'
+end
+
+def pycommand(cmd)
+  command("#{source_virtualenv_activate} ; #{cmd}")
+end
+
 describe 'python environment' do
-  describe command('python --version') do
+  describe pycommand('python --version') do
     its(:stdout) { should be_empty }
     its(:stderr) { should match(/^Python \d+\.\d+\.\d+/) }
   end
 
-  describe command('easy_install --version') do
+  describe pycommand('easy_install --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^setuptools \d+\.\d+\.\d+/) }
   end
 
-  describe command('pip --version') do
+  describe pycommand('pip --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^pip \d+\.\d+\.\d+/) }
   end
 
-  describe command('wheel version') do
+  describe pycommand('wheel version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^wheel \d+\.\d+\.\d+/) }
   end
 
-  describe command('py.test --version') do
+  describe pycommand('py.test --version') do
     its(:stdout) { should be_empty }
     its(:stderr) { should match(/pytest version \d+\.\d+\.\d+/) }
   end
 
-  describe command('nosetests --version') do
+  describe pycommand('nosetests --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^nosetests version \d+\.\d+\.\d+/) }
   end
 
-  describe command(
+  describe pycommand(
     %q{python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")'}
   ) do
     its(:stderr) { should be_empty }
