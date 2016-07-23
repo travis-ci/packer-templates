@@ -10,6 +10,7 @@ rvm: 2.3.1
 env:
   matrix:
   - SPEC_SUITES='travis_packer_templates,travis_ci_connie,travis_ci_sugilite'
+    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sugilite.yml"
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
@@ -20,6 +21,7 @@ env:
 matrix:
   include:
   - env: SPEC_SUITES='travis_packer_templates,travis_ci_standard'
+         TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
     dist: precise
     group: edge
 install:

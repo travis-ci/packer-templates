@@ -1,0 +1,32 @@
+---
+languages:
+- bash
+- c
+- c++
+- cplusplus
+- cpp
+- crystal
+- csharp
+- d
+- dart
+- default
+- generic
+- haxe
+- julia
+- r
+- ruby
+- rust
+- sh
+- shell
+features:
+- chromium
+- firefox
+- google-chrome
+- memcached
+- phantomjs
+- postgresql
+- rabbitmq
+- redis
+- sphinxsearch
+- sqlite
+- xserver

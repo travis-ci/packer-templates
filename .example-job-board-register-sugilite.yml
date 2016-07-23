@@ -1,0 +1,47 @@
+---
+languages:
+- __sugilite__
+- android
+- c
+- c++
+- clojure
+- cplusplus
+- cpp
+- crystal
+- csharp
+- d
+- dart
+- default
+- elixir
+- erlang
+- go
+- groovy
+- haskell
+- haxe
+- java
+- julia
+- legacy
+- mega
+- node_js
+- perl
+- perl6
+- php
+- pure_java
+- python
+- r
+- ruby
+- rust
+- scala
+- universe
+features:
+- chromium
+- firefox
+- google-chrome
+- memcached
+- phantomjs
+- postgresql
+- rabbitmq
+- redis
+- sphinxsearch
+- sqlite
+- xserver
