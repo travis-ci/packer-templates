@@ -1,5 +1,5 @@
 ---
-description: Travis CI connie build env template woo!
+description: Travis CI connie build env template
 push:
   name: travis-ci/ci-connie
 variables:
