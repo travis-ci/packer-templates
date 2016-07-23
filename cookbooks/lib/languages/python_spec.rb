@@ -1,15 +1,6 @@
-def source_virtualenv_activate
-  return @sva if @sva
-  venv_activate = File.expand_path('~/virtualenv/python2.7/bin/activate')
-  @sva = "source #{venv_activate}" if File.exist?(venv_activate)
-  @sva = 'true'
-end
-
-def pycommand(cmd)
-  command("#{source_virtualenv_activate} ; #{cmd}")
-end
-
 describe 'python environment' do
+  include Support::Python
+
   describe pycommand('python --version') do
     its(:stdout) { should be_empty }
     its(:stderr) { should match(/^Python \d+\.\d+\.\d+/) }
