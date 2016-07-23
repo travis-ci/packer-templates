@@ -35,6 +35,7 @@ include_recipe 'travis_build_environment::bats'
 include_recipe 'travis_build_environment::heroku_toolbelt'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
+  override['travis_packer_templates']['job_board']['features'] << 'docker'
   include_recipe 'travis_docker'
   include_recipe 'travis_docker::compose'
   include_recipe 'travis_build_environment::ramfs'

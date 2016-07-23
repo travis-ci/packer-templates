@@ -39,4 +39,4 @@ done
 
 rubocop
 ./run-foodcritic cookbooks
-./bin/check-language-tags
+./bin/check-job-board-tags

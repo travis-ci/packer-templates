@@ -4,6 +4,19 @@ override['java']['alternate_versions'] = %w(
   oraclejdk8
 )
 override['travis_packer_templates']['job_board']['codename'] = 'jvm'
+override['travis_packer_templates']['job_board']['features'] = %w(
+  chromium
+  firefox
+  google-chrome
+  memcached
+  phantomjs
+  postgresql
+  rabbitmq
+  redis
+  sphinxsearch
+  sqlite
+  xserver
+)
 override['travis_packer_templates']['job_board']['languages'] = %w(
   clojure
   groovy

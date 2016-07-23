@@ -6,24 +6,24 @@ require 'optparse'
 def main(argv: ARGV)
   parsed = parse_args(argv: argv)
   assertions = [
-    [parsed[:op], parsed[:base], parsed[:other]]
+    [parsed[:tagset], parsed[:op], parsed[:base], parsed[:other]]
   ]
 
   assertions = stdin_assertions if parsed[:stdin]
 
   any_failed = false
-  assertions.each do |op, base, other|
+  assertions.each do |tagset, op, base, other|
     if op !~ /excl|incl/
       $stderr.puts "unknown op #{op.inspect}"
       any_failed = true
       next
     end
 
-    if assert_languages(op, base, other)
-      $stdout.puts "✔︎: #{op} #{base} #{other}"
+    if assert_tags(tagset, op, base, other)
+      $stdout.puts "✔︎: #{tagset} #{op} #{base} #{other}"
       next
     end
-    $stdout.puts "✘: #{op} #{base} #{other}"
+    $stdout.puts "✘: #{tagset} #{op} #{base} #{other}"
     any_failed = true
   end
 
@@ -35,16 +35,17 @@ def stdin_assertions(stream = $stdin)
   assertions = []
 
   stream.each_line do |line|
-    op, base, other = line.split(':').map(&:strip)
-    assertions << [op, base, other] if op && base && other
+    tagset, op, base, other = line.split(':').map(&:strip)
+    rec = [tagset, op, base, other].compact.reject(&:empty?)
+    assertions << rec if rec.length == 4
   end
 
   assertions
 end
 
-def assert_languages(op, base, other)
-  loaded_base = load_languages(base)
-  loaded_other = load_languages(other)
+def assert_tags(tagset, op, base, other)
+  loaded_base = load_tagset(tagset, base)
+  loaded_other = load_tagset(tagset, other)
 
   return false if op == 'excl' && !(loaded_base & loaded_other).empty?
   return false if op == 'incl' && (loaded_base & loaded_other) != loaded_other
@@ -54,24 +55,30 @@ end
 
 def parse_args(argv: ARGV)
   parsed = {
-    op: 'incl',
+    op: ENV['OP'] || 'incl',
     base: ENV['BASE'],
     other: ENV['OTHER'],
+    tagset: ENV['TAGSET'],
     stdin: false
   }
 
   OptionParser.new do |opts|
-    opts.on('-o OP', '--op OP', String, 'language set operator') do |v|
+    opts.on('-t TAGSET', '--tagset TAGSET', String,
+            'tag set on which to operate') do |v|
+      parsed[:tagset] = v.strip
+    end
+
+    opts.on('-o OP', '--op OP', String, 'tag set operator') do |v|
       parsed[:op] = v.strip
     end
 
     opts.on('-b BASE', '--base BASE', String,
-            'base filename for language set comparison') do |v|
+            'base filename for tag set comparison') do |v|
       parsed[:base] = v.strip
     end
 
     opts.on('-O OTHER', '--other OTHER', String,
-            'other filename for language set comparison') do |v|
+            'other filename for tag set comparison') do |v|
       parsed[:other] = v.strip
     end
 
@@ -83,11 +90,15 @@ def parse_args(argv: ARGV)
   parsed
 end
 
-@languages_cache = {}
+def load_tagset(tagset, attributes_filename)
+  load_attributes(attributes_filename).send(tagset)
+end
 
-def load_languages(attributes_filename)
-  @languages_cache[attributes_filename] ||=
-    FakeAttributes.new(attributes_filename).eval!.languages
+@attributes_cache = {}
+
+def load_attributes(attributes_filename)
+  @attributes_cache[attributes_filename] ||=
+    FakeAttributes.new(attributes_filename).eval!
 end
 
 class ForeverHash < Hash
@@ -120,6 +131,12 @@ class FakeAttributes < ForeverHash
       .fetch('job_board')
       .fetch('languages')
       .reject { |lang| lang =~ /^__[a-z]+__/ }
+  end
+
+  def features
+    fetch('travis_packer_templates')
+      .fetch('job_board')
+      .fetch('features')
   end
 
   private

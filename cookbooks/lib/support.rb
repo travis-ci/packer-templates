@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 module Support
   autoload :Helpers, 'support/helpers'
+  autoload :JobBoardTags, 'support/job_board_tags'
 
   def base_packages
     @base_packages ||= []

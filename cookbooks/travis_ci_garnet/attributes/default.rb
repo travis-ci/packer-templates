@@ -94,6 +94,18 @@ override['travis_sphinxsearch']['ppas'] = %w(
 )
 
 override['travis_packer_templates']['job_board']['codename'] = 'garnet'
+override['travis_packer_templates']['job_board']['features'] = %w(
+  chromium
+  firefox
+  google-chrome
+  memcached
+  phantomjs
+  postgresql
+  rabbitmq
+  redis
+  sqlite
+  xserver
+)
 override['travis_packer_templates']['job_board']['languages'] = %w(
   __garnet__
   c
