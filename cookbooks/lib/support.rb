@@ -2,6 +2,7 @@ lib = File.expand_path('../', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 module Support
+  autoload :Erlang, 'support/erlang'
   autoload :Helpers, 'support/helpers'
   autoload :JobBoardTags, 'support/job_board_tags'
   autoload :Python, 'support/python'
