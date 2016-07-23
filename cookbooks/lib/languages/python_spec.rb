@@ -1,6 +1,6 @@
-describe 'python environment' do
-  include Support::Python
+include Support::Python
 
+describe 'python environment' do
   describe pycommand('python --version') do
     its(:stdout) { should be_empty }
     its(:stderr) { should match(/^Python \d+\.\d+\.\d+/) }
