@@ -119,7 +119,7 @@ provisioning process.  The steps executed include:
 #### cloning travis-cookbooks
 
 The script at `./packer-scripts/clone-travis-cookbooks` is responsible for `git
-clone`'ing [travis-cookbooks][https://github.com/travis-ci/travis-cookbooks]
+clone`'ing [travis-cookbooks](https://github.com/travis-ci/travis-cookbooks)
 into `/tmp/chef-stuff` on the provisioned machine.  Optional env vars supported
 by this script are:
 
