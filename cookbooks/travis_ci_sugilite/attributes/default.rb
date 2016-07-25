@@ -131,11 +131,12 @@ pythons.each do |full_name|
 end
 
 rubies = %w(
-  jruby-9.0.1.0
+  jruby-9.1.2.0
   1.9.3-p551
-  2.0.0-p647
-  2.1.7
-  2.2.3
+  2.0.0-p648
+  2.1.9
+  2.2.5
+  2.3.1
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
@@ -173,6 +174,19 @@ override['travis_build_environment']['default_elixir_version'] = '1.0.4'
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['codename'] = 'sugilite'
+override['travis_packer_templates']['job_board']['features'] = %w(
+  chromium
+  firefox
+  google-chrome
+  memcached
+  phantomjs
+  postgresql
+  rabbitmq
+  redis
+  sphinxsearch
+  sqlite
+  xserver
+)
 override['travis_packer_templates']['job_board']['languages'] = %w(
   __sugilite__
   android

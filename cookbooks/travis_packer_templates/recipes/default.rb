@@ -32,8 +32,18 @@ template '/etc/default/job-board-register' do
   mode 0o644
   variables(
     languages: node['travis_packer_templates']['job_board']['languages'],
+    features: node['travis_packer_templates']['job_board']['features'],
     codename: node['travis_packer_templates']['job_board']['codename']
   )
+end
+
+file '/.job-board-register.yml' do
+  content YAML.dump(
+    JSON.parse(JSON.dump(node['travis_packer_templates']['job_board']))
+  )
+  owner 'root'
+  group 'root'
+  mode 0o644
 end
 
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|

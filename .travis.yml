@@ -9,7 +9,8 @@ cache:
 rvm: 2.3.1
 env:
   matrix:
-  - SPEC_SUITES='travis_ci_connie,travis_ci_sugilite'
+  - SPEC_SUITES='travis_packer_templates,travis_ci_connie,travis_ci_sugilite'
+    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sugilite.yml"
   global:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
@@ -19,7 +20,8 @@ env:
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
 matrix:
   include:
-  - env: SPEC_SUITES='travis_ci_standard'
+  - env: SPEC_SUITES='travis_packer_templates,travis_ci_standard'
+         TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
     dist: precise
     group: edge
 install:
@@ -34,9 +36,9 @@ script:
 - bundle exec make test
 - bundle exec sudo packer-scripts/run-serverspecs
 - for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
-- git fetch --unshallow
 after_success:
 - if [[ $SPEC_SUITES =~ sugilite ]] ; then
+    git fetch --unshallow ;
     bundle exec make packer-build-trigger ;
   else
     echo 'no packer-build-trigger for you' ;

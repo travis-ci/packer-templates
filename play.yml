@@ -1,7 +1,5 @@
 ---
 description: Travis play build env template
-push:
-  name: travis-ci/play
 variables:
   travis_cookbooks_branch: "meat-system-info-fixy"
   travis_cookbooks_sha: ""
