@@ -1,6 +1,4 @@
 ---
-push:
-  name: travis-ci/internal-bastion
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
@@ -27,10 +25,6 @@ builders:
   associate_public_ip_address: true
   subnet_id: "{{ user `subnet_id` }}"
   vpc_id: "{{ user `vpc_id` }}"
-push:
-  name: travis-ci/bastion
-  include:
-  - internal-bastion.json
 provisioners:
 - type: shell
   inline:

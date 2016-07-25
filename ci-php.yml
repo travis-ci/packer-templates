@@ -1,9 +1,8 @@
 ---
 description: Travis CI php build env template
-push:
-  name: travis-ci/ci-php
 variables:
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_edge_branch: precise-stable
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   docker_login_email: "{{ env `DOCKER_LOGIN_EMAIL` }}"
   docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
@@ -69,7 +68,7 @@ provisioners:
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
-  - TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable
+  - TRAVIS_COOKBOOKS_EDGE_BRANCH={{ user `travis_cookbooks_edge_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
@@ -96,7 +95,7 @@ provisioners:
   - IMAGE_NAME={{ user `gce_image_name` }}
   - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
   - SPEC_SUITES=travis_packer_templates,travis_ci_standard,travis_ci_php
-  - TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable
+  - TRAVIS_COOKBOOKS_EDGE_BRANCH={{ user `travis_cookbooks_edge_branch` }}
   - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:

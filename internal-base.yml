@@ -1,7 +1,5 @@
 ---
 description: Base Ubuntu 14.04 image for Travis CI internal stuff
-push:
-  name: travis-ci/internal-base
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
@@ -65,8 +63,6 @@ builders:
   ssh_port: 22
   ssh_wait_timeout: 10000s
   tools_upload_flavor: linux
-push:
-  name: travis-ci/base-image
 provisioners:
 - type: file
   source: packer-assets/ubuntu-trusty-normal-purge.txt

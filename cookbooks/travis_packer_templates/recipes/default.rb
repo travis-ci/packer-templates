@@ -38,7 +38,9 @@ template '/etc/default/job-board-register' do
 end
 
 file '/.job-board-register.yml' do
-  content YAML.dump(node['travis_packer_templates']['job_board'].to_h)
+  content YAML.dump(
+    JSON.parse(JSON.dump(node['travis_packer_templates']['job_board']))
+  )
   owner 'root'
   group 'root'
   mode 0o644

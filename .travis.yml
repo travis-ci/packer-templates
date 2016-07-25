@@ -36,9 +36,9 @@ script:
 - bundle exec make test
 - bundle exec sudo packer-scripts/run-serverspecs
 - for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
-- git fetch --unshallow
 after_success:
 - if [[ $SPEC_SUITES =~ sugilite ]] ; then
+    git fetch --unshallow ;
     bundle exec make packer-build-trigger ;
   else
     echo 'no packer-build-trigger for you' ;
