@@ -7,12 +7,12 @@ describe 'erlang environment' do
      '" -noshell'
   ) do
     its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^"\d+/) }
+    its(:stdout) { should match(/^"R?\d+/) }
   end
 
-  describe erlcommand('kerl version') do
+  describe erlcommand('kerl list builds') do
     its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
+    its(:stdout) { should match(/^R?\d+/) }
   end
 
   describe erlcommand('rebar --version') do
