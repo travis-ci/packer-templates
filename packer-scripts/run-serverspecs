@@ -48,6 +48,7 @@ EOF
 }
 
 __remove_chefdk() {
+  apt-get purge -y chefdk
   rm -f /etc/apt/sources.list.d/chef-current.list
   apt-get update -y
 }
