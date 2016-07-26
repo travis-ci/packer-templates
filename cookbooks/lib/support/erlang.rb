@@ -8,7 +8,7 @@ module Support
       return @sa if @sa
       otp_releases.each do |version|
         next if @sa
-        activate = File.expand_path("~/otp/#{version}/bin/activate")
+        activate = File.expand_path("~/otp/#{version}/activate")
         @sa = "source #{activate}" if File.exist?(activate)
       end
       @sa ||= 'true'
