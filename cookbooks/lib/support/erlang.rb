@@ -6,7 +6,7 @@ module Support
 
     def source_activate
       return @sa if @sa
-      candidate_erlang_versions.each do |version|
+      otp_releases.each do |version|
         next if @sa
         activate = File.expand_path("~/otp/#{version}/bin/activate")
         @sa = "source #{activate}" if File.exist?(activate)
@@ -15,10 +15,16 @@ module Support
       @sa
     end
 
-    def candidate_erlang_versions
-      (
-        ENV['TRAVIS_CANDIDATE_ERLANG_VERSIONS'] || '18.2 R16B03'
-      ).split.map(&:strip)
+    def otp_releases
+      otp_releases_trusty || otp_releases_precise || %w(18.2 17.5 R16B03)
+    end
+
+    def otp_releases_trusty
+      ::Support.attributes.fetch('travis_build_environment', {})['otp_releases']
+    end
+
+    def otp_releases_precise
+      ::Support.attributes.fetch('kerl', {})['releases']
     end
   end
 end

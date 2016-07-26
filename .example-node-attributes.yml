@@ -1,0 +1,12 @@
+---
+__timestamp: '2016-07-26 15:29:44 UTC'
+travis_build_environment:
+  otp_releases:
+  - '18.2'
+  - '17.5'
+  - 'R16B03'
+travis_python:
+  pyenv:
+    pythons:
+    - '2.7'
+    - '3.5'
