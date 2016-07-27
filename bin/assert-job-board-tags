@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 # vim:fileencoding=utf-8
 
+lib = File.expand_path('../../cookbooks/lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'optparse'
+require 'job_board_tags'
 
 def main(argv: ARGV)
   parsed = parse_args(argv: argv)
@@ -11,6 +15,7 @@ def main(argv: ARGV)
 
   assertions = stdin_assertions if parsed[:stdin]
 
+  tags = JobBoardTags.new
   any_failed = false
   assertions.each do |tagset, op, base, other|
     if op !~ /excl|incl/
@@ -19,7 +24,7 @@ def main(argv: ARGV)
       next
     end
 
-    if assert_tags(tagset, op, base, other)
+    if assert_tags(tags, tagset, op, base, other)
       $stdout.puts "✔︎: #{tagset} #{op} #{base} #{other}"
       next
     end
@@ -43,9 +48,9 @@ def stdin_assertions(stream = $stdin)
   assertions
 end
 
-def assert_tags(tagset, op, base, other)
-  loaded_base = load_tagset(tagset, base)
-  loaded_other = load_tagset(tagset, other)
+def assert_tags(tags, tagset, op, base, other)
+  loaded_base = tags.load_tagset(tagset, base)
+  loaded_other = tags.load_tagset(tagset, other)
 
   return false if op == 'excl' && !(loaded_base & loaded_other).empty?
   return false if op == 'incl' && (loaded_base & loaded_other) != loaded_other
@@ -88,60 +93,6 @@ def parse_args(argv: ARGV)
   end.parse!(argv)
 
   parsed
-end
-
-def load_tagset(tagset, attributes_filename)
-  load_attributes(attributes_filename).send(tagset)
-end
-
-@attributes_cache = {}
-
-def load_attributes(attributes_filename)
-  @attributes_cache[attributes_filename] ||=
-    FakeAttributes.new(attributes_filename).eval!
-end
-
-class ForeverHash < Hash
-  def [](key)
-    self[key] = ForeverHash.new unless key?(key)
-    fetch(key)
-  end
-end
-
-class FakeAttributes < ForeverHash
-  def initialize(attributes_filename)
-    @attributes_filename = attributes_filename
-  end
-
-  def eval!
-    instance_eval(File.read(attributes_filename))
-    self
-  end
-
-  def default
-    self
-  end
-
-  def override
-    self
-  end
-
-  def languages
-    fetch('travis_packer_templates')
-      .fetch('job_board')
-      .fetch('languages')
-      .reject { |lang| lang =~ /^__[a-z]+__/ }
-  end
-
-  def features
-    fetch('travis_packer_templates')
-      .fetch('job_board')
-      .fetch('features')
-  end
-
-  private
-
-  attr_reader :attributes_filename
 end
 
 exit(main) if $PROGRAM_NAME == __FILE__

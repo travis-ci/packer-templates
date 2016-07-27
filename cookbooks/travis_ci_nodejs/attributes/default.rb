@@ -10,6 +10,7 @@ override['nodejs']['aliases']['0.11.15'] = 'node-unstable'
 override['nodejs']['default'] = '0.10.36'
 override['travis_packer_templates']['job_board']['codename'] = 'nodejs'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   chromium
   firefox
   google-chrome

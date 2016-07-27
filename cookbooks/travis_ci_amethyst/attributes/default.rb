@@ -75,6 +75,7 @@ override['travis_sphinxsearch']['ppas'] = %w(
 
 override['travis_packer_templates']['job_board']['codename'] = 'amethyst'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   memcached
   postgresql
   redis

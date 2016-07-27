@@ -7,6 +7,7 @@ module Support
   autoload :JobBoardTags, 'support/job_board_tags'
   autoload :NodeAttributes, 'support/node_attributes'
   autoload :Python, 'support/python'
+  autoload :RabbitMQAdmin, 'support/rabbitmqadmin'
 
   def base_packages
     @base_packages ||= []
@@ -34,4 +35,10 @@ module Support
   end
 
   module_function :attributes
+
+  def libdir
+    @libdir ||= File.expand_path('../', __FILE__)
+  end
+
+  module_function :libdir
 end

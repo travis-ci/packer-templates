@@ -9,11 +9,8 @@ COMBOS=(
   languages:incl:sugilite:garnet
   features:incl:sugilite:garnet
   languages:excl:sugilite:connie
-  features:excl:sugilite:connie
   languages:excl:amethyst:connie
-  features:excl:amethyst:connie
   languages:excl:garnet:connie
-  features:excl:garnet:connie
   languages:excl:garnet:amethyst
   features:incl:garnet:amethyst
   features:incl:ruby:sugilite
