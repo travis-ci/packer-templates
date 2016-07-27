@@ -5,6 +5,7 @@ module Support
   autoload :Erlang, 'support/erlang'
   autoload :Helpers, 'support/helpers'
   autoload :JobBoardTags, 'support/job_board_tags'
+  autoload :NodeAttributes, 'support/node_attributes'
   autoload :Python, 'support/python'
 
   def base_packages
@@ -27,4 +28,10 @@ module Support
   end
 
   module_function :base_packages_file
+
+  def attributes
+    ::Support::NodeAttributes.new.load
+  end
+
+  module_function :attributes
 end
