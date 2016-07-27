@@ -53,7 +53,7 @@ describe 'unarchivers installation' do
     describe command(
       %W(
         zip #{Support.libdir}/features/files/unarchivers.txt.zip
-            #{Support.libdir}/features/files/unarchivers.txt ;
+        #{Support.libdir}/features/files/unarchivers.txt ;
         ls #{Support.libdir}/features/files ;
         unzip #{Support.libdir}/features/files/unarchivers2.txt.zip ;
         cat unarchivers2.txt

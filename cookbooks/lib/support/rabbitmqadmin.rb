@@ -14,7 +14,7 @@ module Support
 
     def download_rabbitmqadmin
       system "curl -sSL -o #{dest} #{url}"
-      FileUtils.chmod(0755, dest)
+      FileUtils.chmod(0o0755, dest)
     end
 
     def dest

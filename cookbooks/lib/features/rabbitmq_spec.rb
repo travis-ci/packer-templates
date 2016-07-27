@@ -1,7 +1,9 @@
 require 'support'
 
 describe 'rabbitmq installation' do
-  let(:rmq) { Support::RabbitMQAdmin.new }
+  def rmq
+    @rmq ||= Support::RabbitMQAdmin.new
+  end
 
   before :all do
     sh('sudo service rabbitmq-server start')
