@@ -1,10 +1,10 @@
 require 'support'
 
-describe 'rabbitmq installation' do
-  def rmq
-    @rmq ||= Support::RabbitMQAdmin.new
-  end
+def rmq
+  @rmq ||= Support::RabbitMQAdmin.new
+end
 
+describe 'rabbitmq installation' do
   before :all do
     sh('sudo service rabbitmq-server start')
     tcpwait('127.0.0.1', 5672)
