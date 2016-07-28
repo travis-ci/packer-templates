@@ -4,6 +4,6 @@ describe 'maven installation' do
   end
 
   describe command('mvn help:describe -Dplugin=help') do
-    its(:stdout) { should match 'Name: Maven Help Plugin' }
+    its(:stdout) { should match(/Building Maven Stub Project/) }
   end
 end

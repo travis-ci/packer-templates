@@ -23,7 +23,10 @@ describe 'cassandra installation' do
       its(:stderr) { should match(/Using thrift lib:/) }
     end
 
-    describe command('cqlsh --no-color --debug -f ./spec/files/cassandra_schema.cql') do
+    describe command(
+      'cqlsh --no-color --debug -f ' \
+      "#{Support.libdir}/features/files/cassandra_schema.cql"
+    ) do
       its(:stdout) { should match(/\s+first\s+\|\s+Jane/) }
       its(:stdout) { should match(/\s+last\s+\|\s+Doe/) }
       its(:stdout) { should match(/\s+age\s+\|\s+84/) }

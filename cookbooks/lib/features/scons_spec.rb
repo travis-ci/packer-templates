@@ -6,10 +6,11 @@ describe 'scons installation' do
 
   describe 'scons commands' do
     before :each do
-      sh('rm -f ./spec/files/helloworld.o ./spec/files/helloworld')
+      sh("rm -f #{Support.libdir}/features/files/helloworld.o " \
+         "#{Support.libdir}/features/files/helloworld")
     end
 
-    describe command('scons -C ./spec/files') do
+    describe command("scons -C #{Support.libdir}/features/files") do
       its(:stdout) do
         should include(
           'scons: Reading SConscript files ...',
@@ -22,7 +23,7 @@ describe 'scons installation' do
       end
     end
 
-    describe command('cd ./spec/files; scons --tree=all') do
+    describe command("cd #{Support.libdir}/features/files; scons --tree=all") do
       its(:stdout) do
         should include(
           '+-.',
