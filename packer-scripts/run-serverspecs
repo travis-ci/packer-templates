@@ -12,6 +12,11 @@ main() {
 
   : ${PACKER_CHEF_PREFIX:=/tmp}
   : ${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}
+  : ${PACKER_BUILDER_TYPE:=docker}
+
+  if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]] ; then
+    export SPEC_ARGS="${SPEC_ARGS} --tag ~docker"
+  fi
 
   __install_chefdk
   __create_sudo_bash
@@ -61,10 +66,6 @@ __run_suite() {
     __suite_cookbook_dir "${suite}" "${packer_chef_prefix}"
   )"
   pushd "${cookbook_dir}" &>/dev/null
-
-  if [[ -d spec/bin ]] ; then
-    __populate_spec_bin
-  fi
 
   __run_suite_as_travis "${suite}" "${cookbook_dir}" "${runner}"
 
@@ -122,13 +123,6 @@ __suite_cookbook_dir() {
       -type d | head -1
   )"
   dirname "${spec_dir}"
-}
-
-__populate_spec_bin() {
-  curl -sSL \
-    -o spec/bin/rabbitmqadmin \
-    http://hg.rabbitmq.com/rabbitmq-management/raw-file/tip/bin/rabbitmqadmin
-  chmod +x spec/bin/rabbitmqadmin
 }
 
 __chown_travis_dirs() {

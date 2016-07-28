@@ -91,15 +91,20 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_packer_templates']['job_board']['codename'] = 'garnet'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   chromium
   firefox
   google-chrome
   memcached
   mongodb
+  nodejs_interpreter
+  perl_interpreter
   phantomjs
   postgresql
+  python_interpreter
   rabbitmq
   redis
+  ruby_interpreter
   sqlite
   xserver
 )

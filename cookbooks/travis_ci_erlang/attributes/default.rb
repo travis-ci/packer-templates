@@ -1,5 +1,6 @@
 override['travis_packer_templates']['job_board']['codename'] = 'erlang'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   chromium
   firefox
   google-chrome

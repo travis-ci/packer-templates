@@ -12,6 +12,7 @@ override['composer']['github_oauth_token'] = '2d8490a1060eb8e8a1ae9588b14e3a039b
 
 override['travis_packer_templates']['job_board']['codename'] = 'php'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   chromium
   firefox
   google-chrome

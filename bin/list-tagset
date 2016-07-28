@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+# vim:fileencoding=utf-8
+
+lib = File.expand_path('../../cookbooks/lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+def main(argv: ARGV)
+  unless argv.length == 2
+    puts "Usage: #{File.basename($PROGRAM_NAME)} <tagset> <attributes-file>"
+    return 1
+  end
+
+  require 'job_board_tags'
+
+  puts JobBoardTags.new.load_tagset(*argv).join("\n")
+  0
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__

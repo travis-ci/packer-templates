@@ -9,19 +9,20 @@ cache:
 rvm: 2.3.1
 env:
   matrix:
-  - SPEC_SUITES='travis_packer_templates,travis_ci_connie,travis_ci_sugilite'
+  - DIST=trusty
     TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sugilite.yml"
-    NODE_ATTRIBUTES_YML="${TRAVIS_BUILD_DIR}/.example-node-attributes.yml"
   global:
+  - NODE_ATTRIBUTES_YML="${TRAVIS_BUILD_DIR}/.example-node-attributes.yml"
+  - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
+  - SKIP_CHEFDK_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
-  - SKIP_CHEFDK_REMOVAL='1'
-  - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
+  - SPEC_SUITES='travis_packer_templates'
 matrix:
   include:
-  - env: SPEC_SUITES='travis_packer_templates,travis_ci_standard'
+  - env: DIST=precise
          TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
     dist: precise
     group: edge
@@ -38,7 +39,7 @@ script:
 - bundle exec sudo packer-scripts/run-serverspecs
 - for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
 after_success:
-- if [[ $SPEC_SUITES =~ sugilite ]] ; then
+- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]] ; then
     git fetch --unshallow ;
     bundle exec make packer-build-trigger ;
   else

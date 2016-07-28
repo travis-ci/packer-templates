@@ -9,7 +9,7 @@ module Support
     def load_specs!
       %w(language feature).each do |tagset|
         declared_job_board_tagset("#{tagset}s").each do |value|
-          spec_name = "#{tagset}s/#{value}_spec"
+          spec_name = "#{tagset}s/#{value.tr('-', '_')}_spec"
           begin
             require spec_name
           rescue LoadError => e

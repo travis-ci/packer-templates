@@ -5,6 +5,7 @@ override['java']['alternate_versions'] = %w(
 )
 override['travis_packer_templates']['job_board']['codename'] = 'jvm'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   chromium
   firefox
   google-chrome

@@ -1,9 +1,7 @@
-describe 'ruby environment' do
-  describe command('ruby --version') do
-    its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^ruby \d+\.\d+\.\d+/) }
-  end
+require 'features/ruby_interpreter_spec'
+require 'features/rvm_spec'
 
+describe 'ruby installation' do
   describe command('gem --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
