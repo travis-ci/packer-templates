@@ -99,7 +99,7 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
   - IMAGE_NAME={{ user `gce_image_name` }}
-  - SPEC_SUITES=travis_packer_templates,travis_ci_amethyst
+  - SPEC_SUITES=travis_packer_templates
   - DISPLAY=:99.0
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:

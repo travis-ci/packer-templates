@@ -10,6 +10,7 @@ override['python']['pyenv']['pythons'] = %w(
 )
 override['travis_packer_templates']['job_board']['codename'] = 'python'
 override['travis_packer_templates']['job_board']['features'] = %w(
+  basic
   chromium
   firefox
   google-chrome

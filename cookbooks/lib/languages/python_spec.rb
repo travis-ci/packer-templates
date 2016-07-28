@@ -1,11 +1,8 @@
 include Support::Python
 
-describe 'python environment' do
-  describe pycommand('python --version') do
-    its(:stdout) { should be_empty }
-    its(:stderr) { should match(/^Python \d+\.\d+\.\d+/) }
-  end
+require 'features/python_interpreter_spec'
 
+describe 'python environment' do
   describe pycommand('easy_install --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^setuptools \d+\.\d+\.\d+/) }
