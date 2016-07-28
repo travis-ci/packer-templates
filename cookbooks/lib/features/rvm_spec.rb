@@ -8,7 +8,7 @@ describe 'rvm installation' do
   describe 'rvm commands' do
     describe command('rvm list') do
       its(:stdout) { should include('rvm rubies', 'current') }
-      its(:stdout) { should include('ruby-1.9.3') }
+      its(:stdout) { should match(/ruby-(1\.9|2\.[1-3])\.\d/) }
       its(:stderr) { should be_empty }
     end
 

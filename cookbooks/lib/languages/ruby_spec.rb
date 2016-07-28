@@ -1,4 +1,5 @@
-require 'features/ruby_interpreter'
+require 'features/ruby_interpreter_spec'
+require 'features/rvm_spec'
 
 describe 'ruby installation' do
   describe command('gem --version') do
