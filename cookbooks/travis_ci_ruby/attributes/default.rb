@@ -34,10 +34,14 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   google-chrome
   memcached
   mongodb
+  nodejs_interpreter
+  perl_interpreter
   phantomjs
   postgresql
+  python_interpreter
   rabbitmq
   redis
+  ruby_interpreter
   sphinxsearch
   sqlite
   xserver

@@ -45,4 +45,5 @@ ${rec}
 "
 done
 
-echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i
+echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i | \
+  grep --color -E '^✘:.*|$'
