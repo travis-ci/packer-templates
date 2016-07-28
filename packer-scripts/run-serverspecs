@@ -12,6 +12,11 @@ main() {
 
   : ${PACKER_CHEF_PREFIX:=/tmp}
   : ${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}
+  : ${PACKER_BUILDER_TYPE:=docker}
+
+  if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]] ; then
+    export SPEC_ARGS="${SPEC_ARGS} --tag ~docker"
+  fi
 
   __install_chefdk
   __create_sudo_bash
