@@ -9,7 +9,8 @@ cache:
 rvm: 2.3.1
 env:
   matrix:
-  - TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sugilite.yml"
+  - DIST=trusty
+    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sugilite.yml"
   global:
   - NODE_ATTRIBUTES_YML="${TRAVIS_BUILD_DIR}/.example-node-attributes.yml"
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
@@ -21,7 +22,8 @@ env:
   - SPEC_SUITES='travis_packer_templates'
 matrix:
   include:
-  - env: TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
+  - env: DIST=precise
+         TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
     dist: precise
     group: edge
 install:
