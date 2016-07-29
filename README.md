@@ -228,19 +228,19 @@ Optional env vars supported by this script are:
 
 #### removing undesirable files
 
-The script at './packer-scripts/cleanup` is responsible for removing files and
+The script at `./packer-scripts/cleanup` is responsible for removing files and
 directories that are unnecessary for the CI environment or otherwise add
 unnecessary mass to the mastered image.  The list of operations is:
 
 - recursively remove a bunch of files and directories
-- conditionally remove `/var/lib/apt/lists/\*`
+- conditionally remove `/var/lib/apt/lists/*`
 - conditionally remove `/var/lib/man-db`
 - conditionally remove `/home/travis/linux.iso` and `/home/travis/shutdown.sh`
 - empty all files in `/var/log`
 
 Optional env vars supported by this script are:
 
-- `CLEANUP_APT_LISTS` - if non-empty, trigger removal of `/var/lib/apt/lists/\*`
+- `CLEANUP_APT_LISTS` - if non-empty, trigger removal of `/var/lib/apt/lists/*`
 - `CLEANUP_MAN_DB` - if non-empty, trigger removal of `/var/lib/man-db`
 
 #### registering the image with job-board
