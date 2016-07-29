@@ -15,7 +15,7 @@ main() {
   : ${PACKER_BUILDER_TYPE:=docker}
 
   if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]] ; then
-    export SPEC_ARGS="${SPEC_ARGS} --tag ~docker"
+    export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
   __install_chefdk
