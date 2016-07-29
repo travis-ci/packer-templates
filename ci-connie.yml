@@ -34,7 +34,7 @@ builders:
 - type: docker
   name: docker
   ssh_pty: true
-  image: "ubuntu-upstart:14.04"
+  image: "ubuntu:14.04"
   run_command:
   - "-d"
   - "-i"
