@@ -143,11 +143,16 @@ post-processors:
     tag: "{{ user `docker_tag` }}"
     only:
     - docker
-  - type: docker-push
-    login: true
-    login_email: "{{ user `quay_docker_login_email` }}"
-    login_password: "{{ user `quay_docker_login_password` }}"
-    login_username: "{{ user `quay_docker_login_username` }}"
-    login_server: "{{ user `quay_docker_login_server` }}"
+  - type: artifice
+    files:
+    - tmp/docker-meta/.dumped
+    only:
+    - docker
+  - type: shell-local
+    scripts:
+    - bin/docker-push
+    environment_vars:
+    - "DOCKER_DEST=quay.io/travisci/ci-connie:{{ user `docker_tag` }}"
+    - "DOCKER_CREDS=quay"
     only:
     - docker

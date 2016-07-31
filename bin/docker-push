@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  local envdir=$(dirname "${1}")
+
+  set +o xtrace
+  for f in ${envdir}/* ; do
+    eval "export $(basename $f)='$(cat $f)'"
+  done
+
+  if [[ ${DOCKER_CREDS} ]] ; then
+    local prefix="$(echo ${DOCKER_CREDS} | tr '[:lower:]' '[:upper:]')"
+    for varname in USERNAME PASSWORD SERVER ; do
+      eval "export DOCKER_LOGIN_${varname}=\$${prefix}_DOCKER_LOGIN_${varname}"
+    done
+  fi
+
+  [[ ${DOCKER_LOGIN_USERNAME} ]] || {
+    echo Missing \$DOCKER_LOGIN_USERNAME
+    exit 1
+  }
+
+  [[ ${DOCKER_LOGIN_PASSWORD} ]] || {
+    echo Missing \$DOCKER_LOGIN_PASSWORD
+    exit 1
+  }
+
+  [[ ${DOCKER_LOGIN_SERVER} ]] || {
+    echo Missing \$DOCKER_LOGIN_SERVER
+    exit 1
+  }
+
+  [[ ${DOCKER_DEST} ]] || {
+    echo Missing \$DOCKER_DEST
+  }
+
+  echo -en 'docker login... '
+  docker login \
+    -u "${DOCKER_LOGIN_USERNAME}" \
+    -p "${DOCKER_LOGIN_PASSWORD}" \
+    "${DOCKER_LOGIN_SERVER}"
+  echo success
+
+  : ${DOCKER_PUSH_RETRIES:=2}
+  : ${DOCKER_LOGOUT_POST_PUSH:=1}
+
+  local attempt=1
+  local sleep_interval=10
+
+  while true ; do
+    echo "docker push attempt=$((attempt + 1))"
+    if docker push "${DOCKER_DEST}" ; then
+      if [[ ${DOCKER_LOGOUT_POST_PUSH} =~ true|yes|1 ]] ; then
+        docker logout "${DOCKER_LOGIN_SERVER}"
+      fi
+      echo 'docker push success'
+      exit 0
+    fi
+
+    attempt=$((attempt + 1))
+
+    if [[ $attempt > ${DOCKER_PUSH_RETRIES} ]] ; then
+      break
+    fi
+
+    sleep $((attempt * sleep_interval))
+  done
+
+  exit 86
+}
+
+echo 'Running docker-push'
+main "$@"
