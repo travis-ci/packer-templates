@@ -19,6 +19,9 @@ config:
   install:
   - git clone --branch="%{branch}" "https://github.com/travis-ci/packer-templates.git"
   - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
+  - if [[ "$(packer version 2>/dev/null)" != "Packer v0.10.1" ]] ; then
+      make -C packer-templates install-packer ;
+    fi
   - "./packer-templates/bin/packer-build-install"
   script:
   - "./packer-templates/bin/packer-build-script %{template_name}"
