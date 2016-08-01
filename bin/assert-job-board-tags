@@ -24,7 +24,11 @@ def main(argv: ARGV)
       next
     end
 
-    if assert_tags(tags, tagset, op, base, other)
+    if send(
+      "assert_#{op}",
+      tags.load_tagset(tagset, base),
+      tags.load_tagset(tagset, other)
+    )
       $stdout.puts "✔︎: #{tagset} #{op} #{base} #{other}"
       next
     end
@@ -48,15 +52,16 @@ def stdin_assertions(stream = $stdin)
   assertions
 end
 
-def assert_tags(tags, tagset, op, base, other)
-  loaded_base = tags.load_tagset(tagset, base)
-  loaded_other = tags.load_tagset(tagset, other)
+def assert_eq(loaded_base, loaded_other)
+  loaded_base == loaded_other
+end
 
-  return false if op == 'eq' && (loaded_base != loaded_other)
-  return false if op == 'excl' && !(loaded_base & loaded_other).empty?
-  return false if op == 'incl' && (loaded_base & loaded_other) != loaded_other
+def assert_excl(loaded_base, loaded_other)
+  (loaded_base & loaded_other).empty?
+end
 
-  true
+def assert_incl(loaded_base, loaded_other)
+  (loaded_base & loaded_other) == loaded_other
 end
 
 def parse_args(argv: ARGV)
