@@ -18,7 +18,7 @@ def main(argv: ARGV)
   tags = JobBoardTags.new
   any_failed = false
   assertions.each do |tagset, op, base, other|
-    if op !~ /excl|incl/
+    if op !~ /eq|excl|incl/
       $stderr.puts "unknown op #{op.inspect}"
       any_failed = true
       next
@@ -52,6 +52,7 @@ def assert_tags(tags, tagset, op, base, other)
   loaded_base = tags.load_tagset(tagset, base)
   loaded_other = tags.load_tagset(tagset, other)
 
+  return false if op == 'eq' && (loaded_base != loaded_other)
   return false if op == 'excl' && !(loaded_base & loaded_other).empty?
   return false if op == 'incl' && (loaded_base & loaded_other) != loaded_other
 

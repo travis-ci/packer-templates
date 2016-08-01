@@ -2,6 +2,7 @@
 
 cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))"
 set -o errexit
+set -o pipefail
 
 COMBOS=(
   languages:incl:sugilite:amethyst
@@ -13,8 +14,7 @@ COMBOS=(
   languages:excl:garnet:connie
   languages:excl:garnet:amethyst
   features:incl:garnet:amethyst
-  features:incl:ruby:sugilite
-  features:incl:sugilite:ruby
+  features:eq:ruby:sugilite
 )
 
 for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
