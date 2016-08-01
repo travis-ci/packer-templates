@@ -13,12 +13,12 @@ main() {
   : ${SKIP_ON_BUILDER_TYPE:-docker}
 
   [[ $JOB_BOARD_IMAGES_URL ]] || {
-    echo Missing \$JOB_BOARD_IMAGES_URL
+    __log Missing \$JOB_BOARD_IMAGES_URL
     exit 1
   }
 
   [[ $IMAGE_NAME ]] || {
-    echo Missing \$IMAGE_NAME
+    __log Missing \$IMAGE_NAME
     exit 1
   }
 
@@ -31,7 +31,7 @@ main() {
   if [[ "x${PACKER_BUILDER_TYPE}" != 'x' && \
         "x${SKIP_ON_BUILDER_TYPE}" != 'x' && \
         "x${PACKER_BUILDER_TYPE}" == "x${SKIP_ON_BUILDER_TYPE}" ]] ; then
-    echo Skipping registration on $PACKER_BUILDER_TYPE
+    __log Skipping registration on $PACKER_BUILDER_TYPE
     set +o errexit
     exit 0
   fi
@@ -69,11 +69,9 @@ main() {
   curl_params="${curl_params}&name=$(__uri_esc "${IMAGE_NAME}")"
   curl_params="${curl_params}&tags=$(__uri_esc "${TAGS}")"
 
-  echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-    "msg=\"registering with job board\"" \
+  __log "msg=\"registering with job board\"" \
     "name=${IMAGE_NAME} infra=${IMAGE_INFRA} tags=${TAGS}"
-  echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-    "curl_params=\"${curl_params}\""
+  __log "curl_params=\"${curl_params}\""
 
   curl -s -X POST "$JOB_BOARD_IMAGES_URL?${curl_params}" | jq .
 }
@@ -104,6 +102,10 @@ __uname() {
 
 __uri_esc() {
   echo "\"${1}\"" | jq -r '. | @uri'
+}
+
+__log() {
+  echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$@"
 }
 
 main "$@"

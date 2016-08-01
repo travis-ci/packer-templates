@@ -18,44 +18,49 @@ main() {
   fi
 
   [[ ${DOCKER_LOGIN_USERNAME} ]] || {
-    echo Missing \$DOCKER_LOGIN_USERNAME
+    __log Missing \$DOCKER_LOGIN_USERNAME
     exit 1
   }
 
   [[ ${DOCKER_LOGIN_PASSWORD} ]] || {
-    echo Missing \$DOCKER_LOGIN_PASSWORD
+    __log Missing \$DOCKER_LOGIN_PASSWORD
     exit 1
   }
 
   [[ ${DOCKER_LOGIN_SERVER} ]] || {
-    echo Missing \$DOCKER_LOGIN_SERVER
+    __log Missing \$DOCKER_LOGIN_SERVER
     exit 1
   }
 
   [[ ${DOCKER_DEST} ]] || {
-    echo Missing \$DOCKER_DEST
+    __log Missing \$DOCKER_DEST
   }
 
-  echo -en 'docker login... '
+  __log 'msg="docker login"'
   docker login \
     -u "${DOCKER_LOGIN_USERNAME}" \
     -p "${DOCKER_LOGIN_PASSWORD}" \
     "${DOCKER_LOGIN_SERVER}"
-  echo success
 
   : ${DOCKER_PUSH_RETRIES:=2}
   : ${DOCKER_LOGOUT_POST_PUSH:=1}
 
-  local attempt=1
+  local attempt=0
   local sleep_interval=10
+  local push_start
 
   while true ; do
-    echo "docker push attempt=$((attempt + 1))"
+    __log "msg=\"docker push\" attempt=$((attempt + 1))"
+    push_start=$(date +%s)
     if docker push "${DOCKER_DEST}" ; then
+      __log 'msg="docker push complete"' \
+        "duration=$(($(date +%s) - push_start))s"
+
       if [[ ${DOCKER_LOGOUT_POST_PUSH} =~ true|yes|1 ]] ; then
+        __log 'msg="docker logout"'
         docker logout "${DOCKER_LOGIN_SERVER}"
+        __log 'msg="docker logout complete"'
       fi
-      echo 'docker push success'
       exit 0
     fi
 
@@ -65,11 +70,15 @@ main() {
       break
     fi
 
+    __log "msg=\"sleeping\" interval=$((attempt * sleep_interval))"
     sleep $((attempt * sleep_interval))
   done
 
   exit 86
 }
 
-echo 'Running docker-push'
+__log() {
+  echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$@"
+}
+
 main "$@"
