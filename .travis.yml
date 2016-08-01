@@ -34,10 +34,12 @@ script:
 - make
 - git diff --exit-code
 - git diff --cached --exit-code
-- if [[ "$(packer version 2>/dev/null)" != "Packer v0.10.1" ]] ; then make install-packer ; fi
 - bundle exec make test
 - bundle exec sudo packer-scripts/run-serverspecs
-- for f in ~/.*_rspec.json ; do echo "checking $f" ; jq . < $f &>/dev/null ; done
+- for f in ~/.*_rspec.json ; do
+    echo "checking $f" ;
+    jq . < $f &>/dev/null ;
+  done
 after_success:
 - if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]] ; then
     git fetch --unshallow ;

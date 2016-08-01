@@ -51,7 +51,7 @@ test:
 
 .PHONY: clean
 clean:
-	$(RM) -r $(PWD)/tmp/docker-meta
+	$(RM) -r $(PWD)/tmp/docker-meta $(PWD)/tmp/git-meta
 
 .PHONY: packer-build-trigger
 packer-build-trigger:
