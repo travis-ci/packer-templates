@@ -282,4 +282,17 @@ Optional env vars supported by this script are:
 
 #### minimizing image size
 
-**TODO**
+The script at `./packer-scripts/minimize` is responsible for reducing the size
+of the provisioned image by squeezing out all of the empty space into a
+contiguous area using the [same method as
+bento](https://github.com/chef/bento/blob/0d78beb7df68b025a0354f8eee58d81102d192f1/scripts/common/minimize.sh).
+The list of operations is:
+
+- exit `0` if `$PACKER_BUILDER_TYPE` is either `googlecompute` or `amazon-ebs`,
+  as minimizing like this is superfluous on those builders
+- if `$PACKER_BUILDER_TYPE` is not `docker`, turn off swap and zero out the swap
+  partition if available.
+- write zeros to `/EMPTY` until the disk is out of space
+- remove `/EMPTY` and run `sync`
+- if the `vmware-toolbox-cmd` is available, run disk shrink operations for both
+  `/` `/boot` paths.
