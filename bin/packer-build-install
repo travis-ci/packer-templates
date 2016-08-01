@@ -8,3 +8,7 @@ mkdir -p tmp/
 echo "${GCE_ACCOUNT_FILE_B64_BZ2}" | \
   base64 -d | \
   bunzip2 > tmp/gce.json
+
+if [[ "x$(packer version 2>/dev/null)" != "xPacker v0.10.1" ]] ; then
+  make install-packer
+fi

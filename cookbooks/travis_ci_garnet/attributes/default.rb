@@ -105,6 +105,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   rabbitmq
   redis
   ruby_interpreter
+  rvm
   sqlite
   xserver
 )

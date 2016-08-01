@@ -4,4 +4,9 @@
 export AWS_ACCESS_KEY_ID AWS_ACCESS_KEY
 export AWS_SECRET_ACCESS_KEY AWS_SECRET_KEY
 
-make -C "$(dirname $(dirname ${BASH_SOURCE[0]}))" ${1}
+set -o errexit
+
+cd $(dirname $(dirname ${BASH_SOURCE[0]}))
+
+make
+make ${1}
