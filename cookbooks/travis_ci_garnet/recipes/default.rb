@@ -24,7 +24,6 @@
 
 include_recipe 'travis_build_environment'
 include_recipe 'travis_packer_templates'
-include_recipe 'travis_git::lfs'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   node.override['travis_packer_templates']['job_board']['features'] << 'docker'
@@ -36,12 +35,9 @@ end
 include_recipe 'wget'
 include_recipe 'openssl'
 include_recipe 'mercurial'
-include_recipe 'bazaar'
 include_recipe 'subversion'
 include_recipe 'scons'
 include_recipe 'unarchivers'
-include_recipe 'md5deep'
-include_recipe 'dictionaries'
 include_recipe 'travis_java::multi'
 include_recipe 'ant'
 include_recipe 'maven'
