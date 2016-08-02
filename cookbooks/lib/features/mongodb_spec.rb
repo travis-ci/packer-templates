@@ -7,12 +7,17 @@ describe 'mongodb installation' do
   describe 'mongo commands', sudo: true do
     before :all do
       sh('sudo service mongodb start')
-      tcpwait('127.0.0.1', 27_017)
+      procwait(/\bmongod\b/)
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
+      sleep 3 # HACK: thanks a bunch, Mongo
+    end
+
+    after :all do
+      sh('sudo service mongodb stop || true')
     end
 
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
-      its(:stdout) { should match(/{ "_id" : ObjectId\("[\w]+"\), "x" : 6 }/) }
+      its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
     end
   end
 end
