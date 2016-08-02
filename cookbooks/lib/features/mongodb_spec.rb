@@ -11,6 +11,10 @@ describe 'mongodb installation' do
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
     end
 
+    after :all do
+      sh('sudo service mongodb stop || true')
+    end
+
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
       its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
     end
