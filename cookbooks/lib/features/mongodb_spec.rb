@@ -9,7 +9,7 @@ describe 'mongodb installation' do
       sh('sudo service mongodb start')
       procwait(/\bmongod\b/)
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
-      sleep 3  # HACK thanks a bunch, Mongo
+      sleep 3 # HACK: thanks a bunch, Mongo
     end
 
     after :all do
