@@ -23,6 +23,7 @@ features:
 - firefox
 - google-chrome
 - memcached
+- mongodb
 - phantomjs
 - postgresql
 - rabbitmq
