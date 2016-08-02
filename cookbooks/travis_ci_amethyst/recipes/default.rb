@@ -22,18 +22,8 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'apt'
-include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
-include_recipe 'clang::tarball'
-include_recipe 'travis_build_environment::cmake'
-include_recipe 'sysctl'
-include_recipe 'travis_git::ppa'
-include_recipe 'travis_git::lfs'
-include_recipe 'travis_build_environment::packer'
-include_recipe 'travis_build_environment::bats'
-include_recipe 'travis_build_environment::heroku_toolbelt'
+include_recipe 'travis_packer_templates'
 
 unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   node.override['travis_packer_templates']['job_board']['features'] << 'docker'
