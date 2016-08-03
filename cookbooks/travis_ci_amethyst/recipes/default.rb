@@ -33,12 +33,8 @@ unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_build_environment::ramfs'
 end
 
-include_recipe 'wget'
 include_recipe 'openssl'
-include_recipe 'subversion'
 include_recipe 'scons'
-include_recipe 'unarchivers'
-include_recipe 'sqlite'
 include_recipe 'postgresql'
 include_recipe 'travis_python::pyenv'
 include_recipe 'travis_python::system'
@@ -51,7 +47,6 @@ include_recipe 'travis_build_environment::xserver'
 include_recipe 'emacs::nox'
 include_recipe 'vim'
 include_recipe 'travis_system_info'
-include_recipe 'sweeper'
 
 include_recipe 'travis_python::devshm' unless
   node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
