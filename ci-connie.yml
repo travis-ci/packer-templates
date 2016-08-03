@@ -1,5 +1,5 @@
 ---
-description: Travis CI connie build env template
+description: Travis CI connie build env template woo
 variables:
   docker_repository: "quay.io/travisci/ci-connie"
   docker_tag: "packer-{{ timestamp }}"
