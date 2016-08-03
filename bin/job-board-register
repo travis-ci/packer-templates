@@ -5,9 +5,11 @@ set -o errexit
 main() {
   shopt -s nullglob
 
-  if [[ -f /etc/default/job-board-register ]] ; then
-    source /etc/default/job-board-register
-  fi
+  local envdir=$(dirname "${1}")
+
+  for f in ${envdir}/* ; do
+    eval "export $(basename $f)='$(cat $f)'"
+  done
 
   : ${PACKER_ENV_DIR:=/.packer-env}
   : ${SKIP_ON_BUILDER_TYPE:-docker}
@@ -21,6 +23,12 @@ main() {
     __log Missing \$IMAGE_NAME
     exit 1
   }
+
+  local jb_env="$(dirname "${envdir}")/job-board-${IMAGE_NAME}"
+
+  if [[ -f "${jb_env}" ]] ; then
+    source "${jb_env}"
+  fi
 
   if [[ -d ${PACKER_ENV_DIR} ]] ; then
     for f in ${PACKER_ENV_DIR}/* ; do

@@ -1,7 +1,11 @@
 SHELL := /bin/bash
 BRANCH_FILE := tmp/git-meta/packer-templates-branch
 SHA_FILE := tmp/git-meta/packer-templates-sha
-META_FILES := $(BRANCH_FILE) $(SHA_FILE) $(PWD)/tmp/docker-meta/.dumped
+META_FILES := \
+	$(BRANCH_FILE) \
+	$(SHA_FILE) \
+	$(PWD)/tmp/docker-meta/.dumped \
+	$(PWD)/tmp/job-board-meta/.dumped
 PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
@@ -76,7 +80,8 @@ tmp:
 
 $(META_FILES): .git/HEAD
 	./bin/dump-git-meta ./tmp/git-meta
-	./bin/dump-docker-meta $(PWD)/tmp/docker-meta
+	./bin/write-envdir $(PWD)/tmp/docker-meta 'DOCKER_LOGIN_(USERNAME|PASSWORD|SERVER)'
+	./bin/write-envdir $(PWD)/tmp/job-board-meta 'JOB_BOARD'
 
 $(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
 	$(SED) 's/libcurl4-openssl-dev/libcurl4-gnutls-dev/' < $^ > $@

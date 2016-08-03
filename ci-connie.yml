@@ -91,15 +91,16 @@ provisioners:
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
-  - packer-scripts/job-board-register
   - packer-scripts/minimize
   environment_vars:
   - TRAVIS_OBFUSCATE_PASSWORD=1
-  - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
-  - IMAGE_NAME={{ user `gce_image_name` }}
   - SPEC_SUITES=travis_packer_templates
   - DISPLAY=:99.0
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /etc/default/job-board-register
+  destination: tmp/job-board-{{ user `gce_image_name` }}
+  direction: download
 post-processors:
 -
   - type: docker-tag
@@ -116,7 +117,20 @@ post-processors:
     scripts:
     - bin/docker-push
     environment_vars:
-    - "DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}"
-    - "DOCKER_CREDS=quay"
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    - DOCKER_CREDS=quay
     only:
     - docker
+-
+  - type: artifice
+    files:
+    - tmp/job-board-meta/.dumped
+    only:
+    - googlecompute
+  - type: shell-local
+    scripts:
+    - bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `gce_image_name` }}
+    only:
+    - googlecompute
