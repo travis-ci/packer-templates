@@ -35,7 +35,6 @@ end
 
 include_recipe 'wget'
 include_recipe 'openssl'
-include_recipe 'mercurial'
 include_recipe 'subversion'
 include_recipe 'scons'
 include_recipe 'unarchivers'

@@ -10,7 +10,6 @@ issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'emacs'
 depends 'memcached'
-depends 'mercurial'
 depends 'nodejs'
 depends 'openssl'
 depends 'postgresql'
