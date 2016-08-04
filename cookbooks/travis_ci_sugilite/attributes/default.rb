@@ -177,6 +177,7 @@ override['travis_packer_templates']['job_board']['codename'] = 'sugilite'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
+  docker
   firefox
   google-chrome
   memcached

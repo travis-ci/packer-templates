@@ -93,6 +93,7 @@ override['travis_packer_templates']['job_board']['codename'] = 'garnet'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
+  docker
   firefox
   google-chrome
   memcached

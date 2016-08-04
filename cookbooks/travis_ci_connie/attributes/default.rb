@@ -44,6 +44,7 @@ override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_packer_templates']['job_board']['codename'] = 'connie'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  docker
   perl_interpreter
   python_interpreter
   ruby_interpreter

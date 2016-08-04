@@ -243,43 +243,6 @@ Optional env vars supported by this script are:
 - `CLEANUP_APT_LISTS` - if non-empty, trigger removal of `/var/lib/apt/lists/*`
 - `CLEANUP_MAN_DB` - if non-empty, trigger removal of `/var/lib/man-db`
 
-#### registering the image with job-board
-
-The script at `./packer-scripts/job-board-register` is responsible for
-"registering" the mastered image by making an HTTP request to the
-[job-board](https://github.com/travis-ci/job-board) images API.  The list of
-operations is:
-
-- source `/etc/default/job-board-register` if it exists, which is typically
-  written by the `travis_packer_templates::default` recipe
-- source the contents of the `/.packer-env` envdir if present
-- short circuit and exit 0 if skip conditions are met
-- dump any env vars with prefixes `^(PACKER|TRAVIS|TAGS|IMAGE_NAME)`
-- define a `TAGS` env var that will be used as the `tags` HTTP request param.
-- define a URI-escaped query string from several env vars
-- perform the HTTP request to job-board with `curl` and pipe the response
-  through `jq`
-
-Required env vars for this script are:
-
-- `JOB_BOARD_IMAGES_URL` - the URL including `PATH_INFO` prefix to job-board
-- `IMAGE_NAME` - the name of the image, typically the same as that used by the
-  target infrastructure
-
-Optional env vars supported by this script are:
-
-- `PACKER_ENV_DIR` - path to the envdir containing packer-specific env vars,
-  default `/.packer-env`
-- `SKIP_ON_BUILDER_TYPE` - a packer builder name for which registration should
-  be skipped
-- `TAGS` - initial value for tags set during job-board registration
-- `GROUP` - value used in `group` tag, default `edge` if edge conditions match,
-  else `dev`
-- `DIST` - value used in `dist` tag, default either Linux release codename or OS
-  X product version
-- `OS` - value used in `os` tag, default lowercase value of `uname`, mapped to
-  `osx` on Darwin
-
 #### minimizing image size
 
 The script at `./packer-scripts/minimize` is responsible for reducing the size
@@ -296,3 +259,35 @@ The list of operations is:
 - remove `/EMPTY` and run `sync`
 - if the `vmware-toolbox-cmd` is available, run disk shrink operations for both
   `/` `/boot` paths.
+
+#### registering the image with job-board
+
+The script at `./bin/job-board-register` is responsible for "registering" the
+mastered image in a post-processing step by making an HTTP request to the
+[job-board](https://github.com/travis-ci/job-board) images API.  The list of
+operations is:
+
+- source any available env vars exported from the provisioned VM
+- dump any env vars with prefixes `^(PACKER|TRAVIS|TAGS|IMAGE_NAME)`
+- define a `TAGS` env var that will be used as the `tags` HTTP request param.
+- define a URI-escaped query string from several env vars
+- perform the HTTP request to job-board with `curl` and pipe the response
+  through `jq`
+
+Required env vars for this script are:
+
+- `JOB_BOARD_IMAGES_URL` - the URL including `PATH_INFO` prefix to job-board
+- `IMAGE_NAME` - the name of the image, typically the same as that used by the
+  target infrastructure
+
+Optional env vars supported by this script are:
+
+- `PACKER_ENV_DIR` - path to the envdir containing packer-specific env vars,
+  default `/.packer-env`
+- `TAGS` - initial value for tags set during job-board registration
+- `GROUP` - value used in `group` tag, default `edge` if edge conditions match,
+  else `dev`
+- `DIST` - value used in `dist` tag, default either Linux release codename or OS
+  X product version
+- `OS` - value used in `os` tag, default lowercase value of `uname`, mapped to
+  `osx` on Darwin

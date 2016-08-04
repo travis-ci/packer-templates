@@ -72,6 +72,7 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['codename'] = 'amethyst'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  docker
   memcached
   nodejs_interpreter
   perl_interpreter

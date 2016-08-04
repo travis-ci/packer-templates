@@ -4,8 +4,9 @@ set -o errexit
 
 main() {
   local envdir="${1}"
+  local pattern="${2}"
   mkdir -p "${envdir}"
-  printenv | grep -E 'DOCKER_LOGIN_(USERNAME|PASSWORD|SERVER)' | while read vardef ; do
+  printenv | grep -E "${pattern}" | while read vardef ; do
     echo "${vardef##*=}" > "${envdir}/${vardef//=*/}"
   done
   touch "${envdir}/.dumped"

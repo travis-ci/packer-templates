@@ -14,7 +14,7 @@ COMBOS=(
   languages:excl:garnet:connie
   languages:excl:garnet:amethyst
   features:incl:garnet:amethyst
-  features:eq:ruby:sugilite
+  features:incl:sugilite:ruby
 )
 
 for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
