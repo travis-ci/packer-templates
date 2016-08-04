@@ -6,7 +6,6 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-ci-erlang-precise-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  job_board_images_url: "{{ env `JOB_BOARD_IMAGES_URL` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: "precise-stable"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -85,16 +84,33 @@ provisioners:
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
-  - packer-scripts/job-board-register
   - packer-scripts/minimize
   environment_vars:
   - DISPLAY=:99.0
-  - IMAGE_NAME={{ user `gce_image_name` }}
-  - JOB_BOARD_IMAGES_URL={{ user `job_board_images_url` }}
   - SPEC_SUITES=travis_packer_templates
   - TRAVIS_COOKBOOKS_EDGE_BRANCH={{ user `travis_cookbooks_edge_branch` }}
   - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /etc/default/job-board-register
+  destination: tmp/job-board-{{ user `gce_image_name` }}.env
+  direction: download
+  only:
+  - googlecompute
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-tar-bz2
+  environment_vars:
+  - PACKER_ENV_TAR=/var/tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  only:
+  - googlecompute
+- type: file
+  source: /var/tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  destination: tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  direction: download
+  only:
+  - googlecompute
 post-processors:
 -
   - type: docker-tag
@@ -111,7 +127,19 @@ post-processors:
     scripts:
     - bin/docker-push
     environment_vars:
-    - "DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}"
-    - "DOCKER_CREDS=quay"
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    - DOCKER_CREDS=quay
     only:
     - docker
+-
+  - type: artifice
+    files:
+    - tmp/job-board-meta/.dumped
+    only:
+    - googlecompute
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `gce_image_name` }}
+    only:
+    - googlecompute

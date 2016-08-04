@@ -25,13 +25,11 @@
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
+include_recipe 'travis_docker'
+include_recipe 'travis_docker::compose'
 
-unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
-  node.override['travis_packer_templates']['job_board']['features'] << 'docker'
-  include_recipe 'travis_docker'
-  include_recipe 'travis_docker::compose'
-  include_recipe 'travis_build_environment::ramfs'
-end
+include_recipe 'travis_build_environment::ramfs' unless
+  node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
 
 include_recipe 'openssl'
 include_recipe 'scons'

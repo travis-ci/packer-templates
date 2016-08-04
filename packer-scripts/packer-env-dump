@@ -3,20 +3,26 @@
 set -o errexit
 set -o xtrace
 
-mkdir -p /.packer-env
+main() {
+  : ${PACKER_ENV_DIR:=/.packer-env}
 
-for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
-  eval "echo \$$var" > /.packer-env/$var
-done
+  mkdir -p ${PACKER_ENV_DIR}
 
-if [[ -f /var/tmp/git-meta/packer-templates-branch ]] ; then
-  cp -v \
-    /var/tmp/git-meta/packer-templates-branch \
-    /.packer-env/PACKER_TEMPLATES_BRANCH
-fi
+  for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
+    eval "echo \$$var" > "${PACKER_ENV_DIR}/$var"
+  done
 
-if [[ -f /var/tmp/git-meta/packer-templates-sha ]] ; then
-  cp -v \
-    /var/tmp/git-meta/packer-templates-sha \
-    /.packer-env/PACKER_TEMPLATES_SHA
-fi
+  if [[ -f /var/tmp/git-meta/packer-templates-branch ]] ; then
+    cp -v \
+      /var/tmp/git-meta/packer-templates-branch \
+      "${PACKER_ENV_DIR}/PACKER_TEMPLATES_BRANCH"
+  fi
+
+  if [[ -f /var/tmp/git-meta/packer-templates-sha ]] ; then
+    cp -v \
+      /var/tmp/git-meta/packer-templates-sha \
+      "${PACKER_ENV_DIR}/PACKER_TEMPLATES_SHA"
+  fi
+}
+
+main "$@"

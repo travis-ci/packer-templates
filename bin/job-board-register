@@ -1,47 +1,40 @@
 #!/usr/bin/env bash
 
 set -o errexit
+set -o pipefail
+shopt -s nullglob
 
 main() {
-  shopt -s nullglob
+  local envdir="$(dirname "${1}")"
+  local relbase="$(dirname "${envdir}")"
 
-  local envdir=$(dirname "${1}")
-
-  for f in ${envdir}/* ; do
-    eval "export $(basename $f)='$(cat $f)'"
-  done
-
-  : ${PACKER_ENV_DIR:=/.packer-env}
-  : ${SKIP_ON_BUILDER_TYPE:-docker}
+  __load_envdir "${envdir}"
 
   [[ $JOB_BOARD_IMAGES_URL ]] || {
-    __log Missing \$JOB_BOARD_IMAGES_URL
+    __log 'error="missing $JOB_BOARD_IMAGES_URL"'
     exit 1
   }
 
   [[ $IMAGE_NAME ]] || {
-    __log Missing \$IMAGE_NAME
+    __log 'error="missing $IMAGE_NAME"'
     exit 1
   }
 
-  local jb_env="$(dirname "${envdir}")/job-board-${IMAGE_NAME}"
+  local packer_env_tarball="${relbase}/packer-env-${IMAGE_NAME}.tar.bz2"
+  local packer_envdir="${relbase}/packer-env-${IMAGE_NAME}"
 
-  if [[ -f "${jb_env}" ]] ; then
-    source "${jb_env}"
+  if [[ -f "${packer_env_tarball}" ]] ; then
+    tar -C "${relbase}" -xjvf "${packer_env_tarball}"
   fi
 
-  if [[ -d ${PACKER_ENV_DIR} ]] ; then
-    for f in ${PACKER_ENV_DIR}/* ; do
-      eval "export $(basename $f)='$(cat $f)'"
-    done
+  if [[ -d "${packer_envdir}" ]] ; then
+    __load_envdir "${packer_envdir}"
   fi
 
-  if [[ "x${PACKER_BUILDER_TYPE}" != 'x' && \
-        "x${SKIP_ON_BUILDER_TYPE}" != 'x' && \
-        "x${PACKER_BUILDER_TYPE}" == "x${SKIP_ON_BUILDER_TYPE}" ]] ; then
-    __log Skipping registration on $PACKER_BUILDER_TYPE
-    set +o errexit
-    exit 0
+  local job_board_envdir="${relbase}/job-board-${IMAGE_NAME}.env"
+
+  if [[ -f "${job_board_envdir}" ]] ; then
+    source "${job_board_envdir}"
   fi
 
   env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | sort
@@ -81,7 +74,7 @@ main() {
     "name=${IMAGE_NAME} infra=${IMAGE_INFRA} tags=${TAGS}"
   __log "curl_params=\"${curl_params}\""
 
-  curl -s -X POST "$JOB_BOARD_IMAGES_URL?${curl_params}" | jq .
+  curl -f -s -X POST "${JOB_BOARD_IMAGES_URL}?${curl_params}" | jq .
 }
 
 __group() {
@@ -114,6 +107,12 @@ __uri_esc() {
 
 __log() {
   echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$@"
+}
+
+__load_envdir() {
+  for f in ${1}/* ; do
+    eval "export $(basename $f)='$(cat $f)'"
+  done
 }
 
 main "$@"

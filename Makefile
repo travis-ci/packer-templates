@@ -38,14 +38,14 @@ langs:
 .PHONY: langs-precise
 langs-precise:
 	@for f in ci-*.yml ; do \
-		grep -l 'travis_cookbooks_edge_branch: precise-stable' $$f | \
+		grep -lE 'travis_cookbooks_edge_branch:.*precise-stable' $$f | \
 		$(SED) 's/ci-//;s/\.yml//' ; \
 	done
 
 .PHONY: langs-trusty
 langs-trusty:
 	@for f in ci-*.yml ; do \
-		grep -l 'travis_cookbooks_edge_branch: master' $$f | \
+		grep -lE 'travis_cookbooks_edge_branch:.*master' $$f | \
 		$(SED) 's/ci-//;s/\.yml//' ; \
 	done
 

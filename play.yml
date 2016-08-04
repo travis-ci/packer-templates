@@ -3,7 +3,7 @@ description: Travis play build env template
 variables:
   docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: "travis-ci-connie-trusty-{{ timestamp }}"
+  gce_image_name: "travis-play-trusty-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   gcr_auth_token: "{{ env `GCR_AUTH_TOKEN` }}"
   gcr_login_server: "{{ env `GCR_LOGIN_SERVER` }}"
@@ -12,6 +12,21 @@ variables:
   travis_cookbooks_edge_branch: "master"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 builders:
+- type: googlecompute
+  name: googlecompute
+  communicator: ssh
+  ssh_timeout: 10m
+  ssh_port: 22
+  image_description: Travis Play
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image: ubuntu-1404-trusty-v20160627
+  zone: us-central1-a
+  image_name: "{{ user `gce_image_name` }}"
+  machine_type: n1-standard-4
+  disk_size: 15
+  tags:
+  - play
 - type: docker
   name: docker
   ssh_pty: true
@@ -32,23 +47,39 @@ provisioners:
   scripts:
   - packer-scripts/packer-env-dump
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  inline: "echo 'TAGS=language_whatever:true' > /etc/default/job-board-register"
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /etc/default/job-board-register
+  destination: tmp/job-board-{{ user `gce_image_name` }}.env
+  direction: download
+  only:
+  - googlecompute
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-tar-bz2
+  environment_vars:
+  - PACKER_ENV_TAR=/var/tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  only:
+  - googlecompute
+- type: file
+  source: /var/tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  destination: tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  direction: download
+  only:
+  - googlecompute
 post-processors:
 -
-  - type: docker-tag
-    repository: quay.io/travisci/play
-    tag: "{{ user `docker_tag` }}"
-    only:
-    - docker
   - type: artifice
     files:
-    - tmp/docker-meta/.dumped
+    - tmp/job-board-meta/.dumped
     only:
-    - docker
+    - googlecompute
   - type: shell-local
-    scripts:
-    - bin/docker-push
+    script: bin/job-board-register
     environment_vars:
-    - DOCKER_DEST=quay.io/travisci/play:{{ user `docker_tag` }}
-    - DOCKER_CREDS=quay
+    - IMAGE_NAME={{ user `gce_image_name` }}
     only:
-    - docker
+    - googlecompute
