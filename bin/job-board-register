@@ -5,10 +5,14 @@ set -o pipefail
 shopt -s nullglob
 
 main() {
-  local envdir="$(dirname "${1}")"
-  local relbase="$(dirname "${envdir}")"
+  local image_metadata_tarball="${1}"
+  local image_metadata_dir="$(basename "${image_metadata_tarball}" .tar.bz2)"
+  local image_metadata_envdir="${image_metadata_dir}/env"
+  local image_job_board_env="${image_metadata_dir}/job-board-register"
+  local relbase="$(dirname "${image_metadata_tarball}")"
+  local job_board_envdir="${relbase}/job-board-env"
 
-  __load_envdir "${envdir}"
+  __load_envdir "${job_board_envdir}"
 
   [[ $JOB_BOARD_IMAGES_URL ]] || {
     __log 'error="missing $JOB_BOARD_IMAGES_URL"'
@@ -20,21 +24,16 @@ main() {
     exit 1
   }
 
-  local packer_env_tarball="${relbase}/packer-env-${IMAGE_NAME}.tar.bz2"
-  local packer_envdir="${relbase}/packer-env-${IMAGE_NAME}"
-
-  if [[ -f "${packer_env_tarball}" ]] ; then
-    tar -C "${relbase}" -xjvf "${packer_env_tarball}"
+  if [[ -f "${image_metadata_tarball}" ]] ; then
+    tar -C "${relbase}" -xjvf "${image_metadata_tarball}"
   fi
 
-  if [[ -d "${packer_envdir}" ]] ; then
-    __load_envdir "${packer_envdir}"
+  if [[ -d "${image_metadata_envdir}" ]] ; then
+    __load_envdir "${image_metadata_envdir}"
   fi
 
-  local job_board_envdir="${relbase}/job-board-${IMAGE_NAME}.env"
-
-  if [[ -f "${job_board_envdir}" ]] ; then
-    source "${job_board_envdir}"
+  if [[ -f "${image_job_board_env}" ]] ; then
+    source "${image_job_board_env}"
   fi
 
   env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | sort

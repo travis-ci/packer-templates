@@ -40,13 +40,17 @@ builders:
   - "/sbin/init"
   commit: true
 provisioners:
-- type: file
-  source: tmp/git-meta
-  destination: /var/tmp/git-meta
 - type: shell
   inline: sleep 10
   only:
   - googlecompute
+- type: shell
+  inline: apt-get update -yqq && apt-get install sudo -yqq
+  only:
+  - docker
+- type: file
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
 - type: file
   source: packer-assets/ubuntu-trusty-normal-purge.txt
   destination: "/var/tmp/purge.txt"
@@ -92,27 +96,21 @@ provisioners:
   - packer-scripts/cleanup
   - packer-scripts/minimize
   environment_vars:
-  - TRAVIS_OBFUSCATE_PASSWORD=1
-  - SPEC_SUITES=travis_packer_templates
   - DISPLAY=:99.0
+  - SPEC_SUITES=travis_packer_templates
+  - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-- type: file
-  source: /etc/default/job-board-register
-  destination: tmp/job-board-{{ user `gce_image_name` }}.env
-  direction: download
-  only:
-  - googlecompute
 - type: shell
   scripts:
-  - packer-scripts/packer-env-tar-bz2
+  - packer-scripts/create-image-metadata-tarball
   environment_vars:
-  - PACKER_ENV_TAR=/var/tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  - IMAGE_METADATA_TARBALL=/var/tmp/image-metadata-{{ user `gce_image_name` }}.tar.bz2
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
   only:
   - googlecompute
 - type: file
-  source: /var/tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
-  destination: tmp/packer-env-{{ user `gce_image_name` }}.tar.bz2
+  source: /var/tmp/image-metadata-{{ user `gce_image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `gce_image_name` }}.tar.bz2
   direction: download
   only:
   - googlecompute
@@ -139,7 +137,7 @@ post-processors:
 -
   - type: artifice
     files:
-    - tmp/job-board-meta/.dumped
+    - tmp/image-metadata-{{ user `gce_image_name` }}.tar.bz2
     only:
     - googlecompute
   - type: shell-local
