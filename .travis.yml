@@ -27,7 +27,7 @@ matrix:
     dist: precise
     group: edge
 install:
-- bundle install --path vendor/bundle
+- bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
 script:
