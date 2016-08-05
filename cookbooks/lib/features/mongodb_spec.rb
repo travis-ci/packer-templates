@@ -4,7 +4,13 @@ describe 'mongodb installation' do
     its(:stdout) { should match(/MongoDB shell/) }
   end
 
-  describe 'mongo commands', sudo: true do
+  describe 'mongo commands', docker: false, fixme: true do
+    # FIXME: This suite does not currently work inside docker because the
+    # upstart config for mongo 3.2 apparently will not do.  Rather than shipping
+    # our own upstart conf, or patching the upstream one, or worse, this suite
+    # is disabled.  Additionally, we don't advertise or guarantee functioning
+    # mongo installations on trusty+docker.
+
     before :all do
       sh('sudo service mongodb start')
       procwait(/\bmongod\b/)
