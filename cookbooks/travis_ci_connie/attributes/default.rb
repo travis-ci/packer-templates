@@ -41,6 +41,9 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 
+override['travis_docker']['version'] = '1.12.0-0~xenial' if
+  node['lsb']['codename'] == 'xenial'
+
 override['travis_packer_templates']['job_board']['codename'] = 'connie'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
