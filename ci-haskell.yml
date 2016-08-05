@@ -35,6 +35,7 @@ builders:
   - "-i"
   - "-t"
   - "--privileged=true"
+  - "--storage-opt=size=15G"
   - "{{.Image}}"
   - "/sbin/init"
   commit: true
