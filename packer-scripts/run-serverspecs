@@ -44,8 +44,29 @@ __install_chefdk() {
     apt-key add -
   echo "deb https://packages.chef.io/current-apt $(lsb_release -cs) main" \
     > /etc/apt/sources.list.d/chef-current.list
-  apt-get update -y
-  apt-get install -y chefdk
+
+  __run_retry 2 30 apt-get update -y
+  __run_retry 2 30 apt-get install -y chefdk
+}
+
+__run_retry() {
+  local retries="${1}"
+  shift
+  local retry_delay="${1}"
+  shift
+  local cmd="${@}"
+
+  i=0
+  while true ; do
+    if [[ $i > "${retries}" ]] ; then
+      exit 86
+    fi
+
+    if ! ${cmd} ; then
+      i=$((i + 1))
+      sleep "${retry_delay}"
+    fi
+  done
 }
 
 __create_sudo_bash() {
@@ -57,9 +78,9 @@ EOF
 }
 
 __remove_chefdk() {
-  apt-get purge -y chefdk
+  __run_retry 2 30 apt-get purge -y chefdk
   rm -f /etc/apt/sources.list.d/chef-current.list
-  apt-get update -y
+  __run_retry 2 30 apt-get update -y
 }
 
 __run_suite() {
