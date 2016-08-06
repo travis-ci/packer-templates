@@ -72,6 +72,10 @@ install-packer: tmp/packer.zip
 	$(UNZIP) -d ~/bin $<
 	chmod +x ~/bin/packer
 
+.PHONY: update-gce-images
+update-gce-images:
+	bin/gce-image-update $$(git grep -lE 'source_image: ubuntu' *.yml)
+
 tmp/packer.zip:
 	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/0.10.1/packer_0.10.1_$(UNAME)_amd64.zip'
 
