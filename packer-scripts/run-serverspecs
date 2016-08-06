@@ -56,7 +56,7 @@ __run_retry() {
   shift
   local cmd="${@}"
 
-  i=0
+  local i=0
   while true ; do
     if [[ $i > "${retries}" ]] ; then
       exit 86
