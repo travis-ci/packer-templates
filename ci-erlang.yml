@@ -18,7 +18,7 @@ builders:
   image_description: Travis CI Erlang
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1204-precise-v20160627
+  source_image: ubuntu-1204-precise-v20160801
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
