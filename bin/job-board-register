@@ -95,11 +95,11 @@ __dist() {
 
 __uname() {
   local uname_lower=$(uname | tr '[:upper:]' '[:lower:]')
-  if [[ $uname_lower = darwin ]] ; then
+  if [[ "x${uname_lower}" = 'xdarwin' ]] ; then
     echo osx
     return
   fi
-  echo $uname_lower
+  echo "${uname_lower}"
 }
 
 __uri_esc() {
