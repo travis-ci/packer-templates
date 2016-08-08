@@ -1,6 +1,6 @@
-default['rvm']['default'] = '1.9.3'
+default['rvm']['default'] = '2.2.5'
 default['rvm']['rubies'] = [
-  { name: '1.9.3', arguments: '--binary --fuzzy' }
+  { name: '2.2.5', arguments: '--binary --fuzzy' }
 ]
 default['rvm']['gems'] = %w(nokogiri)
 
