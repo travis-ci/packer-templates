@@ -25,7 +25,7 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/connie-system-info-commands.yml'
 
 rubies = %w(
-  1.9.3-p551
+  2.2.5
   2.3.1
 )
 
