@@ -18,7 +18,7 @@ builders:
   image_description: Travis CI Ruby
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1204-precise-v20160627
+  source_image: ubuntu-1204-precise-v20160801
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
@@ -35,6 +35,7 @@ builders:
   - "-i"
   - "-t"
   - "--privileged=true"
+  - "--storage-opt=size=15G"
   - "{{.Image}}"
   - "/sbin/init"
   commit: true
