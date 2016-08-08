@@ -45,7 +45,7 @@ main() {
   : ${DIST:=$(__dist)}
   : ${OS:=$(__uname)}
 
-  TAGS="${TAGS},os:${OS},group:${GROUP},dist:${DIST}"
+  TAGS="${TAGS},os:${OS},group_${GROUP}:true,group:${GROUP},dist:${DIST}"
   TAGS="${TAGS},packer_templates_branch:${PACKER_TEMPLATES_BRANCH}"
   TAGS="${TAGS},packer_templates_sha:${PACKER_TEMPLATES_SHA}"
   TAGS="${TAGS},travis_cookbooks_branch:${TRAVIS_COOKBOOKS_BRANCH}"
