@@ -1,7 +1,7 @@
 describe 'ruby interpreter' do
   describe command('ruby --version') do
     its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^ruby \d+\.\d+\.\d+/) }
+    its(:stdout) { should match(/^ruby 2\.\d+\.\d+/) }
   end
 
   describe command(%(ruby -e 'puts RUBY_ENGINE')) do
