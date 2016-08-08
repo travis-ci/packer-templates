@@ -6,10 +6,10 @@ shopt -s nullglob
 
 main() {
   local image_metadata_tarball="${1}"
-  local image_metadata_dir="$(basename "${image_metadata_tarball}" .tar.bz2)"
+  local relbase="$(dirname "${image_metadata_tarball}")"
+  local image_metadata_dir="${relbase}/$(basename "${image_metadata_tarball}" .tar.bz2)"
   local image_metadata_envdir="${image_metadata_dir}/env"
   local image_job_board_env="${image_metadata_dir}/job-board-register"
-  local relbase="$(dirname "${image_metadata_tarball}")"
   local job_board_envdir="${relbase}/job-board-env"
 
   __load_envdir "${job_board_envdir}"
@@ -30,6 +30,8 @@ main() {
 
   if [[ -d "${image_metadata_envdir}" ]] ; then
     __load_envdir "${image_metadata_envdir}"
+  else
+    __log "msg=\"does not exist\" dir=${image_metadata_envdir}"
   fi
 
   if [[ -f "${image_job_board_env}" ]] ; then
@@ -110,6 +112,7 @@ __log() {
 
 __load_envdir() {
   for f in ${1}/* ; do
+    __log "msg=\"loading $(basename $f)\""
     eval "export $(basename $f)='$(cat $f)'"
   done
 }
