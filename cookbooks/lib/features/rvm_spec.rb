@@ -8,7 +8,7 @@ describe 'rvm installation' do
   describe 'rvm commands' do
     describe command('rvm list') do
       its(:stdout) { should include('rvm rubies', 'current') }
-      its(:stdout) { should match(/ruby-2\.[23])\.\d/) }
+      its(:stdout) { should match(/ruby-2\.[23]\.\d/) }
       its(:stderr) { should be_empty }
     end
 
