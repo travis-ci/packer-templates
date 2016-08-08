@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
 
-[[ $DEBUG ]] && set -o xtrace
 set -o errexit
 
-cd $(dirname $(dirname ${BASH_SOURCE[0]}))
+main() {
+  if [[ $DEBUG ]] ; then
+    set -o xtrace
+  fi
 
-: ${DEST_DIR:=./tmp/git-meta}
-mkdir -p "${DEST_DIR}"
-git rev-parse --abbrev-ref HEAD | tee "${DEST_DIR}/packer-templates-branch"
-git describe --always --dirty | tee "${DEST_DIR}/packer-templates-sha"
+  cd $(dirname $(dirname ${BASH_SOURCE[0]}))
+
+  : ${DEST_DIR:=./tmp/git-meta}
+  mkdir -p "${DEST_DIR}"
+
+  local branch="$(git rev-parse --abbrev-ref HEAD)"
+  local sha="$(git describe --always --dirty)"
+
+  if [[ "x${branch}" = 'xHEAD' ]] ; then
+    branch="${PACKER_TEMPLATES_BRANCH:-HEAD}"
+  fi
+
+  echo "${branch}" | tee "${DEST_DIR}/packer-templates-branch"
+  echo "${sha}" | tee "${DEST_DIR}/packer-templates-sha"
+}
+
+main "$@"
