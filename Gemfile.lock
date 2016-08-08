@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-packer-build.git
-  revision: f33690c295742af52a004845f3aa442994c6269b
-  branch: meat-post-processor-detect
+  revision: a12ce33b1724f3ce0d7e8dd838ad82363050db73
   specs:
     travis-packer-build (0.1.0)
       faraday (~> 0.9)
