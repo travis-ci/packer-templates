@@ -1,4 +1,4 @@
-language: ruby
+language: universe
 dist: trusty
 group: edge
 sudo: required
@@ -6,7 +6,6 @@ cache:
   bundler: true
   directories:
   - ${HOME}/bin
-rvm: 2.3.1
 env:
   matrix:
   - DIST=trusty
@@ -22,11 +21,14 @@ env:
   - SPEC_SUITES='travis_packer_templates'
 matrix:
   include:
-  - env: DIST=precise
+  - language: ruby
+    rvm: 2.3.1
+    env: DIST=precise
          TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
     dist: precise
     group: edge
 install:
+- rvm use 2.3.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
