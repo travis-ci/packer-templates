@@ -80,7 +80,7 @@ main() {
 }
 
 __group() {
-  if [[ "x${TRAVIS_COOKBOOKS_BRANCH}" = xmaster && \
+  if [[ "x${TRAVIS_COOKBOOKS_BRANCH}" = x${TRAVIS_COOKBOOKS_EDGE_BRANCH} && \
     ! ${TRAVIS_COOKBOOKS_SHA:-dirty} =~ dirty && \
     "x${PACKER_TEMPLATES_BRANCH}" = xmaster && \
     ! ${PACKER_TEMPLATES_SHA:-dirty} =~ dirty ]] ; then

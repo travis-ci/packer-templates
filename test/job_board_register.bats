@@ -27,3 +27,19 @@ teardown() {
   [ "${KNOWN_VALUE}" = known-value ]
   [ "${RANDOM_VALUE}" != "${RANDOM}" ]
 }
+
+@test "job-board-register uname" {
+  [ "$(__uname)" ]
+}
+
+@test "job-board-register group" {
+  [ "$(TRAVIS_COOKBOOKS_BRANCH=foo __group)" = dev ]
+  [ "$(TRAVIS_COOKBOOKS_SHA=gfafafaf-dirty __group)" = dev ]
+  [ "$(PACKER_TEMPLATES_BRANCH=floofluh __group)" = dev ]
+  [ "$(PACKER_TEMPLATES_SHA=gfafafaf-dirty __group)" = dev ]
+  [ "$(TRAVIS_COOKBOOKS_BRANCH=master \
+       TRAVIS_COOKBOOKS_EDGE_BRANCH=master \
+       TRAVIS_COOKBOOKS_SHA=fafafaf \
+       PACKER_TEMPLATES_BRANCH=master \
+       PACKER_TEMPLATES_SHA=fafafaf __group)" = edge ]
+}
