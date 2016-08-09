@@ -1,5 +1,5 @@
 describe 'mongodb installation' do
-  describe service('mongod') do
+  describe service('mongod'), dev: true do
     it { should_not be_enabled }
     it { should_not be_running }
   end
