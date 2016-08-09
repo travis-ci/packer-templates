@@ -1,4 +1,9 @@
 describe 'mongodb installation' do
+  describe service('mongod') do
+    it { should_not be_enabled }
+    it { should_not be_running }
+  end
+
   describe command('mongo --version') do
     its(:exit_status) { should eq 0 }
     its(:stdout) { should match(/MongoDB shell/) }
@@ -12,14 +17,14 @@ describe 'mongodb installation' do
     # mongo installations on trusty+docker.
 
     before :all do
-      sh('sudo service mongodb start')
+      sh('sudo service mongod start')
       procwait(/\bmongod\b/)
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
       sleep 3 # HACK: thanks a bunch, Mongo
     end
 
     after :all do
-      sh('sudo service mongodb stop || true')
+      sh('sudo service mongod stop || true')
     end
 
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
