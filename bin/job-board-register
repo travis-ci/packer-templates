@@ -44,6 +44,7 @@ main() {
   : ${GROUP:=$(__group)}
   : ${DIST:=$(__dist)}
   : ${OS:=$(__uname)}
+  : ${TRAVIS_COOKBOOKS_BRANCH:=${TRAVIS_COOKBOOKS_EDGE_BRANCH}}
 
   TAGS="${TAGS},os:${OS},group_${GROUP}:true,group:${GROUP},dist:${DIST}"
   TAGS="${TAGS},packer_templates_branch:${PACKER_TEMPLATES_BRANCH}"
@@ -79,9 +80,9 @@ main() {
 }
 
 __group() {
-  if [[ $TRAVIS_COOKBOOKS_BRANCH = ${TRAVIS_COOKBOOKS_EDGE_BRANCH:-master} && \
+  if [[ "x${TRAVIS_COOKBOOKS_BRANCH}" = xmaster && \
     ! ${TRAVIS_COOKBOOKS_SHA:-dirty} =~ dirty && \
-    $PACKER_TEMPLATES_BRANCH = master && \
+    "x${PACKER_TEMPLATES_BRANCH}" = xmaster && \
     ! ${PACKER_TEMPLATES_SHA:-dirty} =~ dirty ]] ; then
     echo edge
     return
@@ -117,4 +118,6 @@ __load_envdir() {
   done
 }
 
-main "$@"
+if [[ ! "${NOOP}" ]] ; then
+  main "$@"
+fi

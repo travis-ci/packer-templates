@@ -12,3 +12,7 @@ echo "${GCE_ACCOUNT_FILE_B64_BZ2}" | \
 if [[ "x$(packer version 2>/dev/null)" != "xPacker v0.10.1" ]] ; then
   make install-packer
 fi
+
+if ! bats --version &>/dev/null ; then
+  make install-bats
+fi

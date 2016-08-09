@@ -12,6 +12,7 @@ if [[ $# > 1 && $1 = --env ]] ; then
               BUNDLE_ORIG_PATH=$BUNDLE_ORIG_PATH \
               RUBYLIB=$RUBYLIB \
               RUBYOPT=$RUBYOPT \
+              TERM=$TERM \
     bash -c "source '${2}' && \\
       unset PACKER_LOG && \\
       bash ${BASH_SOURCE[0]}
@@ -36,6 +37,8 @@ for f in $(git grep -l '^#!/usr/bin/env bash') ; do
   bash -n $f
   echo "✓"
 done
+
+PACKER_TEMPLATES_ROOT=$(git rev-parse --show-toplevel) bats ./test
 
 rubocop
 ./run-foodcritic cookbooks
