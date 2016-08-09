@@ -38,7 +38,10 @@ for f in $(git grep -l '^#!/usr/bin/env bash') ; do
   echo "✓"
 done
 
-PACKER_TEMPLATES_ROOT=$(git rev-parse --show-toplevel) bats ./test
+if [[ "x$(lsb_release -sc 2>/dev/null)" != xprecise ]] ; then
+  # this code should never *need* to run on precise
+  PACKER_TEMPLATES_ROOT=$(git rev-parse --show-toplevel) bats ./test
+fi
 
 rubocop
 ./run-foodcritic cookbooks
