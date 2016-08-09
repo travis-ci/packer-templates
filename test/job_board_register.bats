@@ -6,6 +6,16 @@ setup() {
   mkdir -p test-envdir
   echo "${RANDOM}" > test-envdir/RANDOM_VALUE
   echo known-value > test-envdir/KNOWN_VALUE
+  unset TAGS
+  unset IMAGE_INFRA
+  unset GROUP
+  unset DIST
+  unset OS
+  unset TRAVIS_COOKBOOKS_BRANCH
+  unset TRAVIS_COOKBOOKS_EDGE_BRANCH
+  unset TRAVIS_COOKBOOKS_SHA
+  unset PACKER_TEMPLATES_BRANCH
+  unset PACKER_TEMPLATES_SHA
 }
 
 teardown() {
@@ -13,7 +23,7 @@ teardown() {
 }
 
 @test "job-board-register logging" {
-  result="$(__log hello)"
+  result="$(__log hello 2>&1)"
   [[ "${result}" =~ time=.*hello ]]
 }
 
@@ -37,9 +47,32 @@ teardown() {
   [ "$(TRAVIS_COOKBOOKS_SHA=gfafafaf-dirty __group)" = dev ]
   [ "$(PACKER_TEMPLATES_BRANCH=floofluh __group)" = dev ]
   [ "$(PACKER_TEMPLATES_SHA=gfafafaf-dirty __group)" = dev ]
-  [ "$(TRAVIS_COOKBOOKS_BRANCH=master \
-       TRAVIS_COOKBOOKS_EDGE_BRANCH=master \
-       TRAVIS_COOKBOOKS_SHA=fafafaf \
-       PACKER_TEMPLATES_BRANCH=master \
-       PACKER_TEMPLATES_SHA=fafafaf __group)" = edge ]
+
+  result="$(
+    TRAVIS_COOKBOOKS_BRANCH=master \
+    TRAVIS_COOKBOOKS_EDGE_BRANCH=master \
+    TRAVIS_COOKBOOKS_SHA=fafafaf \
+    PACKER_TEMPLATES_BRANCH=master \
+    PACKER_TEMPLATES_SHA=fafafaf __group
+  )"
+  echo "result: ${result} = edge"
+  [ "${result}" = edge ]
+
+  result="$(
+    TRAVIS_COOKBOOKS_BRANCH=precise-stable \
+    TRAVIS_COOKBOOKS_EDGE_BRANCH=precise-stable \
+    TRAVIS_COOKBOOKS_SHA=fafafaf \
+    PACKER_TEMPLATES_BRANCH=master \
+    PACKER_TEMPLATES_SHA=fafafaf __group
+  )"
+  echo "result: ${result} = edge"
+  [ "${result}" = edge ]
+}
+
+@test "job-board-register tag and infra definition" {
+  __define_tags_and_infra
+  echo "TAGS: ${TAGS}"
+  echo "IMAGE_INFRA: ${IMAGE_INFRA}"
+  [[ "${TAGS}" ]]
+  [[ "${IMAGE_INFRA}" ]]
 }
