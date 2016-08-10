@@ -73,6 +73,7 @@ override['travis_packer_templates']['job_board']['codename'] = 'amethyst'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   docker
+  docker-compose
   memcached
   nodejs_interpreter
   perl_interpreter

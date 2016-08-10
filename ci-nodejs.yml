@@ -1,5 +1,4 @@
 ---
-# bump
 description: Travis CI node build env template
 variables:
   docker_repository: "quay.io/travisci/ci-nodejs"

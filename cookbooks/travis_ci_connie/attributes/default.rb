@@ -45,6 +45,7 @@ override['travis_packer_templates']['job_board']['codename'] = 'connie'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   docker
+  docker-compose
   perl_interpreter
   python_interpreter
   ruby_interpreter

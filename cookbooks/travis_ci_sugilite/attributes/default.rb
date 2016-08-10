@@ -11,13 +11,13 @@ override['travis_system_info']['commands_file'] = \
 
 php_versions = %w(
   5.4.45
-  5.5.30
+  5.5.37
   5.6.24
 )
 override['travis_build_environment']['php_versions'] = php_versions
 override['travis_build_environment']['php_aliases'] = {
   '5.4' => '5.4.45',
-  '5.5' => '5.5.30',
+  '5.5' => '5.5.37',
   '5.6' => '5.6.24'
 }
 
@@ -178,6 +178,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
   docker
+  docker-compose
   firefox
   google-chrome
   memcached

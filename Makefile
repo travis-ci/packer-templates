@@ -72,12 +72,19 @@ install-packer: tmp/packer.zip
 	$(UNZIP) -d ~/bin $<
 	chmod +x ~/bin/packer
 
+.PHONY: install-bats
+install-bats: tmp/bats/.git
+	cd tmp/bats && ./install.sh $$HOME
+
 .PHONY: update-gce-images
 update-gce-images:
 	bin/gce-image-update $$(git grep -lE 'source_image: ubuntu' *.yml)
 
 tmp/packer.zip:
 	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/0.10.1/packer_0.10.1_$(UNAME)_amd64.zip'
+
+tmp/bats/.git:
+	$(GIT) clone https://github.com/sstephenson/bats.git tmp/bats
 
 tmp:
 	mkdir -p tmp

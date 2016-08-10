@@ -10,3 +10,6 @@ TAGS="$TAGS,<%= prefix %>_<%= value %>:true"
 <% end %>
 
 export TAGS
+
+export DIST="<%= node['lsb']['codename'] %>"
+export OS="<%= node['platform'] %>"
