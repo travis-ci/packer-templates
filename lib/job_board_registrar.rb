@@ -24,7 +24,7 @@ class JobBoardRegistrar
       return 1
     end
 
-    unless File.exist?(image_metadata_tarball)
+    unless image_metadata_tarball_exists?
       logger.error 'image metadata tarball does not exist'
       return 1
     end
@@ -46,23 +46,34 @@ class JobBoardRegistrar
   attr_reader :image_metadata_tarball, :image_infra
 
   def make_request
-    system(%W(
+    output = `#{request_command.join(' ')}`.strip
+    $stdout.puts JSON.pretty_generate(JSON.parse(output))
+    true
+  rescue => e
+    logger.error e
+    false
+  end
+
+  def request_command
+    %W(
       #{curl_exe}
       -f
       -s
       -X POST
       '#{env('JOB_BOARD_IMAGES_URL')}?#{registration_request_params}'
-    ).join(' '))
-  end
-
-  def extract_image_metadata_tarball
-    system(
-      %W(tar -C #{relbase} -xjvf #{image_metadata_tarball.inspect}).join(' ')
     )
   end
 
+  def extract_image_metadata_tarball
+    system(*image_metadata_extract_command)
+  end
+
+  def image_metadata_extract_command
+    %W(tar -C #{relbase} -xjvf #{image_metadata_tarball.inspect})
+  end
+
   def load_image_metadata
-    if File.directory?(image_metadata_envdir)
+    if image_metadata_envdir_isdir?
       load_envdir(image_metadata_envdir)
     else
       logger.warn "#{image_metadata_envdir} does not exist"
@@ -144,6 +155,14 @@ class JobBoardRegistrar
     @image_metadata_dir ||= File.join(
       relbase, File.basename(image_metadata_tarball, '.tar.bz2')
     )
+  end
+
+  def image_metadata_tarball_exists?
+    File.exist?(image_metadata_tarball)
+  end
+
+  def image_metadata_envdir_isdir?
+    File.directory?(image_metadata_envdir)
   end
 
   def image_metadata_envdir
