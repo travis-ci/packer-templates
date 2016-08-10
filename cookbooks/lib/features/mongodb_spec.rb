@@ -24,8 +24,9 @@ describe 'mongodb installation' do
     before :all do
       sh("sudo service #{mongodb_service_name} start")
       procwait(/\bmongod\b/)
-      sh('mongo --eval "db.testData.insert( { x : 6 } );"')
       sleep 3 # HACK: thanks a bunch, Mongo
+      sh('mongo --eval "db.testData.insert( { x : 6 } );"')
+      sleep 3 # HACK: thanks a bunch more, Mongo
     end
 
     after :all do
