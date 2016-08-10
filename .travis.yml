@@ -45,6 +45,7 @@ script:
 after_success:
 - if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]] ; then
     git fetch --unshallow ;
+    env | grep -E '^(PACKER|TRAVIS|TAGS|IMAGE_NAME)' | grep -v TOKEN | sort ;
     bundle exec make packer-build-trigger ;
   else
     echo 'no packer-build-trigger for you' ;

@@ -1,5 +1,10 @@
+def mongodb_service_name
+  return 'mongod' if `lsb_release -sc 2>/dev/null`.strip == 'trusty'
+  'mongodb'
+end
+
 describe 'mongodb installation' do
-  describe service('mongod'), dev: true do
+  describe service(mongodb_service_name), dev: true do
     it { should_not be_enabled }
     it { should_not be_running }
   end
@@ -17,14 +22,15 @@ describe 'mongodb installation' do
     # mongo installations on trusty+docker.
 
     before :all do
-      sh('sudo service mongod start')
+      sh("sudo service #{mongodb_service_name} start")
       procwait(/\bmongod\b/)
-      sh('mongo --eval "db.testData.insert( { x : 6 } );"')
       sleep 3 # HACK: thanks a bunch, Mongo
+      sh('mongo --eval "db.testData.insert( { x : 6 } );"')
+      sleep 3 # HACK: thanks a bunch more, Mongo
     end
 
     after :all do
-      sh('sudo service mongod stop || true')
+      sh("sudo service #{mongodb_service_name} stop || true")
     end
 
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
