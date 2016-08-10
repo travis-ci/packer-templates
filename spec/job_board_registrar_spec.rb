@@ -1,27 +1,40 @@
 require 'job_board_registrar'
 
-def tmpdir
-  @tmpdir ||= Dir.mktmpdir(%w(packer-templates job-board-register))
-end
-
 describe JobBoardRegistrar do
-  subject do
-    described_class.new(image_metadata_tarball)
+  context 'with file operations stubbed out' do
+    let :image_metadata_tarball do
+      'somedir/metadata.tar.bz2'
+    end
+
+    subject do
+      described_class.new(image_metadata_tarball)
+    end
+
+    before :each do
+      ENV.clear
+      {
+        IMAGE_NAME: 'travis-ci-foo-flah-99999999999',
+        JOB_BOARD_IMAGES_URL: 'http://flim:flam@job-board.example.org/images',
+        TRAVIS_COOKBOOKS_BRANCH: 'master',
+        CURL_EXE: ':'
+      }.each do |key, value|
+        ENV[key.to_s] = value
+      end
+      allow(subject).to receive(:load_envdir).with('somedir/job-board-env')
+      allow(File).to receive(:exist?).with('somedir/metadata.tar.bz2').and_return(true)
+      allow(File).to receive(:directory?).with('somedir/metadata/env').and_return(true)
+      allow(subject).to receive(:load_envdir).with('somedir/metadata/env')
+      allow(subject).to receive(:extract_image_metadata_tarball).and_return(true)
+      subject.send(:logger).level = Logger::FATAL
+    end
+
+    it 'registers an image' do
+      expect(subject).to receive(:make_request).once
+      subject.register!
+    end
   end
 
-  let :image_metadata_tarball do
-    File.join(tmpdir, 'metadata.tar.bz2')
-  end
-
-  let :image_metadata_dir do
-    File.join(tmpdir, 'metadata')
-  end
-
-  before :each do
-    rm_rf(tmpdir)
-    mkdir_p(tmpdir)
-    system(%W(
-      tar -C #{tmpdir} -cjf #{image_metadata_tarball} #{image_metadata_dir}
-    ).join(' '))
+  context 'with real commands' do
+    xit 'eventually maybe'
   end
 end
