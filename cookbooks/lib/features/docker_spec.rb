@@ -1,7 +1,9 @@
 describe 'docker installation' do
-  describe command('docker version') do
-    its(:exit_status) { should eq 0 }
-    its(:stdout) { should match(/^Client:/) }
-    its(:stdout) { should match(/^ Version:\s+1\.\d+\.\d+/) }
+  describe command('docker version --format="{{.Client.Version}}" || true') do
+    its(:stdout) { should match(/^1\.\d+\.\d+/) }
+  end
+
+  describe command('docker version --format="{{.Server.Version}}" || true'), docker: false do
+    its(:stdout) { should match(/^1\.\d+\.\d+/) }
   end
 end
