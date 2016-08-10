@@ -18,7 +18,7 @@ describe JobBoardRegistrar do
 
   it 'constructs an image extraction command' do
     expect(subject.send(:image_metadata_extract_command)).to eq(
-      %w(tar -C somedir -xjvf "somedir/metadata.tar.bz2")
+      ['tar', '-C', 'somedir', '-xjvf', '"somedir/metadata.tar.bz2"']
     )
   end
 
@@ -107,10 +107,10 @@ describe JobBoardRegistrar do
         infra: 'gce',
         name: 'travis-ci-sheeple-12345678',
         tags: {
-        os: 'lintux',
-        dist: 'frosty',
-        group: 'dev'
-      }
+          os: 'lintux',
+          dist: 'frosty',
+          group: 'dev'
+        }
       }
     },
     edge: {
@@ -131,10 +131,10 @@ describe JobBoardRegistrar do
         infra: 'gce',
         name: 'travis-ci-foo-flah-99999999999',
         tags: {
-        os: 'linnix',
-        dist: 'crusty',
-        group: 'edge'
-      }
+          os: 'linnix',
+          dist: 'crusty',
+          group: 'edge'
+        }
       }
     }
   }.each do |suite_name, config|
