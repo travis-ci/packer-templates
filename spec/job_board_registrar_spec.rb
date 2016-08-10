@@ -22,6 +22,42 @@ describe JobBoardRegistrar do
     )
   end
 
+  describe 'determining TRAVIS_COOKBOOKS_BRANCH' do
+    context 'without TRAVIS_COOKBOOKS_BRANCH value present' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_BRANCH'] = ''
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'floof'
+      end
+
+      it 'falls back to TRAVIS_COOKBOOKS_EDGE_BRANCH' do
+        expect(subject.send(:travis_cookbooks_branch)).to eq('floof')
+      end
+    end
+
+    context 'with TRAVIS_COOKBOOKS_BRANCH value present' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_BRANCH'] = 'bloof'
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'floof'
+      end
+
+      it 'uses TRAVIS_COOKBOOKS_BRANCH' do
+        expect(subject.send(:travis_cookbooks_branch)).to eq('bloof')
+      end
+    end
+
+    context 'without TRAVIS_COOKBOOKS_BRANCH ' \
+            'or TRAVIS_COOKBOOKS_EDGE_BRANCH' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_BRANCH'] = ''
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
+      end
+
+      it 'uses master' do
+        expect(subject.send(:travis_cookbooks_branch)).to eq('master')
+      end
+    end
+  end
+
   context 'without a metadata tarball' do
     it 'aborts with exit 1' do
       inst = described_class.new(nil)

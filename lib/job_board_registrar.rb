@@ -187,10 +187,11 @@ class JobBoardRegistrar
   end
 
   def travis_cookbooks_branch
-    ENV.fetch(
-      'TRAVIS_COOKBOOKS_BRANCH',
-      ENV.fetch('TRAVIS_COOKBOOKS_EDGE_BRANCH', 'master')
-    )
+    value = ENV.fetch('TRAVIS_COOKBOOKS_BRANCH', '').strip
+    return value unless value.empty?
+    value = ENV.fetch('TRAVIS_COOKBOOKS_EDGE_BRANCH', '').strip
+    return value unless value.empty?
+    'master'
   end
 
   def source_file(path)
@@ -207,7 +208,7 @@ class JobBoardRegistrar
     Dir.glob(File.join(path, '*')) do |entry|
       next unless File.file?(entry)
       logger.info "loading #{entry}"
-      ENV[File.basename(entry)] = File.read(entry)
+      ENV[File.basename(entry)] = File.read(entry).strip
     end
   end
 
