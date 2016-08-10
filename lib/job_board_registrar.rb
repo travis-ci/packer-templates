@@ -106,7 +106,7 @@ class JobBoardRegistrar
       dist: dist,
       packer_templates_branch: env('PACKER_TEMPLATES_BRANCH'),
       packer_templates_sha: env('PACKER_TEMPLATES_SHA'),
-      travis_cookbooks_branch: env('TRAVIS_COOKBOOKS_BRANCH'),
+      travis_cookbooks_branch: travis_cookbooks_branch,
       travis_cookbooks_sha: env('TRAVIS_COOKBOOKS_SHA')
     }.tap do |tags|
       tags[:packer_build_name] = env('PACKER_BUILD_NAME') if
@@ -125,7 +125,7 @@ class JobBoardRegistrar
 
   def group
     return 'edge' if
-      env('TRAVIS_COOKBOOKS_BRANCH') == env('TRAVIS_COOKBOOKS_EDGE_BRANCH') &&
+      travis_cookbooks_branch == env('TRAVIS_COOKBOOKS_EDGE_BRANCH') &&
       env('TRAVIS_COOKBOOKS_SHA') !~ /dirty/ &&
       env('PACKER_TEMPLATES_BRANCH') == 'master' &&
       env('PACKER_TEMPLATES_SHA') !~ /dirty/
@@ -184,6 +184,13 @@ class JobBoardRegistrar
 
   def job_board_envdir
     @job_board_envdir ||= File.join(relbase, 'job-board-env')
+  end
+
+  def travis_cookbooks_branch
+    ENV.fetch(
+      'TRAVIS_COOKBOOKS_BRANCH',
+      ENV.fetch('TRAVIS_COOKBOOKS_EDGE_BRANCH', 'master')
+    )
   end
 
   def source_file(path)
