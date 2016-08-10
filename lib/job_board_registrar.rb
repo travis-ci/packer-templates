@@ -1,3 +1,4 @@
+require 'json'
 require 'logger'
 require 'uri'
 
@@ -34,6 +35,8 @@ class JobBoardRegistrar
       return 1
     end
 
+    source_file(image_job_board_env) if image_job_board_env_exists?
+
     load_image_metadata
     dump_relevant_env_vars
 
@@ -69,7 +72,7 @@ class JobBoardRegistrar
   end
 
   def image_metadata_extract_command
-    %W(tar -C #{relbase} -xjvf #{image_metadata_tarball.inspect})
+    %W(tar -C #{relbase} -xjvf #{File.expand_path(image_metadata_tarball)})
   end
 
   def load_image_metadata
@@ -114,6 +117,7 @@ class JobBoardRegistrar
   end
 
   def os
+    return env('OS') unless env('OS').empty?
     return 'osx' if RUBY_PLATFORM =~ /darwin/i
     return 'linux' if RUBY_PLATFORM =~ /linux/i
     'unknown'
@@ -130,6 +134,7 @@ class JobBoardRegistrar
   end
 
   def dist
+    return env('DIST') unless env('DIST').empty?
     return `lsb_release -sc 2>/dev/null`.strip if os == 'linux'
     return `sw_vers -productVersion 2>/dev/null`.strip if os == 'osx'
     'unknown'
@@ -169,12 +174,26 @@ class JobBoardRegistrar
     @image_metadata_envdir ||= File.join(image_metadata_dir, 'env')
   end
 
+  def image_job_board_env_exists?
+    File.exist?(image_job_board_env)
+  end
+
   def image_job_board_env
     @image_job_board_env ||= File.join(image_metadata_dir, 'job-board-register')
   end
 
   def job_board_envdir
     @job_board_envdir ||= File.join(relbase, 'job-board-env')
+  end
+
+  def source_file(path)
+    raw = `env -i bash -c "source #{path} && env" 2>/dev/null`
+    raw.split("\n").each do |line|
+      key, value = line.strip.split('=', 2)
+      next if %w(PWD SHLVL _).include?(key)
+      logger.info "setting #{key}"
+      ENV[key] = value.strip
+    end
   end
 
   def load_envdir(path)

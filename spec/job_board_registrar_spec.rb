@@ -18,7 +18,7 @@ describe JobBoardRegistrar do
 
   it 'constructs an image extraction command' do
     expect(subject.send(:image_metadata_extract_command)).to eq(
-      ['tar', '-C', 'somedir', '-xjvf', '"somedir/metadata.tar.bz2"']
+      ['tar', '-C', 'somedir', '-xjvf', File.expand_path('somedir/metadata.tar.bz2')]
     )
   end
 
@@ -152,6 +152,10 @@ describe JobBoardRegistrar do
           .and_return(true)
         allow(subject).to receive(:image_metadata_envdir_isdir?)
           .and_return(true)
+        allow(subject).to receive(:image_job_board_env_exists?)
+          .and_return(true)
+        allow(subject).to receive(:source_file)
+          .with('somedir/metadata/job-board-register').and_return(true)
         allow(subject).to receive(:load_envdir).with('somedir/metadata/env')
         allow(subject).to receive(:extract_image_metadata_tarball)
           .and_return(true)
