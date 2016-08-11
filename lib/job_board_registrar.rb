@@ -113,6 +113,12 @@ class JobBoardRegistrar
         ENV.key?('PACKER_BUILD_NAME')
       tags[:packer_builder_type] = env('PACKER_BUILDER_TYPE') if
         ENV.key?('PACKER_BUILDER_TYPE')
+      if ENV.key?('TAGS')
+        ENV['TAGS'].split(',').each do |tag_pair|
+          key, value = tag_pair.split(':', 2)
+          tags[key.to_sym] = value unless value.to_s.empty?
+        end
+      end
     end
   end
 
@@ -199,16 +205,19 @@ class JobBoardRegistrar
     raw.split("\n").each do |line|
       key, value = line.strip.split('=', 2)
       next if %w(PWD SHLVL _).include?(key)
-      logger.info "setting #{key}"
-      ENV[key] = value.strip
+      value.strip!
+      logger.info "setting #{key}=#{value}"
+      ENV[key] = value
     end
   end
 
   def load_envdir(path)
     Dir.glob(File.join(path, '*')) do |entry|
       next unless File.file?(entry)
-      logger.info "loading #{entry}"
-      ENV[File.basename(entry)] = File.read(entry).strip
+      key = File.basename(entry)
+      value = File.read(entry).strip
+      logger.info "loading #{key}=#{value}"
+      ENV[key] = value
     end
   end
 
