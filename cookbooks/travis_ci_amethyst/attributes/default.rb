@@ -31,8 +31,12 @@ override['travis_perlbrew']['modules'] = %w(
 )
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-override['gimme']['versions'] = []
-override['gimme']['default_version'] = ''
+gimme_versions = %w(
+  1.6.3
+)
+
+override['travis_build_environment']['gimme']['versions'] = gimme_versions
+override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 node_versions = %w(
   4.4.7
@@ -74,6 +78,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   docker
   docker-compose
+  go-toolchain
   memcached
   nodejs_interpreter
   perl_interpreter

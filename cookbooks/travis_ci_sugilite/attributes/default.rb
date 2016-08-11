@@ -59,8 +59,8 @@ gimme_versions = %w(
   1.6.3
 )
 
-override['gimme']['versions'] = gimme_versions
-override['gimme']['default_version'] = gimme_versions.max
+override['travis_build_environment']['gimme']['versions'] = gimme_versions
+override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 override['java']['jdk_version'] = '8'
 override['java']['install_flavor'] = 'oracle'
@@ -180,6 +180,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   docker
   docker-compose
   firefox
+  go-toolchain
   google-chrome
   memcached
   mongodb
