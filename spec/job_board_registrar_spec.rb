@@ -22,6 +22,13 @@ describe JobBoardRegistrar do
     )
   end
 
+  it 'merges env TAGS when making image tags' do
+    ENV['TAGS'] = 'razza:frazza,flim:flam,os:bonk'
+    expect(subject.send(:image_tags)).to include(
+      razza: 'frazza', flim: 'flam', os: 'bonk'
+    )
+  end
+
   describe 'determining TRAVIS_COOKBOOKS_BRANCH' do
     context 'without TRAVIS_COOKBOOKS_BRANCH value present' do
       before do
