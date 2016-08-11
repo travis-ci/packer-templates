@@ -1,4 +1,4 @@
-describe 'perl installation' do
+describe 'perl installation', dev: true do
   describe command('perlbrew list') do
     its(:stdout) { should match(/\* 5\.\d+ \(5\.\d+\.\d+\)/) }
   end
