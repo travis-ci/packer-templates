@@ -5,9 +5,10 @@ describe 'perlbrew installation' do
         %r{perl5/perlbrew/bin/perlbrew.+App::perlbrew\/\d+\.\d+}
       )
     end
+    its(:exit_status) { should eq 0 }
   end
 
   describe command('perlbrew list') do
-    its(:stdout) { should match(/\* 5\.\d+ \(5\.\d+\.\d+\)/) }
+    its(:exit_status) { should eq 0 }
   end
 end
