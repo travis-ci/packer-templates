@@ -89,3 +89,8 @@ context 'with something listening on 19494' do
     its(stream) { should include 'succeeded' }
   end
 end
+
+describe file('/opt'), dev: true do
+  it { should be_directory }
+  it { should be_writable.by_user('travis') }
+end
