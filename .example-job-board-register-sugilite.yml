@@ -36,6 +36,7 @@ languages:
 features:
 - chromium
 - firefox
+- go-toolchain
 - google-chrome
 - memcached
 - mongodb
