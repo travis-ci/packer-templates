@@ -84,7 +84,7 @@ class JobBoardRegistrar
   end
 
   def dump_relevant_env_vars
-    ENV.each do |key, value|
+    ENV.sort.each do |key, value|
       next unless key =~ /^(PACKER|TRAVIS|TAGS|IMAGE_NAME)/
       logger.info "#{key.strip}=#{value.strip}"
     end
@@ -131,7 +131,7 @@ class JobBoardRegistrar
 
   def group
     return 'edge' if
-      travis_cookbooks_branch == env('TRAVIS_COOKBOOKS_EDGE_BRANCH') &&
+      travis_cookbooks_branch == travis_cookbooks_edge_branch &&
       env('TRAVIS_COOKBOOKS_SHA') !~ /dirty/ &&
       env('PACKER_TEMPLATES_BRANCH') == 'master' &&
       env('PACKER_TEMPLATES_SHA') !~ /dirty/
@@ -195,6 +195,10 @@ class JobBoardRegistrar
   def travis_cookbooks_branch
     value = ENV.fetch('TRAVIS_COOKBOOKS_BRANCH', '').strip
     return value unless value.empty?
+    travis_cookbooks_edge_branch
+  end
+
+  def travis_cookbooks_edge_branch
     value = ENV.fetch('TRAVIS_COOKBOOKS_EDGE_BRANCH', '').strip
     return value unless value.empty?
     'master'

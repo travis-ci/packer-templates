@@ -29,6 +29,28 @@ describe JobBoardRegistrar do
     )
   end
 
+  describe 'determining TRAVIS_COOKBOOKS_EDGE_BRANCH' do
+    context 'without TRAVIS_COOKBOOKS_EDGE_BRANCH value present' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
+      end
+
+      it 'falls back to "master"' do
+        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('master')
+      end
+    end
+
+    context 'with TRAVIS_COOKBOOKS_EDGE_BRANCH value present' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'meister'
+      end
+
+      it 'uses the value' do
+        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('meister')
+      end
+    end
+  end
+
   describe 'determining TRAVIS_COOKBOOKS_BRANCH' do
     context 'without TRAVIS_COOKBOOKS_BRANCH value present' do
       before do
