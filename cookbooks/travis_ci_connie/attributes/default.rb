@@ -47,6 +47,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   docker
   docker-compose
   perl_interpreter
+  perlbrew
   python_interpreter
   ruby_interpreter
 )

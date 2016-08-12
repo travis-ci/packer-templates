@@ -19,6 +19,10 @@ override['travis_build_environment']['php_aliases'] = {
   '7.0' => '7.0.7'
 }
 
+override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['prerequisite_packages'] = []
+
 gimme_versions = %w(
   1.6.3
 )
@@ -101,6 +105,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   mongodb
   nodejs_interpreter
   perl_interpreter
+  perlbrew
   phantomjs
   postgresql
   python_interpreter
