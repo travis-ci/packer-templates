@@ -4,6 +4,6 @@ describe 'disabled ipv6' do
   end
 
   describe file('/etc/hosts') do
-    its(:contents) { should_not match(/::1.+\blocalhost\b/) }
+    its(:content) { should_not match(/::1.+\blocalhost\b/) }
   end
 end
