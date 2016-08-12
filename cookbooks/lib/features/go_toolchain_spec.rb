@@ -8,7 +8,7 @@ def randint
   @randint ||= rand(10_000..20_000)
 end
 
-describe 'go toolchain installation' do
+describe 'go toolchain installation', dev: true do
   describe command('go version') do
     its(:stdout) { should match(/^go version go1\.[4567]/) }
   end
