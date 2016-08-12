@@ -1,6 +1,9 @@
 lib = File.expand_path('../', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
+require 'tmpdir'
+require 'fileutils'
+
 module Support
   autoload :Erlang, 'support/erlang'
   autoload :Helpers, 'support/helpers'
@@ -41,4 +44,14 @@ module Support
   end
 
   module_function :libdir
+
+  def tmpdir
+    @tmpdir ||= Dir.mktmpdir(%w(packer-templates rspec))
+  end
+
+  module_function :tmpdir
+end
+
+at_exit do
+  FileUtils.rm_rf(Support.tmpdir)
 end
