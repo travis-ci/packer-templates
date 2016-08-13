@@ -29,3 +29,16 @@ include_recipe 'openssh'
 include_recipe 'papertrail'
 include_recipe 'users'
 include_recipe 'sudo'
+
+template '/etc/cloud/cloud.cfg' do
+  source 'etc-cloud-cloud.cfg.erb'
+  owner 'root'
+  group 'root'
+  mode 0o644
+end
+
+cookbook_file '/usr/local/bin/generate-ssh-host-keys' do
+  owner 'root'
+  group 'root'
+  mode 0o755
+end
