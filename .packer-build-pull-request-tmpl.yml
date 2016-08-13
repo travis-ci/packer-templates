@@ -22,5 +22,5 @@ config:
     popd
   - "./packer-templates/bin/packer-build-install"
   script:
-  - export PACKER_TEMPLATES_BRANCH="+refs/pull/%{pull_request}/merge"
+  - export PACKER_TEMPLATES_BRANCH="%%2Brefs/pull/%{pull_request}/merge"
   - "./packer-templates/bin/packer-build-script %{template_name}"
