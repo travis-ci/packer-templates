@@ -92,5 +92,10 @@ end
 
 describe file('/opt'), dev: true do
   it { should be_directory }
-  it { should be_writable.by_user('travis') }
+  it 'is writable' do
+    File.open('/opt/.travis-write-test', 'w') do |f|
+      f.puts Time.now.utc.to_s
+    end
+    expect(File.read('/opt/.travis-write-test')).to_not be_empty
+  end
 end
