@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o xtrace
+
+mkdir -p /tmp/chef-stuff
+cd /tmp/chef-stuff
+
+rm -rf ./travis-cookbooks
+
+: ${TRAVIS_COOKBOOKS_BRANCH:=${TRAVIS_COOKBOOKS_EDGE_BRANCH}}
+: ${TRAVIS_COOKBOOKS_BRANCH:=master}
+: ${TRAVIS_COOKBOOKS_URL:=https://github.com/travis-ci/travis-cookbooks.git}
+
+git clone \
+  --depth=10 \
+  --branch="${TRAVIS_COOKBOOKS_BRANCH}" "${TRAVIS_COOKBOOKS_URL}"
+git clone \
+  --branch=v1.3.4 \
+  https://github.com/opscode-cookbooks/openssh.git cookbooks/openssh
+git clone \
+  --branch=v2.7.0 \
+  https://github.com/opscode-cookbooks/apt.git cookbooks/apt
+git clone \
+  --branch=v1.1.6 \
+  https://github.com/opscode-cookbooks/chef_handler.git cookbooks/chef_handler
+git clone \
+  --branch=v2.7.1 \
+  https://github.com/opscode-cookbooks/sudo.git cookbooks/sudo
+git clone \
+  https://github.com/travis-infrastructure/users-cookbook.git cookbooks/users
+
+if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
+  pushd travis-cookbooks
+  git checkout -qf "${TRAVIS_COOKBOOKS_SHA}"
+  popd
+fi
+
+pushd travis-cookbooks
+pwd > /.packer-env/TRAVIS_COOKBOOKS_DIR
+git log -1 --format=%h > /.packer-env/TRAVIS_COOKBOOKS_SHA
+popd
