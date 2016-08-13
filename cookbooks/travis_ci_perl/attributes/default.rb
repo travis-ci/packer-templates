@@ -1,4 +1,4 @@
-override['travis_packer_templates']['job_board']['codename'] = 'perl'
+override['travis_packer_templates']['job_board']['stack'] = 'perl'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium

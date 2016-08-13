@@ -1,7 +1,7 @@
 # Managed by Chef! :heart_eyes_cat:
 
 TAGS="packer_chef_solo_time:<%= Time.now.utc.strftime('%Y%m%dT%H%M%SZ') %>"
-TAGS="$TAGS,codename:<%= @codename %>"
+TAGS="$TAGS,stack:<%= @stack %>"
 
 <% { 'language' => @languages, 'feature' => @features }.each do |prefix, set| %>
 <% set.map(&:strip).reject(&:empty?).each do |value| %>

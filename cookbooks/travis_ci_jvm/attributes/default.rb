@@ -3,7 +3,7 @@ override['java']['alternate_versions'] = %w(
   openjdk7
   oraclejdk8
 )
-override['travis_packer_templates']['job_board']['codename'] = 'jvm'
+override['travis_packer_templates']['job_board']['stack'] = 'jvm'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium

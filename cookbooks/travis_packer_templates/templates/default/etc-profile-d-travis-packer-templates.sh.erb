@@ -1,0 +1,9 @@
+#!/bin/sh
+# Managed by Chef on <%= node.name %> :heart:
+
+export TRAVIS_FEATURES='<%= @features.join(' ') %>'
+export TRAVIS_JOB_BOARD_REGISTER='/.job-board-register.yml'
+export TRAVIS_LANGUAGES='<%= @languages.join(' ') %>'
+export TRAVIS_NODE_ATTRIBUTES='/.node-attributes.yml'
+export TRAVIS_STACK='<%= @stack %>'
+export TRAVIS_TIMESTAMP='<%= @timestamp %>'
