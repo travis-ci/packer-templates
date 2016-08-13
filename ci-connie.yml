@@ -146,4 +146,3 @@ post-processors:
     - IMAGE_NAME={{ user `gce_image_name` }}
     only:
     - googlecompute
-# bumpitty bump
