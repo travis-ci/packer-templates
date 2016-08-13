@@ -159,7 +159,7 @@ describe JobBoardRegistrar do
         CURL_EXE: ':',
         IMAGE_NAME: 'travis-ci-sheeple-12345678',
         JOB_BOARD_IMAGES_URL: 'http://flim:flam@job-board.example.org/images',
-        PACKER_TEMPLATES_BRANCH: 'master',
+        PACKER_TEMPLATES_BRANCH: '+refs/heads/86/merge',
         PACKER_TEMPLATES_SHA: 'fafafaf',
         PACKER_BUILDER_TYPE: 'googlecompute',
         TRAVIS_COOKBOOKS_BRANCH: 'serious-experimentation-time',
@@ -172,9 +172,10 @@ describe JobBoardRegistrar do
         infra: 'gce',
         name: 'travis-ci-sheeple-12345678',
         tags: {
-          os: 'lintux',
           dist: 'frosty',
-          group: 'dev'
+          group: 'dev',
+          os: 'lintux',
+          packer_templates_branch: '+refs/heads/86/merge'
         }
       }
     },
@@ -196,9 +197,10 @@ describe JobBoardRegistrar do
         infra: 'gce',
         name: 'travis-ci-foo-flah-99999999999',
         tags: {
-          os: 'linnix',
           dist: 'crusty',
-          group: 'edge'
+          group: 'edge',
+          os: 'linnix',
+          packer_templates_branch: 'master'
         }
       }
     }
@@ -268,7 +270,7 @@ describe JobBoardRegistrar do
           end
         end
 
-        %w(os group dist).each do |key|
+        %w(os group dist packer_templates_branch).each do |key|
           describe("#{key} tag") do
             it { expect(tags[key]).to eq(config[:expected][:tags][key.to_sym]) }
           end
