@@ -64,7 +64,7 @@ provisioners:
   scripts:
   - packer-scripts/packer-env-dump
   - packer-scripts/pre-chef-bootstrap
-  - packer-scripts/internal-clone-travis-cookbooks
+  - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - TRAVIS_COOKBOOKS_URL={{ user `travis_cookbooks_url` }}
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
