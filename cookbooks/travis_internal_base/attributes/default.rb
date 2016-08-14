@@ -1,33 +1,21 @@
 override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
-                               
 override['openssh']['server']['password_authentication'] = 'no'
 override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
-override['openssh']['server']['challenge_response_authentication'] = 'no'
-override['openssh']['server']['match']['Host *']['challenge_response_authentication'] = 'no'
-
 override['openssh']['server']['pubkey_authentication'] = 'yes'
 override['openssh']['server']['match']['Host *']['pubkey_authentication'] = 'yes'
-override['openssh']['server']['match']['Host *']['host_key_algorithms'] = %w(
-  ssh-ed25519-cert-v01@openssh.com
-  ssh-rsa-cert-v01@openssh.com
-  ssh-ed25519
-  ssh-rsa
-).join(',')
+override['openssh']['server']['challenge_response_authentication'] = 'no'
 override['openssh']['server']['permit_root_login'] = 'no'
 override['openssh']['server']['use_roaming'] = 'no'
-override['openssh']['server']['match']['Host *']['use_roaming'] = 'no'
-kex_algorithms = %w(
+override['openssh']['server']['kex_algorithms'] = %w(
   curve25519-sha256@libssh.org
   diffie-hellman-group-exchange-sha256
 ).join(',')
-override['openssh']['server']['kex_algorithms'] = kex_algorithms
-override['openssh']['server']['match']['Host *']['kex_algorithms'] = kex_algorithms
 override['openssh']['server']['protocol'] = '2'
 override['openssh']['server']['host_key'] = %w(
   /etc/ssh/ssh_host_ed25519_key
   /etc/ssh/ssh_host_rsa_key
 )
-ciphers = %w(
+override['openssh']['server']['ciphers'] = %w(
   chacha20-poly1305@openssh.com
   aes256-gcm@openssh.com
   aes128-gcm@openssh.com
@@ -35,9 +23,7 @@ ciphers = %w(
   aes192-ctr
   aes128-ctr
 ).join(',')
-override['openssh']['server']['ciphers'] = ciphers
-override['openssh']['server']['match']['Host *']['ciphers'] = ciphers
-macs = %w(
+override['openssh']['server']['m_a_cs'] = %w(
   hmac-sha2-512-etm@openssh.com
   hmac-sha2-256-etm@openssh.com
   hmac-ripemd160-etm@openssh.com
@@ -47,8 +33,6 @@ macs = %w(
   hmac-ripemd160
   umac-128@openssh.com
 ).join(',')
-override['openssh']['server']['m_a_cs'] = macs
-override['openssh']['server']['match']['Host *']['m_a_cs'] = macs
 
 override['users'] = [
   {
