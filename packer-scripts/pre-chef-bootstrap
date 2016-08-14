@@ -63,7 +63,9 @@ __setup_travis_user() {
   __setup_sudoers
   __setup_travis_ssh
 
-  chown -R travis:travis /home/travis
+  mkdir -p /opt
+  chmod 0755 /opt
+  chown -R travis:travis /home/travis /opt
 }
 
 __setup_sudoers() {
