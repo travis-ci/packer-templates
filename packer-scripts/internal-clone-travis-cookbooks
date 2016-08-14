@@ -18,17 +18,6 @@ git clone \
 git clone \
   --branch=v1.3.4 \
   https://github.com/opscode-cookbooks/openssh.git cookbooks/openssh
-git clone \
-  --branch=v2.7.0 \
-  https://github.com/opscode-cookbooks/apt.git cookbooks/apt
-git clone \
-  --branch=v1.1.6 \
-  https://github.com/opscode-cookbooks/chef_handler.git cookbooks/chef_handler
-git clone \
-  --branch=v2.7.1 \
-  https://github.com/opscode-cookbooks/sudo.git cookbooks/sudo
-git clone \
-  https://github.com/travis-infrastructure/users-cookbook.git cookbooks/users
 
 if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
   pushd travis-cookbooks
