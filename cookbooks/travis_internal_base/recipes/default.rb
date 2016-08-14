@@ -30,6 +30,10 @@ include_recipe 'papertrail'
 include_recipe 'users'
 include_recipe 'sudo'
 
+package 'whois' do
+  action [:install, :upgrade]
+end
+
 template '/etc/cloud/cloud.cfg' do
   source 'etc-cloud-cloud.cfg.erb'
   owner 'root'
