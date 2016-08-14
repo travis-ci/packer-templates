@@ -1,3 +1,5 @@
+override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
+                               
 override['openssh']['server']['password_authentication'] = 'no'
 override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
 override['openssh']['server']['challenge_response_authentication'] = 'no'
