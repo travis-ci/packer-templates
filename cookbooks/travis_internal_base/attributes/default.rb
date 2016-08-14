@@ -5,7 +5,6 @@ override['openssh']['server']['pubkey_authentication'] = 'yes'
 override['openssh']['server']['match']['Host *']['pubkey_authentication'] = 'yes'
 override['openssh']['server']['challenge_response_authentication'] = 'no'
 override['openssh']['server']['permit_root_login'] = 'no'
-override['openssh']['server']['use_roaming'] = 'no'
 override['openssh']['server']['kex_algorithms'] = %w(
   curve25519-sha256@libssh.org
   diffie-hellman-group-exchange-sha256
