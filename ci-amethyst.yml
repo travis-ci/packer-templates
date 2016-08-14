@@ -26,6 +26,7 @@ builders:
   tags:
   - ci
   - amethyst
+  - travis-ci-packer-templates
 - type: docker
   name: docker
   ssh_pty: true

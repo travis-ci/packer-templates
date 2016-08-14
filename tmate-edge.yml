@@ -43,6 +43,7 @@ builders:
   machine_type: n1-standard-4
   tags:
   - tmate-edge
+  - travis-ci-packer-templates
 provisioners:
 - type: shell
   inline: sleep 10

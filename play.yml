@@ -27,6 +27,7 @@ builders:
   disk_size: 15
   tags:
   - play
+  - travis-ci-packer-templates
 - type: docker
   name: docker
   ssh_pty: true
