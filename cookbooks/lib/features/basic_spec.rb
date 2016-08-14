@@ -89,3 +89,13 @@ context 'with something listening on 19494' do
     its(stream) { should include 'succeeded' }
   end
 end
+
+describe file('/opt'), dev: true do
+  it { should be_directory }
+  it 'is writable' do
+    File.open('/opt/.travis-write-test', 'w') do |f|
+      f.puts Time.now.utc.to_s
+    end
+    expect(File.read('/opt/.travis-write-test')).to_not be_empty
+  end
+end

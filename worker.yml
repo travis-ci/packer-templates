@@ -48,6 +48,7 @@ builders:
   machine_type: n1-standard-4
   tags:
   - worker
+  - travis-ci-packer-templates
 provisioners:
 - type: shell
   inline: sleep 10
@@ -76,6 +77,7 @@ provisioners:
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
+  - "/tmp/chef-stuff/cookbooks"
   - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
   - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
   json:
@@ -103,8 +105,14 @@ provisioners:
   - amazon-ebs
 - type: shell
   scripts:
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/purge
+  - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
   - packer-scripts/minimize
+  environment_vars:
+  - SPEC_SUITES=travis_internal_base,travis_worker_wrapper
+  - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 post-processors:
 -
