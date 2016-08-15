@@ -8,7 +8,7 @@ describe 'xserver installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command('DISPLAY=:99.0 xvfb-run xdpyinfo') do
+  describe command('DISPLAY=:99.0 xvfb-run xdpyinfo'), dev: true do
     its(:stdout) { should match(/^\s+GLX$/) }
     its(:exit_status) { should eq 0 }
   end
