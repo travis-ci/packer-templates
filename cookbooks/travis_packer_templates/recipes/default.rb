@@ -24,6 +24,8 @@
 
 TravisPackerTemplates.new(node).init! if defined?(TravisPackerTemplates)
 
+init_time = Time.now.utc
+
 template '/etc/default/job-board-register' do
   source 'etc-default-job-board-register.sh.erb'
   cookbook 'travis_packer_templates'
@@ -33,14 +35,28 @@ template '/etc/default/job-board-register' do
   variables(
     languages: node['travis_packer_templates']['job_board']['languages'],
     features: node['travis_packer_templates']['job_board']['features'],
-    codename: node['travis_packer_templates']['job_board']['codename']
+    stack: node['travis_packer_templates']['job_board']['stack']
+  )
+end
+
+template '/etc/profile.d/Z90-travis-packer-templates.sh' do
+  source 'etc-profile-d-travis-packer-templates.sh.erb'
+  cookbook 'travis_packer_templates'
+  owner 'root'
+  group 'root'
+  mode 0o755
+  variables(
+    features: node['travis_packer_templates']['job_board']['features'],
+    languages: node['travis_packer_templates']['job_board']['languages'],
+    stack: node['travis_packer_templates']['job_board']['stack'],
+    timestamp: init_time
   )
 end
 
 file '/.node-attributes.yml' do
   content YAML.dump(
     JSON.parse(JSON.dump(node.attributes.to_h)).merge(
-      '__timestamp' => Time.now.utc.to_s
+      '__timestamp' => init_time.to_s
     )
   )
   owner 'root'

@@ -8,7 +8,7 @@ override['gimme']['versions'] = %w(
   1.6.3
 )
 override['gimme']['default_version'] = '1.6.3'
-override['travis_packer_templates']['job_board']['codename'] = 'go'
+override['travis_packer_templates']['job_board']['stack'] = 'go'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
