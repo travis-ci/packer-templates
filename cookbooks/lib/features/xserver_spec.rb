@@ -7,4 +7,9 @@ describe 'xserver installation' do
     its(:stdout) { should match(/^Keyboard Control:/) }
     its(:exit_status) { should eq 0 }
   end
+
+  describe command('DISPLAY=:99.0 xvfb-run xdpyinfo') do
+    its(:stdout) { should match(/^\s+GLX$/) }
+    its(:exit_status) { should eq 0 }
+  end
 end

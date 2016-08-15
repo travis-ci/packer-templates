@@ -91,6 +91,10 @@ unzip
 vim
 wamerican
 wget
+x11-utils
 xfsprogs
+xserver-xorg-core
+xserver-xorg-video-all
+xvfb
 zip
 zlib1g-dev
