@@ -1,3 +1,5 @@
+require 'support'
+
 describe 'git installation' do
   describe package('git') do
     it { should be_installed }
@@ -8,18 +10,26 @@ describe 'git installation' do
     its(:exit_status) { should eq 0 }
   end
 
+  describe command('git config user.name'), dev: true do
+    its(:stdout) { should match(/travis/i) }
+  end
+
+  describe command('git config user.email'), dev: true do
+    its(:stdout) { should match(/travis@example\.org/) }
+  end
+
   describe 'git commands' do
     before :each do
-      sh(%w(
-        rm -rf git-project ;
-        git init git-project ;
-        touch git-project/test-file.txt
+      sh(%W(
+        rm -rf #{Support.tmpdir}/git-project ;
+        git init #{Support.tmpdir}/git-project ;
+        touch #{Support.tmpdir}/git-project/test-file.txt
       ).join(' '))
     end
 
     describe command(
-      %w(
-        cd git-project ;
+      %W(
+        cd #{Support.tmpdir}/git-project ;
         git status ;
         git add test-file.txt ;
         git status ;
