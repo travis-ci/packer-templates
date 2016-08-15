@@ -97,6 +97,7 @@ override['travis_packer_templates']['job_board']['stack'] = 'garnet'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
+  disabled-ipv6
   docker
   docker-compose
   firefox

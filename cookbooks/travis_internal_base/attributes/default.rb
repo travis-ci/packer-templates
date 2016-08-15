@@ -1,10 +1,13 @@
+override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
 override['openssh']['server']['password_authentication'] = 'no'
+override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
 override['openssh']['server']['pubkey_authentication'] = 'yes'
+override['openssh']['server']['match']['Host *']['pubkey_authentication'] = 'yes'
+override['openssh']['server']['challenge_response_authentication'] = 'no'
 override['openssh']['server']['permit_root_login'] = 'no'
 override['openssh']['server']['kex_algorithms'] = %w(
   curve25519-sha256@libssh.org
   diffie-hellman-group-exchange-sha256
-  diffie-hellman-group14-sha1
 ).join(',')
 override['openssh']['server']['protocol'] = '2'
 override['openssh']['server']['host_key'] = %w(
@@ -28,7 +31,6 @@ override['openssh']['server']['m_a_cs'] = %w(
   hmac-sha2-256
   hmac-ripemd160
   umac-128@openssh.com
-  hmac-sha1
 ).join(',')
 
 override['users'] = [

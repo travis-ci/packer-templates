@@ -95,7 +95,9 @@ class JobBoardRegistrar
       infra: image_infra,
       name: env('IMAGE_NAME'),
       tags: image_tags.map { |k, v| "#{k}:#{v}" }.join(',')
-    }.map { |k, v| "#{k}=#{URI.escape(v)}" }.join('&')
+    }.map do |k, v|
+      "#{k}=#{URI.escape(URI.escape(v), '+,:')}"
+    end.join('&')
   end
 
   def image_tags

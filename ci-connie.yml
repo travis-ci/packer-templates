@@ -26,6 +26,7 @@ builders:
   tags:
   - ci
   - connie
+  - travis-ci-packer-templates
 - type: docker
   name: docker
   ssh_pty: true
@@ -146,4 +147,3 @@ post-processors:
     - IMAGE_NAME={{ user `gce_image_name` }}
     only:
     - googlecompute
-# bumpitty bump
