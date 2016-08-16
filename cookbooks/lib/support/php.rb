@@ -6,6 +6,11 @@ module Support
 
     def phpenv_exec
       return @phpenv_exec if @phpenv_exec
+      unless php_default_version.empty?
+        @phpenv_exec = "RBENV_VERSION=#{php_default_version} phpenv exec"
+        return @phpenv_exec
+      end
+
       available = `phpenv versions 2>/dev/null`.strip
       php_versions.each do |v|
         next if @phpenv_exec
@@ -28,6 +33,21 @@ module Support
       ::Support.attributes
                .fetch('php', {})
                .fetch('multi', {})['versions']
+    end
+
+    def php_default_version
+      php_default_version_trusty || php_default_version_precise || ''
+    end
+
+    def php_default_version_trusty
+      ::Support.attributes
+               .fetch('travis_build_environment', {})['php_default_version']
+    end
+
+    def php_default_version_precise
+      ::Support.attributes
+               .fetch('php', {})
+               .fetch('multi', {})['default_version']
     end
   end
 end
