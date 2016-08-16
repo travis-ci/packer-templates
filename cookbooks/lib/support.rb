@@ -9,6 +9,7 @@ module Support
   autoload :Helpers, 'support/helpers'
   autoload :JobBoardTags, 'support/job_board_tags'
   autoload :NodeAttributes, 'support/node_attributes'
+  autoload :Php, 'support/php'
   autoload :Python, 'support/python'
   autoload :RabbitMQAdmin, 'support/rabbitmqadmin'
 
