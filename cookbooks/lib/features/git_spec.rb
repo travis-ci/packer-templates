@@ -10,11 +10,11 @@ describe 'git installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command('git config user.name'), dev: true do
+  describe command('git config user.name'), dev: true, precise: false do
     its(:stdout) { should match(/travis/i) }
   end
 
-  describe command('git config user.email'), dev: true do
+  describe command('git config user.email'), dev: true, precise: false do
     its(:stdout) { should match(/travis@example\.org/) }
   end
 
