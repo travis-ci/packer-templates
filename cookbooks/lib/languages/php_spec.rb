@@ -2,13 +2,14 @@ include Support::Php
 
 require 'features/php_interpreter_spec'
 
-describe 'php environment' do
+describe 'php environment', dev: true do
   describe phpcommand('php-fpm --version') do
     its(:exit_status) { should eq 0 }
     its(:stdout) { should match(/^PHP \d+\.\d+\.\d+.+fpm-fcgi/) }
   end
 
-  describe phpcommand('php -m') do
+  describe phpcommand('php -m --version') do
+    # Running `php -m` hangs, but adding more args doesn't (???)
     its(:stdout) { should include(*PHP_MODULES) }
   end
 end
