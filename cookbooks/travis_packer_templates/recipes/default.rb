@@ -59,7 +59,7 @@ ruby_block 'write node attributes' do
     require 'yaml'
     require 'fileutils'
 
-    node_attributes_hash = JSON.parse(JSON.dump(node.attributes.to_h))
+    node_attributes_hash = JSON.parse(JSON.dump(node.attributes.to_hash))
     raise 'Empty node attributes' if node_attributes_hash.keys.empty?
 
     File.open('/.node-attributes.yml', 'w') do |f|
