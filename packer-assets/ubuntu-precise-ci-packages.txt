@@ -17,7 +17,6 @@ chromium-browser
 cmake
 curl
 debconf-utils
-fglrx
 flex
 gawk
 gcc
@@ -103,6 +102,7 @@ unzip
 vim
 wamerican
 wget
+x11-utils
 xserver-xorg-core
 xvfb
 zip
