@@ -38,7 +38,7 @@ provisioners:
   source: packer-assets/ubuntu-trusty-normal-purge.txt
   destination: "/var/tmp/purge.txt"
 - type: file
-  source: packer-assets/ubuntu-trusty-ci-packages.txt
+  source: packer-assets/ubuntu-trusty-ci-sugilite-packages.txt
   destination: "/var/tmp/packages.txt"
 - type: shell
   scripts:

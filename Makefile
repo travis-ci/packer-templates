@@ -101,5 +101,6 @@ $(META_FILES): .git/HEAD
 	./bin/write-envdir $(PWD)/tmp/job-board-env 'JOB_BOARD'
 
 $(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
+	chmod 0600 $@
 	$(SED) 's/libcurl4-openssl-dev/libcurl4-gnutls-dev/' < $^ > $@
 	chmod 0400 $@
