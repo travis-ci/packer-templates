@@ -21,7 +21,7 @@ module Support
     end
 
     def php_versions
-      php_versions_trusty || php_versions_precise || %w(system)
+      php_versions_trusty || php_versions_precise || %w(5.6.13 system)
     end
 
     def php_versions_trusty

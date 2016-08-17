@@ -53,15 +53,30 @@ template '/etc/profile.d/Z90-travis-packer-templates.sh' do
   )
 end
 
-file '/.node-attributes.yml' do
-  content YAML.dump(
-    JSON.parse(JSON.dump(node.attributes.to_h)).merge(
-      '__timestamp' => init_time.to_s
-    )
-  )
-  owner 'root'
-  group 'root'
-  mode 0o644
+ruby_block 'write node attributes' do
+  block do
+    require 'json'
+    require 'yaml'
+    require 'fileutils'
+
+    node_attributes_hash = JSON.parse(JSON.dump(node.attributes.to_h))
+    raise 'Empty node attributes' if node_attributes_hash.keys.empty?
+
+    File.open('/.node-attributes.yml', 'w') do |f|
+      f.puts YAML.dump(
+        node_attributes_hash.merge('__timestamp' => init_time.to_s)
+      )
+    end
+
+    FileUtils.chown('root', 'root', '/.node-attributes.yml')
+    FileUtils.chmod(0o644, '/.node-attributes.yml')
+  end
+
+  action :nothing
+end
+
+log 'trigger writing node attributes' do
+  notifies :run, 'ruby_block[write node attributes]'
 end
 
 file '/.job-board-register.yml' do
