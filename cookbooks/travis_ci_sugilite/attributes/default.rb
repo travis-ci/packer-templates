@@ -13,12 +13,15 @@ php_versions = %w(
   5.4.45
   5.5.37
   5.6.24
+  7.0.7
 )
 override['travis_build_environment']['php_versions'] = php_versions
+override['travis_build_environment']['php_default_version'] = '5.6.24'
 override['travis_build_environment']['php_aliases'] = {
   '5.4' => '5.4.45',
   '5.5' => '5.5.37',
-  '5.6' => '5.6.24'
+  '5.6' => '5.6.24',
+  '7.0' => '7.0.7'
 }
 
 override['travis_perlbrew']['perls'] = [
@@ -59,8 +62,8 @@ gimme_versions = %w(
   1.6.3
 )
 
-override['gimme']['versions'] = gimme_versions
-override['gimme']['default_version'] = gimme_versions.max
+override['travis_build_environment']['gimme']['versions'] = gimme_versions
+override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 override['java']['jdk_version'] = '8'
 override['java']['install_flavor'] = 'oracle'
@@ -173,18 +176,21 @@ override['travis_build_environment']['default_elixir_version'] = '1.0.4'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
-override['travis_packer_templates']['job_board']['codename'] = 'sugilite'
+override['travis_packer_templates']['job_board']['stack'] = 'sugilite'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
+  disabled-ipv6
   docker
   docker-compose
   firefox
+  go-toolchain
   google-chrome
   memcached
   mongodb
   nodejs_interpreter
   perl_interpreter
+  perlbrew
   phantomjs
   postgresql
   python_interpreter

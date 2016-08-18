@@ -31,8 +31,12 @@ override['travis_perlbrew']['modules'] = %w(
 )
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-override['gimme']['versions'] = []
-override['gimme']['default_version'] = ''
+gimme_versions = %w(
+  1.6.3
+)
+
+override['travis_build_environment']['gimme']['versions'] = gimme_versions
+override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 node_versions = %w(
   4.4.7
@@ -69,14 +73,17 @@ override['travis_build_environment']['default_elixir_version'] = elixirs.max
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
-override['travis_packer_templates']['job_board']['codename'] = 'amethyst'
+override['travis_packer_templates']['job_board']['stack'] = 'amethyst'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  disabled-ipv6
   docker
   docker-compose
+  go-toolchain
   memcached
   nodejs_interpreter
   perl_interpreter
+  perlbrew
   postgresql
   python_interpreter
   redis

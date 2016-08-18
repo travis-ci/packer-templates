@@ -9,7 +9,7 @@ default['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'] = ''
 
 default['travis_packer_templates']['job_board']['languages'] = []
 default['travis_packer_templates']['job_board']['features'] = []
-default['travis_packer_templates']['job_board']['codename'] = "unset-#{Time.now.to_i}"
+default['travis_packer_templates']['job_board']['stack'] = "unset-#{Time.now.to_i}"
 
 default['travis_packer_templates']['packages'] = []
 default['travis_packer_templates']['packages_file'] = '/var/tmp/packages.txt'

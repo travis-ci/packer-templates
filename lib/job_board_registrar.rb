@@ -84,7 +84,7 @@ class JobBoardRegistrar
   end
 
   def dump_relevant_env_vars
-    ENV.each do |key, value|
+    ENV.sort.each do |key, value|
       next unless key =~ /^(PACKER|TRAVIS|TAGS|IMAGE_NAME)/
       logger.info "#{key.strip}=#{value.strip}"
     end
@@ -95,7 +95,9 @@ class JobBoardRegistrar
       infra: image_infra,
       name: env('IMAGE_NAME'),
       tags: image_tags.map { |k, v| "#{k}:#{v}" }.join(',')
-    }.map { |k, v| "#{k}=#{URI.escape(v)}" }.join('&')
+    }.map do |k, v|
+      "#{k}=#{URI.escape(URI.escape(v), '+,:')}"
+    end.join('&')
   end
 
   def image_tags
@@ -113,6 +115,12 @@ class JobBoardRegistrar
         ENV.key?('PACKER_BUILD_NAME')
       tags[:packer_builder_type] = env('PACKER_BUILDER_TYPE') if
         ENV.key?('PACKER_BUILDER_TYPE')
+      if ENV.key?('TAGS')
+        ENV['TAGS'].split(',').each do |tag_pair|
+          key, value = tag_pair.split(':', 2)
+          tags[key.to_sym] = value unless value.to_s.empty?
+        end
+      end
     end
   end
 
@@ -125,7 +133,7 @@ class JobBoardRegistrar
 
   def group
     return 'edge' if
-      travis_cookbooks_branch == env('TRAVIS_COOKBOOKS_EDGE_BRANCH') &&
+      travis_cookbooks_branch == travis_cookbooks_edge_branch &&
       env('TRAVIS_COOKBOOKS_SHA') !~ /dirty/ &&
       env('PACKER_TEMPLATES_BRANCH') == 'master' &&
       env('PACKER_TEMPLATES_SHA') !~ /dirty/
@@ -189,6 +197,10 @@ class JobBoardRegistrar
   def travis_cookbooks_branch
     value = ENV.fetch('TRAVIS_COOKBOOKS_BRANCH', '').strip
     return value unless value.empty?
+    travis_cookbooks_edge_branch
+  end
+
+  def travis_cookbooks_edge_branch
     value = ENV.fetch('TRAVIS_COOKBOOKS_EDGE_BRANCH', '').strip
     return value unless value.empty?
     'master'
@@ -199,16 +211,19 @@ class JobBoardRegistrar
     raw.split("\n").each do |line|
       key, value = line.strip.split('=', 2)
       next if %w(PWD SHLVL _).include?(key)
-      logger.info "setting #{key}"
-      ENV[key] = value.strip
+      value.strip!
+      logger.info "setting #{key}=#{value}"
+      ENV[key] = value
     end
   end
 
   def load_envdir(path)
     Dir.glob(File.join(path, '*')) do |entry|
       next unless File.file?(entry)
-      logger.info "loading #{entry}"
-      ENV[File.basename(entry)] = File.read(entry).strip
+      key = File.basename(entry)
+      value = File.read(entry).strip
+      logger.info "loading #{key}=#{value}"
+      ENV[key] = value
     end
   end
 

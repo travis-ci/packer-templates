@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-packer-build.git
-  revision: a12ce33b1724f3ce0d7e8dd838ad82363050db73
+  revision: 24798b4cbf30b266374d51eba1793f68d3b0efa2
   specs:
     travis-packer-build (0.1.0)
       faraday (~> 0.9)

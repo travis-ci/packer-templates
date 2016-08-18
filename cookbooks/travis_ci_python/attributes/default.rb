@@ -43,7 +43,7 @@ pythons.each do |full_name|
     python_aliases(full_name)
 end
 
-override['travis_packer_templates']['job_board']['codename'] = 'python'
+override['travis_packer_templates']['job_board']['stack'] = 'python'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium

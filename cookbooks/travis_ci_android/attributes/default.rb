@@ -4,7 +4,7 @@ override['java']['alternate_versions'] = %w(
   oraclejdk8
 )
 
-override['travis_packer_templates']['job_board']['codename'] = 'android'
+override['travis_packer_templates']['job_board']['stack'] = 'android'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium

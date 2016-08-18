@@ -22,6 +22,35 @@ describe JobBoardRegistrar do
     )
   end
 
+  it 'merges env TAGS when making image tags' do
+    ENV['TAGS'] = 'razza:frazza,flim:flam,os:bonk'
+    expect(subject.send(:image_tags)).to include(
+      razza: 'frazza', flim: 'flam', os: 'bonk'
+    )
+  end
+
+  describe 'determining TRAVIS_COOKBOOKS_EDGE_BRANCH' do
+    context 'without TRAVIS_COOKBOOKS_EDGE_BRANCH value present' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
+      end
+
+      it 'falls back to "master"' do
+        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('master')
+      end
+    end
+
+    context 'with TRAVIS_COOKBOOKS_EDGE_BRANCH value present' do
+      before do
+        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'meister'
+      end
+
+      it 'uses the value' do
+        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('meister')
+      end
+    end
+  end
+
   describe 'determining TRAVIS_COOKBOOKS_BRANCH' do
     context 'without TRAVIS_COOKBOOKS_BRANCH value present' do
       before do
@@ -130,7 +159,7 @@ describe JobBoardRegistrar do
         CURL_EXE: ':',
         IMAGE_NAME: 'travis-ci-sheeple-12345678',
         JOB_BOARD_IMAGES_URL: 'http://flim:flam@job-board.example.org/images',
-        PACKER_TEMPLATES_BRANCH: 'master',
+        PACKER_TEMPLATES_BRANCH: '+refs/heads/86/merge',
         PACKER_TEMPLATES_SHA: 'fafafaf',
         PACKER_BUILDER_TYPE: 'googlecompute',
         TRAVIS_COOKBOOKS_BRANCH: 'serious-experimentation-time',
@@ -143,9 +172,10 @@ describe JobBoardRegistrar do
         infra: 'gce',
         name: 'travis-ci-sheeple-12345678',
         tags: {
-          os: 'lintux',
           dist: 'frosty',
-          group: 'dev'
+          group: 'dev',
+          os: 'lintux',
+          packer_templates_branch: '+refs/heads/86/merge'
         }
       }
     },
@@ -167,9 +197,10 @@ describe JobBoardRegistrar do
         infra: 'gce',
         name: 'travis-ci-foo-flah-99999999999',
         tags: {
-          os: 'linnix',
           dist: 'crusty',
-          group: 'edge'
+          group: 'edge',
+          os: 'linnix',
+          packer_templates_branch: 'master'
         }
       }
     }
@@ -239,7 +270,7 @@ describe JobBoardRegistrar do
           end
         end
 
-        %w(os group dist).each do |key|
+        %w(os group dist packer_templates_branch).each do |key|
           describe("#{key} tag") do
             it { expect(tags[key]).to eq(config[:expected][:tags][key.to_sym]) }
           end

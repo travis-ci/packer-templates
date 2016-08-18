@@ -23,6 +23,7 @@ GIT ?= git
 JQ ?= jq
 PACKER ?= packer
 SED ?= sed
+TRAVIS_PACKER_BUILD ?= travis-packer-build
 UNZIP ?= unzip
 
 %: %.yml $(META_FILES)
@@ -59,12 +60,17 @@ clean:
 
 .PHONY: packer-build-trigger
 packer-build-trigger:
-	travis-packer-build \
+	BODY_TMPL=$(PWD)/.packer-build-pull-request-$(TRAVIS_PULL_REQUEST)-tmpl.yml ; \
+	if [[ ! -f $$BODY_TMPL ]] ; then \
+		BODY_TMPL=$(PWD)/.packer-build-pull-request-tmpl.yml ; \
+	fi ; \
+	$(TRAVIS_PACKER_BUILD) \
 		--chef-cookbook-path="$(shell echo $(CHEF_COOKBOOK_PATH))" \
 		--packer-templates-path="$(PWD)/.git::" \
 		--commit-range="$(TRAVIS_COMMIT_RANGE)" \
+		--pull-request="$(TRAVIS_PULL_REQUEST)" \
 		--target-repo-slug=travis-infrastructure/packer-build \
-		--body-tmpl=$(PWD)/.travis-packer-build-tmpl.yml
+		--body-tmpl=$$BODY_TMPL
 
 .PHONY: install-packer
 install-packer: tmp/packer.zip
@@ -95,5 +101,6 @@ $(META_FILES): .git/HEAD
 	./bin/write-envdir $(PWD)/tmp/job-board-env 'JOB_BOARD'
 
 $(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
+	chmod 0600 $@
 	$(SED) 's/libcurl4-openssl-dev/libcurl4-gnutls-dev/' < $^ > $@
 	chmod 0400 $@

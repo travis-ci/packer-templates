@@ -8,8 +8,12 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-override['gimme']['versions'] = []
-override['gimme']['default_version'] = ''
+gimme_versions = %w(
+  1.6.3
+)
+
+override['travis_build_environment']['gimme']['versions'] = gimme_versions
+override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 override['travis_python']['pyenv']['pythons'] = []
 override['travis_python']['pyenv']['aliases'] = {}
@@ -41,12 +45,15 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 
-override['travis_packer_templates']['job_board']['codename'] = 'connie'
+override['travis_packer_templates']['job_board']['stack'] = 'connie'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  disabled-ipv6
   docker
   docker-compose
+  go-toolchain
   perl_interpreter
+  perlbrew
   python_interpreter
   ruby_interpreter
 )

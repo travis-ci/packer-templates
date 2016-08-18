@@ -7,4 +7,10 @@ describe 'xserver installation' do
     its(:stdout) { should match(/^Keyboard Control:/) }
     its(:exit_status) { should eq 0 }
   end
+
+  describe command('xvfb-run -a xdpyinfo'), dev: true do
+    its(:stdout) { should match(/^\s+GLX$/) }
+    its(:stderr) { should be_empty }
+    its(:exit_status) { should eq 0 }
+  end
 end
