@@ -8,7 +8,9 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
 
-  __disable_ipv6
+  if [[ "x${PACKER_BUILDER_TYPE}" != xdocker ]] ; then
+    __disable_ipv6
+  fi
   __install_packages
   __setup_sshd
   __setup_travis_user
@@ -20,7 +22,7 @@ __disable_ipv6() {
 }
 
 __install_packages() {
-  if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
+  if [[ "x${PACKER_BUILDER_TYPE}" =~ xvmware ]] ; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
 
