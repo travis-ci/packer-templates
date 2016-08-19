@@ -147,3 +147,4 @@ post-processors:
     - IMAGE_NAME={{ user `gce_image_name` }}
     only:
     - googlecompute
+# Fri Aug 19 01:58:35 UTC 2016
