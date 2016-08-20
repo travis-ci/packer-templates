@@ -60,17 +60,11 @@ clean:
 
 .PHONY: packer-build-trigger
 packer-build-trigger:
-	BODY_TMPL=$(PWD)/.packer-build-pull-request-$(TRAVIS_PULL_REQUEST)-tmpl.yml ; \
-	if [[ ! -f $$BODY_TMPL ]] ; then \
-		BODY_TMPL=$(PWD)/.packer-build-pull-request-tmpl.yml ; \
-	fi ; \
-	$(TRAVIS_PACKER_BUILD) \
-		--chef-cookbook-path="$(shell echo $(CHEF_COOKBOOK_PATH))" \
-		--packer-templates-path="$(PWD)/.git::" \
-		--commit-range="$(TRAVIS_COMMIT_RANGE)" \
-		--pull-request="$(TRAVIS_PULL_REQUEST)" \
-		--target-repo-slug=travis-infrastructure/packer-build \
-		--body-tmpl=$$BODY_TMPL
+	bin/packer-build-trigger
+
+.PHONY: packer-build-trigger-all-ci
+packer-build-trigger-all-ci:
+	bin/packer-build-trigger $(shell for f in ci-*.yml ; do echo -I $$f ; done)
 
 .PHONY: install-packer
 install-packer: tmp/packer.zip
