@@ -90,12 +90,35 @@ context 'with something listening on 19494' do
   end
 end
 
-describe file('/opt'), dev: true do
+describe file('/opt') do
   it { should be_directory }
   it 'is writable' do
     File.open('/opt/.travis-write-test', 'w') do |f|
       f.puts Time.now.utc.to_s
     end
     expect(File.read('/opt/.travis-write-test')).to_not be_empty
+  end
+end
+
+describe file('/etc/hosts') do
+  let :lines do
+    subject.content.split("\n").map(&:strip).reject do |line|
+      line =~ /^\s*#/ || line.empty?
+    end
+  end
+
+  %w(127.0.0.1 127.0.1.1).each do |ipv4_addr|
+    it "has one #{ipv4_addr} entry" do
+      expect(lines.grep(/^\s*#{ipv4_addr}\b/).length).to eq(1)
+    end
+  end
+
+  {
+    '127.0.0.1' => 'localhost',
+    '127.0.1.1' => 'ip4-loopback'
+  }.each do |addr, name|
+    it "maps #{addr} to #{name}" do
+      expect(lines.grep(/^\s*#{addr}\b/).first.split(/\s+/)).to include(name)
+    end
   end
 end
