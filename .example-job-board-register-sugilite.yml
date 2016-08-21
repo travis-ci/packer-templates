@@ -34,6 +34,7 @@ languages:
 - scala
 - universe
 features:
+- basic
 - chromium
 - firefox
 - go-toolchain
