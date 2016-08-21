@@ -19,6 +19,7 @@ languages:
 - sh
 - shell
 features:
+- basic
 - chromium
 - firefox
 - google-chrome
