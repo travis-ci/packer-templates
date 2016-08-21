@@ -37,31 +37,31 @@ intended for use as execution environment for jobs flowing through Travis CI,
 and those used for various backend fun in the Travis CI infrastructure.  The
 former type all have the prefix `ci-`, described in more detail below:
 
-### ci templates
+### stacks
 
-There are two primary types of CI templates: those targeting Ubuntu 12.04
-(precise), primarily authored to replicate the legacy Blue Box and Docker images
-that were mastered via the `travis-images` process, and those targeting Ubuntu
-14.04 (trusty) that run on GCE and (someday) Docker.
+There are two primary types of stacks: those targeting Ubuntu 12.04 (precise),
+primarily authored to replicate the legacy Blue Box and Docker images that were
+mastered via the `travis-images` process, and those targeting Ubuntu 14.04
+(trusty) that run on GCE and (someday) Docker.
 
 Take a peek at what's what:
 
 ``` bash
-make langs-precise
+make stacks-precise
 ```
 
 ``` bash
-make langs-trusty
+make stacks-trusty
 ```
 
-The primary difference between the precise and trusty images is which branch of
+The primary difference between the precise and trusty stacks is which branch of
 [travis-cookbooks](https://github.com/travis-ci/travis-cookbooks) is used by the
-given template's Chef provisioner.  Images targeting precise default to the
+given template's Chef provisioner.  Stacks targeting precise default to the
 `precise-stable` branch, while those targeting trusty default to the `master`
 branch.
 
-There may be some subtle variations, but for the most part each CI template is
-built via the following steps.
+There may be some subtle variations, but for the most part each stack is built
+via the following steps.
 
 #### git metadata file input
 
@@ -146,7 +146,7 @@ cookbook located in `./cookbooks/`.
 Each wrapper cookbook must contain at least a `metadata.rb` and a
 `recipes/default.rb`.  Typically, the `attributes/default.rb` is defined and
 contains all override attribute settings.  The earliest version of Chef used by
-either precise or trusty images is `12.9`, which means that *all* cookbook
+either precise or trusty stacks is `12.9`, which means that *all* cookbook
 dependencies must be declared in `metadata.rb`, a requirement that is also
 enforced by the `foodcritic` checks.
 

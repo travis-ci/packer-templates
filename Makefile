@@ -32,22 +32,25 @@ UNZIP ?= unzip
 .PHONY: all
 all: $(META_FILES) $(PHP_PACKAGES_FILE)
 
-.PHONY: langs
-langs:
-	@for f in ci-*.yml ; do echo $$f | $(SED) 's/ci-//;s/\.yml//' ; done
+.PHONY: stacks-short
+stacks-short:
+	@$(MAKE) stacks | sed 's/-trusty//;s/-precise//'
 
-.PHONY: langs-precise
-langs-precise:
+.PHONY: stacks
+stacks: stacks-precise stacks-trusty
+
+.PHONY: stacks-precise
+stacks-precise:
 	@for f in ci-*.yml ; do \
 		grep -lE 'travis_cookbooks_edge_branch:.*precise-stable' $$f | \
-		$(SED) 's/ci-//;s/\.yml//' ; \
+		$(SED) 's/ci-//;s/\.yml//;s/$$/-precise/' ; \
 	done
 
-.PHONY: langs-trusty
-langs-trusty:
+.PHONY: stacks-trusty
+stacks-trusty:
 	@for f in ci-*.yml ; do \
 		grep -lE 'travis_cookbooks_edge_branch:.*master' $$f | \
-		$(SED) 's/ci-//;s/\.yml//' ; \
+		$(SED) 's/ci-//;s/\.yml//;s/$$/-trusty/' ; \
 	done
 
 .PHONY: test
