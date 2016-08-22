@@ -2,7 +2,7 @@
 
 set -o errexit
 
-TOP="$(dirname $(dirname ${BASH_SOURCE[0]}))"
+TOP="$(cd $(dirname $(dirname ${BASH_SOURCE[0]})) ; pwd)"
 
 : ${TRAVIS_PULL_REQUEST:=false}
 : ${TRAVIS_COMMIT_RANGE:=@...@}
