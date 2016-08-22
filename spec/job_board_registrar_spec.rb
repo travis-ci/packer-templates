@@ -4,87 +4,17 @@ require 'cgi'
 require 'job_board_registrar'
 
 describe JobBoardRegistrar do
-  let :image_metadata_tarball do
-    'somedir/metadata.tar.bz2'
-  end
-
   subject do
     described_class.new(image_metadata_tarball)
   end
 
+  let(:image_metadata_tarball) { 'somedir/metadata.tar.bz2' }
+  let(:env) { subject.send(:env) }
+  let(:image_metadata) { subject.send(:image_metadata) }
+  let(:image_tagger) { subject.send(:image_tagger) }
+
   before :each do
     subject.send(:logger).level = Logger::FATAL
-  end
-
-  it 'constructs an image extraction command' do
-    expect(subject.send(:image_metadata_extract_command)).to eq(
-      ['tar', '-C', 'somedir', '-xjvf', File.expand_path('somedir/metadata.tar.bz2')]
-    )
-  end
-
-  it 'merges env TAGS when making image tags' do
-    ENV['TAGS'] = 'razza:frazza,flim:flam,os:bonk'
-    expect(subject.send(:image_tags)).to include(
-      razza: 'frazza', flim: 'flam', os: 'bonk'
-    )
-  end
-
-  describe 'determining TRAVIS_COOKBOOKS_EDGE_BRANCH' do
-    context 'without TRAVIS_COOKBOOKS_EDGE_BRANCH value present' do
-      before do
-        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
-      end
-
-      it 'falls back to "master"' do
-        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('master')
-      end
-    end
-
-    context 'with TRAVIS_COOKBOOKS_EDGE_BRANCH value present' do
-      before do
-        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'meister'
-      end
-
-      it 'uses the value' do
-        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('meister')
-      end
-    end
-  end
-
-  describe 'determining TRAVIS_COOKBOOKS_BRANCH' do
-    context 'without TRAVIS_COOKBOOKS_BRANCH value present' do
-      before do
-        ENV['TRAVIS_COOKBOOKS_BRANCH'] = ''
-        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'floof'
-      end
-
-      it 'falls back to TRAVIS_COOKBOOKS_EDGE_BRANCH' do
-        expect(subject.send(:travis_cookbooks_branch)).to eq('floof')
-      end
-    end
-
-    context 'with TRAVIS_COOKBOOKS_BRANCH value present' do
-      before do
-        ENV['TRAVIS_COOKBOOKS_BRANCH'] = 'bloof'
-        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = 'floof'
-      end
-
-      it 'uses TRAVIS_COOKBOOKS_BRANCH' do
-        expect(subject.send(:travis_cookbooks_branch)).to eq('bloof')
-      end
-    end
-
-    context 'without TRAVIS_COOKBOOKS_BRANCH ' \
-            'or TRAVIS_COOKBOOKS_EDGE_BRANCH' do
-      before do
-        ENV['TRAVIS_COOKBOOKS_BRANCH'] = ''
-        ENV['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
-      end
-
-      it 'uses master' do
-        expect(subject.send(:travis_cookbooks_branch)).to eq('master')
-      end
-    end
   end
 
   context 'without a metadata tarball' do
@@ -97,23 +27,23 @@ describe JobBoardRegistrar do
 
   context 'without a JOB_BOARD_IMAGES_URL' do
     it 'aborts with exit 1' do
-      ENV['JOB_BOARD_IMAGES_URL'] = nil
+      env['JOB_BOARD_IMAGES_URL'] = nil
       expect(subject.register!).to eq(1)
     end
   end
 
   context 'without an IMAGE_NAME' do
     it 'aborts with exit 1' do
-      ENV['IMAGE_NAME'] = nil
+      env['IMAGE_NAME'] = nil
       expect(subject.register!).to eq(1)
     end
   end
 
   context 'with a nonexistent metadata tarball' do
     before do
-      ENV['IMAGE_NAME'] = 'foo'
-      ENV['JOB_BOARD_IMAGES_URL'] = 'flah'
-      allow(subject).to receive(:image_metadata_tarball_exists?)
+      env['IMAGE_NAME'] = 'foo'
+      env['JOB_BOARD_IMAGES_URL'] = 'flah'
+      allow(image_metadata).to receive(:tarball_exists?)
         .and_return(false)
     end
 
@@ -124,11 +54,11 @@ describe JobBoardRegistrar do
 
   context 'when failing to extract the metadata tarball' do
     before do
-      ENV['IMAGE_NAME'] = 'foo'
-      ENV['JOB_BOARD_IMAGES_URL'] = 'flah'
-      allow(subject).to receive(:image_metadata_tarball_exists?)
+      env['IMAGE_NAME'] = 'foo'
+      env['JOB_BOARD_IMAGES_URL'] = 'flah'
+      allow(image_metadata).to receive(:tarball_exists?)
         .and_return(true)
-      allow(subject).to receive(:extract_image_metadata_tarball)
+      allow(image_metadata).to receive(:extract_tarball)
         .and_return(false)
     end
 
@@ -207,27 +137,25 @@ describe JobBoardRegistrar do
   }.each do |suite_name, config|
     context "with #{suite_name} config" do
       before :each do
-        ENV.clear
+        env.clear
 
         config[:env].each do |key, value|
           next unless key.to_s.upcase == key.to_s
-          ENV[key.to_s] = value
+          env[key.to_s] = value
         end
 
-        allow(subject).to receive(:load_envdir).with('somedir/job-board-env')
-        allow(subject).to receive(:image_metadata_tarball_exists?)
+        allow(env).to receive(:load_envdir)
+        allow(image_metadata).to receive(:valid?).and_return(true)
+        allow(image_metadata).to receive(:tarball_exists?).and_return(true)
+        allow(image_metadata).to receive(:envdir_isdir?).and_return(true)
+        allow(image_metadata).to receive(:image_job_board_env_exists?)
           .and_return(true)
-        allow(subject).to receive(:image_metadata_envdir_isdir?)
-          .and_return(true)
-        allow(subject).to receive(:image_job_board_env_exists?)
-          .and_return(true)
-        allow(subject).to receive(:source_file)
+        allow(env).to receive(:source_file)
           .with('somedir/metadata/job-board-register').and_return(true)
-        allow(subject).to receive(:load_envdir).with('somedir/metadata/env')
-        allow(subject).to receive(:extract_image_metadata_tarball)
-          .and_return(true)
-        allow(subject).to receive(:os).and_return(config[:env][:os])
-        allow(subject).to receive(:dist).and_return(config[:env][:dist])
+        allow(env).to receive(:load_envdir).with('somedir/metadata/env')
+        allow(image_metadata).to receive(:extract_tarball).and_return(true)
+        allow(image_tagger).to receive(:os).and_return(config[:env][:os])
+        allow(image_tagger).to receive(:dist).and_return(config[:env][:dist])
         subject.send(:logger).level = Logger::FATAL
       end
 
