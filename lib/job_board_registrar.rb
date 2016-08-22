@@ -10,7 +10,8 @@ class JobBoardRegistrar
   def initialize(image_metadata_tarball)
     @image_metadata = ImageMetadata.new(
       tarball: image_metadata_tarball,
-      env: env
+      env: env,
+      logger: logger
     )
     @image_tagger = ImageTagger.new(env: env)
   end

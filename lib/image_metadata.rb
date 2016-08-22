@@ -1,7 +1,8 @@
 class ImageMetadata
-  def initialize(tarball: nil, env: nil)
+  def initialize(tarball: nil, env: nil, logger: nil)
     @tarball = tarball
     @env = env
+    @logger = logger
   end
 
   def parent_dir
@@ -23,7 +24,7 @@ class ImageMetadata
 
   private
 
-  attr_reader :tarball, :env
+  attr_reader :tarball, :env, :logger
 
   def relbase
     @relbase ||= File.dirname(tarball)
