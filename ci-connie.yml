@@ -3,12 +3,12 @@ description: Travis CI connie build env template
 variables:
   docker_repository: quay.io/travisci/ci-connie
   docker_tag: packer-{{ timestamp }}
-  gce_account_file: {{ env `GCE_ACCOUNT_FILE` }}
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: travis-ci-connie-trusty-{{ timestamp }}
-  gce_project_id: {{ env `GCE_PROJECT_ID` }}
-  travis_cookbooks_branch: {{ env `TRAVIS_COOKBOOKS_BRANCH` }}
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
-  travis_cookbooks_sha: {{ env `TRAVIS_COOKBOOKS_SHA` }}
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 builders:
 - type: googlecompute
   name: googlecompute
@@ -16,11 +16,11 @@ builders:
   ssh_timeout: 10m
   ssh_port: 22
   image_description: Travis CI Connie
-  account_file: {{ user `gce_account_file` }}
-  project_id: {{ user `gce_project_id` }}
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1404-trusty-v20160627
   zone: us-central1-a
-  image_name: {{ user `gce_image_name` }}
+  image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
   disk_size: 15
   tags:
@@ -37,7 +37,7 @@ builders:
   - -t
   - --privileged=true
   - --storage-opt=size=11G
-  - {{.Image}}
+  - "{{ .Image }}"
   - /sbin/init
   commit: true
 provisioners:
@@ -118,8 +118,8 @@ provisioners:
 post-processors:
 -
   - type: docker-tag
-    repository: {{ user `docker_repository` }}
-    tag: {{ user `docker_tag` }}
+    repository: "{{ user `docker_repository` }}"
+    tag: "{{ user `docker_tag` }}"
     only:
     - docker
   - type: artifice
