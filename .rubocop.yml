@@ -8,3 +8,20 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/LineLength:
+  Max: 80
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+  - http
+  - https
+  Exclude:
+  - 'spec/**/*'
+  - 'cookbooks/**/*'
