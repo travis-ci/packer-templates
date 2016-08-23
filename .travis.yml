@@ -33,6 +33,8 @@ install:
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - if ! shellcheck --version ; then
     git clone https://github.com/koalaman/shellcheck.git ~/tmp/shellcheck ;
+    sudo apt-get update -yqq ;
+    sudo apt-get install -yqq cabal-install ghc ;
     cabal install ~/tmp/shellcheck ;
   fi
 - ./bin/packer-build-install
