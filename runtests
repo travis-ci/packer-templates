@@ -34,7 +34,7 @@ done
 for f in $(git grep -l '^#!/usr/bin/env bash') ; do
   if [[ ! -x "$f" ]] ; then continue ; fi
   echo -en "$f "
-  bash -n $f
+  shellcheck "$f"
   echo "✓"
 done
 
