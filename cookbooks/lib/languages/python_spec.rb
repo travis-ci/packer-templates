@@ -42,7 +42,7 @@ describe 'python environment' do
     describe pycommand('python -m this', version: python_alias) do
       its(:stderr) { should be_empty }
       its(:stdout) { should include('Now is better than never') }
-      its(:exit_code) { should eq(0) }
+      its(:exit_status) { should eq(0) }
     end
 
     describe pycommand('python --version', version: python_alias), dev: true do
