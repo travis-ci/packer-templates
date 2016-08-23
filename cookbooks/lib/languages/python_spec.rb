@@ -46,7 +46,8 @@ describe 'python environment' do
     end
 
     describe pycommand('python --version', version: python_alias), dev: true do
-      its(:stdout) { should include("Python #{python_version}") }
+      stream = python_alias < 'python3' ? :stderr : :stdout
+      its(stream) { should include("Python #{python_version}") }
     end
   end
 end
