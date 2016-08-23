@@ -104,12 +104,12 @@ override['nodejs']['default_modules'] = [
 
 pythons = %w(
   2.6.9
-  2.7.10
+  2.7.12
   3.2.6
   3.3.6
-  3.4.3
-  3.5.0
-  pypy-2.6.1
+  3.4.4
+  3.5.2
+  pypy-5.3.1
   pypy3-2.4.0
 )
 
