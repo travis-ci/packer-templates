@@ -35,6 +35,7 @@ install:
     git clone https://github.com/koalaman/shellcheck.git ~/tmp/shellcheck ;
     sudo apt-get update -yqq ;
     sudo apt-get install -yqq cabal-install ghc ;
+    cabal update ;
     cabal install ~/tmp/shellcheck ;
   fi
 - ./bin/packer-build-install
