@@ -3,17 +3,19 @@
 set -o errexit
 
 main() {
-  if [[ $DEBUG ]] ; then
+  if [[ "${DEBUG}" ]] ; then
     set -o xtrace
   fi
 
-  cd $(dirname $(dirname ${BASH_SOURCE[0]}))
+  cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 
-  : ${DEST_DIR:=./tmp/git-meta}
+  : "${DEST_DIR:=./tmp/git-meta}"
   mkdir -p "${DEST_DIR}"
 
-  local branch="$(git rev-parse --abbrev-ref HEAD)"
-  local sha="$(git describe --always --dirty)"
+  local branch
+  branch="$(git rev-parse --abbrev-ref HEAD)"
+  local sha
+  sha="$(git describe --always --dirty)"
 
   if [[ "x${branch}" = 'xHEAD' ]] ; then
     branch="${PACKER_TEMPLATES_BRANCH:-HEAD}"

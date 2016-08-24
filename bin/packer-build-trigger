@@ -2,12 +2,12 @@
 
 set -o errexit
 
-TOP="$(cd $(dirname $(dirname ${BASH_SOURCE[0]})) ; pwd)"
+TOP="$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" ; pwd)"
 
-: ${TRAVIS_PULL_REQUEST:=false}
-: ${TRAVIS_COMMIT_RANGE:=@...@}
-: ${TRAVIS_COOKBOOKS_GIT:=https://github.com/travis-ci/travis-cookbooks.git}
-: ${CHEF_COOKBOOK_PATH:=${TRAVIS_COOKBOOKS_GIT}::cookbooks@master,community-cookbooks@master}
+: "${TRAVIS_PULL_REQUEST:=false}"
+: "${TRAVIS_COMMIT_RANGE:=@...@}"
+: "${TRAVIS_COOKBOOKS_GIT:=https://github.com/travis-ci/travis-cookbooks.git}"
+: "${CHEF_COOKBOOK_PATH:=${TRAVIS_COOKBOOKS_GIT}::cookbooks@master,community-cookbooks@master}"
 
 BODY_TMPL=${TOP}/.packer-build-pull-request-${TRAVIS_PULL_REQUEST}-tmpl.yml
 if [[ ! -f "${BODY_TMPL}" ]] ; then

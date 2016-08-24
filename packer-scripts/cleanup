@@ -29,6 +29,6 @@ if [[ -d /home/travis ]] ; then
   rm -f /home/travis/linux.iso /home/travis/shutdown.sh
 fi
 
-for f in $(find /var/log -type f) ; do
-  dd if=/dev/null of=$f
+find /var/log -type f | while read -r f ; do
+  dd if=/dev/null of="${f}"
 done

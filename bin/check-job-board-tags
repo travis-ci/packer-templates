@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))"
+cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 set -o errexit
 set -o pipefail
 
@@ -27,7 +27,7 @@ for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
     COMBOS+=(features:incl:ruby:$lang)
   fi
   for excl in android erlang go haskell jvm nodejs perl php python ruby ; do
-    if [[ $lang = $excl ]] ; then
+    if [[ "x${lang}" = "x${excl}" ]] ; then
       continue
     fi
     COMBOS+=(languages:excl:$lang:$excl)
@@ -35,7 +35,7 @@ for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
 done
 
 BATCH_INPUT=""
-for cmd in ${COMBOS[@]} ; do
+for cmd in "${COMBOS[@]}" ; do
   parts=(${cmd//:/ })
   rec="${parts[0]}:${parts[1]}"
   rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
