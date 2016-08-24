@@ -42,6 +42,7 @@ class JobBoardRegistrar
 
   def make_request
     output = `#{request_command.join(' ')}`.strip
+    logger.info(output) unless env['JOB_BOARD_REGISTER_DEBUG'].empty?
     $stdout.puts JSON.pretty_generate(JSON.parse(output))
     true
   rescue => e
