@@ -18,6 +18,7 @@ class ImageMetadata
       logger.info "setting #{key}=#{value}"
     end if image_job_board_env_exists?
 
+    extract_tarball
     load_image_metadata
     env.to_hash
   end
