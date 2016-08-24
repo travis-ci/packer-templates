@@ -25,7 +25,7 @@ export DD_PID="$!"
 echo 'snoozing a bit here for dd mkay'
 sleep 5
 
-trap "kill -9 $DD_PID &>/dev/null || true" EXIT QUIT TERM INT
+trap 'kill -9 '"${DD_PID}"' &>/dev/null || true' EXIT QUIT TERM INT
 
 while pgrep dd ; do
   kill -USR1 "$DD_PID" || true

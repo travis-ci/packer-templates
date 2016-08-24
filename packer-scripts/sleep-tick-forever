@@ -3,5 +3,5 @@
 while true ; do
   date -u
   echo tick
-  sleep ${SLEEPYTIME:-60}
+  sleep "${SLEEPYTIME:-60}"
 done

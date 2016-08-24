@@ -4,15 +4,16 @@ set -o pipefail
 
 unset GEM_PATH
 
-if [[ $# > 1 && $1 = --env ]] ; then
+if [[ $# -gt 1 && $1 = --env ]] ; then
   echo "Running isolated with env ${2}"
-  exec env -i HOME=$HOME PATH=$PATH \
-              BUNDLE_GEMFILE=$BUNDLE_GEMFILE \
-              BUNDLE_BIN_PATH=$BUNDLE_BIN_PATH \
-              BUNDLE_ORIG_PATH=$BUNDLE_ORIG_PATH \
-              RUBYLIB=$RUBYLIB \
-              RUBYOPT=$RUBYOPT \
-              TERM=$TERM \
+  exec env -i HOME="${HOME}" PATH="${PATH}" \
+              BUNDLE_GEMFILE="${BUNDLE_GEMFILE}" \
+              BUNDLE_BIN_PATH="${BUNDLE_BIN_PATH}" \
+              BUNDLE_ORIG_PATH="${BUNDLE_ORIG_PATH}" \
+              RUBYLIB="${RUBYLIB}" \
+              RUBYOPT="${RUBYOPT}" \
+              TERM="${TERM}" \
+              LANG="${LANG}" \
     bash -c "source '${2}' && \\
       unset PACKER_LOG && \\
       bash ${BASH_SOURCE[0]}
@@ -21,7 +22,7 @@ fi
 
 for f in $(git ls-files '*.yml') ; do
   echo -en "$f "
-  ./bin/yml2json < $f | ./bin/json2yml &>/dev/null
+  ./bin/yml2json < "${f}" | ./bin/json2yml &>/dev/null
   if grep -q ^builders: "$f" ; then
     echo -en "(packer validate ...) "
     packer validate <(bin/yml2json < "$f")
@@ -31,12 +32,7 @@ for f in $(git ls-files '*.yml') ; do
   fi
 done
 
-for f in $(git grep -l '^#!/usr/bin/env bash') ; do
-  if [[ ! -x "$f" ]] ; then continue ; fi
-  echo -en "$f "
-  bash -n $f
-  echo "✓"
-done
+git grep -l '^#!/usr/bin/env bash' | xargs shellcheck
 
 if [[ "x$(lsb_release -sc 2>/dev/null)" != xprecise ]] ; then
   # this code should never *need* to run on precise

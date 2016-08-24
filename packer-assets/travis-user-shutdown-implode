@@ -3,7 +3,7 @@ set -o errexit
 
 IMPLODE_SCRIPT=/tmp/implode.$(date -u +%s).sh
 
-cat > $IMPLODE_SCRIPT <<EOF
+cat > "${IMPLODE_SCRIPT}" <<EOF
 sleep 3
 
 cd /tmp
