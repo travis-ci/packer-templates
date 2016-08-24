@@ -6,7 +6,6 @@ cache:
   bundler: true
   directories:
   - ${HOME}/bin
-  - ${HOME}/.cabal/bin
 env:
   matrix:
   - DIST=trusty
@@ -14,7 +13,7 @@ env:
   global:
   - NODE_ATTRIBUTES_YML="${TRAVIS_BUILD_DIR}/.example-node-attributes.yml"
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${HOME}/.cabal/bin:${PATH}"
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
   - SKIP_CHEFDK_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
@@ -32,11 +31,9 @@ install:
 - rvm use 2.3.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - if ! shellcheck --version ; then
-    git clone https://github.com/koalaman/shellcheck.git ~/tmp/shellcheck ;
-    sudo apt-get update -yqq ;
-    sudo apt-get install -yqq cabal-install ghc ;
-    cabal update ;
-    cabal install ~/tmp/shellcheck ;
+    sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" ;
+    sudo apt-get -qq update ;
+    sudo apt-get -t trusty-backports install shellcheck ;
   fi
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
