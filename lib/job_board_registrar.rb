@@ -19,7 +19,7 @@ class JobBoardRegistrar
   def register!
     return die('invalid image metadata') unless image_metadata.valid?
 
-    env.load_envdir(job_board_envdir) { |k, v| logger.info "loading #{k}=#{v}" }
+    env.load_envdir(job_board_envdir) { |k, _| logger.info "loading #{k}" }
     return die('missing $JOB_BOARD_IMAGES_URL') if
       env['JOB_BOARD_IMAGES_URL'].empty?
 

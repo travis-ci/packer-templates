@@ -51,8 +51,8 @@ class ImageMetadata
 
   def load_image_metadata
     if envdir_isdir?
-      env.load_envdir(envdir) do |key, value|
-        logger.info "loading #{key}=#{value}"
+      env.load_envdir(envdir) do |key, _|
+        logger.info "loading #{key}"
       end
     else
       logger.warn "#{envdir} does not exist"
