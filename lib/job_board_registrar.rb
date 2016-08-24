@@ -26,8 +26,6 @@ class JobBoardRegistrar
     image_metadata.load!
     return die('missing $IMAGE_NAME') if env['IMAGE_NAME'].empty?
 
-    dump_relevant_env_vars
-
     return 0 if make_request
     1
   end
@@ -58,13 +56,6 @@ class JobBoardRegistrar
       -X POST
       '#{env['JOB_BOARD_IMAGES_URL']}?#{registration_request_params}'
     )
-  end
-
-  def dump_relevant_env_vars
-    env.to_hash.sort.each do |key, value|
-      next unless key =~ /^(PACKER|TRAVIS|TAGS|IMAGE_NAME)/
-      logger.info "#{key.strip}=#{value.strip}"
-    end
   end
 
   def registration_request_params
