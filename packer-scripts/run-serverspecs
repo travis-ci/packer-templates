@@ -23,6 +23,7 @@ main() {
   fi
 
   __install_chefdk "${PACKER_CHEF_PREFIX}"
+  # shellcheck disable=SC2119
   __create_sudo_bash
   __chown_travis_dirs "${PACKER_CHEF_PREFIX}"
 
