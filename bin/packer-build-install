@@ -2,7 +2,7 @@
 
 set -o errexit
 
-cd $(dirname $(dirname ${BASH_SOURCE[0]}))
+cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 
 mkdir -p tmp/
 echo "${GCE_ACCOUNT_FILE_B64_BZ2}" | \

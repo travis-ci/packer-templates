@@ -2,16 +2,16 @@
 set -o errexit
 
 main() {
-  if [[ $# < 1 ]] ; then
+  if [[ $# -lt 1 ]] ; then
     echo 'Missing editable files' >&2
     exit 1
   fi
 
-  local topdir="$(dirname $(dirname "${BASH_SOURCE[0]}"))"
-
   for rel in 1204 1404 1604 ; do
-    local curimg="$(__fetch_curimg "${rel}")"
-    local newimg="$(__fetch_newimg "${rel}")"
+    local curimg
+    curimg="$(__fetch_curimg "${rel}")"
+    local newimg
+    newimg="$(__fetch_newimg "${rel}")"
     if [[ "${curimg}" && "${newimg}" ]] ; then
       __sed "s,${curimg},${newimg},g" "$@"
     fi
@@ -20,7 +20,8 @@ main() {
 
 __fetch_curimg() {
   local rel="${1}"
-  local f="$(git grep -lE "image: ubuntu-${rel}-.*" | head -1)"
+  local f
+  f="$(git grep -lE "image: ubuntu-${rel}-.*" | head -1)"
   if [[ ! "${f}" || ! -f "${f}" ]] ; then
     return
   fi

@@ -4,12 +4,13 @@ set -o errexit
 set -o xtrace
 
 main() {
-  : ${IMAGE_METADATA_TARBALL:=/var/tmp/image-metadata.tar.bz2}
-  : ${PACKER_ENV_DIR:=/.packer-env}
-  : ${JOB_BOARD_REGISTER_FILE:=/etc/default/job-board-register}
+  : "${IMAGE_METADATA_TARBALL:=/var/tmp/image-metadata.tar.bz2}"
+  : "${PACKER_ENV_DIR:=/.packer-env}"
+  : "${JOB_BOARD_REGISTER_FILE:=/etc/default/job-board-register}"
 
   pushd "${TMPDIR:-/var/tmp}"
-  local dest="$(basename "${IMAGE_METADATA_TARBALL}" .tar.bz2)"
+  local dest
+  dest="$(basename "${IMAGE_METADATA_TARBALL}" .tar.bz2)"
   mkdir -p "${dest}/env"
 
   rsync -av "${PACKER_ENV_DIR}/" "${dest}/env/"

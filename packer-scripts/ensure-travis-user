@@ -3,7 +3,7 @@
 set -o errexit
 
 main() {
-  : ${TRAVIS_USER_PASSWORD:=travis}
+  : "${TRAVIS_USER_PASSWORD:=travis}"
 
   if [[ ${TRAVIS_OBFUSCATE_PASSWORD} ]] ; then
     TRAVIS_USER_PASSWORD="$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)"
@@ -15,9 +15,9 @@ main() {
   [[ -d /home/travis ]]
 
   for f in .ssh/authorized_keys .ssh/known_hosts ; do
-    mkdir -p /home/travis/$(dirname $f)
+    mkdir -p "/home/travis/$(dirname "${f}")"
     touch /home/travis/$f
-    chmod 0600 /home/travis/$f
+    chmod 0600 "/home/travis/${f}"
   done
 
   echo '# this space intentionally left blank' > /home/travis/.ssh/authorized_keys

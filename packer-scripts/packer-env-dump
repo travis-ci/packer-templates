@@ -4,9 +4,9 @@ set -o errexit
 set -o xtrace
 
 main() {
-  : ${PACKER_ENV_DIR:=/.packer-env}
+  : "${PACKER_ENV_DIR:=/.packer-env}"
 
-  mkdir -p ${PACKER_ENV_DIR}
+  mkdir -p "${PACKER_ENV_DIR}"
 
   for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
     eval "echo \$$var" > "${PACKER_ENV_DIR}/$var"
