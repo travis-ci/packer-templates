@@ -64,7 +64,7 @@ __run_retry() {
 
   local i=0
   while true ; do
-    if [[ $i > "${retries}" ]] ; then
+    if [[ $i -gt "${retries}" ]] ; then
       exit 86
     fi
 

@@ -1,34 +1,61 @@
 #!/usr/bin/env bash
 
 set -o errexit
-set -o xtrace
 
-export DEBIAN_FRONTEND='noninteractive'
+main() {
+  set -o xtrace
+  shopt -s nullglob
 
-_purge_packages() {
+  export DEBIAN_FRONTEND='noninteractive'
+
+  rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
+  __run_retry apt-get -y update
+
+  if [[ "${APT_GET_UPGRADE_DURING_CLEANUP}" ]] ; then
+    __run_retry apt-get -y upgrade
+  fi
+
+  __run_retry __purge_packages linux-headers
+  __run_retry __purge_packages linux-source
+  __run_retry __purge_packages chef
+  __run_retry __purge_packages chefdk
+
+  if [[ "${CLEAN_DEV_PACKAGES}" ]] ; then
+    __run_retry __purge_packages '-dev$'
+  fi
+
+  __run_retry __purge_from_manifest
+  __run_retry apt-get -y autoremove
+  __run_retry apt-get -y clean
+}
+
+__purge_from_manifest() {
+  if [[ -f /var/tmp/purge.txt ]] ; then
+    grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
+  fi
+}
+
+__purge_packages() {
   dpkg --list | awk '{ print $2 }' | grep -- "$1" | \
     grep -v -- "${2:-^$}" | xargs apt-get -y purge
 }
 
-rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
-apt-get -y update
+__run_retry() {
+  local cmd=("${@}")
 
-if [[ $APT_GET_UPGRADE_DURING_CLEANUP ]] ; then
-  apt-get -y upgrade
-fi
+  local i=0
+  while true ; do
+    if [[ $i -gt 2 ]] ; then
+      exit 86
+    fi
 
-_purge_packages 'linux-headers'
-_purge_packages 'linux-source'
-_purge_packages 'chef'
-_purge_packages 'chefdk'
+    if "${cmd[@]}" ; then
+      return
+    fi
 
-if [[ $CLEAN_DEV_PACKAGES ]] ; then
-  _purge_packages '-dev$'
-fi
+    i=$((i + 1))
+    sleep 30
+  done
+}
 
-if [[ -f /var/tmp/purge.txt ]] ; then
-  grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
-fi
-
-apt-get -y autoremove
-apt-get -y clean
+main "${@}"
