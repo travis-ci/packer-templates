@@ -6,7 +6,7 @@ set -o xtrace
 main() {
   : "${IMAGE_METADATA_TARBALL:=/var/tmp/image-metadata.tar.bz2}"
   : "${PACKER_ENV_DIR:=/.packer-env}"
-  : "${JOB_BOARD_REGISTER_FILE:=/etc/default/job-board-register}"
+  : "${JOB_BOARD_REGISTER_FILE:=/.job-board-register.yml}"
 
   pushd "${TMPDIR:-/var/tmp}"
   local dest
@@ -14,7 +14,7 @@ main() {
   mkdir -p "${dest}/env"
 
   rsync -av "${PACKER_ENV_DIR}/" "${dest}/env/"
-  cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register"
+  cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register.yml"
   tar -cjvf "${IMAGE_METADATA_TARBALL}" "${dest}"
 }
 

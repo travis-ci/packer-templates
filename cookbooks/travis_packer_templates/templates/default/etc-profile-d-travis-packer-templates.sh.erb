@@ -2,8 +2,8 @@
 # Managed by Chef on <%= node.name %> :heart:
 
 export TRAVIS_STACK_FEATURES='<%= @features.join(' ') %>'
-export TRAVIS_STACK_JOB_BOARD_REGISTER='/.job-board-register.yml'
+export TRAVIS_STACK_JOB_BOARD_REGISTER='<%= node['travis_packer_templates']['job_board_register_yml'] %>'
 export TRAVIS_STACK_LANGUAGES='<%= @languages.join(' ') %>'
 export TRAVIS_STACK_NAME='<%= @stack %>'
-export TRAVIS_STACK_NODE_ATTRIBUTES='/.node-attributes.yml'
+export TRAVIS_STACK_NODE_ATTRIBUTES='<%= node['travis_packer_templates']['node_attributes_yml'] %>'
 export TRAVIS_STACK_TIMESTAMP='<%= @timestamp %>'

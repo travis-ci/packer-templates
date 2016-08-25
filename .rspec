@@ -1,5 +1,6 @@
---require pry
---require support
+--color
 --format documentation
 --order rand
---color
+--require pry
+--require support
+-I cookbooks/travis_packer_templates/libraries
