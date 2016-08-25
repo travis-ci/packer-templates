@@ -3,16 +3,16 @@
 set -o errexit
 set -o xtrace
 
-if [[ $PACKER_BUILDER_TYPE = googlecompute || \
-      $PACKER_BUILDER_TYPE = amazon-ebs ]] ; then
+if [[ $PACKER_BUILDER_TYPE = googlecompute \
+  || $PACKER_BUILDER_TYPE = amazon-ebs ]]; then
   echo "Skipping minimization on $PACKER_BUILDER_TYPE"
   exit 0
 fi
 
-if [[ $PACKER_BUILDER_TYPE != docker ]] ; then
+if [[ $PACKER_BUILDER_TYPE != docker ]]; then
   readonly SWAP_UUID=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)
 
-  if [[ $SWAP_UUID ]] ; then
+  if [[ $SWAP_UUID ]]; then
     readonly SWAP_PART=$(readlink -f /dev/disk/by-uuid/"$SWAP_UUID")
     /sbin/swapoff "$SWAP_PART"
     dd if=/dev/zero of="$SWAP_PART" bs=1M || echo "dd exit $? suppressed"
@@ -27,7 +27,7 @@ sleep 5
 
 trap 'kill -9 '"${DD_PID}"' &>/dev/null || true' EXIT QUIT TERM INT
 
-while pgrep dd ; do
+while pgrep dd; do
   kill -USR1 "$DD_PID" || true
   sleep 5
 done

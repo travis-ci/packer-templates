@@ -5,7 +5,7 @@ set -o errexit
 main() {
   set -o xtrace
 
-  for u in ${DEFAULT_USERS:-vagrant ubuntu} ; do
+  for u in ${DEFAULT_USERS:-vagrant ubuntu}; do
     __remove_user "${u}"
   done
 }
@@ -13,12 +13,12 @@ main() {
 __remove_user() {
   local u="${1}"
 
-  if [[ "x$(whoami)" = "x${u}" ]] ; then
+  if [[ "x$(whoami)" = "x${u}" ]]; then
     echo 'Refusing to remove myself' >&2
     return
   fi
 
-  if ! getent passwd "${u}" &>/dev/null ; then
+  if ! getent passwd "${u}" &>/dev/null; then
     return
   fi
 

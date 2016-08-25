@@ -3,7 +3,7 @@
 set -o errexit
 set -o xtrace
 
-if service apparmor status ; then
+if service apparmor status; then
   service apparmor stop
   update-rc.d -f apparmor remove
   service apparmor teardown

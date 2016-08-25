@@ -17,8 +17,8 @@ COMBOS=(
   features:incl:sugilite:ruby
 )
 
-for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
-  if [[ $lang != ruby ]] ; then
+for lang in android erlang go haskell jvm nodejs perl php python ruby; do
+  if [[ $lang != ruby ]]; then
     # Ruby is the "default" image on precise, but some of the languages covered
     # by the ruby precise image are covered by the connie image on trusty, so we
     # can't enforce the inclusive relationship with sugilite.
@@ -26,8 +26,8 @@ for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
     COMBOS+=(features:incl:sugilite:$lang)
     COMBOS+=(features:incl:ruby:$lang)
   fi
-  for excl in android erlang go haskell jvm nodejs perl php python ruby ; do
-    if [[ "x${lang}" = "x${excl}" ]] ; then
+  for excl in android erlang go haskell jvm nodejs perl php python ruby; do
+    if [[ "x${lang}" = "x${excl}" ]]; then
       continue
     fi
     COMBOS+=(languages:excl:$lang:$excl)
@@ -35,7 +35,7 @@ for lang in android erlang go haskell jvm nodejs perl php python ruby ; do
 done
 
 BATCH_INPUT=""
-for cmd in "${COMBOS[@]}" ; do
+for cmd in "${COMBOS[@]}"; do
   parts=(${cmd//:/ })
   rec="${parts[0]}:${parts[1]}"
   rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
@@ -45,5 +45,5 @@ ${rec}
 "
 done
 
-echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i | \
-  grep --color -E '^✘:.*|$'
+echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i \
+  | grep --color -E '^✘:.*|$'

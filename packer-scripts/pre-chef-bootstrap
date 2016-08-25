@@ -8,7 +8,7 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
 
-  if [[ "x${PACKER_BUILDER_TYPE}" != xdocker ]] ; then
+  if [[ "x${PACKER_BUILDER_TYPE}" != xdocker ]]; then
     __disable_ipv6
   fi
   __install_packages
@@ -22,7 +22,7 @@ __disable_ipv6() {
 }
 
 __install_packages() {
-  if [[ "x${PACKER_BUILDER_TYPE}" =~ xvmware ]] ; then
+  if [[ "x${PACKER_BUILDER_TYPE}" =~ xvmware ]]; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
 
@@ -46,13 +46,13 @@ __install_packages() {
 __setup_sshd() {
   mkdir -p /var/run/sshd
 
-  if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow ; then
-    echo 'sshd: ALL: ALLOW' >> /etc/hosts.allow
+  if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
+    echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
   fi
 }
 
 __setup_travis_user() {
-  if ! getent passwd travis &>/dev/null ; then
+  if ! getent passwd travis &>/dev/null; then
     if [[ "$TRAVIS_UID_1000" == noforce ]]; then
       useradd -p travis -s /bin/bash -m travis
     else
@@ -72,14 +72,14 @@ __setup_travis_user() {
 
 __setup_sudoers() {
   sed -i '/^%/d;/^# /d;/^$/d;/^#$/d;/^#includedir/d' /etc/sudoers
-  echo '#includedir /etc/sudoers.d' >> /etc/sudoers
+  echo '#includedir /etc/sudoers.d' >>/etc/sudoers
 
   mkdir -p /etc/sudoers.d
 
-  if [[ -f /var/tmp/sudoers.d-travis ]] ; then
+  if [[ -f /var/tmp/sudoers.d-travis ]]; then
     cp -v /var/tmp/sudoers.d-travis /etc/sudoers.d/travis
   else
-    cat > /etc/sudoers.d/travis <<EOF
+    cat >/etc/sudoers.d/travis <<EOF
 travis ALL=(ALL) NOPASSWD:ALL
 Defaults !authenticate
 Defaults !env_reset
@@ -94,8 +94,8 @@ __setup_travis_ssh() {
   chmod 0700 /home/travis/.ssh
 
   touch /home/travis/.ssh/authorized_keys
-  for f in /var/tmp/*_rsa.pub ; do
-    cat "${f}" >> /home/travis/.ssh/authorized_keys
+  for f in /var/tmp/*_rsa.pub; do
+    cat "${f}" >>/home/travis/.ssh/authorized_keys
   done
   chmod 0600 /home/travis/.ssh/authorized_keys
 }

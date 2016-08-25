@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-while true ; do
+while true; do
   date -u
   echo tick
   sleep "${SLEEPYTIME:-60}"

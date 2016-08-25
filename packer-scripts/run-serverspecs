@@ -14,11 +14,11 @@ main() {
   : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
   : "${PACKER_BUILDER_TYPE:=docker}"
 
-  if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]] ; then
+  if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "x$(lsb_release -sc)" = 'xprecise' ]] ; then
+  if [[ "x$(lsb_release -sc)" = 'xprecise' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~precise:false"
   fi
 
@@ -27,17 +27,17 @@ main() {
   __create_sudo_bash
   __chown_travis_dirs "${PACKER_CHEF_PREFIX}"
 
-  for suite in ${SPEC_SUITES/,/ } ; do
+  for suite in ${SPEC_SUITES/,/ }; do
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ -z ${SKIP_CHEFDK_REMOVAL} ]] ; then
+  if [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
     __remove_chefdk
   fi
 }
 
 __install_chefdk() {
-  if [[ -f /opt/chefdk/embedded/bin/rspec ]] ; then
+  if [[ -f /opt/chefdk/embedded/bin/rspec ]]; then
     return
   fi
 
@@ -49,7 +49,7 @@ __install_chefdk() {
   apt-key add "${tmp}/packages-chef-io-public.key"
 
   echo "deb https://packages.chef.io/current-apt $(lsb_release -cs) main" \
-    > /etc/apt/sources.list.d/chef-current.list
+    >/etc/apt/sources.list.d/chef-current.list
 
   __run_retry 2 30 apt-get update -y
   __run_retry 2 30 apt-get install -y chefdk
@@ -63,12 +63,12 @@ __run_retry() {
   local cmd=("${@}")
 
   local i=0
-  while true ; do
-    if [[ $i -gt "${retries}" ]] ; then
+  while true; do
+    if [[ $i -gt "${retries}" ]]; then
       exit 86
     fi
 
-    if "${cmd[@]}" ; then
+    if "${cmd[@]}"; then
       return
     fi
 
@@ -79,7 +79,7 @@ __run_retry() {
 
 # shellcheck disable=SC2120
 __create_sudo_bash() {
-  cat > /tmp/sudo-bash <<EOF
+  cat >/tmp/sudo-bash <<EOF
 #!/usr/bin/env bash
 exec sudo -- bash "\$@"
 EOF
@@ -135,10 +135,10 @@ rspec ${SPEC_ARGS} \\
 "
   local exit_code="$?"
 
-  if [[ $exit_code != 0 ]] ; then
+  if [[ $exit_code != 0 ]]; then
     echo "Spec suite exited with ${exit_code}" >&2
-    if [[ -n ${SPEC_FAILURE_SLEEP_FOREVER} ]] ; then
-      while true ; do
+    if [[ -n ${SPEC_FAILURE_SLEEP_FOREVER} ]]; then
+      while true; do
         date -u
         echo tick
         sleep "${SLEEPYTIME:-60}"

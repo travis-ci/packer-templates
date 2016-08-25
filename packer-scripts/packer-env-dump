@@ -8,17 +8,17 @@ main() {
 
   mkdir -p "${PACKER_ENV_DIR}"
 
-  for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }') ; do
-    eval "echo \$$var" > "${PACKER_ENV_DIR}/$var"
+  for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }'); do
+    eval "echo \$$var" >"${PACKER_ENV_DIR}/$var"
   done
 
-  if [[ -f /var/tmp/git-meta/packer-templates-branch ]] ; then
+  if [[ -f /var/tmp/git-meta/packer-templates-branch ]]; then
     cp -v \
       /var/tmp/git-meta/packer-templates-branch \
       "${PACKER_ENV_DIR}/PACKER_TEMPLATES_BRANCH"
   fi
 
-  if [[ -f /var/tmp/git-meta/packer-templates-sha ]] ; then
+  if [[ -f /var/tmp/git-meta/packer-templates-sha ]]; then
     cp -v \
       /var/tmp/git-meta/packer-templates-sha \
       "${PACKER_ENV_DIR}/PACKER_TEMPLATES_SHA"

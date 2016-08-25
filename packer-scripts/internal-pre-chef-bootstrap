@@ -5,7 +5,7 @@ set -o xtrace
 
 export DEBIAN_FRONTEND='noninteractive'
 
-if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]] ; then
+if [[ ${PACKER_BUILDER_TYPE} =~ vmware ]]; then
   APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
 fi
 
