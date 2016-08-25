@@ -1,3 +1,5 @@
+require 'yaml'
+
 class ImageMetadata
   def initialize(tarball: nil, env: nil, logger: nil)
     @tarball = tarball

@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  echo 'Checking image metadata export/import'
+
+  [[ "${IMAGE_METADATA_TARBALL}" ]] || {
+    echo Missing \$IMAGE_METADATA_TARBALL
+    exit 1
+  }
+
+  [[ "${TMPDIR}" ]] || {
+    echo Missing \$TMPDIR
+    exit 1
+  }
+
+  export JOB_BOARD_NO_PARSE_RESPONSE=1
+  export CURL_EXE='echo curl'
+  export IMAGE_NAME='image-metadata'
+
+  mkdir -p "${TMPDIR}/packer-env"
+  date -u >"${TMPDIR}/packer-env/NOWISH"
+
+  __write_job_board_register_yml
+  ./packer-scripts/create-image-metadata-tarball
+  ./bin/job-board-register "${IMAGE_METADATA_TARBALL}"
+
+  rm -rf \
+    "${TMPDIR}/packer-env" \
+    "${TMPDIR}/image-metadata"*
+}
+
+__write_job_board_register_yml() {
+  cat >"${TMPDIR}/.job-board-register.yml" <<EOF
+---
+languages:
+- ruby
+- python
+- french
+features:
+- mysql
+- mongodb
+- lulz
+tags:
+  dist: floof
+  os: imaginary
+  packer_chef_time: 20160825T203524Z
+  language_ruby: true
+  language_python: true
+  language_french: true
+  feature_mysql: true
+  feature_mongodb: true
+  feature_lulz: true
+tags_string: dist:floof,feature_lulz:true,feature_mongodb:true,feature_mysql:true,language_french:true,language_python:true,language_ruby:true,os:imaginary,packer_chef_time:20160825T203524Z
+EOF
+}
+
+main "$@"
