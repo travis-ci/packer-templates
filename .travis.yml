@@ -36,12 +36,13 @@ install:
     sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" ;
     sudo apt-get -yqq update ;
     sudo apt-get -t trusty-backports install shellcheck ;
-    sudo cp `which shellcheck` ${HOME}/bin/shellcheck ;
+    sudo cp -v `which shellcheck` ${HOME}/bin/shellcheck ;
     sudo chown travis:travis ${HOME}/bin/shellcheck ;
     sudo apt-add-repository -r "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" ;
   fi
-- if command -v shfmt ; then
-    go get github.com/mvdan/sh/cmd/shfmt ;
+- if ! command -v shfmt ; then
+    eval "$(gimme 1.6.3)" ;
+    go get -x github.com/mvdan/sh/cmd/shfmt ;
   fi
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
