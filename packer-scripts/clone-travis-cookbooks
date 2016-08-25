@@ -16,13 +16,13 @@ git clone \
   --depth=10 \
   --branch="${TRAVIS_COOKBOOKS_BRANCH}" "${TRAVIS_COOKBOOKS_URL}"
 
-if [[ ${TRAVIS_COOKBOOKS_SHA} ]] ; then
+if [[ ${TRAVIS_COOKBOOKS_SHA} ]]; then
   pushd travis-cookbooks
   git checkout -qf "${TRAVIS_COOKBOOKS_SHA}"
   popd
 fi
 
 pushd travis-cookbooks
-pwd > /.packer-env/TRAVIS_COOKBOOKS_DIR
-git log -1 --format=%h > /.packer-env/TRAVIS_COOKBOOKS_SHA
+pwd >/.packer-env/TRAVIS_COOKBOOKS_DIR
+git log -1 --format=%h >/.packer-env/TRAVIS_COOKBOOKS_SHA
 popd

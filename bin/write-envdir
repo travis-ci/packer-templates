@@ -6,8 +6,8 @@ main() {
   local envdir="${1}"
   local pattern="${2}"
   mkdir -p "${envdir}"
-  printenv | grep -E "${pattern}" | while read -r vardef ; do
-    echo "${vardef##*=}" > "${envdir}/${vardef//=*/}"
+  printenv | grep -E "${pattern}" | while read -r vardef; do
+    echo "${vardef##*=}" >"${envdir}/${vardef//=*/}"
   done
   touch "${envdir}/.dumped"
 }

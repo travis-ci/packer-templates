@@ -17,18 +17,18 @@ rm -rf \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.?
 
-if [[ $CLEANUP_APT_LISTS ]] ; then
+if [[ $CLEANUP_APT_LISTS ]]; then
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
 fi
 
-if [[ $CLEANUP_MAN_DB ]] ; then
+if [[ $CLEANUP_MAN_DB ]]; then
   rm -rf /var/lib/man-db || echo "Suppressing exit $?"
 fi
 
-if [[ -d /home/travis ]] ; then
+if [[ -d /home/travis ]]; then
   rm -f /home/travis/linux.iso /home/travis/shutdown.sh
 fi
 
-find /var/log -type f | while read -r f ; do
+find /var/log -type f | while read -r f; do
   dd if=/dev/null of="${f}"
 done

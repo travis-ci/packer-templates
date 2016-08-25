@@ -10,14 +10,14 @@ main() {
 
   : "${DOCKER_LOGIN_EMAIL:=.}"
 
-  for f in ${envdir}/* ; do
+  for f in ${envdir}/*; do
     eval "export $(basename "${f}")='$(cat "${f}")'"
   done
 
-  if [[ ${DOCKER_CREDS} ]] ; then
+  if [[ ${DOCKER_CREDS} ]]; then
     local prefix
     prefix="$(echo "${DOCKER_CREDS}" | tr '[:lower:]' '[:upper:]')"
-    for varname in EMAIL USERNAME PASSWORD SERVER ; do
+    for varname in EMAIL USERNAME PASSWORD SERVER; do
       eval "export DOCKER_LOGIN_${varname}=\$${prefix}_DOCKER_LOGIN_${varname}"
     done
   fi
@@ -55,14 +55,14 @@ main() {
   local sleep_interval=10
   local push_start
 
-  while true ; do
+  while true; do
     __log "msg=\"docker push\" attempt=$((attempt + 1))"
     push_start=$(date +%s)
-    if docker push "${DOCKER_DEST}" ; then
+    if docker push "${DOCKER_DEST}"; then
       __log 'msg="docker push complete"' \
         "duration=$(($(date +%s) - push_start))s"
 
-      if [[ ${DOCKER_LOGOUT_POST_PUSH} =~ true|yes|1 ]] ; then
+      if [[ ${DOCKER_LOGOUT_POST_PUSH} = 1 ]]; then
         __log 'msg="docker logout"'
         docker logout "${DOCKER_LOGIN_SERVER}"
         __log 'msg="docker logout complete"'
@@ -72,7 +72,7 @@ main() {
 
     attempt=$((attempt + 1))
 
-    if [[ $attempt > ${DOCKER_PUSH_RETRIES} ]] ; then
+    if [[ $attempt -gt ${DOCKER_PUSH_RETRIES} ]]; then
       break
     fi
 

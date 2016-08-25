@@ -11,7 +11,7 @@ main() {
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
   __run_retry apt-get -y update
 
-  if [[ "${APT_GET_UPGRADE_DURING_CLEANUP}" ]] ; then
+  if [[ "${APT_GET_UPGRADE_DURING_CLEANUP}" ]]; then
     __run_retry apt-get -y upgrade
   fi
 
@@ -20,7 +20,7 @@ main() {
   __run_retry __purge_packages chef
   __run_retry __purge_packages chefdk
 
-  if [[ "${CLEAN_DEV_PACKAGES}" ]] ; then
+  if [[ "${CLEAN_DEV_PACKAGES}" ]]; then
     __run_retry __purge_packages '-dev$'
   fi
 
@@ -30,26 +30,26 @@ main() {
 }
 
 __purge_from_manifest() {
-  if [[ -f /var/tmp/purge.txt ]] ; then
+  if [[ -f /var/tmp/purge.txt ]]; then
     grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
   fi
 }
 
 __purge_packages() {
-  dpkg --list | awk '{ print $2 }' | grep -- "$1" | \
-    grep -v -- "${2:-^$}" | xargs apt-get -y purge
+  dpkg --list | awk '{ print $2 }' | grep -- "$1" \
+    | grep -v -- "${2:-^$}" | xargs apt-get -y purge
 }
 
 __run_retry() {
   local cmd=("${@}")
 
   local i=0
-  while true ; do
-    if [[ $i -gt 2 ]] ; then
+  while true; do
+    if [[ $i -gt 2 ]]; then
       exit 86
     fi
 
-    if "${cmd[@]}" ; then
+    if "${cmd[@]}"; then
       return
     fi
 
