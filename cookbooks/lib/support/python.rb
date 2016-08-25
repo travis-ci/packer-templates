@@ -1,7 +1,9 @@
 module Support
   module Python
-    def pycommand(cmd)
-      command("#{source_virtualenv_activate} ; #{cmd}")
+    def pycommand(cmd, version: nil)
+      return command("#{source_virtualenv_activate} ; #{cmd}") if version.nil?
+      activate = File.expand_path("~/virtualenv/#{version}/bin/activate")
+      command("source #{activate}; #{cmd}")
     end
 
     def source_virtualenv_activate

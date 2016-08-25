@@ -74,7 +74,6 @@ describe JobBoardRegistrar do
       allow(subject).to receive(:extract_image_metadata_tarball)
         .and_return(true)
       allow(subject).to receive(:load_image_metadata)
-      allow(subject).to receive(:dump_relevant_env_vars)
       allow(subject).to receive(:make_request).and_return(false)
     end
 

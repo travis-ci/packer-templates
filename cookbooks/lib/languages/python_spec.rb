@@ -34,4 +34,20 @@ describe 'python environment' do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
   end
+
+  {
+    'python2.7' => '2.7.12',
+    'python3.5' => '3.5.2'
+  }.each do |python_alias, python_version|
+    describe pycommand('python -m this', version: python_alias) do
+      its(:stderr) { should be_empty }
+      its(:stdout) { should include('Now is better than never') }
+      its(:exit_status) { should eq(0) }
+    end
+
+    describe pycommand('python --version', version: python_alias), dev: true do
+      stream = python_alias < 'python3' ? :stderr : :stdout
+      its(stream) { should include("Python #{python_version}") }
+    end
+  end
 end
