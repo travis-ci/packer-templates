@@ -6,7 +6,8 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-ci-ruby-precise-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_branch: "meat-postgresql-9.5-full"
   travis_cookbooks_edge_branch: "precise-stable"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 builders:
