@@ -27,7 +27,8 @@ main() {
 
   rm -rf \
     "${TMPDIR}/packer-env" \
-    "${TMPDIR}/image-metadata"*
+    "${TMPDIR}/image-metadata" \
+    "${TMPDIR}/image-metadata.tar.bz2"
 }
 
 __write_job_board_register_yml() {
