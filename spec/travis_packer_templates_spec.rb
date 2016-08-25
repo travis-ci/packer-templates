@@ -16,11 +16,12 @@ describe TravisPackerTemplates do
   end
 
   let(:attrs) { travis_packer_templates_attrs }
-  let(:now) { Time.now.utc }
+  let(:now) { INITTIME }
 
   before do
     subject.instance_variable_set(:@default_owner, Process.uid)
     subject.instance_variable_set(:@default_group, Process.gid)
+    subject.instance_variable_set(:@init_time, now)
   end
 
   context 'with file IO stubbed out' do

@@ -1,6 +1,8 @@
 require 'simplecov'
 
 module Support
+  INITTIME = Time.now.utc
+
   def travis_packer_templates_attrs
     {
       'env' => {
@@ -16,7 +18,7 @@ module Support
     }
   end
 
-  def job_board_attrs(now: Time.now.utc)
+  def job_board_attrs(now: INITTIME)
     {
       'languages' => %w(ruby python french),
       'features' => %w(mysql mongodb lulz),
