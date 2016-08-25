@@ -16,8 +16,8 @@ class ImageMetadata
   end
 
   def load!
-    load_job_board_register_yml
     extract_tarball
+    load_job_board_register_yml
     load_image_metadata
     env.to_hash
   end
