@@ -77,9 +77,8 @@ provisioners:
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/cookbooks"
-  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
-  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   json:
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
@@ -92,8 +91,8 @@ provisioners:
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
-  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   json:
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
