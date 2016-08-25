@@ -32,7 +32,10 @@ for f in $(git ls-files '*.yml'); do
   fi
 done
 
+echo 'Running shellcheck'
 git grep -l '^#!/usr/bin/env bash' | xargs shellcheck
+
+echo 'Running shfmt'
 git grep -l '^#!/usr/bin/env bash' | xargs shfmt -i 2 -w
 
 if [[ "x$(lsb_release -sc 2>/dev/null)" != xprecise ]]; then
