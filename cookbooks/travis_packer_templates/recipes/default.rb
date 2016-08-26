@@ -22,22 +22,11 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-TravisPackerTemplates.new(node).init! if defined?(TravisPackerTemplates)
-
 init_time = Time.now.utc
-
-template '/etc/default/job-board-register' do
-  source 'etc-default-job-board-register.sh.erb'
-  cookbook 'travis_packer_templates'
-  owner 'root'
-  group 'root'
-  mode 0o644
-  variables(
-    languages: node['travis_packer_templates']['job_board']['languages'],
-    features: node['travis_packer_templates']['job_board']['features'],
-    stack: node['travis_packer_templates']['job_board']['stack']
-  )
-end
+travis_packer_templates = nil
+travis_packer_templates = TravisPackerTemplates.new(node) if
+  defined?(TravisPackerTemplates)
+travis_packer_templates.init!(init_time) unless travis_packer_templates.nil?
 
 template '/etc/profile.d/Z90-travis-packer-templates.sh' do
   source 'etc-profile-d-travis-packer-templates.sh.erb'
@@ -54,24 +43,7 @@ template '/etc/profile.d/Z90-travis-packer-templates.sh' do
 end
 
 ruby_block 'write node attributes' do
-  block do
-    require 'json'
-    require 'yaml'
-    require 'fileutils'
-
-    node_attributes_hash = JSON.parse(JSON.dump(node.attributes.to_hash))
-    raise 'Empty node attributes' if node_attributes_hash.keys.empty?
-
-    File.open('/.node-attributes.yml', 'w') do |f|
-      f.puts YAML.dump(
-        node_attributes_hash.merge('__timestamp' => init_time.to_s)
-      )
-    end
-
-    FileUtils.chown('root', 'root', '/.node-attributes.yml')
-    FileUtils.chmod(0o644, '/.node-attributes.yml')
-  end
-
+  block { travis_packer_templates.write_node_attributes_yml }
   action :nothing
 end
 
@@ -79,13 +51,8 @@ log 'trigger writing node attributes' do
   notifies :run, 'ruby_block[write node attributes]'
 end
 
-file '/.job-board-register.yml' do
-  content YAML.dump(
-    JSON.parse(JSON.dump(node['travis_packer_templates']['job_board']))
-  )
-  owner 'root'
-  group 'root'
-  mode 0o644
+ruby_block 'write job-board registration bits' do
+  block { travis_packer_templates.write_job_board_register_yml }
 end
 
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|

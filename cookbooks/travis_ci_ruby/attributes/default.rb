@@ -1,18 +1,12 @@
 override['rvm']['default'] = '2.2.5'
-override['rvm']['rubies'] = [
-  { name: 'ree' }
-] + (%w(
-  1.8.7
+override['rvm']['rubies'] = %w(
   1.9.2
   1.9.3
   2.0.0
-  2.1.2
-  2.1.3
-  2.1.4
-  2.1.5
+  2.1.10
   2.2.5
   2.3.1
-).map { |name| { name: name, arguments: '--binary --fuzzy' } })
+).map { |name| { name: name, arguments: '--binary --fuzzy' } }
 
 override['rvm']['gems'] = %w(
   bundler

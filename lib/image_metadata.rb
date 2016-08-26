@@ -1,3 +1,5 @@
+require 'yaml'
+
 class ImageMetadata
   def initialize(tarball: nil, env: nil, logger: nil)
     @tarball = tarball
@@ -14,11 +16,8 @@ class ImageMetadata
   end
 
   def load!
-    env.source_file(image_job_board_env) do |key, value|
-      logger.info "setting #{key}=#{value}"
-    end if image_job_board_env_exists?
-
     extract_tarball
+    load_job_board_register_yml
     load_image_metadata
     env.to_hash
   end
@@ -31,14 +30,19 @@ class ImageMetadata
     @relbase ||= File.dirname(tarball)
   end
 
-  def image_job_board_env_exists?
-    File.exist?(image_job_board_env)
+  def load_job_board_register_yml
+    loaded = load_raw_job_board_register_yml
+    env['OS'] = loaded['tags']['os']
+    env['DIST'] = loaded['tags']['dist']
+    env['TAGS'] = loaded['tags_string']
   end
 
-  def image_job_board_env
-    @image_job_board_env ||= File.join(
-      dir, 'job-board-register'
-    )
+  def load_raw_job_board_register_yml
+    YAML.load_file(job_board_register_yml)
+  end
+
+  def job_board_register_yml
+    @job_board_register_yml ||= File.join(dir, 'job-board-register.yml')
   end
 
   def extract_tarball

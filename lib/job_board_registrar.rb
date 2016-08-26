@@ -41,7 +41,9 @@ class JobBoardRegistrar
   def make_request
     output = `#{request_command.join(' ')}`.strip
     logger.info(output) unless env['JOB_BOARD_REGISTER_DEBUG'].empty?
-    $stdout.puts JSON.pretty_generate(JSON.parse(output))
+    output = JSON.pretty_generate(JSON.parse(output)) if
+      env['JOB_BOARD_NO_PARSE_RESPONSE'].empty?
+    $stdout.puts output
     true
   rescue => e
     logger.error e
