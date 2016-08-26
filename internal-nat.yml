@@ -25,6 +25,10 @@ builders:
   zone: us-central1-b
   image_name: nat-{{ timestamp }}
   machine_type: g1-small
+  tags:
+  - internal
+  - nat
+  - travis-ci-packer-templates
 provisioners:
 - type: shell
   inline:

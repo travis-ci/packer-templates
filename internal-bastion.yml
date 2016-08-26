@@ -34,6 +34,10 @@ builders:
   zone: us-central1-b
   image_name: bastion-host-{{ timestamp }}
   machine_type: g1-small
+  tags:
+  - internal
+  - bastion
+  - travis-ci-packer-templates
 provisioners:
 - type: shell
   scripts:
