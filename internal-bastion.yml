@@ -1,4 +1,5 @@
 ---
+description: Travis CI Internal bastion template
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
@@ -6,12 +7,11 @@ variables:
   duo_integration_key: "{{ env `DUO_INTEGRATION_KEY` }}"
   duo_secret_key: "{{ env `DUO_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_project: "{{ env `GCE_PROJECT` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   github_oauth_token: "{{ env `GITHUB_OAUTH_TOKEN` }}"
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   subnet_id: "{{ env `BASTION_SUBNET_ID` }}"
   ubuntu_trusty_ami: "{{ env `UBUNTU_TRUSTY_AMI` }}"
-  ubuntu_trusty_image: "{{ env `UBUNTU_TRUSTY_IMAGE` }}"
   vpc_id: "{{ env `BASTION_VPC_ID` }}"
 builders:
 - type: amazon-ebs
@@ -30,8 +30,8 @@ builders:
   vpc_id: "{{ user `vpc_id` }}"
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"
-  project_id: "{{ user `gce_project` }}"
-  source_image: "{{ user `ubuntu_trusty_image` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image: ubuntu-1404-trusty-v20160627
   zone: us-central1-b
   image_name: bastion-host-{{ timestamp }}
   machine_type: g1-small
