@@ -41,7 +41,13 @@ builders:
 provisioners:
 - type: shell
   scripts:
+  - packer-scripts/packer-env-dump
+  - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
   remote_cookbook_paths:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
