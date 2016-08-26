@@ -53,13 +53,12 @@ override['travis_perlbrew']['modules'] = %w(
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w(
-  1.0.3
-  1.1.2
   1.2.2
   1.3.3
   1.4.3
   1.5.4
   1.6.3
+  1.7
 )
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -137,7 +136,7 @@ rubies = %w(
   jruby-9.1.2.0
   1.9.3-p551
   2.0.0-p648
-  2.1.9
+  2.1.10
   2.2.5
   2.3.1
 )

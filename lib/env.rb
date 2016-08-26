@@ -23,17 +23,6 @@ class Env
     end
   end
 
-  def source_file(path)
-    raw = `env -i bash -c "source #{path} && env" 2>/dev/null`
-    raw.split("\n").each do |line|
-      key, value = line.strip.split('=', 2)
-      next if %w(PWD SHLVL _).include?(key)
-      value.strip!
-      yield [key, value] if block_given?
-      state[key] = value
-    end
-  end
-
   private
 
   attr_reader :state

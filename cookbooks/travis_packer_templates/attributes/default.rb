@@ -14,3 +14,5 @@ default['travis_packer_templates']['job_board']['stack'] = "unset-#{Time.now.to_
 default['travis_packer_templates']['packages'] = []
 default['travis_packer_templates']['packages_file'] = '/var/tmp/packages.txt'
 default['travis_packer_templates']['packer_env_dir'] = '/.packer-env'
+default['travis_packer_templates']['job_board_register_yml'] = '/.job-board-register.yml'
+default['travis_packer_templates']['node_attributes_yml'] = '/.node-attributes.yml'

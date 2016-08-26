@@ -48,3 +48,4 @@ fi
 rubocop
 ./run-foodcritic cookbooks
 ./bin/check-job-board-tags
+./bin/check-image-metadata-export-import
