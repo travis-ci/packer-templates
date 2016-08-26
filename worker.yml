@@ -3,7 +3,6 @@ description: Worker image for Travis CI
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
-  base_ami: "{{ env `TRAVIS_WORKER_AMI` }}"
   docker_repository: "quay.io/travisci/worker"
   docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
@@ -23,7 +22,7 @@ builders:
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  source_ami: "{{ user `base_ami` }}"
+  source_ami: ami-af5a4cc5
   ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu
