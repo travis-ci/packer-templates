@@ -6,13 +6,12 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: travis-ci-connie-trusty-{{ timestamp }}
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  ubuntu_trusty_ami: "{{ env `UBUNTU_TRUSTY_AMI` }}"
 builders:
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  source_ami: "{{ user `ubuntu_trusty_ami` }}"
+  source_ami: ami-af5a4cc5
   ami_name: nat-host {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu
