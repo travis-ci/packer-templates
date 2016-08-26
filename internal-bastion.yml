@@ -50,6 +50,8 @@ provisioners:
   - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
+  cookbook_paths:
+  - cookbooks
   remote_cookbook_paths:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
