@@ -10,7 +10,7 @@ variables:
   travis_cookbooks_branch: meat-postgresql-9.5-full
   travis_cookbooks_edge_branch: precise-stable
   # travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
-  travis_cookbooks_sha: 0a609719f672ba5c5dbebf8a42d8b90ab9f3a760
+  travis_cookbooks_sha: d414d47e77242a0a381591d5c3ad112529bf918b
 builders:
 - type: googlecompute
   name: googlecompute
