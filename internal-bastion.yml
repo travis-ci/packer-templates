@@ -3,18 +3,11 @@ description: Travis CI Internal bastion template
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
-  duo_api_hostname: "{{ env `DUO_API_HOSTNAME` }}"
-  duo_integration_key: "{{ env `DUO_INTEGRATION_KEY` }}"
-  duo_secret_key: "{{ env `DUO_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  github_oauth_token: "{{ env `GITHUB_OAUTH_TOKEN` }}"
-  papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
-  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
-  travis_cookbooks_branch: meat-duo-touchup
-  # travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
-  travis_cookbooks_sha: 64eab90c176bcf005f43ed6a5af20070d46db426
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
 - type: amazon-ebs
@@ -59,13 +52,5 @@ provisioners:
   remote_cookbook_paths:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
-  json:
-    travis_duo:
-      conf:
-        ikey: "{{ user `duo_integration_key` }}"
-        skey: "{{ user `duo_secret_key` }}"
-        host: "{{ user `duo_api_hostname` }}"
-    papertrail:
-      remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
   - recipe[travis_internal_bastion]
