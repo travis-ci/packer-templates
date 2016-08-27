@@ -11,6 +11,10 @@ variables:
   github_oauth_token: "{{ env `GITHUB_OAUTH_TOKEN` }}"
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
+  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_branch: meat-duo-touchup
+  # travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_cookbooks_sha: 5c7a7beb9a6a6787f3a87671caeec51fae4b9b8d
   vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
 - type: amazon-ebs
@@ -56,10 +60,11 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   json:
-    duo_unix:
-      integration_key: "{{ user `duo_integration_key` }}"
-      secret_key: "{{ user `duo_secret_key` }}"
-      api_hostname: "{{ user `duo_api_hostname` }}"
+    travis_duo:
+      conf:
+        ikey: "{{ user `duo_integration_key` }}"
+        skey: "{{ user `duo_secret_key` }}"
+        host: "{{ user `duo_api_hostname` }}"
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
