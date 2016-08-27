@@ -30,7 +30,7 @@ builders:
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20160627
+  source_image: ubuntu-1404-trusty-v20160809a
   zone: us-central1-b
   image_name: bastion-{{ timestamp }}
   machine_type: g1-small
