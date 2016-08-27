@@ -14,7 +14,7 @@ variables:
   # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_branch: meat-duo-touchup
   # travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
-  travis_cookbooks_sha: 5c7a7beb9a6a6787f3a87671caeec51fae4b9b8d
+  travis_cookbooks_sha: c320898669d39e968f5d5b3c5678f2ce9c00c9ee
   vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
 - type: amazon-ebs
