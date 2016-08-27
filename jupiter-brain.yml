@@ -5,14 +5,13 @@ variables:
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   subnet_id: "{{ env `JUPITER_BRAIN_SUBNET_ID` }}"
   vpc_id: "{{ env `JUPITER_BRAIN_VPC_ID` }}"
-  base_ami: "{{ env `TRAVIS_CI_BASE_AMI` }}"
   jupiter_brain_binary: "{{ env `JUPITER_BRAIN_BINARY` }}"
 builders:
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  source_ami: "{{ user `base_ami` }}"
+  source_ami: ami-af5a4cc5
   ami_name: travis-ci-jupiter-brain {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu

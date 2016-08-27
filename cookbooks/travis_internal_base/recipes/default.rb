@@ -39,6 +39,7 @@ template '/etc/cloud/cloud.cfg' do
   owner 'root'
   group 'root'
   mode 0o644
+  only_if { File.directory?('/etc/cloud') }
 end
 
 cookbook_file '/usr/local/bin/generate-ssh-host-keys' do

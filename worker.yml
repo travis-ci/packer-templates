@@ -3,7 +3,6 @@ description: Worker image for Travis CI
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
-  base_ami: "{{ env `TRAVIS_WORKER_AMI` }}"
   docker_repository: "quay.io/travisci/worker"
   docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
@@ -12,7 +11,6 @@ variables:
   papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
-  travis_cookbooks_url: "{{ env `TRAVIS_COOKBOOKS_URL` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
@@ -24,7 +22,7 @@ builders:
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  source_ami: "{{ user `base_ami` }}"
+  source_ami: ami-af5a4cc5
   ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu
@@ -42,7 +40,7 @@ builders:
   image_description: Travis Worker
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20160627
+  source_image: ubuntu-1404-trusty-v20160809a
   zone: us-central1-a
   image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
@@ -67,7 +65,6 @@ provisioners:
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
-  - TRAVIS_COOKBOOKS_URL={{ user `travis_cookbooks_url` }}
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   - TRAVIS_UID_1000=noforce
@@ -77,9 +74,8 @@ provisioners:
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/cookbooks"
-  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
-  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   json:
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
@@ -92,8 +88,8 @@ provisioners:
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
-  - "/tmp/chef-stuff/travis-cookbooks/cookbooks"
-  - "/tmp/chef-stuff/travis-cookbooks/community-cookbooks"
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   json:
     papertrail:
       remote_port: "{{ user `papertrail_remote_port` }}"
