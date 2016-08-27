@@ -3,7 +3,6 @@ description: Base Ubuntu 14.04 image for Travis CI internal stuff
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
-  papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
@@ -80,9 +79,6 @@ provisioners:
   remote_cookbook_paths:
   - "/tmp/chef-stuff/travis-cookbooks/worker_host"
   - "/tmp/chef-stuff/cookbooks"
-  json:
-    papertrail:
-      remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
   - recipe[travis_internal_base]
 - type: shell
