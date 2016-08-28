@@ -8,7 +8,6 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-worker-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  papertrail_remote_port: "{{ env `PAPERTRAIL_REMOTE_PORT` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
@@ -76,9 +75,6 @@ provisioners:
   remote_cookbook_paths:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
-  json:
-    papertrail:
-      remote_port: "{{ user `papertrail_remote_port` }}"
   run_list:
   - recipe[travis_worker_wrapper]
   except:
@@ -91,8 +87,6 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   json:
-    papertrail:
-      remote_port: "{{ user `papertrail_remote_port` }}"
     travis_worker_wrapper:
       local_docker: true
   run_list:
