@@ -1,29 +1,36 @@
+include Support::Postgresql
+
 describe 'postgresql installation' do
-  describe command('psql --version') do
-    its(:stdout) { should match(/^psql /) }
+  describe pgcommand('psql --version') do
+    its(:stdout) { should match(/^psql.+9\.[2-5]+\.[0-9]+/) }
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe pgcommand('pg_config --bindir') do
+    its(:stdout) { should match(%r{/usr/lib/postgresql/9\.[2-5]/bin}) }
     its(:exit_status) { should eq 0 }
   end
 
   describe 'psql commands' do
     before do
-      sh('dropdb -U travis test_db || true')
-      sh('createdb -U travis test_db')
+      sh("#{pg_path} dropdb -U travis test_db || true")
+      sh("#{pg_path} createdb -U travis test_db")
     end
 
     after do
-      sh('dropdb -U travis test_db || true')
+      sh("#{pg_path} dropdb -U travis test_db || true")
     end
 
-    describe command('psql -U travis -ltA') do
+    describe pgcommand('psql -U travis -ltA') do
       its(:stdout) { should match(/^test_db\|/) }
     end
 
     context 'with a test table' do
       before do
-        sh('psql -U travis -c "CREATE TABLE test_table();" test_db')
+        sh(%{#{pg_path} psql -U travis -c "CREATE TABLE test_table();" test_db})
       end
 
-      describe command("psql -U travis -tA -c '\\dt' test_db") do
+      describe pgcommand("psql -U travis -tA -c '\\dt' test_db") do
         its(:stdout) { should match(/^public\|test_table\|/) }
         its(:stderr) { should be_empty }
       end
