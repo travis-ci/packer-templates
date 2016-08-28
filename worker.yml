@@ -4,7 +4,6 @@ variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   docker_repository: "quay.io/travisci/worker"
-  docker_tag: "packer-{{ timestamp }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: "travis-worker-{{ timestamp }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
@@ -12,10 +11,17 @@ variables:
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
+  travis_worker_version: "{{ env `TRAVIS_WORKER_VERSION` }}"
 builders:
 - type: docker
   name: docker
-  image: "ubuntu:14.04"
+  image: "alpine:3.4"
+  run_command:
+  - -d
+  - -i
+  - -t
+  - "{{.Image}}"
+  - sh
   commit: true
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
@@ -68,6 +74,8 @@ provisioners:
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  except:
+  - docker
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
@@ -79,6 +87,7 @@ provisioners:
   - recipe[travis_worker_wrapper]
   except:
   - amazon-ebs
+  - docker
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
@@ -104,11 +113,28 @@ provisioners:
   - SPEC_SUITES=travis_internal_base,travis_worker_wrapper
   - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  except:
+  - docker
+- type: shell
+  inline: apk add --no-cache --virtual=.build-deps bash curl
+  only:
+  - docker
+- type: shell
+  scripts:
+  - packer-scripts/travis-worker-download
+  environment_vars:
+  - TRAVIS_WORKER_VERSION={{ user `travis_worker_version` }}
+  only:
+  - docker
+- type: shell
+  inline: apk del .build-deps
+  only:
+  - docker
 post-processors:
 -
   - type: docker-tag
     repository: "{{ user `docker_repository` }}"
-    tag: "{{ user `docker_tag` }}"
+    tag: "{{ user `travis_worker_version` }}"
     only:
     - docker
   - type: artifice
@@ -120,7 +146,7 @@ post-processors:
     scripts:
     - bin/docker-push
     environment_vars:
-    - "DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}"
+    - "DOCKER_DEST={{ user `docker_repository` }}:{{ user `travis_worker_version` }}"
     - "DOCKER_CREDS=quay"
     only:
     - docker
