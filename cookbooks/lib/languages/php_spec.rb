@@ -12,6 +12,10 @@ describe 'php environment', dev: true do
     # Running `php -m` hangs, but adding more args doesn't (???)
     its(:stdout) { should include(*PHP_MODULES) }
   end
+
+  describe file('/home/travis/.pearrc') do
+    it { should_not exist }
+  end
 end
 
 PHP_MODULES = <<EOF.split("\n")
