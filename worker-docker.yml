@@ -1,0 +1,65 @@
+---
+description: Worker+Docker combo image for Travis CI
+variables:
+  aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
+  aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
+  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_branch: "meat-worker-docker-docker"
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
+  travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
+  travis_worker_version: "{{ env `TRAVIS_WORKER_VERSION` }}"
+builders:
+- type: amazon-ebs
+  access_key: "{{ user `aws_access_key` }}"
+  secret_key: "{{ user `aws_secret_key` }}"
+  region: us-east-1
+  source_ami: ami-af5a4cc5
+  ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  instance_type: t2.micro
+  ssh_username: ubuntu
+  ami_virtualization_type: hvm
+  tags:
+    role: worker
+  associate_public_ip_address: true
+  subnet_id: "{{ user `travis_subnet_id` }}"
+  vpc_id: "{{ user `travis_vpc_id` }}"
+provisioners:
+- type: shell
+  inline:
+    sudo rm -rf /var/lib/apt/lists* ;
+    sudo apt-get update -yqq ;
+    sudo apt-get install -f
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-dump
+  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID_1000=noforce
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: chef-solo
+  config_template: chef-solo.rb.tmpl
+  cookbook_paths:
+  - cookbooks
+  remote_cookbook_paths:
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
+  json:
+    travis_worker_wrapper:
+      local_docker: true
+  run_list:
+  - recipe[travis_worker_wrapper]
+- type: shell
+  scripts:
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/purge
+  - packer-scripts/run-serverspecs
+  - packer-scripts/cleanup
+  - packer-scripts/minimize
+  environment_vars:
+  - SPEC_SUITES=travis_internal_base,travis_worker_wrapper
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
