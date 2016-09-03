@@ -57,6 +57,14 @@ provisioners:
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  inline:
+  # Disable direct-lvm on googlecompute since it probably won't work and we
+  # don't need it to given that we're running jobs via the GCE API rather than
+  # local Docker.
+  - echo 'TRAVIS_WORKER_DISABLE_DIRECT_LVM=1' | sudo tee /etc/default/docker-cloud-init
+  only:
+  - googlecompute
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
