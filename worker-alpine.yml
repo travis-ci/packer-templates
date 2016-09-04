@@ -18,16 +18,12 @@ builders:
   commit: true
 provisioners:
 - type: shell
-  inline:
-  - apk add --no-cache ca-certificates
-  - apk add --no-cache --virtual=.build-deps bash curl
-- type: shell
   scripts:
+  - packer-scripts/alpine-prereqs
   - packer-scripts/travis-worker-download
+  - packer-scripts/alpine-cleanup
   environment_vars:
   - TRAVIS_WORKER_VERSION={{ user `travis_worker_version` }}
-- type: shell
-  inline: apk del .build-deps
 post-processors:
 -
   - type: docker-tag
