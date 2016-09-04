@@ -4,7 +4,7 @@ variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: travis-ci-worker-{{ timestamp }}
+  gce_image_name: travis-worker-{{ timestamp }}
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_branch: "meat-worker-docker-docker"
@@ -32,7 +32,7 @@ builders:
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
   source_ami: ami-af5a4cc5
-  ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  ami_name: travis-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu
   ami_virtualization_type: hvm
