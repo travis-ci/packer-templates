@@ -72,9 +72,6 @@ provisioners:
   remote_cookbook_paths:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
-  json:
-    travis_worker_wrapper:
-      local_docker: true
   run_list:
   - recipe[travis_worker_wrapper]
 - type: shell

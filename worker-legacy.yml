@@ -44,6 +44,9 @@ provisioners:
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
+  json:
+    travis_worker_wrapper:
+      install_type: package
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
@@ -60,5 +63,6 @@ provisioners:
   - packer-scripts/minimize
   environment_vars:
   - SPEC_SUITES=travis_internal_base,travis_worker_wrapper
+  - SPEC_ARGS='--tag ~legacy:false'
   - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
