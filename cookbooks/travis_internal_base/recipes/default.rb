@@ -45,3 +45,17 @@ cookbook_file '/usr/local/bin/generate-ssh-host-keys' do
   group 'root'
   mode 0o755
 end
+
+template '/etc/pam.d/sshd' do
+  source 'pam.d-sshd.conf.erb'
+  owner 'sshd'
+  group 'root'
+  mode 0o600
+end
+
+template '/etc/pam.d/common-auth' do
+  source 'pam.d-common-auth.conf.erb'
+  owner 'sshd'
+  group 'root'
+  mode 0o600
+end
