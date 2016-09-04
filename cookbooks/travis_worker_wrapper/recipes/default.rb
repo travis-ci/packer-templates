@@ -27,8 +27,8 @@
 include_recipe 'travis_internal_base'
 
 if node['travis_worker_wrapper']['standalone']
-  include_recipe 'travis_go_worker::devicemapper'
+  include_recipe 'travis_worker::devicemapper'
   include_recipe 'travis_docker'
 end
 
-include_recipe 'travis_go_worker::docker'
+include_recipe 'travis_worker::docker'
