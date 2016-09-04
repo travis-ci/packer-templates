@@ -9,5 +9,5 @@ source_url 'https://github.com/travis-ci/packer-templates'
 issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'travis_docker'
-depends 'travis_go_worker'
+depends 'travis_worker'
 depends 'travis_internal_base'

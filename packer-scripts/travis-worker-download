@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  set -o xtrace
+
+  [[ "${TRAVIS_WORKER_VERSION}" ]] || {
+    echo Missing \$TRAVIS_WORKER_VERSION
+    exit 1
+  }
+
+  : "${TRAVIS_WORKER_DEST:=/usr/local/bin/travis-worker}"
+  : "${TRAVIS_WORKER_URL_PREFIX:=https://s3.amazonaws.com/travis-worker-artifacts/travis-ci/worker}"
+  : "${TRAVIS_WORKER_URL_SUFFIX:=build/linux/amd64/travis-worker}"
+
+  curl -SL --progress -o "${TRAVIS_WORKER_DEST}" \
+    "${TRAVIS_WORKER_URL_PREFIX}/${TRAVIS_WORKER_VERSION}/${TRAVIS_WORKER_URL_SUFFIX}"
+  chmod +x "${TRAVIS_WORKER_DEST}"
+  "${TRAVIS_WORKER_DEST}" --version
+}
+
+main "$@"

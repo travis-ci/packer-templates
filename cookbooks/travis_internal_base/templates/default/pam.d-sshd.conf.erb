@@ -1,0 +1,19 @@
+# vim:filetype=pamconf
+# Managed by Chef on <%= node.name %> :heart:
+# cookbook:: travis_internal_base
+#     file:: templates/default/pam.d-sshd.conf.erb
+
+@include common-auth
+@include common-account
+
+session required pam_loginuid.so
+session optional pam_keyinit.so force revoke
+
+@include common-session
+
+session required pam_limits.so
+
+session required pam_env.so
+session required pam_env.so user_readenv=1 envfile=/etc/default/locale
+
+@include common-password

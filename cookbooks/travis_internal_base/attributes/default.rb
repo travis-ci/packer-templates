@@ -1,3 +1,5 @@
+override['openssh']['client']['10.10.*']['user_known_hosts_file'] = '/dev/null'
+override['openssh']['client']['10.10.*']['strict_host_key_checking'] = 'no'
 override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
 override['openssh']['server']['password_authentication'] = 'no'
 override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
@@ -33,72 +35,26 @@ override['openssh']['server']['m_a_cs'] = %w(
   umac-128@openssh.com
 ).join(',')
 
-override['users'] = [
+override['travis_users'] = {
+  brandon: 'solarce',
+  carmen: 'Lyoness',
+  dan: 'meatballhat',
+  emma: 'emdantrim',
+  henrik: 'henrikhodne',
+  hiro: 'BanzaiMan',
+  igor: 'igorwwwwwwwwwwwwwwwwwwww',
+  josh: 'joshk',
+  konstantin: 'rkh',
+  mathias: 'roidrage',
+  piotr: 'drogus',
+  sven: 'svenfuchs'
+}.map do |username, github_username|
   {
-    'id' => 'hiro',
+    'id' => username.to_s,
     'shell' => '/bin/zsh',
-    'github_username' => 'BanzaiMan'
-  },
-  {
-    'id' => 'piotr',
-    'shell' => '/bin/zsh',
-    'github_username' => 'drogus'
-  },
-  {
-    'id' => 'emma',
-    'shell' => '/bin/zsh',
-    'github_username' => 'emdantrim'
-  },
-  {
-    'id' => 'henrik',
-    'shell' => '/bin/zsh',
-    'github_username' => 'henrikhodne'
-  },
-  {
-    'id' => 'josh',
-    'shell' => '/bin/zsh',
-    'github_username' => 'joshk'
-  },
-  {
-    'id' => 'dan',
-    'shell' => '/bin/zsh',
-    'github_username' => 'meatballhat'
-  },
-  {
-    'id' => 'konstantin',
-    'shell' => '/bin/zsh',
-    'github_username' => 'rkh'
-  },
-  {
-    'id' => 'mathias',
-    'shell' => '/bin/zsh',
-    'github_username' => 'roidrage'
-  },
-  {
-    'id' => 'brandon',
-    'shell' => '/bin/zsh',
-    'github_username' => 'solarce'
-  },
-  {
-    'id' => 'sven',
-    'shell' => '/bin/zsh',
-    'github_username' => 'svenfuchs'
-  },
-  {
-    'id' => 'igor',
-    'shell' => '/bin/zsh',
-    'github_username' => 'igorwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    'id' => 'carmen',
-    'shell' => '/bin/zsh',
-    'github_username' => 'Lyoness'
-  }
-]
-
-override['sudo']['users'] = override['users'].map do |u|
-  {
-    'name' => u['id'],
-    'nopassword' => true
+    'github_username' => github_username,
+    'groups' => %w(sudo)
   }
 end
+
+override['travis_sudo']['groups'] = %w(sudo)

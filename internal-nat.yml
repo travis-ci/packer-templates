@@ -38,3 +38,4 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/configure-nat
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"

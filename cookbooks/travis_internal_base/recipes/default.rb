@@ -1,4 +1,3 @@
-#
 # Cookbook Name:: travis_internal_base
 # Recipe:: default
 #
@@ -22,13 +21,12 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
 
 include_recipe 'apt'
 include_recipe 'openssh'
 include_recipe 'papertrail'
-include_recipe 'users'
-include_recipe 'sudo'
+include_recipe 'travis_users'
+include_recipe 'travis_sudo'
 
 package 'whois' do
   action [:install, :upgrade]
@@ -46,4 +44,18 @@ cookbook_file '/usr/local/bin/generate-ssh-host-keys' do
   owner 'root'
   group 'root'
   mode 0o755
+end
+
+template '/etc/pam.d/sshd' do
+  source 'pam.d-sshd.conf.erb'
+  owner 'sshd'
+  group 'root'
+  mode 0o600
+end
+
+template '/etc/pam.d/common-auth' do
+  source 'pam.d-common-auth.conf.erb'
+  owner 'sshd'
+  group 'root'
+  mode 0o600
 end
