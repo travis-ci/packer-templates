@@ -17,9 +17,13 @@ builders:
   - sh
   commit: true
 provisioners:
+- type: file
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
 - type: shell
   scripts:
   - packer-scripts/alpine-prereqs
+  - packer-scripts/packer-env-dump
   - packer-scripts/travis-worker-download
   - packer-scripts/alpine-cleanup
   environment_vars:
