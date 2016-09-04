@@ -5,12 +5,6 @@ set -o errexit
 main() {
   set -o xtrace
 
-  : "${PACKER_ENV_DIR:=/.packer-env}"
-
-  if [[ -f ${PACKER_ENV_DIR}/TRAVIS_WORKER_VERSION ]]; then
-    TRAVIS_WORKER_VERSION="$(cat "${PACKER_ENV_DIR}/TRAVIS_WORKER_VERSION")"
-  fi
-
   [[ "${TRAVIS_WORKER_VERSION}" ]] || {
     echo Missing \$TRAVIS_WORKER_VERSION
     exit 1
