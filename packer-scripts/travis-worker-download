@@ -8,7 +8,7 @@ main() {
   : "${PACKER_ENV_DIR:=/.packer-env}"
 
   if [[ -f ${PACKER_ENV_DIR}/TRAVIS_WORKER_VERSION ]]; then
-    export TRAVIS_WORKER_VERSION="$(cat ${PACKER_ENV_DIR}/TRAVIS_WORKER_VERSION)"
+    TRAVIS_WORKER_VERSION="$(cat "${PACKER_ENV_DIR}/TRAVIS_WORKER_VERSION")"
   fi
 
   [[ "${TRAVIS_WORKER_VERSION}" ]] || {
