@@ -1,3 +1,5 @@
+override['openssh']['client']['10.10.*']['user_known_hosts_file'] = '/dev/null'
+override['openssh']['client']['10.10.*']['strict_host_key_checking'] = 'no'
 override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
 override['openssh']['server']['password_authentication'] = 'no'
 override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
@@ -33,22 +35,22 @@ override['openssh']['server']['m_a_cs'] = %w(
   umac-128@openssh.com
 ).join(',')
 
-override['travis_users'] = [
-  %w(brandon solarce),
-  %w(carmen Lyoness),
-  %w(dan meatballhat),
-  %w(emma emdantrim),
-  %w(henrik henrikhodne),
-  %w(hiro BanzaiMan),
-  %w(igor igorwwwwwwwwwwwwwwwwwwww),
-  %w(josh joshk),
-  %w(konstantin rkh),
-  %w(mathias roidrage),
-  %w(piotr drogus),
-  %w(sven svenfuchs)
-].map do |username, github_username|
+override['travis_users'] = {
+  brandon: 'solarce',
+  carmen: 'Lyoness',
+  dan: 'meatballhat',
+  emma: 'emdantrim',
+  henrik: 'henrikhodne',
+  hiro: 'BanzaiMan',
+  igor: 'igorwwwwwwwwwwwwwwwwwwww',
+  josh: 'joshk',
+  konstantin: 'rkh',
+  mathias: 'roidrage',
+  piotr: 'drogus',
+  sven: 'svenfuchs'
+}.map do |username, github_username|
   {
-    'id' => username,
+    'id' => username.to_s,
     'shell' => '/bin/zsh',
     'github_username' => github_username,
     'groups' => %w(sudo)
