@@ -1,5 +1,7 @@
 include_attribute 'travis_internal_base'
 
+override['openssh']['client']['match']['Host 10.10.*']['user_known_hosts_file'] = '/dev/null'
+override['openssh']['client']['match']['Host 10.10.*']['strict_host_key_checking'] = 'no'
 override['openssh']['server']['permit_tunnel'] = 'no'
 override['openssh']['server']['allow_tcp_forwarding'] = 'no'
 override['openssh']['server']['force_command'] = '/usr/sbin/login_duo'
