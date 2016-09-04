@@ -54,3 +54,5 @@ override['travis_users'] = [
     'groups' => %w(sudo)
   }
 end
+
+override['travis_sudo']['groups'] = %w(sudo)
