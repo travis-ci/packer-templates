@@ -8,7 +8,8 @@ variables:
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_branch: "meat-worker-docker-docker"
-  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  # travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_cookbooks_sha: "9a0e66d0193d10c489182a2fa93d7e3452bc6ef2"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
