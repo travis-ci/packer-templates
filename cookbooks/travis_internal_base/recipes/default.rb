@@ -27,8 +27,8 @@
 include_recipe 'apt'
 include_recipe 'openssh'
 include_recipe 'papertrail'
-include_recipe 'users'
-include_recipe 'sudo'
+include_recipe 'travis_users'
+include_recipe 'travis_sudo'
 
 package 'whois' do
   action [:install, :upgrade]
