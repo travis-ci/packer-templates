@@ -33,72 +33,24 @@ override['openssh']['server']['m_a_cs'] = %w(
   umac-128@openssh.com
 ).join(',')
 
-override['users'] = [
+override['travis_users'] = [
+  %w(brandon solarce),
+  %w(carmen Lyoness),
+  %w(dan meatballhat),
+  %w(emma emdantrim),
+  %w(henrik henrikhodne),
+  %w(hiro BanzaiMan),
+  %w(igor igorwwwwwwwwwwwwwwwwwwww),
+  %w(josh joshk),
+  %w(konstantin rkh),
+  %w(mathias roidrage),
+  %w(piotr drogus),
+  %w(sven svenfuchs)
+].map do |username, github_username|
   {
-    'id' => 'hiro',
+    'id' => username,
     'shell' => '/bin/zsh',
-    'github_username' => 'BanzaiMan'
-  },
-  {
-    'id' => 'piotr',
-    'shell' => '/bin/zsh',
-    'github_username' => 'drogus'
-  },
-  {
-    'id' => 'emma',
-    'shell' => '/bin/zsh',
-    'github_username' => 'emdantrim'
-  },
-  {
-    'id' => 'henrik',
-    'shell' => '/bin/zsh',
-    'github_username' => 'henrikhodne'
-  },
-  {
-    'id' => 'josh',
-    'shell' => '/bin/zsh',
-    'github_username' => 'joshk'
-  },
-  {
-    'id' => 'dan',
-    'shell' => '/bin/zsh',
-    'github_username' => 'meatballhat'
-  },
-  {
-    'id' => 'konstantin',
-    'shell' => '/bin/zsh',
-    'github_username' => 'rkh'
-  },
-  {
-    'id' => 'mathias',
-    'shell' => '/bin/zsh',
-    'github_username' => 'roidrage'
-  },
-  {
-    'id' => 'brandon',
-    'shell' => '/bin/zsh',
-    'github_username' => 'solarce'
-  },
-  {
-    'id' => 'sven',
-    'shell' => '/bin/zsh',
-    'github_username' => 'svenfuchs'
-  },
-  {
-    'id' => 'igor',
-    'shell' => '/bin/zsh',
-    'github_username' => 'igorwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    'id' => 'carmen',
-    'shell' => '/bin/zsh',
-    'github_username' => 'Lyoness'
-  }
-]
-
-override['sudo']['users'] = override['users'].map do |u|
-  {
-    'name' => u['id'],
-    'nopassword' => true
+    'github_username' => github_username,
+    'groups' => %w(sudo)
   }
 end
