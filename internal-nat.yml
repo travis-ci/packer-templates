@@ -1,10 +1,9 @@
 ---
-description: Travis CI Internal NAT template
+description: Travis internal NAT template
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: travis-ci-connie-trusty-{{ timestamp }}
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
@@ -26,7 +25,7 @@ builders:
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20160809a
+  source_image: ubuntu-1604-xenial-v20160830
   zone: us-central1-b
   image_name: nat-{{ timestamp }}
   machine_type: g1-small
