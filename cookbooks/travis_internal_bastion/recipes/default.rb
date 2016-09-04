@@ -1,4 +1,3 @@
-#
 # Cookbook Name:: travis_internal_bastion
 # Recipe:: default
 #
@@ -22,7 +21,6 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
 
 include_recipe 'travis_internal_base'
 include_recipe 'apt'
