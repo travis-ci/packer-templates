@@ -6,14 +6,14 @@ config:
   dist: trusty
   group: edge
   sudo: true
-  # before_install:
-  # - if [[ "x${BUILDER}" = "xdocker" ]] ; then
-  #     sudo apt-get update -yqq ;
-  #     sudo apt-get purge -o Dpkg::Options::="--force-confnew" -yqq docker-engine ;
-  #     sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq docker-engine lvm2 xfsprogs ;
-  #     echo 'DOCKER_OPTS="$DOCKER_OPTS --storage-driver devicemapper"' | sudo tee -a /etc/default/docker ;
-  #     sudo service docker restart ;
-  #   fi
+  before_install:
+  - if [[ "x${BUILDER}" = "xdocker" ]] ; then
+      sudo apt-get update -yqq ;
+      sudo apt-get purge -o Dpkg::Options::="--force-confnew" -yqq docker-engine ;
+      sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq docker-engine lvm2 xfsprogs ;
+      echo 'DOCKER_OPTS="$DOCKER_OPTS --storage-driver devicemapper"' | sudo tee -a /etc/default/docker ;
+      sudo service docker restart ;
+    fi
   install:
   - git clone --depth=50 "https://github.com/travis-ci/packer-templates.git"
   - pushd packer-templates &&
