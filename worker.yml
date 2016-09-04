@@ -32,7 +32,7 @@ builders:
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  source_ami: ami-a8137dbf
+  source_ami: ami-4f680658
   ami_name: travis-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu
