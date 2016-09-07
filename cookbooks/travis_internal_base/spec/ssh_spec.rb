@@ -6,7 +6,7 @@ end
 
 EXPECTED_SSHD_CONFIG = <<-EOF.split("\n")
 addressfamily any
-allowtcpforwarding yes
+allowtcpforwarding no
 authenticationmethods
 authorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2
 challengeresponseauthentication no
