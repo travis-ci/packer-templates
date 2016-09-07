@@ -6,8 +6,7 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
-  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
-  travis_cookbooks_branch: "meat-worker-docker-docker"
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
@@ -55,3 +54,11 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   run_list:
   - recipe[travis_internal_bastion]
+- type: shell
+  scripts:
+  - packer-scripts/purge
+  - packer-scripts/run-serverspecs
+  - packer-scripts/cleanup
+  environment_vars:
+  - SPEC_SUITES=travis_internal_base
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
