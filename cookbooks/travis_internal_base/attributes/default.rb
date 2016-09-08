@@ -1,17 +1,18 @@
-override['openssh']['client']['10.10.*']['user_known_hosts_file'] = '/dev/null'
 override['openssh']['client']['10.10.*']['strict_host_key_checking'] = 'no'
-override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
-override['openssh']['server']['password_authentication'] = 'no'
-override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
-override['openssh']['server']['pubkey_authentication'] = 'yes'
-override['openssh']['server']['match']['Host *']['pubkey_authentication'] = 'yes'
+override['openssh']['client']['10.10.*']['user_known_hosts_file'] = '/dev/null'
+override['openssh']['server']['allow_tcp_forwarding'] = 'no'
 override['openssh']['server']['challenge_response_authentication'] = 'no'
+override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
+override['openssh']['server']['match']['Host *']['password_authentication'] = 'no'
+override['openssh']['server']['match']['Host *']['pubkey_authentication'] = 'yes'
+override['openssh']['server']['password_authentication'] = 'no'
 override['openssh']['server']['permit_root_login'] = 'no'
+override['openssh']['server']['protocol'] = '2'
+override['openssh']['server']['pubkey_authentication'] = 'yes'
 override['openssh']['server']['kex_algorithms'] = %w(
   curve25519-sha256@libssh.org
   diffie-hellman-group-exchange-sha256
 ).join(',')
-override['openssh']['server']['protocol'] = '2'
 override['openssh']['server']['host_key'] = %w(
   /etc/ssh/ssh_host_ed25519_key
   /etc/ssh/ssh_host_rsa_key
