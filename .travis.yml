@@ -18,6 +18,7 @@ env:
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/gopath/bin:${HOME}/bin:${PATH}"
   - GOPATH="${HOME}/gopath"
   - REQUEST_INTERVAL=5
+  - SHELLCHECK_URL="https://s3.amazonaws.com/travis-blue-public/binaries/ubuntu/14.04/x86_64/shellcheck-0.4.4.tar.bz2"
   - SKIP_CHEFDK_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
@@ -34,12 +35,7 @@ install:
 - rvm use 2.3.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - if ! shellcheck --version ; then
-    sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" ;
-    sudo apt-get -yqq update ;
-    sudo apt-get -t trusty-backports install shellcheck ;
-    sudo cp -v `which shellcheck` ${HOME}/bin/shellcheck ;
-    sudo chown travis:travis ${HOME}/bin/shellcheck ;
-    sudo apt-add-repository -r "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" ;
+    curl -sSL "${SHELLCHECK_URL}" | tar -C "${HOME}/bin" -xjf - ;
   fi
 - if ! command -v shfmt ; then
     eval "$(gimme 1.6.3)" ;
