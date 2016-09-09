@@ -14,7 +14,7 @@ builders:
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
   source_ami: ami-8e0b9499
-  ami_name: nat-host {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  ami_name: nat {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
   ssh_username: ubuntu
   ami_virtualization_type: hvm
