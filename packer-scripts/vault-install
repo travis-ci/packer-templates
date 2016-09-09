@@ -3,31 +3,31 @@
 set -ex
 
 main() {
-    apt-get -y update
-    apt-get -y install curl unzip
+  apt-get -y update
+  apt-get -y install curl unzip
 
-    tmp=$(mktemp -d)
-    cd "$tmp"
+  tmp=$(mktemp -d)
+  cd "$tmp"
 
-    curl -sLo vault.zip "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
+  curl -sLo vault.zip "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
 
-    cat > vault.sha256sums <<EOF
+  cat >vault.sha256sums <<EOF
 ${VAULT_SHA}  vault.zip
 EOF
 
-    if ! sha256sum -c vault.sha256sums; then
-        echo "SHA256sum check failed!"
-        exit 1
-    fi
+  if ! sha256sum -c vault.sha256sums; then
+    echo "SHA256sum check failed!"
+    exit 1
+  fi
 
-    unzip vault.zip
-    mv vault /usr/local/bin/vault
-    # Enable mlock
-    setcap cap_ipc_lock=+ep /usr/local/bin/vault
+  unzip vault.zip
+  mv vault /usr/local/bin/vault
+  # Enable mlock
+  setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
-    adduser --system --no-create-home --group --disabled-password --disabled-login vault
+  adduser --system --no-create-home --group --disabled-password --disabled-login vault
 
-    cat > /etc/systemd/system/vault.service <<EOF
+  cat >/etc/systemd/system/vault.service <<EOF
 [Unit]
 Description=vault agent
 Requires=network-online.target
