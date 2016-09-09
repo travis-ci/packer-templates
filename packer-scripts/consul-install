@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -ex
+
+main() {
+    apt-get -y update
+    apt-get -y install curl unzip
+
+    tmp=$(mktemp -d)
+    cd $tmp
+
+    curl -sLo consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
+
+    cat > consul.sha256sums <<EOF
+${CONSUL_SHA}  consul.zip
+EOF
+
+    if ! sha256sum -c consul.sha256sums; then
+        echo "SHA256sum check failed!"
+        exit 1
+    fi
+
+    unzip consul.zip
+    mv consul /usr/local/bin/consul
+
+    adduser --system --no-create-home --group --disabled-password --disabled-login consul
+
+    cat > /etc/systemd/system/consul.service <<EOF
+[Unit]
+Description=consul agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=-/etc/default/consul
+User=consul
+Group=consul
+Restart=on-failure
+ExecStart=/usr/local/bin/consul agent $OPTIONS -config-dir=/etc/consul.d
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    mkdir /etc/consul.d
+}
+
+main
