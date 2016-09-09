@@ -26,9 +26,11 @@ __install_packages() {
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
 
-  rm -vf /etc/apt/sources.list.d/partner.list
+  if [[ "x${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
+    rm -rvf /etc/apt/sources.list.d/partner.list \
+      /var/lib/apt/lists/*
+  fi
 
-  rm -rf /var/lib/apt/lists/*
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
