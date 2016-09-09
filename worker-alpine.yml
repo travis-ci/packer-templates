@@ -9,12 +9,7 @@ builders:
 - type: docker
   name: docker
   image: "alpine:3.4"
-  run_command:
-  - -d
-  - -i
-  - -t
-  - "{{.Image}}"
-  - sh
+  run_command: [-d, -i, -t, "{{.Image}}", sh]
   commit: true
 provisioners:
 - type: shell
