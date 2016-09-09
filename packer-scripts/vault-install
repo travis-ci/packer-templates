@@ -7,9 +7,9 @@ main() {
     apt-get -y install curl unzip
 
     tmp=$(mktemp -d)
-    cd $tmp
+    cd "$tmp"
 
-    curl -sLo vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
+    curl -sLo vault.zip "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
 
     cat > vault.sha256sums <<EOF
 ${VAULT_SHA}  vault.zip

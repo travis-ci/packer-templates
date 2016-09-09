@@ -7,9 +7,9 @@ main() {
     apt-get -y install curl unzip
 
     tmp=$(mktemp -d)
-    cd $tmp
+    cd "$tmp"
 
-    curl -sLo consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
+    curl -sLo consul.zip "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip"
 
     cat > consul.sha256sums <<EOF
 ${CONSUL_SHA}  consul.zip
