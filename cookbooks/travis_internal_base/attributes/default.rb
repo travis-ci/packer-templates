@@ -1,5 +1,5 @@
-override['openssh']['client']['10.10.*']['strict_host_key_checking'] = 'no'
-override['openssh']['client']['10.10.*']['user_known_hosts_file'] = '/dev/null'
+override['openssh']['client']['10.*']['strict_host_key_checking'] = 'no'
+override['openssh']['client']['10.*']['user_known_hosts_file'] = '/dev/null'
 override['openssh']['server']['allow_tcp_forwarding'] = 'no'
 override['openssh']['server']['challenge_response_authentication'] = 'no'
 override['openssh']['server']['listen_address'] = %w(0.0.0.0:22 [::]:22)
