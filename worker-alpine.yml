@@ -1,5 +1,5 @@
 ---
-description: Alpine-based Worker Docker image for Travis CI
+description: Alpine-based Worker Docker image for Travis CI!
 variables:
   docker_repository: "quay.io/travisci/worker"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
