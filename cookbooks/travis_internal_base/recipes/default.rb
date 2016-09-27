@@ -29,7 +29,7 @@ include_recipe 'travis_users'
 include_recipe 'travis_sudo'
 
 package 'whois' do
-  action [:install, :upgrade]
+  action %i(install upgrade)
 end
 
 template '/etc/cloud/cloud.cfg' do
