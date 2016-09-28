@@ -72,7 +72,7 @@ packer-build-trigger-all-ci:
 .PHONY: install-packer
 install-packer: tmp/packer.zip
 	mkdir -p ~/bin
-	$(UNZIP) -d ~/bin $<
+	$(UNZIP) -d -o ~/bin $<
 	chmod +x ~/bin/packer
 
 .PHONY: install-bats
