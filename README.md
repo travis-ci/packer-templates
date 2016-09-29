@@ -334,7 +334,7 @@ then the tags generated for registration with job-board would be equivalent to:
 {
   "language_fribble": true,
   "language_snurp": true,
-  "language_zzz: true
+  "language_zzz": true
 }
 ```
 
