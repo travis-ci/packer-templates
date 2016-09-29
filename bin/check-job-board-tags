@@ -1,49 +1,89 @@
 #!/usr/bin/env bash
+#
+#+  Usage: check-job-board-tags [-h|--help|-l|--list-only]
+#+  -
+#+  Performs a series of assertions about the relationship between
+#+  different stacks' languages and features.  Some stacks are intended to be
+#+  subsets of others.  Some stacks are meant to be mutually exclusive.  These
+#+  relationships are checked via the assert-job-board-tags script, which
+#+  accepts batch inputs created by *this* script.
+#+  -
 
-cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 set -o errexit
-set -o pipefail
 
-COMBOS=(
-  languages:incl:sugilite:amethyst
-  features:incl:sugilite:amethyst
-  languages:incl:sugilite:garnet
-  features:incl:sugilite:garnet
-  languages:excl:sugilite:connie
-  languages:excl:amethyst:connie
-  languages:excl:garnet:connie
-  languages:excl:garnet:amethyst
-  features:incl:garnet:amethyst
-  features:incl:sugilite:ruby
-)
+main() {
+  set -o pipefail
 
-for lang in android erlang go haskell jvm nodejs perl php python ruby; do
-  if [[ $lang != ruby ]]; then
-    # Ruby is the "default" image on precise, but some of the languages covered
-    # by the ruby precise image are covered by the connie image on trusty, so we
-    # can't enforce the inclusive relationship with sugilite.
-    COMBOS+=(languages:incl:sugilite:$lang)
-    COMBOS+=(features:incl:sugilite:$lang)
-    COMBOS+=(features:incl:ruby:$lang)
-  fi
-  for excl in android erlang go haskell jvm nodejs perl php python ruby; do
-    if [[ "x${lang}" = "x${excl}" ]]; then
-      continue
+  case "$1" in
+    -h | --help | help)
+      __usage
+      exit 0
+      ;;
+    -l | --list-only)
+      CHECK_JOB_BOARD_TAGS_LIST_ONLY=1
+      ;;
+  esac
+
+  COMBOS=(
+    languages:incl:sugilite:amethyst
+    features:incl:sugilite:amethyst
+    languages:incl:sugilite:garnet
+    features:incl:sugilite:garnet
+    languages:excl:sugilite:connie
+    languages:excl:amethyst:connie
+    languages:excl:garnet:connie
+    languages:excl:garnet:amethyst
+    features:incl:garnet:amethyst
+    features:incl:sugilite:ruby
+  )
+
+  cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+
+  for lang in android erlang go haskell jvm nodejs perl php python ruby; do
+    if [[ $lang != ruby ]]; then
+      # Ruby is the "default" image on precise, but some of the languages covered
+      # by the ruby precise image are covered by the connie image on trusty, so we
+      # can't enforce the inclusive relationship with sugilite.
+      COMBOS+=(languages:incl:sugilite:$lang)
+      COMBOS+=(features:incl:sugilite:$lang)
+      COMBOS+=(features:incl:ruby:$lang)
     fi
-    COMBOS+=(languages:excl:$lang:$excl)
+    for excl in android erlang go haskell jvm nodejs perl php python ruby; do
+      if [[ "x${lang}" = "x${excl}" ]]; then
+        continue
+      fi
+      COMBOS+=(languages:excl:$lang:$excl)
+    done
   done
-done
 
-BATCH_INPUT=""
-for cmd in "${COMBOS[@]}"; do
-  parts=(${cmd//:/ })
-  rec="${parts[0]}:${parts[1]}"
-  rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
-  rec="${rec}:./cookbooks/travis_ci_${parts[3]}/attributes/default.rb"
-  BATCH_INPUT="$BATCH_INPUT
+  if [[ "${CHECK_JOB_BOARD_TAGS_LIST_ONLY}" ]]; then
+    for cmd in "${COMBOS[@]}"; do
+      echo ${cmd//:/ }
+    done
+    exit 0
+  fi
+
+  BATCH_INPUT=""
+  for cmd in "${COMBOS[@]}"; do
+    parts=(${cmd//:/ })
+    rec="${parts[0]}:${parts[1]}"
+    rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
+    rec="${rec}:./cookbooks/travis_ci_${parts[3]}/attributes/default.rb"
+    BATCH_INPUT="$BATCH_INPUT
 ${rec}
 "
-done
+  done
 
-echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i \
-  | grep --color -E '^✘:.*|$'
+  echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i \
+    | grep --color -E '^✘:.*|$'
+}
+
+__usage() {
+  awk '/^#\+  / {
+    sub(/^#\+  /, "", $0) ;
+    sub(/-$/, "", $0) ;
+    print $0
+  }' "${0}"
+}
+
+main "$@"
