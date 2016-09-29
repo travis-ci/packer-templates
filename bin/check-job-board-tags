@@ -58,7 +58,7 @@ main() {
 
   if [[ "${CHECK_JOB_BOARD_TAGS_LIST_ONLY}" ]]; then
     for cmd in "${COMBOS[@]}"; do
-      echo ${cmd//:/ }
+      echo "${cmd//:/ }"
     done
     exit 0
   fi
