@@ -6,7 +6,6 @@ cache:
   bundler: true
   directories:
   - ${HOME}/bin
-  - ${HOME}/gopath/bin
 env:
   matrix:
   - DIST=trusty
@@ -15,10 +14,10 @@ env:
   - LANG=en_US.UTF-8
   - NODE_ATTRIBUTES_YML="${TRAVIS_BUILD_DIR}/.example-node-attributes.yml"
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/gopath/bin:${HOME}/bin:${PATH}"
-  - GOPATH="${HOME}/gopath"
+  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
   - SHELLCHECK_URL="https://s3.amazonaws.com/travis-blue-public/binaries/ubuntu/14.04/x86_64/shellcheck-0.4.4.tar.bz2"
+  - SHFMT_URL="https://github.com/mvdan/sh/releases/download/v0.1.0/shfmt_v0.1.0_linux_amd64"
   - SKIP_CHEFDK_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
@@ -38,8 +37,8 @@ install:
     curl -sSL "${SHELLCHECK_URL}" | tar -C "${HOME}/bin" -xjf - ;
   fi
 - if ! command -v shfmt ; then
-    eval "$(gimme 1.6.3)" ;
-    go get -x github.com/mvdan/sh/cmd/shfmt ;
+    curl -sSL "${SHFMT_URL}" -o "${HOME}/bin/shfmt" ;
+    chmod +x "${HOME}/bin/shfmt" ;
   fi
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
