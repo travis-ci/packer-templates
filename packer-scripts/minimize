@@ -3,8 +3,7 @@
 set -o errexit
 set -o xtrace
 
-if [[ $PACKER_BUILDER_TYPE = googlecompute \
-  || $PACKER_BUILDER_TYPE = amazon-ebs ]]; then
+if [[ $PACKER_BUILDER_TYPE = googlecompute || $PACKER_BUILDER_TYPE = amazon-ebs ]]; then
   echo "Skipping minimization on $PACKER_BUILDER_TYPE"
   exit 0
 fi
