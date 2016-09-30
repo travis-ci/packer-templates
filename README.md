@@ -291,3 +291,99 @@ Optional env vars supported by this script are:
   X product version
 - `OS` - value used in `os` tag, default lowercase value of `uname`, mapped to
   `osx` on Darwin
+
+For more info on the relationship between a given packer build artifact and
+job-board, see [job-board details](#job-board-details) below.
+
+###  job-board details
+
+The [job-board](https://github.com/travis-ci/job-board) application is
+responsible for tracking stack image metadata and presenting a queryable API
+that is used by the [travis-worker API image
+selector](https://github.com/travis-ci/worker/blob/master/image/api_selector.go).
+As described above, each stack image is registered with job-board along with a
+`group`, `os`, `dist`, and map of `tags`.  When travis-worker requests a stack
+image identifier, it performs a series of queries with progressively lower
+specificity.
+
+Of the values assigned to each stack image, the `tags` map is perhaps most
+mysterious, in part because it is so loosely defined.  This is intentional, as
+the number of values that could be considered "tags" varies enough that
+maintaining them all as individual columns would result in (opinions!) too much
+overhead in the form of schema management and query complexity.
+
+The implementation of the [job-board-register
+script](./lib/job_board_registrar.rb) includes a process that converts the
+`languages` and `features` arrays present in `/.job-board-register.yml`, written
+from the values present in chef attributes at
+`travis_packer_templates.job_board.{features,languages}`, into "sets"
+represented as `{key} => true`.  For example, if a given wrapper cookbook
+contains attributes like this:
+
+``` ruby
+override['travis_packer_templates']['job_board']['languages'] = %w(
+  fribble
+  snurp
+  zzz
+)
+```
+
+then the tags generated for registration with job-board would be equivalent to:
+
+``` json
+{
+  "language_fribble": true,
+  "language_snurp": true,
+  "language_zzz": true
+}
+```
+
+#### job-board tagsets
+
+A "tagset" is the "set" (as in the type) of the "tags" applied during job-board
+registration of a particular stack image, including `languages` and `features`.
+At the time of this writing, both tagsets are used during serverspec runs, and
+only the `languages` tagset is considered during selection via the job-board
+API.
+
+#### tagset relationships
+
+Because the [travis-worker API image
+selector](https://github.com/travis-ci/worker/blob/master/image/api_selector.go)
+is querying job-board for stack images that match a particular language, it is
+important for us to ensure reasonably consistent image selection by way of
+asserting the `languages` values *do not* overlap between certain stacks (an
+"exclusive" relationship).  Additionally, it is important that we ensure certain
+stack `features` are subsets of others (an "inclusive" relationship).
+
+Part of the CI process for *this* repository makes assertions about such
+exclusive and inclusive relationships by way of the
+[check-job-board-tags](./bin/check-job-board-tags) script.  The exact
+relationships being enforced may be viewed like so:
+
+``` bash
+./bin/check-job-board-tags --list-only
+```
+
+##### exclusive relationships
+
+An exclusive tagset relationship is equivalent to asserting that the set
+intersection is the empty set, e.g.:
+
+``` ruby
+tagset_a = %w(a b c)
+tagset_b = %w(d e f)
+assert (tagset_a & tagset_b).empty?
+```
+
+##### inclusive relationships
+
+An inclusive tagset relationship is equivalent to asserting that all members
+of one tagset are present in another, or that a tagset's intersection with its
+superset is equivalent to itself, e.g.:
+
+``` ruby
+tagset_a = %w(a b c d e f)
+tagset_b = %w(f d b)
+assert (tagset_a & tagset_b).sort == tagset_b.sort
+```
