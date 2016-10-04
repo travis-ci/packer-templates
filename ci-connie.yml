@@ -1,7 +1,7 @@
 ---
 description: Travis CI connie build env template
 variables:
-  docker_repository: quay.io/travisci/ci-connie
+  docker_repository: travisci/ci-connie
   docker_tag: packer-{{ timestamp }}
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: travis-ci-connie-trusty-{{ timestamp }}
@@ -132,7 +132,6 @@ post-processors:
     - bin/docker-push
     environment_vars:
     - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
-    - DOCKER_CREDS=quay
     only:
     - docker
 -
