@@ -40,9 +40,10 @@ template '/etc/cloud/cloud.cfg' do
 end
 
 %w(
-  generate-ssh-host-keys
-  set-hostname-from-template
-  create-users
+  00-create-users
+  10-generate-ssh-host-keys
+  10-set-hostname-from-template
+  50-update-rsyslog-papertrail-config
 ).each do |script|
   cookbook_file "/var/lib/cloud/scripts/per-instance/#{script}" do
     owner 'root'

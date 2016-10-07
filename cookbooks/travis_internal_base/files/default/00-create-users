@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # vim:filetype=sh
 
+set -o errexit
+set -o pipefail
+
 main() {
   : "${GITHUB_USERS_ENV:=/etc/default/github-users}"
   : "${DEFAULT_GROUPS:=sudo}"
