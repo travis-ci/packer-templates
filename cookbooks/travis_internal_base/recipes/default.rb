@@ -25,10 +25,9 @@
 include_recipe 'apt'
 include_recipe 'openssh'
 include_recipe 'papertrail'
-include_recipe 'travis_users'
 include_recipe 'travis_sudo'
 
-package 'whois' do
+package %w(whois zsh) do
   action %i(install upgrade)
 end
 
@@ -43,6 +42,7 @@ end
 %w(
   generate-ssh-host-keys
   set-hostname-from-template
+  create-users
 ).each do |script|
   cookbook_file "/var/lib/cloud/scripts/per-instance/#{script}" do
     owner 'root'

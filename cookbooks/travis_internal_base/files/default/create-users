@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# vim:filetype=sh
+
+main() {
+  : "${GITHUB_USERS_ENV:=/etc/default/github-users}"
+  : "${DEFAULT_GROUPS:=sudo}"
+
+  if [[ -f "${GITHUB_USERS_ENV}" ]]; then
+    # shellcheck source=/dev/null
+    source "${GITHUB_USERS_ENV}"
+  fi
+
+  DEFAULT_GROUPS=(${DEFAULT_GROUPS})
+
+  for pair in ${GITHUB_USERS}; do
+    __create_user "${pair%%:*}" "${DEFAULT_GROUPS[@]}"
+    __stub_zshrc "${pair%%:*}"
+    __add_github_keys "${pair%%:*}" "${pair##*:}"
+  done
+}
+
+__create_user() {
+  local username="${1}"
+  shift
+  local groups=("${@}")
+
+  if getent passwd "${username}"; then
+    return
+  fi
+
+  useradd \
+    -G "${groups[@]}" \
+    -U \
+    -d "/home/${username}" \
+    -m \
+    -s /bin/zsh \
+    "${username}"
+}
+
+__stub_zshrc() {
+  local username="${1}"
+  local zshrc="/home/${username}/.zshrc"
+
+  if [[ -s "${zshrc}" ]]; then
+    return
+  fi
+
+  echo '# this space intentionally left blank' >"${zshrc}"
+  chmod 0640 "${zshrc}"
+  chown "${username}:${username}" "${zshrc}"
+}
+
+__add_github_keys() {
+  local username="${1}"
+  local github_username="${2}"
+  local ssh_dir="/home/${username}/.ssh"
+
+  mkdir -p "${ssh_dir}"
+  chmod 0700 "${ssh_dir}"
+
+  ssh-import-id -o "${ssh_dir}/authorized_keys" "gh:${github_username}"
+  chown -R "${username}:${username}" "${ssh_dir}"
+}
+
+main "$@"

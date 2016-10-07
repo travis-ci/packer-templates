@@ -36,26 +36,4 @@ override['openssh']['server']['m_a_cs'] = %w(
   umac-128@openssh.com
 ).join(',')
 
-override['travis_users'] = {
-  brandon: 'solarce',
-  carmen: 'Lyoness',
-  dan: 'meatballhat',
-  emma: 'emdantrim',
-  henrik: 'henrikhodne',
-  hiro: 'BanzaiMan',
-  igor: 'igorwwwwwwwwwwwwwwwwwwww',
-  josh: 'joshk',
-  konstantin: 'rkh',
-  mathias: 'roidrage',
-  piotr: 'drogus',
-  sven: 'svenfuchs'
-}.map do |username, github_username|
-  {
-    'id' => username.to_s,
-    'shell' => '/bin/zsh',
-    'github_username' => github_username,
-    'groups' => %w(sudo)
-  }
-end
-
 override['travis_sudo']['groups'] = %w(sudo)
