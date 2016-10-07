@@ -40,10 +40,16 @@ template '/etc/cloud/cloud.cfg' do
   only_if { File.directory?('/etc/cloud') }
 end
 
-cookbook_file '/usr/local/bin/generate-ssh-host-keys' do
-  owner 'root'
-  group 'root'
-  mode 0o755
+%w(
+  generate-ssh-host-keys
+  set-hostname-from-template
+).each do |script|
+  cookbook_file "/var/lib/cloud/scripts/per-instance/#{script}" do
+    owner 'root'
+    group 'root'
+    mode 0o755
+    only_if { File.directory?('/var/lib/cloud/scripts/per-instance') }
+  end
 end
 
 template '/etc/pam.d/sshd' do
