@@ -27,3 +27,5 @@ EOF
   service fail2ban stop || true
   service fail2ban start || true
 }
+
+main "$@"
