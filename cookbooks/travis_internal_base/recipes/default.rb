@@ -25,10 +25,9 @@
 include_recipe 'apt'
 include_recipe 'openssh'
 include_recipe 'papertrail'
-include_recipe 'travis_users'
 include_recipe 'travis_sudo'
 
-package 'whois' do
+package %w(whois zsh) do
   action %i(install upgrade)
 end
 
@@ -40,10 +39,18 @@ template '/etc/cloud/cloud.cfg' do
   only_if { File.directory?('/etc/cloud') }
 end
 
-cookbook_file '/usr/local/bin/generate-ssh-host-keys' do
-  owner 'root'
-  group 'root'
-  mode 0o755
+%w(
+  00-create-users
+  10-generate-ssh-host-keys
+  10-set-hostname-from-template
+  50-update-rsyslog-papertrail-config
+).each do |script|
+  cookbook_file "/var/lib/cloud/scripts/per-instance/#{script}" do
+    owner 'root'
+    group 'root'
+    mode 0o755
+    only_if { File.directory?('/var/lib/cloud/scripts/per-instance') }
+  end
 end
 
 template '/etc/pam.d/sshd' do
