@@ -1,5 +1,5 @@
 ---
-description: Standalone Worker + Docker combo image for Travis CI woop!
+description: travis-worker (via docker) image
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"

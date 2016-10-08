@@ -1,5 +1,5 @@
 ---
-description: Travis internal bastion template
+description: Travis internal bastion template woop!
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
