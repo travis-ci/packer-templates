@@ -27,7 +27,7 @@ include_recipe 'openssh'
 include_recipe 'papertrail'
 include_recipe 'travis_sudo'
 
-package %w(whois zsh) do
+package %w(fail2ban iptables-persistent whois zsh) do
   action %i(install upgrade)
 end
 
@@ -42,6 +42,7 @@ end
 %w(
   00-create-users
   10-generate-ssh-host-keys
+  10-configure-fail2ban-ssh
   10-set-hostname-from-template
   50-update-rsyslog-papertrail-config
 ).each do |script|
