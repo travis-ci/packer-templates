@@ -3,15 +3,23 @@ set -o errexit
 
 # http://anonscm.debian.org/cgit/pkg-ssh/openssh.git/tree/debian/openssh-server.postinst?id=c77724ca2355dec905cfa1e18930c79e32db2d4e
 
-# generate SSH2 host keys, but only if they don't exist
-for keytype in rsa ecdsa ed25519; do
-  f="/etc/ssh/ssh_host_${keytype}_key"
-  if [ -f "$f" ]; then
-    echo "SSH2 '$keytype' key ($f) already exists; not regenerating."
-    continue
-  fi
+main() {
+  : "${ETC_SSH:=/etc/ssh}"
 
-  echo "Generating SSH2 '$keytype' key ($f); this may take some time..."
-  ssh-keygen -q -f "$f" -N '' -t "$keytype"
-  ssh-keygen -l -f "${f}.pub"
-done
+  for key in rsa:4096 ecdsa:521 ed25519:256; do
+    local keytype="${key%%:*}"
+    local keybits="${key##*:}"
+    local keyfile="${ETC_SSH}/ssh_host_${keytype}_key"
+
+    if [ -f "${keyfile}" ]; then
+      echo "INFO: '${keytype}' key (${keyfile}) already exists; not regenerating."
+      continue
+    fi
+
+    echo "INFO: generating '${keytype}' key (${keyfile}); this may take some time..."
+    ssh-keygen -q -f "${keyfile}" -N '' -t "${keytype}" -b "${keybits}"
+    ssh-keygen -l -f "${keyfile}.pub"
+  done
+}
+
+main "$@"
