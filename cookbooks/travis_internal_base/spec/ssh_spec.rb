@@ -36,7 +36,6 @@ keyregenerationinterval 3600
 listenaddress 0.0.0.0:22
 listenaddress [::]:22
 logingracetime 120
-loglevel INFO
 macs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
 maxauthtries 6
 maxsessions 10
