@@ -53,6 +53,7 @@ override['nodejs']['default_modules'] = [
 override['travis_python']['pyenv']['pythons'] = []
 
 rubies = %w(
+  2.2.5
   2.3.1
 )
 
