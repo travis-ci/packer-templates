@@ -40,3 +40,7 @@ include_recipe 'travis_perlbrew::multi'
 include_recipe 'postgresql::pgdg'
 include_recipe 'travis_python::pyenv'
 include_recipe 'travis_system_info'
+
+# HACK: force removal of ~/.pearrc until a decision is reached on if they are
+# good or bad
+execute 'rm -f /home/travis/.pearrc'
