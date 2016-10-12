@@ -29,3 +29,7 @@ include_recipe 'rvm'
 include_recipe 'rvm::multi'
 include_recipe 'travis_system_info'
 include_recipe 'sweeper'
+
+# HACK: force removal of ~/.pearrc until a decision is reached on if they are
+# good or bad
+execute 'rm -f /home/travis/.pearrc'
