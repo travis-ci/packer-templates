@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/travis-ci/travis-packer-build.git
+  remote: https://github.com/travis-ci/travis-packer-build
   revision: 4e2665e57dcca74a35d8274678d0296929ea7280
   specs:
     travis-packer-build (0.1.0)
@@ -76,6 +76,7 @@ GEM
       compat_resource
     coderay (1.1.1)
     compat_resource (12.10.7)
+    connection_pool (2.2.0)
     cookbook-omnifetch (0.2.3)
       minitar (~> 0.5.4)
     cucumber-core (1.5.0)
@@ -139,7 +140,8 @@ GEM
     molinillo (0.4.5)
     multi_json (1.12.1)
     multipart-post (2.0.0)
-    net-http-persistent (2.9.4)
+    net-http-persistent (3.0.0)
+      connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -262,4 +264,4 @@ DEPENDENCIES
   travis-packer-build!
 
 BUNDLED WITH
-   1.12.5
+   1.13.5
