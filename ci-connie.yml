@@ -147,4 +147,6 @@ post-processors:
     files:
     - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
-    inline: echo "{{ user `image_name` }}" >tmp/ci-connie-latest-image-name
+    inline:
+    - mkdir -p tmp/ci-connie
+    - echo "{{ user `image_name` }}" >tmp/ci-connie/latest-image-name
