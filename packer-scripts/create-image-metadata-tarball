@@ -7,6 +7,7 @@ main() {
   : "${IMAGE_METADATA_TARBALL:=/var/tmp/image-metadata.tar.bz2}"
   : "${PACKER_ENV_DIR:=/.packer-env}"
   : "${JOB_BOARD_REGISTER_FILE:=/.job-board-register.yml}"
+  : "${NODE_ATTRIBUTES_YML:=/.node-attributes.yml}"
 
   pushd "${TMPDIR:-/var/tmp}"
   local dest
@@ -15,6 +16,7 @@ main() {
 
   rsync -av "${PACKER_ENV_DIR}/" "${dest}/env/"
   cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register.yml"
+  cp -v "${NODE_ATTRIBUTES_YML}" "${dest}/node-attributes.yml"
   tar -cjvf "${IMAGE_METADATA_TARBALL}" "${dest}"
 }
 
