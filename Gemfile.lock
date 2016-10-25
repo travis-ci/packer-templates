@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/travis-ci/travis-packer-build
-  revision: 4e2665e57dcca74a35d8274678d0296929ea7280
+  revision: 1fdd12a7bb84fbc5ad18b02f0cc1dc6f231df61b
+  branch: meat-body-tmpl-once
   specs:
     travis-packer-build (0.1.0)
       faraday (~> 0.9)
