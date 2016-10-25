@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/travis-ci/travis-packer-build
-  revision: 1fdd12a7bb84fbc5ad18b02f0cc1dc6f231df61b
-  branch: meat-body-tmpl-once
+  revision: 0baa000f19e23c10db2ca864f78db94cdb7ad1ca
   specs:
     travis-packer-build (0.1.0)
       faraday (~> 0.9)
@@ -265,4 +264,4 @@ DEPENDENCIES
   travis-packer-build!
 
 BUNDLED WITH
-   1.13.5
+   1.13.6

@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'time'
+
+def main(argv: ARGV)
+  metadata_tarball = File.basename(argv.fetch(0))
+  top = File.expand_path('../../', __FILE__)
+  template_name = metadata_tarball.match(/\b(ci-[a-z]+)\b/)[1]
+  latest_image_name = metadata_tarball.match(/\b(travis-ci-[^\.]+)\b/)[1]
+
+  outfile = File.join(top, 'tmp', template_name, 'latest-image-name')
+  FileUtils.mkdir_p(File.dirname(outfile))
+
+  File.open(outfile, 'w') { |f| f.puts(latest_image_name) }
+  $stdout.puts "time=#{Time.now.utc.iso8601} outfile=#{outfile} " \
+               "template=#{template_name} " \
+               "latest_image_name=#{latest_image_name}"
+
+  0
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__

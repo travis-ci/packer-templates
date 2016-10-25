@@ -6,5 +6,4 @@ gem 'pry'
 gem 'rspec'
 gem 'rubocop'
 gem 'simplecov'
-gem 'travis-packer-build', git: 'https://github.com/travis-ci/travis-packer-build',
-                           branch: 'meat-body-tmpl-once'
+gem 'travis-packer-build', git: 'https://github.com/travis-ci/travis-packer-build'
