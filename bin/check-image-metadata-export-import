@@ -21,6 +21,7 @@ main() {
   mkdir -p "${TMPDIR}/packer-env"
   date -u >"${TMPDIR}/packer-env/NOWISH"
 
+  __write_node_attributes_yml
   __write_job_board_register_yml
   ./packer-scripts/create-image-metadata-tarball
   ./bin/job-board-register "${IMAGE_METADATA_TARBALL}"
@@ -29,6 +30,23 @@ main() {
     "${TMPDIR}/packer-env" \
     "${TMPDIR}/image-metadata" \
     "${TMPDIR}/image-metadata.tar.bz2"
+}
+
+__write_node_attributes_yml() {
+  cat >"${TMPDIR}/.node-attributes.yml" <<EOF
+---
+__timestamp: '2016-07-26 15:29:44 UTC'
+travis_build_environment:
+  otp_releases:
+  - '18.2'
+  - '17.5'
+  - 'R16B03'
+travis_python:
+  pyenv:
+    pythons:
+    - '2.7'
+    - '3.5'
+EOF
 }
 
 __write_job_board_register_yml() {
