@@ -14,6 +14,7 @@ BODY_TMPL=${TOP}/.packer-build-pull-request-${TRAVIS_PULL_REQUEST}-tmpl.yml
 if [[ ! -f "${BODY_TMPL}" ]]; then BODY_TMPL=${TOP}/.packer-build-pull-request-tmpl.yml
 fi
 
+set -o xtrace
 exec travis-packer-build \
   --chef-cookbook-path="${CHEF_COOKBOOK_PATH}" \
   --packer-templates-path="${TOP}/.git::" \
