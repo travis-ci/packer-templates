@@ -29,4 +29,4 @@ config:
       paths:
       - ./packer-templates/tmp/image-metadata-$(cat ./packer-templates/tmp/%{template_name}/latest-image-name).tar.bz2
       target_paths:
-      - travis-ci/packer-templates/%{template_name}/$(git describe --always --dirty --tags)/$BUILDER
+      - travis-ci/packer-templates/%{template_name}/$BUILDER
