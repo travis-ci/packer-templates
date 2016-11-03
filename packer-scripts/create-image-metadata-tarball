@@ -8,11 +8,20 @@ main() {
   : "${PACKER_ENV_DIR:=/.packer-env}"
   : "${JOB_BOARD_REGISTER_FILE:=/.job-board-register.yml}"
   : "${NODE_ATTRIBUTES_YML:=/.node-attributes.yml}"
+  : "${RSPEC_JSON_DIR:=/home/travis}"
 
   pushd "${TMPDIR:-/var/tmp}"
   local dest
-  dest="$(basename "${IMAGE_METADATA_TARBALL}" .tar.bz2)"
+  dest="${IMAGE_METADATA_TARBALL##*/}"
+  dest="${dest%%.tar.bz2}"
   mkdir -p "${dest}/env"
+
+  find "${RSPEC_JSON_DIR}" \
+    -maxdepth 1 \
+    -name '.*_rspec.json' \
+    | while read -r rspec_json; do
+      cp -v "${rspec_json}" "${dest}/${rspec_json##*/.}"
+    done
 
   rsync -av "${PACKER_ENV_DIR}/" "${dest}/env/"
   cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register.yml"
