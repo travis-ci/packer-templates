@@ -40,6 +40,7 @@ template '/etc/cloud/cloud.cfg' do
 end
 
 %w(
+  00-disable-travis-sudo
   00-create-users
   10-generate-ssh-host-keys
   10-configure-fail2ban-ssh
