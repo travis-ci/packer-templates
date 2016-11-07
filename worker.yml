@@ -83,4 +83,5 @@ provisioners:
   environment_vars:
   - SPEC_SUITES=travis_internal_base,travis_worker_wrapper
   - TRAVIS_OBFUSCATE_PASSWORD=1
+  - PURGE_PACKAGE_DEFAULTS=chef,chefdk
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
