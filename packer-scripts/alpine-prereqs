@@ -1,7 +1,0 @@
-#!/bin/sh
-
-set -x
-set -e
-
-apk add --no-cache ca-certificates
-apk add --no-cache --virtual=.build-deps bash curl
