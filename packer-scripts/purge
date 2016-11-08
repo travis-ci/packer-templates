@@ -6,6 +6,7 @@ main() {
   set -o xtrace
   shopt -s nullglob
 
+  : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chefdk}"
   export DEBIAN_FRONTEND='noninteractive'
 
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
@@ -15,10 +16,9 @@ main() {
     __run_retry apt-get -y upgrade
   fi
 
-  __run_retry __purge_packages linux-headers
-  __run_retry __purge_packages linux-source
-  __run_retry __purge_packages chef
-  __run_retry __purge_packages chefdk
+  for pkg in ${PURGE_PACKAGE_DEFAULTS//,/ }; do
+    __run_retry __purge_packages "${pkg}"
+  done
 
   if [[ "${CLEAN_DEV_PACKAGES}" ]]; then
     __run_retry __purge_packages '-dev$'
