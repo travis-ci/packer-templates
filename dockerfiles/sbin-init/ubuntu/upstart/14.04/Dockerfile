@@ -8,11 +8,6 @@ RUN apt-get update && apt-get install -y ssh
 
 ADD init-fake.conf /etc/init/fake-container-events.conf
 
-# re-add a binary version of /sbin/initctl
-ADD initctl /sbin/initctl
-
-RUN chmod 0755 /sbin/initctl
-
 # undo some leet hax of the base image
 RUN rm /usr/sbin/policy-rc.d; \
 	rm /sbin/initctl; dpkg-divert --rename --remove /sbin/initctl
