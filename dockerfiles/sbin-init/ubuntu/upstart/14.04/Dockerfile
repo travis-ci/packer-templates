@@ -51,11 +51,6 @@ RUN apt-get \
   -yq \
   dist-upgrade
 
-# set a cheap, simple password for great convenience
-RUN echo 'root:docker.io' | chpasswd
-
-# we can has SSH
 EXPOSE 22
 
-# prepare for takeoff
 CMD ["/sbin/init"]
