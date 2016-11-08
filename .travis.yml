@@ -57,8 +57,8 @@ after_success:
     git fetch --unshallow ;
     bundle exec make packer-build-trigger ;
     make docker-build-upstart-14.04 ;
-    docker push travisci/ubuntu-upstart:14.04 ;
-    docker push travisci/ubuntu-upstart:trusty ;
+    DOCKER_DEST="travisci/ubuntu-upstart:14.04" bin/docker-push ;
+    DOCKER_DEST="travisci/ubuntu-upstart:trusty" bin/docker-push ;
   else
     echo 'no packer-build-trigger for you' ;
   fi
