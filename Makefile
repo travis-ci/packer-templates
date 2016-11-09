@@ -89,14 +89,14 @@ docker-build-upstart-14.04:
 	$(DOCKER) build \
 		-t travisci/ubuntu-upstart:14.04 \
 		-t travisci/ubuntu-upstart:trusty \
-		dockerfiles/sbin-init/ubuntu/upstart/14.04
+		dockerfiles/ubuntu-upstart/14.04
 
 .PHONY: docker-build-upstart-12.04
 docker-build-upstart-12.04:
 	$(DOCKER) build \
 		-t travisci/ubuntu-upstart:12.04 \
 		-t travisci/ubuntu-upstart:precise \
-		dockerfiles/sbin-init/ubuntu/upstart/12.04
+		dockerfiles/ubuntu-upstart/12.04
 
 tmp/packer.zip:
 	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/0.10.1/packer_0.10.1_$(UNAME)_amd64.zip'
