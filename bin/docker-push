@@ -10,9 +10,11 @@ main() {
 
   : "${DOCKER_LOGIN_EMAIL:=.}"
 
-  for f in ${envdir}/*; do
-    eval "export $(basename "${f}")='$(cat "${f}")'"
-  done
+  if [[ -f "${envdir}/DOCKER_LOGIN_USERNAME" ]]; then
+    for f in ${envdir}/*; do
+      eval "export $(basename "${f}")='$(cat "${f}")'"
+    done
+  fi
 
   if [[ ${DOCKER_CREDS} ]]; then
     local prefix
