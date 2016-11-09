@@ -19,6 +19,7 @@ UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 BUILDER ?= googlecompute
 
 CURL ?= curl
+DOCKER ?= docker
 GIT ?= git
 JQ ?= jq
 PACKER ?= packer
@@ -82,6 +83,20 @@ install-bats: tmp/bats/.git
 .PHONY: update-gce-images
 update-gce-images:
 	bin/gce-image-update $$(git grep -lE 'source_image: ubuntu' *.yml)
+
+.PHONY: docker-build-upstart-14.04
+docker-build-upstart-14.04:
+	$(DOCKER) build \
+		-t travisci/ubuntu-upstart:14.04 \
+		-t travisci/ubuntu-upstart:trusty \
+		dockerfiles/sbin-init/ubuntu/upstart/14.04
+
+.PHONY: docker-build-upstart-12.04
+docker-build-upstart-12.04:
+	$(DOCKER) build \
+		-t travisci/ubuntu-upstart:12.04 \
+		-t travisci/ubuntu-upstart:precise \
+		dockerfiles/sbin-init/ubuntu/upstart/12.04
 
 tmp/packer.zip:
 	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/0.10.1/packer_0.10.1_$(UNAME)_amd64.zip'
