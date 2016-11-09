@@ -1,5 +1,5 @@
 ---
-description: Travis CI python build env template, wow!
+description: Travis CI python build env template
 variables:
   docker_repository: travisci/ci-python
   docker_tag: "packer-{{ timestamp }}"
