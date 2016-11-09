@@ -40,11 +40,6 @@ main() {
   cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 
   for lang in android erlang go haskell jvm nodejs perl php python ruby; do
-    # HACK: skip python comparisons while working on MySQL stuff
-    if [[ $lang == python ]]; then
-      continue
-    fi
-    # HACK: skip python comparisons while working on MySQL stuff
     if [[ $lang != ruby ]]; then
       # Ruby is the "default" image on precise, but some of the languages covered
       # by the ruby precise image are covered by the connie image on trusty, so we
