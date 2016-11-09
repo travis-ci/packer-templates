@@ -90,7 +90,6 @@ provisioners:
   environment_vars:
   - DISPLAY=:99.0
   - SPEC_SUITES=travis_packer_templates
-  - SPEC_FAILURE_SLEEP_FOREVER=1
   - TRAVIS_COOKBOOKS_EDGE_BRANCH={{ user `travis_cookbooks_edge_branch` }}
   - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
