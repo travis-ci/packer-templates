@@ -91,6 +91,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   go-toolchain
   jdk
   memcached
+  mysql
   nodejs_interpreter
   perl_interpreter
   perlbrew
