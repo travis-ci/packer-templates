@@ -19,7 +19,7 @@ module Support
     def pg_versions
       ::Support.attributes
                .fetch('postgresql', {})
-               .fetch('alternate_versions', %w(9.2 9.3 9.4 9.5))
+               .fetch('alternate_versions', %w(9.2 9.3 9.4 9.5 9.6))
     end
   end
 end
