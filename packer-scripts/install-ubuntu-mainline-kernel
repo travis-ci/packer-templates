@@ -14,8 +14,8 @@ main() {
 
   local kv="${KERNEL_VERSION}"
   local url_prefix='http://kernel.ubuntu.com/~kernel-ppa/mainline'
-  local re_prefix='[0-9a-f]{64}  linux-'
-  local image_sfx="-[0-9]{6}-generic_${kv}-[0-9]{6}\\.[0-9]{12}_amd64\\.deb\$"
+  local re_prefix='[0-9a-f]{64}  linux'
+  local image_suffix="[0-9]{6}-generic_${kv}-[0-9]{6}\\.[0-9]{12}_amd64\\.deb\$"
   local image_path headers_path
 
   export DEBIAN_FRONTEND=noninteractive
@@ -28,12 +28,12 @@ main() {
 
   image_path="$(
     awk \
-      "/${re_prefix}image-${kv}${image_sfx}/ { print \$NF }" \
+      "/${re_prefix}-image-${kv}-${image_suffix}/ { print \$NF }" \
       "${TMPDIR}/CHECKSUMS"
   )"
   headers_path="$(
     awk \
-      "/${re_prefix}headers-${kv}.+_all\\.deb\$/ { print \$NF }" \
+      "/${re_prefix}-headers-${kv}.+_all\\.deb\$/ { print \$NF }" \
       "${TMPDIR}/CHECKSUMS"
   )"
 
