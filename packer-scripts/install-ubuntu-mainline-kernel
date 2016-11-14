@@ -2,7 +2,9 @@
 set -o errexit
 
 main() {
-  set -o xtrace
+  if [[ "${DEBUG}" ]]; then
+    set -o xtrace
+  fi
 
   : "${APT_GET:=apt-get}"
   : "${CURL:=curl}"
@@ -10,9 +12,10 @@ main() {
   : "${KERNEL_VERSION:=4.8.7}"
   : "${TMPDIR:=/var/tmp}"
 
+  local kv="${KERNEL_VERSION}"
   local url_prefix='http://kernel.ubuntu.com/~kernel-ppa/mainline'
   local re_prefix='[0-9a-f]{64}  linux-'
-  local re_suffix='.+generic.+_amd64\.deb$'
+  local image_sfx="-[0-9]{6}-generic_${kv}-[0-9]{6}\\.[0-9]{12}_amd64\\.deb\$"
   local image_path headers_path
 
   export DEBIAN_FRONTEND=noninteractive
@@ -21,25 +24,37 @@ main() {
   sudo "${APT_GET}" install -yq curl
 
   "${CURL}" -sSL -o "${TMPDIR}/CHECKSUMS" \
-    "${url_prefix}/v${KERNEL_VERSION}/CHECKSUMS"
+    "${url_prefix}/v${kv}/CHECKSUMS"
 
   image_path="$(
-    awk "/${re_prefix}image-${KERNEL_VERSION}${re_suffix}/ { print \$NF }" \
+    awk \
+      "/${re_prefix}image-${kv}${image_sfx}/ { print \$NF }" \
       "${TMPDIR}/CHECKSUMS"
   )"
   headers_path="$(
-    awk "/${re_prefix}headers-${KERNEL_VERSION}${re_suffix}/ { print \$NF }" \
+    awk \
+      "/${re_prefix}headers-${kv}.+_all\\.deb\$/ { print \$NF }" \
       "${TMPDIR}/CHECKSUMS"
   )"
 
+  [[ "${image_path}" ]] || {
+    echo "Failed to find matching image deb for kernel ${kv}"
+    exit 1
+  }
+
+  [[ "${headers_path}" ]] || {
+    echo "Failed to find matching headers deb for kernel ${kv}"
+    exit 1
+  }
+
   "${CURL}" -sSL -o "${TMPDIR}/linux-image.deb" \
-    "${url_prefix}/v${KERNEL_VERSION}/${image_path}"
+    "${url_prefix}/v${kv}/${image_path}"
   "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
-    "${url_prefix}/v${KERNEL_VERSION}/${headers_path}"
+    "${url_prefix}/v${kv}/${headers_path}"
 
   sudo "${DPKG}" -i \
-    "${TMPDIR}/linux-image.deb" \
-    "${TMPDIR}/linux-headers.deb"
+    "${TMPDIR}/linux-headers.deb" \
+    "${TMPDIR}/linux-image.deb"
 }
 
 main "$@"
