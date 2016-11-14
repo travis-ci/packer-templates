@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  set -o xtrace
+
+  : "${APT_GET:=apt-get}"
+  : "${CURL:=curl}"
+  : "${DPKG:=dpkg}"
+  : "${KERNEL_VERSION:=4.8.7}"
+  : "${TMPDIR:=/var/tmp}"
+
+  local url_prefix='http://kernel.ubuntu.com/~kernel-ppa/mainline'
+  local re_prefix='[0-9a-f]{64}  linux-'
+  local re_suffix='.+generic.+_amd64\.deb$'
+  local image_path headers_path
+
+  export DEBIAN_FRONTEND=noninteractive
+
+  sudo "${APT_GET}" update -yq
+  sudo "${APT_GET}" install -yq curl
+
+  "${CURL}" -sSL -o "${TMPDIR}/CHECKSUMS" \
+    "${url_prefix}/v${KERNEL_VERSION}/CHECKSUMS"
+
+  image_path="$(
+    awk "/${re_prefix}image-${KERNEL_VERSION}${re_suffix}/ { print \$NF }" \
+      "${TMPDIR}/CHECKSUMS"
+  )"
+  headers_path="$(
+    awk "/${re_prefix}headers-${KERNEL_VERSION}${re_suffix}/ { print \$NF }" \
+      "${TMPDIR}/CHECKSUMS"
+  )"
+
+  "${CURL}" -sSL -o "${TMPDIR}/linux-image.deb" \
+    "${url_prefix}/v${KERNEL_VERSION}/${image_path}"
+  "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
+    "${url_prefix}/v${KERNEL_VERSION}/${headers_path}"
+
+  sudo "${DPKG}" -i \
+    "${TMPDIR}/linux-image.deb" \
+    "${TMPDIR}/linux-headers.deb"
+}
+
+main "$@"
