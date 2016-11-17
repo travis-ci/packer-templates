@@ -68,7 +68,6 @@ lvm2
 md5deep
 mercurial
 mingw32
-mysql-client
 netcat-openbsd
 openssl
 perl

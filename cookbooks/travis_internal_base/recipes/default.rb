@@ -41,8 +41,9 @@ end
 
 %w(
   00-create-users
-  10-generate-ssh-host-keys
+  00-disable-travis-sudo
   10-configure-fail2ban-ssh
+  10-generate-ssh-host-keys
   10-set-hostname-from-template
   50-update-rsyslog-papertrail-config
 ).each do |script|

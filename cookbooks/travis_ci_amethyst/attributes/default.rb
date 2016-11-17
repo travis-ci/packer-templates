@@ -38,6 +38,14 @@ gimme_versions = %w(
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
+override['java']['jdk_version'] = '8'
+override['java']['install_flavor'] = 'oracle'
+override['java']['oracle']['accept_oracle_download_terms'] = true
+override['java']['oracle']['jce']['enabled'] = true
+
+override['travis_java']['default_version'] = 'oraclejdk8'
+override['travis_java']['alternate_versions'] = []
+
 node_versions = %w(
   4.4.7
 )
@@ -81,7 +89,9 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   docker
   docker-compose
   go-toolchain
+  jdk
   memcached
+  mysql
   nodejs_interpreter
   perl_interpreter
   perlbrew

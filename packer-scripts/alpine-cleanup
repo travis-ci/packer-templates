@@ -1,6 +1,0 @@
-#!/bin/sh
-
-set -x
-set -e
-
-apk del .build-deps
