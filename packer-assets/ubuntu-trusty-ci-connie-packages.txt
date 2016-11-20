@@ -2,6 +2,7 @@ apt-transport-https
 autoconf
 automake
 bash
+bc
 binutils-doc
 bison
 bsdmainutils
