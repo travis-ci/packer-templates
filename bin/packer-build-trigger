@@ -14,7 +14,16 @@ BODY_TMPL=${TOP}/.packer-build-pull-request-${TRAVIS_PULL_REQUEST}-tmpl.yml
 if [[ ! -f "${BODY_TMPL}" ]]; then BODY_TMPL=${TOP}/.packer-build-pull-request-tmpl.yml
 fi
 
+if [[ "${TRAVIS_COOKBOOKS_TEST_BRANCH}" ]]; then
+  BODY_TMPL_TMP="$(mktemp "${TMPDIR:-/var/tmp}/packer-build-trigger.yml.XXXXXXX")"
+  trap "rm -f ${BODY_TMPL_TMP}" EXIT INT TERM QUIT
+  "${TOP}/bin/body-tmpl-with-cookbooks-branch" \
+    "${BODY_TMPL}" "${TRAVIS_COOKBOOKS_TEST_BRANCH}" >"${BODY_TMPL_TMP}"
+  BODY_TMPL="${BODY_TMPL_TMP}"
+fi
+
 set -o xtrace
+export DEBUG=1
 exec travis-packer-build \
   --chef-cookbook-path="${CHEF_COOKBOOK_PATH}" \
   --packer-templates-path="${TOP}/.git::" \

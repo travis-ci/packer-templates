@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+require 'yaml'
+
+def main(argv: ARGV)
+  tmpl = argv.fetch(0)
+  branch = argv.fetch(1)
+
+  loaded_tmpl = YAML.load_file(tmpl)
+  loaded_tmpl['config']['before_install'] += [
+    "export TRAVIS_COOKBOOKS_BRANCH=#{branch}"
+  ]
+
+  $stdout.puts YAML.dump(loaded_tmpl)
+  0
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__

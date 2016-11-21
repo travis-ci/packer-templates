@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o pipefail
+
+main() {
+  if [[ $# -lt 2 ]]; then
+    __usage
+    exit 1
+  fi
+
+  local branch="${1}"
+  shift
+  local trigger_args=()
+
+  for tmpl in "${@}"; do
+    trigger_args=("${trigger_args[@]}" -I "${tmpl}")
+  done
+
+  export TRAVIS_COOKBOOKS_TEST_BRANCH="${branch}"
+  exec "$(git rev-parse --show-toplevel)/bin/packer-build-trigger" \
+         "${trigger_args[@]}"
+}
+
+__usage() {
+  echo "Usage: $(basename "${0}") <branch> <template> [template...]" >&2
+}
+
+main "$@"
