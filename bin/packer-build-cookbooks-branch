@@ -18,7 +18,7 @@ main() {
 
   export TRAVIS_COOKBOOKS_TEST_BRANCH="${branch}"
   exec "$(git rev-parse --show-toplevel)/bin/packer-build-trigger" \
-         "${trigger_args[@]}"
+    "${trigger_args[@]}"
 }
 
 __usage() {
