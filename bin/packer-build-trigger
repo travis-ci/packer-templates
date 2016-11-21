@@ -23,7 +23,6 @@ if [[ "${TRAVIS_COOKBOOKS_TEST_BRANCH}" ]]; then
 fi
 
 set -o xtrace
-export DEBUG=1
 exec travis-packer-build \
   --chef-cookbook-path="${CHEF_COOKBOOK_PATH}" \
   --packer-templates-path="${TOP}/.git::" \
