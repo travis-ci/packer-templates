@@ -1,5 +1,5 @@
 ---
-description: Travis CI ruby build env template
+description: Travis CI ruby build env template woop!
 variables:
   docker_repository: travisci/ci-ruby
   docker_tag: packer-{{ timestamp }}
