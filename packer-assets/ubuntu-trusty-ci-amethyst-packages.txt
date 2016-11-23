@@ -22,6 +22,7 @@ gettext
 git
 gnupg2
 gzip
+haveged
 imagemagick
 iptables
 language-pack-en
