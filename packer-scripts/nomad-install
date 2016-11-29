@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -ex
+
+main() {
+  apt-get -y update
+  apt-get -y install curl unzip
+
+  tmp=$(mktemp -d)
+  cd "$tmp"
+
+  curl -sLo nomad.zip "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip"
+
+  cat >nomad.sha256sums <<EOF
+${NOMAD_SHA}  nomad.zip
+EOF
+
+  if ! sha256sum -c nomad.sha256sums; then
+    echo "SHA256sum check failed!"
+    exit 1
+  fi
+
+  unzip nomad.zip
+  mv nomad /usr/local/bin/nomad
+
+  adduser --system --no-create-home --group --disabled-password --disabled-login nomad
+
+  cat >/etc/systemd/system/nomad.service <<EOF
+[Unit]
+Description=nomad agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=-/etc/default/nomad
+User=nomad
+Group=nomad
+Restart=on-failure
+ExecStart=/usr/local/bin/nomad agent $OPTIONS -config=/etc/nomad.d
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  mkdir /etc/nomad.d
+
+  cat >/etc/nomad.d/leave_on_terminate.hcl <<EOF
+# Gracefully leave when SIGTERM is received, which is the termination signal
+# sent by systemd, as specified in the nomad.service unit file
+leave_on_terminate = true
+EOF
+}
+
+main

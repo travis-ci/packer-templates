@@ -1,31 +1,36 @@
 ---
-description: Vault and Consul Server template
+description: HashiStack server running Consul, Nomad and Vault servers
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  consul_version: 0.6.4
-  consul_sha: abdf0e1856292468e2c9971420d73b805e93888e006c76324ae39416edcf0627
-  vault_version: 0.6.1
-  vault_sha: 4f248214e4e71da68a166de60cc0c1485b194f4a2197da641187b745c8d5b8be
+  consul_version: 0.7.1
+  consul_sha: 5dbfc555352bded8a39c7a8bf28b5d7cf47dec493bc0496e21603c84dfe41b4b
+  vault_version: 0.6.2
+  vault_sha: 91432c812b1264306f8d1ecf7dd237c3d7a8b2b6aebf4f887e487c4e7f69338c
+  nomad_version: 0.5.0
+  nomad_sha: 7f7b9af2b1ff3e2c6b837b6e95968415237bb304e1e82802bc42abf6f8645a43
 builders:
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1604-xenial-v20161020
   zone: us-central1-b
-  image_name: vault-consul-{{ timestamp }}
+  image_name: hashistack-server-{{ timestamp }}
   machine_type: g1-small
   ssh_username: ubuntu
   tags:
-  - vault
+  - hashistack-server
 provisioners:
 - type: shell
   scripts:
   - packer-scripts/consul-install
   - packer-scripts/vault-install
+  - packer-scripts/nomad-install
   environment_vars:
   - CONSUL_VERSION={{ user `consul_version` }}
   - CONSUL_SHA={{ user `consul_sha` }}
   - VAULT_VERSION={{ user `vault_version` }}
   - VAULT_SHA={{ user `vault_sha` }}
+  - NOMAD_VERSION={{ user `nomad_version` }}
+  - NOMAD_SHA={{ user `nomad_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
