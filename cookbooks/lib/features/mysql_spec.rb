@@ -17,7 +17,7 @@ describe 'mysql installation' do
     it { should be_readable }
     it { should be_readable }
     it { should be_owned_by 'travis' }
-    it { should be_grouped_int 'travis' }
+    it { should be_grouped_into 'travis' }
   end
 
   describe 'mysql commands' do
