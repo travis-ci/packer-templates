@@ -30,7 +30,7 @@ describe 'mysql installation' do
       root
       travis
     ).each do |mysql_user|
-      describe command(%Q(mysql -u #{mysql_user} "SHOW VARIABLES LIKE '%version%'")) do
+      describe command(%(mysql -u #{mysql_user} "SHOW VARIABLES LIKE '%version%'")) do
         it "has passwordless access via #{mysql_user} user" do
           subject.exit_status.should eq 0
         end
