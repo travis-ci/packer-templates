@@ -1,10 +1,10 @@
 describe 'mysql installation' do
   before :all do
-    sh('sudo service mysql-5.6 start || sudo service mysql start')
+    sh('sudo service mysql start')
   end
 
   after :all do
-    sh('sudo service mysql-5.6 stop || sudo service mysql stop')
+    sh('sudo service mysql stop')
   end
 
   describe command('mysql --version') do
@@ -24,6 +24,17 @@ describe 'mysql installation' do
     before do
       sh("mysql < #{Support.libdir}/features/files/mysql-reset.sql")
       sh("mysql travis < #{Support.libdir}/features/files/mysql-schema.sql")
+    end
+
+    %w(
+      root
+      travis
+    ).each do |mysql_user|
+      describe command(%Q(mysql -u #{mysql_user} "SHOW VARIABLES LIKE '%version%'")) do
+        it "has passwordless access via #{mysql_user} user" do
+          subject.exit_status.should eq 0
+        end
+      end
     end
 
     describe command('echo "SHOW DATABASES" | mysql') do
