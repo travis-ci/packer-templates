@@ -12,7 +12,7 @@ builders:
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20161020
+  source_image: ubuntu-1404-trusty-v20161130
   zone: us-central1-b
   image_name: nat-{{ timestamp }}
   machine_type: g1-small
