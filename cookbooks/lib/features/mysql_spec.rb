@@ -26,7 +26,7 @@ describe 'mysql installation' do
       root
       travis
     ).each do |mysql_user|
-      describe command(%(mysql -u #{mysql_user} 'select "hai"')) do
+      describe command(%(mysql -u #{mysql_user} -e 'select "hai"')) do
         its(:exit_status) { should eq 0 }
         its(:stdout) { should match(/hai/) }
         its(:stderr) { should be_empty }
