@@ -8,7 +8,7 @@ describe 'mysql installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe file('/home/travis/.my.cnf') do
+  describe file('/home/travis/.my.cnf'), precise: false do
     it { should exist }
     it { should be_readable }
     it { should be_readable }
