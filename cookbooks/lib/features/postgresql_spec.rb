@@ -1,6 +1,11 @@
 include Support::Postgresql
 
 describe 'postgresql installation' do
+  describe pgcommand('psql --version') do
+    its(:stdout) { should match(/^psql.+9\.[2-6]+\.[0-9]+/) }
+    its(:exit_status) { should eq 0 }
+  end
+
   describe pgcommand('pg_config --bindir') do
     its(:stdout) { should match(%r{/usr/lib/postgresql/9\.[2-6]/bin}) }
     its(:exit_status) { should eq 0 }
