@@ -45,7 +45,6 @@ libltdl-dev
 libmagickwand-dev
 libmcrypt-dev
 libmhash-dev
-libmysqlclient-dev
 libncurses5-dev
 libncursesw5-dev
 libossp-uuid-dev
@@ -80,7 +79,6 @@ qt4-qmake
 ragel
 re2c
 rsync
-ruby-mysql2
 ruby2.0
 software-properties-common
 sqlite3
