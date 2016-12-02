@@ -39,6 +39,7 @@ features:
 - firefox
 - go-toolchain
 - google-chrome
+- jdk
 - memcached
 - mongodb
 - phantomjs
