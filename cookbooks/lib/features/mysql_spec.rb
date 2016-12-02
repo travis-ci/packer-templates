@@ -28,6 +28,8 @@ describe 'mysql installation' do
     ).each do |mysql_user|
       describe command(%(mysql -u #{mysql_user} 'select "hai"')) do
         its(:exit_status) { should eq 0 }
+        its(:stdout) { should match(/hai/) }
+        its(:stderr) { should be_empty }
       end
     end
 
