@@ -1,4 +1,5 @@
-describe 'jdk installation' do
+# FIXME: remove `dev` tag ASAF
+describe 'jdk installation', dev: true do
   describe command('java -version') do
     its(:exit_status) { should eq 0 }
   end
