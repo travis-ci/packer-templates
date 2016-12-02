@@ -1,10 +1,6 @@
 describe 'mysql installation' do
   before :all do
-    sh('sudo service mysql start')
-  end
-
-  after :all do
-    sh('sudo service mysql stop')
+    sh('sudo service mysql start || true')
   end
 
   describe command('mysql --version') do
@@ -30,10 +26,8 @@ describe 'mysql installation' do
       root
       travis
     ).each do |mysql_user|
-      describe command(%(mysql -u #{mysql_user} "SHOW VARIABLES LIKE '%version%'")) do
-        it "has passwordless access via #{mysql_user} user" do
-          subject.exit_status.should eq 0
-        end
+      describe command(%(mysql -u #{mysql_user} 'select "hai"')) do
+        its(:exit_status) { should eq 0 }
       end
     end
 
