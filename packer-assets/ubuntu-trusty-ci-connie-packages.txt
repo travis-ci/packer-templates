@@ -45,6 +45,7 @@ libltdl-dev
 libmagickwand-dev
 libmcrypt-dev
 libmhash-dev
+libmysqlclient-dev
 libncurses5-dev
 libncursesw5-dev
 libossp-uuid-dev
@@ -69,6 +70,7 @@ lvm2
 md5deep
 mercurial
 mingw32
+mysql-client
 netcat-openbsd
 openssl
 perl
