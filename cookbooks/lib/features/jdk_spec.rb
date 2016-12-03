@@ -1,7 +1,7 @@
-# FIXME: remove `dev` tag ASAF
-describe 'jdk installation', dev: true do
+describe 'jdk installation' do
   describe command('java -version') do
     its(:exit_status) { should eq 0 }
+    its(:stderr) { should match(/^java/) }
   end
 
   describe file('/opt/jdk_switcher/jdk_switcher.sh'), precise: false do
@@ -24,10 +24,14 @@ describe 'jdk installation', dev: true do
 
   describe 'java command' do
     before do
-      Dir.chdir("#{Support.libdir}/languages/files") { sh('javac Hello.java') }
+      cp(
+        Support.libdir.join('languages/files/Hello.java'),
+        Support.tmpdir.join('Hello.java')
+      )
+      Dir.chdir(Support.tmpdir) { sh('javac Hello.java') }
     end
 
-    describe command("cd #{Support.libdir}/languages/files && java Hello") do
+    describe command("cd #{Support.tmpdir} && java Hello") do
       its(:stdout) { should match 'Hello World!' }
     end
   end

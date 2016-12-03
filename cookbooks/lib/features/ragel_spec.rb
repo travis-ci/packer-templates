@@ -11,13 +11,12 @@ describe 'ragel installation' do
   describe 'ragel commands' do
     describe 'add a ragel file and execute a ragel command' do
       before do
-        File.open("#{Support.libdir}/features/files/hello_world.rl", 'w') do |f|
-          f.puts 'puts "Hello World"'
-        end
-        sh("ragel -R #{Support.libdir}/features/files/hello_world.rl")
+        hw_rl = Support.tmpdir.join('hello_world.rl')
+        hw_rl.write('puts "Hello World"')
+        sh("ragel -R #{hw_rl}")
       end
 
-      describe file("#{Support.libdir}/features/files/hello_world.rb") do
+      describe file(Support.tmpdir.join('hello_world.rb').to_s) do
         its(:content) { should match(/^puts "Hello World"/) }
       end
     end

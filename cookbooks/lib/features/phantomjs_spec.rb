@@ -5,7 +5,9 @@ describe 'phantomjs installation' do
   end
 
   describe 'phantomjs commands' do
-    describe command("phantomjs #{Support.libdir}/features/files/phantomjs_test_google.js") do
+    describe command(
+      "phantomjs #{Support.libdir}/features/files/phantomjs_test_google.js"
+    ) do
       its(:stdout) { should match 'Status: success' }
     end
   end

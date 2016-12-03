@@ -7,12 +7,12 @@ describe 'apt installation' do
     it { should be_directory }
   end
 
-  describe command('
-    shopt -s nullglob ;
-    for f in /var/lib/apt/lists/*Packages* ; do
-      echo $f ;
+  describe command(%(
+    shopt -s nullglob;
+    for f in /var/lib/apt/lists/*Packages*; do
+      echo $f;
     done
-  ') do
+  )) do
     its(:stdout) { should_not be_empty }
   end
 

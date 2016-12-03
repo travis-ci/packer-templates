@@ -6,18 +6,17 @@ describe 'mercurial installation' do
 
   describe 'mecurial commands are executed' do
     before :all do
-      sh(%w(
-        rm -rf hg-test-project ;
-        hg init hg-test-project ;
-        touch hg-test-project/test-file.txt
-      ).join(' '))
+      hg_project = Support.tmpdir.join('hg-project')
+      hg_project.rmtree
+      sh("hg init #{hg_project}")
+      hg_project.join('test-file.txt').write("violin\n")
     end
 
     describe command(
-      %w(
-        cd hg-test-project ;
-        hg status ;
-        hg add . ;
+      %W(
+        cd #{Support.tmpdir.join('hg-project')};
+        hg status;
+        hg add .;
         hg status
       ).join(' ')
     ) do
