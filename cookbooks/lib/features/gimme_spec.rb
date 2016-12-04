@@ -3,8 +3,7 @@ describe 'gimme installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)")) do
+  describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
     its(:stdout) { should match 'go version go1.6.3' }
-    its(:stderr) { should be_empty }
   end
 end
