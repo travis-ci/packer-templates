@@ -59,14 +59,15 @@ describe 'unarchivers installation' do
 
   describe command(
     %(
-      zip #{test_txt}.zip #{test_txt};
-      rm #{test_txt};
+      cd #{Support.tmpdir};
+      zip test.zip test.txt;
+      rm test.txt;
       ls #{Support.tmpdir};
-      unzip -d #{Support.tmpdir} #{test_txt}.zip;
-      cat #{test_txt}
+      unzip test.zip;
+      cat test.txt
     )
   ) do
-    its(:stdout) { should include('test.txt.zip') }
+    its(:stdout) { should include('test.zip') }
     its(:stdout) { should match 'Konstantin broke all the things.' }
   end
 end
