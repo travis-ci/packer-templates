@@ -5,14 +5,12 @@ describe 'firefox installation' do
 
   describe 'firefox commands' do
     before do
-      FileUtils.mkdir_p(
-        File.join(Support.tmpdir, '.mozilla/firefox')
-      )
+      Support.tmpdir.join('.mozilla/firefox').mkpath
       sh("HOME=#{Support.tmpdir} DISPLAY=:99.0 firefox -CreateProfile test")
     end
 
     describe file(
-      File.join(Support.tmpdir, '.mozilla/firefox/profiles.ini')
+      Support.tmpdir.join('.mozilla/firefox/profiles.ini')
     ) do
       its(:content) { should match(/^Name=test/) }
     end

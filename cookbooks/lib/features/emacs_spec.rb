@@ -1,3 +1,7 @@
+def test_txt
+  Support.tmpdir.join('test.txt')
+end
+
 describe 'emacs installation' do
   describe command('emacs --version') do
     its(:exit_status) { should eq 0 }
@@ -5,17 +9,14 @@ describe 'emacs installation' do
 
   describe 'editing' do
     before do
-      FileUtils.cp(
-        File.join(Support.libdir, 'features/files/flower.txt'),
-        File.join(Support.tmpdir, 'flower.txt')
-      )
+      test_txt.write("daisy\n")
       sh(
-        "emacs -batch #{Support.tmpdir}/flower.txt " \
+        "emacs -batch #{test_txt} " \
         "--eval '(insert \"Butterblume\")' -f save-buffer"
       )
     end
 
-    describe file("#{Support.tmpdir}/flower.txt") do
+    describe file(test_txt) do
       its(:content) { should match 'Butterblume' }
     end
   end

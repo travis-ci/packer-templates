@@ -1,5 +1,5 @@
-def flower_txt
-  Support.tmpdir.join('flower.txt')
+def test_txt
+  Support.tmpdir.join('test.txt')
 end
 
 describe 'vim installation' do
@@ -10,11 +10,11 @@ describe 'vim installation' do
   end
 
   before do
-    flower_txt.write("blume\n")
-    sh("vim #{flower_txt} -c s/blume/flower -c wq")
+    test_txt.write("their\n")
+    sh("vim #{test_txt} -c s/their/there -c wq")
   end
 
-  describe file(flower_txt) do
-    its(:content) { should match(/flower/) }
+  describe file(test_txt) do
+    its(:content) { should match(/there/) }
   end
 end
