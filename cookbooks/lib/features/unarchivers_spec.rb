@@ -1,3 +1,7 @@
+def test_txt
+  Support.tmpdir.join('test.txt')
+end
+
 describe 'unarchivers installation' do
   describe command('gzip --version') do
     its(:stdout) { should match(/^gzip \d/) }
@@ -24,16 +28,16 @@ describe 'unarchivers installation' do
   end
 
   before :each do
-    Support.tmpdir.join('test.txt').write("Konstantin broke all the things\n")
+    test_txt.write("Konstantin broke all the things.\n")
   end
 
   describe command(
     %(
-      gzip #{Support.tmpdir}/test.txt;
-      rm #{Support.tmpdir}/test.txt;
+      gzip #{test_txt};
+      rm #{test_txt};
       ls #{Support.tmpdir};
-      gzip -d #{Support.tmpdir}/test.txt.gz;
-      cat #{Support.tmpdir}/test.txt
+      gzip -d #{test_txt}.gz;
+      cat #{test_txt}
     )
   ) do
     its(:stdout) { should include('test.txt.gz') }
@@ -42,11 +46,11 @@ describe 'unarchivers installation' do
 
   describe command(
     %(
-      bzip2 -z #{Support.tmpdir}/test.txt;
-      rm #{Support.tmpdir}/test.txt;
+      bzip2 -z #{test_txt};
+      rm #{test_txt};
       ls #{Support.tmpdir};
-      bzip2 -d #{Support.tmpdir}/test.txt.bz2;
-      cat #{Support.tmpdir}/test.txt
+      bzip2 -d #{test_txt}.bz2;
+      cat #{test_txt}
     )
   ) do
     its(:stdout) { should include('test.txt.bz2') }
@@ -55,14 +59,14 @@ describe 'unarchivers installation' do
 
   describe command(
     %(
-      zip #{Support.tmpdir}/test.txt.zip #{Support.tmpdir}/test.txt;
-      rm #{Support.tmpdir}/test.txt;
+      zip #{test_txt}.zip #{test_txt};
+      rm #{test_txt};
       ls #{Support.tmpdir};
-      unzip -d #{Support.tmpdir} #{Support.tmpdir}/test.txt.zip;
-      cat #{Support.tmpdir}/test.txt
+      unzip -d #{Support.tmpdir} #{test_txt}.zip;
+      cat #{test_txt}
     )
   ) do
     its(:stdout) { should include('test.txt.zip') }
-    its(:stdout) { should match 'Konstantin broke all the things' }
+    its(:stdout) { should match 'Konstantin broke all the things.' }
   end
 end

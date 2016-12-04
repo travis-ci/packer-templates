@@ -1,3 +1,7 @@
+def git_project
+  Support.tmpdir.join('git-project')
+end
+
 describe 'git installation' do
   describe package('git') do
     it { should be_installed }
@@ -18,15 +22,14 @@ describe 'git installation' do
 
   describe 'git commands' do
     before :each do
-      git_project = Support.tmpdir.join('git-project')
-      git_project.rmtree
+      git_project.rmtree if git_project.exist?
       sh("git init #{git_project}")
       git_project.join('test-file.txt').write("hippo\n")
     end
 
     describe command(
       %W(
-        cd #{Support.tmpdir.join('git-project')};
+        cd #{git_project};
         git status;
         git add test-file.txt;
         git status;

@@ -1,3 +1,7 @@
+def hg_project
+  Support.tmpdir.join('hg-project')
+end
+
 describe 'mercurial installation' do
   describe command('hg version') do
     its(:stdout) { should match(/^Mercurial Distributed SCM \(version \d/) }
@@ -6,15 +10,14 @@ describe 'mercurial installation' do
 
   describe 'mecurial commands are executed' do
     before :all do
-      hg_project = Support.tmpdir.join('hg-project')
-      hg_project.rmtree
+      hg_project.rmtree if hg_project.exist?
       sh("hg init #{hg_project}")
       hg_project.join('test-file.txt').write("violin\n")
     end
 
     describe command(
       %W(
-        cd #{Support.tmpdir.join('hg-project')};
+        cd #{hg_project};
         hg status;
         hg add .;
         hg status
