@@ -180,6 +180,7 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['stack'] = 'sugilite'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  cassandra
   chromium
   disabled-ipv6
   docker
