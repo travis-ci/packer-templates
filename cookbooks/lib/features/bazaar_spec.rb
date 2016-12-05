@@ -22,9 +22,11 @@ describe 'bazaar installation' do
       bzr status;
     )) do
       [
-        /adding test\.txt/,
-        /unknown.+test\.txt/,
-        /added:.+test\.txt/
+        /^unknown:/,
+        /^  test\.txt/,
+        /^adding test\.txt/,
+        /^added:/,
+        /^  test\.txt/
       ].each do |pattern|
         its(:stdout) { should match(pattern) }
       end
