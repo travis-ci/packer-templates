@@ -1,4 +1,4 @@
-describe 'elasticsearch installation', sudo: true do
+describe 'elasticsearch installation', sudo: true, dev: true do
   before :all do
     sh('sudo service elasticsearch start')
     tcpwait('localhost', 9200, 30)
