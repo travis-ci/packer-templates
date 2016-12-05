@@ -1,19 +1,25 @@
+def empty_dir
+  Support.tmpdir.join('empty')
+end
+
 describe 'gcc installation' do
   before :all do
-    cp(
-      Support.libdir.join('features/files/hai.c'),
-      Support.tmpdir.join('hai.c')
-    )
-    empty_dir = Support.tmpdir.join('empty')
-    rm_rf(empty_dir)
-    mkdir_p(empty_dir)
+    Support.tmpdir.join('hai.c').write(<<-EOF.gsub(/^\s+> /, ''))
+      > #include <stdio.h>
+      > int
+      > main(int argc, char *argv[]) {
+      >   printf("hai %d\\n", argc);
+      > }
+    EOF
+    empty_dir.rmtree if empty_dir.exist?
+    empty_dir.mkpath
   end
 
   describe command('gcc -v') do
     its(:stderr) { should match(/^gcc version/) }
   end
 
-  describe command("cd #{Support.tmpdir.join('empty')} && gcc") do
+  describe command("cd #{empty_dir} && gcc") do
     its(:stderr) { should include('no input files') }
   end
 

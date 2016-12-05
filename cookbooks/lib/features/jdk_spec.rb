@@ -1,3 +1,7 @@
+def hello_java
+  Support.tmpdir.join('Hello.java')
+end
+
 describe 'jdk installation' do
   describe command('java -version') do
     its(:exit_status) { should eq 0 }
@@ -24,10 +28,15 @@ describe 'jdk installation' do
 
   describe 'java command' do
     before do
-      cp(
-        Support.libdir.join('languages/files/Hello.java'),
-        Support.tmpdir.join('Hello.java')
-      )
+      hello_java.write(<<-EOF.gsub(/\s+> /, ''))
+        > class Hello
+        > {
+        >   public static void main ( String[] args )
+        >   {
+        >     System.out.println("Hello World!");
+        >   }
+        > }
+      EOF
       Dir.chdir(Support.tmpdir) { sh('javac Hello.java') }
     end
 

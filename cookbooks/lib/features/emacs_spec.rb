@@ -10,14 +10,11 @@ describe 'emacs installation' do
   describe 'editing' do
     before do
       test_txt.write("daisy\n")
-      sh(
-        "emacs -batch #{test_txt} " \
-        "--eval '(insert \"Butterblume\")' -f save-buffer"
-      )
+      sh(%(emacs -batch #{test_txt} --eval '(insert \"poof\")' -f save-buffer))
     end
 
     describe file(test_txt) do
-      its(:content) { should match 'Butterblume' }
+      its(:content) { should match 'poof' }
     end
   end
 end

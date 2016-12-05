@@ -7,13 +7,10 @@ describe 'apt installation' do
     it { should be_directory }
   end
 
-  describe command(%(
-    shopt -s nullglob;
-    for f in /var/lib/apt/lists/*Packages*; do
-      echo $f;
-    done
-  )) do
-    its(:stdout) { should_not be_empty }
+  describe '/var/lib/apt/lists/*Packages*' do
+    it 'is non-empty' do
+      expect(Dir.glob('/var/lib/apt/lists/*Packages*')).to_not be_empty
+    end
   end
 
   describe command('apt-cache search ubuntu-restricted-extras') do
