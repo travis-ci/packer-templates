@@ -1,6 +1,6 @@
 describe 'cassandra installation' do
   describe command('which cassandra') do
-    its(:stdout) { should match '/local/bin/cassandra' }
+    its(:stdout) { should match 'bin/cassandra' }
   end
 
   describe 'cassandra commands', sudo: true do
@@ -20,7 +20,6 @@ describe 'cassandra installation' do
     describe command('cqlsh --debug -e quit') do
       its(:stdout) { should be_empty }
       its(:stderr) { should match(/Using CQL driver:/) }
-      its(:stderr) { should match(/Using thrift lib:/) }
     end
 
     describe command(
