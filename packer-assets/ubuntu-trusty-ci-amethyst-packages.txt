@@ -80,6 +80,7 @@ ragel
 re2c
 rsync
 ruby2.0
+scons
 software-properties-common
 sqlite3
 subversion
