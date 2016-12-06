@@ -85,6 +85,7 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['stack'] = 'amethyst'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  couchdb
   disabled-ipv6
   docker
   docker-compose
