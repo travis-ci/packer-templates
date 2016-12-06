@@ -181,6 +181,7 @@ override['travis_packer_templates']['job_board']['stack'] = 'sugilite'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   chromium
+  couchdb
   disabled-ipv6
   docker
   docker-compose
