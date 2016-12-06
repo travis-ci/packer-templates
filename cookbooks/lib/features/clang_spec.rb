@@ -5,7 +5,12 @@ describe 'clang installation' do
 
   describe 'clang command' do
     describe command('clang -help') do
-      its(:stdout) { should include('OVERVIEW: clang LLVM compiler', 'OPTIONS:') }
+      its(:stdout) do
+        should include(
+          'OVERVIEW: clang LLVM compiler',
+          'OPTIONS:'
+        )
+      end
     end
   end
 end
