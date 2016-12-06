@@ -10,7 +10,6 @@ issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'chromium'
 depends 'emacs'
-depends 'firefox'
 depends 'google-chrome'
 depends 'gradle'
 depends 'maven'
