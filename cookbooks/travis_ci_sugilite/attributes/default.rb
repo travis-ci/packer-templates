@@ -185,6 +185,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   disabled-ipv6
   docker
   docker-compose
+  elasticsearch
   firefox
   go-toolchain
   google-chrome

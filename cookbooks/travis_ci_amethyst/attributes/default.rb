@@ -89,6 +89,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   disabled-ipv6
   docker
   docker-compose
+  elasticsearch
   go-toolchain
   jdk
   memcached
