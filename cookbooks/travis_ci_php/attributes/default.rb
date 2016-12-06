@@ -1,7 +1,7 @@
 override['rvm']['latest_minor'] = true
-override['rvm']['default'] = '2.2.5'
+override['rvm']['default'] = '2.2.6'
 override['rvm']['rubies'] = [
-  { name: '2.2.5', arguments: '--binary --fuzzy' }
+  { name: '2.2.6', arguments: '--binary --fuzzy' }
 ]
 override['rvm']['gems'] = %w(
   bundler
