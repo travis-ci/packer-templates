@@ -14,6 +14,7 @@ bzip2
 bzr
 ca-certificates
 ccache
+chromium-browser
 cron
 curl
 dosemu
