@@ -27,11 +27,13 @@ describe 'cassandra installation' do
     EOF
 
     seed_cql.write(<<-EOF.gsub(/^\s+> /, ''))
+      > USE travis;
       > INSERT INTO users (first, last, age)
       > VALUES ('Jane', 'Doe', '84');
     EOF
 
     query_cql.write(<<-EOF.gsub(/^\s+> /, ''))
+      > USE travis;
       > EXPAND ON;
       > SELECT * FROM users WHERE first = 'Jane';
     EOF
