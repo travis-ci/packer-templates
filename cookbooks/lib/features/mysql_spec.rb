@@ -3,12 +3,7 @@ describe 'mysql installation' do
     sh('sudo service mysql start || true')
   end
 
-  describe command('mysql --version') do
-    its(:stdout) { should match(/^mysql /) }
-    its(:exit_status) { should eq 0 }
-  end
-
-  describe file('/home/travis/.my.cnf') do
+  describe file('/home/travis/.my.cnf'), precise: false do
     it { should exist }
     it { should be_readable }
     it { should be_readable }

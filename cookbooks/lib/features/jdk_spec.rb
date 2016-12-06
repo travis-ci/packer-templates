@@ -1,5 +1,19 @@
-describe 'jdk installation' do
+# FIXME: remove `dev` tag ASAF
+describe 'jdk installation', dev: true do
   describe command('java -version') do
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe file('/opt/jdk_switcher/jdk_switcher.sh'), precise: false do
+    it { should exist }
+    it { should be_readable }
+  end
+
+  describe command(%(
+    . /opt/jdk_switcher/jdk_switcher.sh;
+    jdk_switcher home default
+  )), precise: false do
+    its(:stdout) { should match(%r{/usr/lib/jvm}) }
     its(:exit_status) { should eq 0 }
   end
 

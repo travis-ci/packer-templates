@@ -1,3 +1,5 @@
+override['maven']['install_java'] = false
+
 default['travis_ci_sugilite']['prerequisite_packages'] = %w(
   cron
   curl
