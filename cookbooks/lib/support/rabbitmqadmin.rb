@@ -6,7 +6,7 @@ module Support
     end
 
     def ensure_available!
-      return if File.exist?(dest) && File.executable?(dest)
+      return if dest.exist? && dest.executable?
       download_rabbitmqadmin
     end
 
@@ -14,11 +14,13 @@ module Support
 
     def download_rabbitmqadmin
       system "curl -sSL -o #{dest} #{url}"
-      FileUtils.chmod(0o0755, dest)
+      dest.chmod(0o0755)
     end
 
     def dest
-      ENV['RABBITMQADMIN_DEST'] || File.join(Support.libdir, 'rabbitmqadmin')
+      Pathname.new(
+        ENV['RABBITMQADMIN_DEST'] || Support.tmpdir.join('rabbitmqadmin')
+      )
     end
 
     def url

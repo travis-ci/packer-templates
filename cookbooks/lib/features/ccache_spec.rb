@@ -5,7 +5,15 @@ describe 'ccache installation' do
 
   describe 'ccache commands are executed' do
     describe command('ccache -s') do
-      its(:stdout) { should include('cache directory', 'cache hit', 'cache miss', 'files in cache', 'max cache size') }
+      its(:stdout) do
+        should include(
+          'cache directory',
+          'cache hit',
+          'cache miss',
+          'files in cache',
+          'max cache size'
+        )
+      end
     end
 
     describe command('ccache -M 0.5') do
