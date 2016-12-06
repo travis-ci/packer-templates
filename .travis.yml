@@ -22,6 +22,7 @@ env:
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
   - SPEC_SUITES='travis_packer_templates'
+  - SYSTEM_INFO_JSON="${TRAVIS_BUILD_DIR}/.example_system_info.json"
 matrix:
   include:
   - language: ruby
