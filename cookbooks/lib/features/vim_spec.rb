@@ -1,3 +1,7 @@
+def test_txt
+  Support.tmpdir.join('test.txt')
+end
+
 describe 'vim installation' do
   describe command('vim --version') do
     its(:stdout) { should_not be_empty }
@@ -5,16 +9,12 @@ describe 'vim installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe 'vim commands' do
-    describe 'batch editing' do
-      before do
-        File.write("#{Support.libdir}/features/files/flower.txt", "blume\n")
-        sh("vim #{Support.libdir}/features/files/flower.txt -c s/blume/flower -c wq")
-      end
+  before do
+    test_txt.write("their\n")
+    sh("vim #{test_txt} -c s/their/there -c wq")
+  end
 
-      describe file("#{Support.libdir}/features/files/flower.txt") do
-        its(:content) { should match(/flower/) }
-      end
-    end
+  describe file(test_txt) do
+    its(:content) { should match(/there/) }
   end
 end

@@ -1,11 +1,11 @@
-override['rvm']['default'] = '2.2.5'
+override['rvm']['default'] = '2.2.6'
 override['rvm']['rubies'] = %w(
   1.9.2
   1.9.3
   2.0.0
   2.1.10
-  2.2.5
-  2.3.1
+  2.2.6
+  2.3.3
 ).map { |name| { name: name, arguments: '--binary --fuzzy' } }
 
 override['rvm']['gems'] = %w(
@@ -15,8 +15,8 @@ override['rvm']['gems'] = %w(
 override['rvm']['aliases'] = {
   '2.0' => 'ruby-2.0.0',
   '2.1' => 'ruby-2.1.5',
-  '2.2' => 'ruby-2.2.5',
-  '2.3' => 'ruby-2.3.1'
+  '2.2' => 'ruby-2.2.6',
+  '2.3' => 'ruby-2.3.3'
 }
 override['java']['alternate_versions'] = %w(
   openjdk6

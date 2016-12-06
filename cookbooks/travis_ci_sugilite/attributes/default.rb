@@ -139,8 +139,8 @@ rubies = %w(
   1.9.3-p551
   2.0.0-p648
   2.1.10
-  2.2.5
-  2.3.1
+  2.2.6
+  2.3.3
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
@@ -184,6 +184,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   disabled-ipv6
   docker
   docker-compose
+  elasticsearch
   firefox
   go-toolchain
   google-chrome
