@@ -86,8 +86,8 @@ pythons.each do |full_name|
 end
 
 rubies = %w(
-  2.2.5
-  2.3.1
+  2.2.6
+  2.3.3
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max

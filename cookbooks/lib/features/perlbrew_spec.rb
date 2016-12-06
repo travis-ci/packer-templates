@@ -1,4 +1,4 @@
-describe 'perlbrew installation', dev: true do
+describe 'perlbrew installation' do
   describe command('perlbrew --version') do
     its(:stdout) do
       should match(

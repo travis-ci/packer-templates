@@ -1,4 +1,6 @@
-require 'fileutils'
+def svn_project
+  Support.tmpdir.join('svn-project')
+end
 
 describe 'subversion installation' do
   describe command('svn --version') do
@@ -7,11 +9,15 @@ describe 'subversion installation' do
 
   describe 'subversion commands are executed' do
     before do
-      FileUtils.rm_rf('svn-project')
-      sh('svnadmin create svn-project')
+      svn_project.rmtree if svn_project.exist?
+      sh("svnadmin create #{svn_project}")
     end
 
-    describe file('svn-project/README.txt') do
+    after do
+      svn_project.rmtree if svn_project.exist?
+    end
+
+    describe file(svn_project.join('README.txt')) do
       its(:content) { should match 'This is a Subversion repository;' }
     end
   end
