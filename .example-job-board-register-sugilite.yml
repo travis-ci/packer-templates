@@ -35,14 +35,20 @@ languages:
 - universe
 features:
 - basic
+- bazaar
 - chromium
+- docker
+- elasticsearch
+- emacs
 - firefox
 - go-toolchain
 - google-chrome
 - jdk
 - memcached
 - mongodb
+- perlbrew
 - phantomjs
+- php_interpreter
 - postgresql
 - rabbitmq
 - redis
