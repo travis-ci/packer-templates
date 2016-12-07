@@ -4,7 +4,7 @@ def mongodb_service_name
 end
 
 describe 'mongodb installation' do
-  describe service(mongodb_service_name), dev: true do
+  describe service(mongodb_service_name) do
     it { should_not be_enabled }
     it { should_not be_running }
   end
@@ -14,13 +14,7 @@ describe 'mongodb installation' do
     its(:stdout) { should match(/MongoDB shell/) }
   end
 
-  describe 'mongo commands', docker: false, fixme: true do
-    # FIXME: This suite does not currently work inside docker because the
-    # upstart config for mongo 3.2 apparently will not do.  Rather than shipping
-    # our own upstart conf, or patching the upstream one, or worse, this suite
-    # is disabled.  Additionally, we don't advertise or guarantee functioning
-    # mongo installations on trusty+docker.
-
+  describe 'mongo commands' do
     before :all do
       sh("sudo service #{mongodb_service_name} start")
       procwait(/\bmongod\b/)

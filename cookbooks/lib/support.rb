@@ -1,8 +1,11 @@
 lib = File.expand_path('../', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require 'tmpdir'
 require 'fileutils'
+require 'pathname'
+require 'tmpdir'
+
+include FileUtils
 
 module Support
   autoload :Erlang, 'support/erlang'
@@ -42,18 +45,18 @@ module Support
   module_function :attributes
 
   def libdir
-    @libdir ||= File.expand_path('../', __FILE__)
+    @libdir ||= Pathname.new(File.expand_path('../', __FILE__))
   end
 
   module_function :libdir
 
   def tmpdir
-    @tmpdir ||= Dir.mktmpdir(%w(packer-templates- -rspec))
+    @tmpdir ||= Pathname.new(Dir.mktmpdir(%w(packer-templates- -rspec)))
   end
 
   module_function :tmpdir
 end
 
 at_exit do
-  FileUtils.rm_rf(Support.tmpdir)
+  rm_rf(Support.tmpdir)
 end

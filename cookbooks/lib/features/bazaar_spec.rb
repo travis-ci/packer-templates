@@ -1,3 +1,7 @@
+def bzr_project
+  Support.tmpdir.join('bzr-project')
+end
+
 describe 'bazaar installation' do
   describe command('bzr version') do
     its(:stdout) { should match(/Bazaar \(bzr\)/) }
@@ -6,17 +10,26 @@ describe 'bazaar installation' do
 
   describe 'bazaar commands' do
     before :each do
-      sh(%w(rm -rf bzr-project ;
-            bzr init bzr-project ;
-            touch bzr-project/test-file.rb).join(' '))
+      bzr_project.rmtree if bzr_project.exist?
+      sh("bzr init #{bzr_project}")
+      bzr_project.join('test.txt').write("floof\n")
     end
 
-    describe command(
-      'cd bzr-project ; bzr status ; bzr add test-file.rb ; bzr status'
-    ) do
-      its(:stdout) { should match(/adding test-file.rb/) }
-      its(:stdout) { should include('unknown:', 'test-file.rb') }
-      its(:stdout) { should include('added:', 'test-file.rb') }
+    describe command(%(
+      cd #{bzr_project};
+      bzr status;
+      bzr add test.txt;
+      bzr status;
+    )) do
+      [
+        /^unknown:/,
+        /^  test\.txt/,
+        /^adding test\.txt/,
+        /^added:/,
+        /^  test\.txt/
+      ].each do |pattern|
+        its(:stdout) { should match(pattern) }
+      end
     end
   end
 end
