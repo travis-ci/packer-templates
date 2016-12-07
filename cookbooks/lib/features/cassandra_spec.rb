@@ -1,3 +1,11 @@
+def wipe_storage
+  %w(
+    /var/lib/cassandra/data
+    /var/lib/cassandra/commitlog
+    /var/lib/cassandra/saved_caches
+  ).each { |dir| rm_rf(dir) }
+end
+
 def schema_cql
   Support.tmpdir.join('schema.cql')
 end
@@ -43,8 +51,10 @@ describe 'cassandra installation' do
         > SELECT * FROM users WHERE first = 'Slappy';
       EOF
 
+      sh('sudo service cassandra stop')
+      wipe_storage
       sh('sudo service cassandra start')
-      tcpwait('localhost', 9042)
+      tcpwait('localhost', 9042, 30)
 
       sh("cqlsh -f #{schema_cql}")
       sh("cqlsh -f #{seed_cql}")
@@ -52,6 +62,7 @@ describe 'cassandra installation' do
 
     after :all do
       sh('sudo service cassandra stop')
+      wipe_storage
     end
 
     describe service('cassandra') do
