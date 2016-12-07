@@ -62,16 +62,11 @@ describe 'cassandra installation' do
       its(:stdout) { should match(/cqlsh \d/) }
     end
 
-    describe command('cqlsh --debug -e quit') do
-      its(:stdout) { should be_empty }
-      its(:stderr) { should match(/Using CQL driver:/) }
-    end
-
-    describe command("cqlsh --no-color -f #{query_cql}") do
+    describe command("cqlsh --no-color --debug -f #{query_cql}") do
       its(:stdout) { should match(/\s+first\s+\|\s+Slappy/) }
       its(:stdout) { should match(/\s+last\s+\|\s+Squirrel/) }
       its(:stdout) { should match(/\s+age\s+\|\s+108/) }
-      its(:stderr) { should eq '' }
+      its(:stderr) { should match(/Using CQL driver:/) }
     end
   end
 end
