@@ -17,9 +17,6 @@ describe 'cassandra installation' do
 
   describe 'cassandra commands', sudo: true do
     before :all do
-      sh('sudo service cassandra start')
-      sleep 10
-
       schema_cql.write(<<-EOF.gsub(/^\s+> /, ''))
         > CREATE KEYSPACE travis
         > WITH REPLICATION = {
@@ -45,6 +42,9 @@ describe 'cassandra installation' do
         > EXPAND ON;
         > SELECT * FROM users WHERE first = 'Slappy';
       EOF
+
+      sh('sudo service cassandra start')
+      tcpwait('localhost', 9042)
 
       sh("cqlsh -f #{schema_cql}")
       sh("cqlsh -f #{seed_cql}")
