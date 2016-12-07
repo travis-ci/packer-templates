@@ -6,7 +6,8 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   image_name: travis-ci-connie-trusty-{{ timestamp }}
-  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_branch: meat-poise-profiler
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 builders:
@@ -88,6 +89,7 @@ provisioners:
   json: {}
   run_list:
   - recipe[travis_ci_connie]
+  - recipe[poise-profiler]
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
