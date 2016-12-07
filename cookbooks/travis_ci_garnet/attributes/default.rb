@@ -101,6 +101,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   cassandra
   chromium
+  couchdb
   disabled-ipv6
   docker
   docker-compose
