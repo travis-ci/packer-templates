@@ -35,7 +35,6 @@ end
 
 include_recipe 'travis_docker::compose'
 include_recipe 'openssl'
-include_recipe 'scons'
 include_recipe 'travis_java'
 include_recipe 'maven'
 include_recipe 'travis_build_environment::lein'
