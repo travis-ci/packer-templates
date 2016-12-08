@@ -16,7 +16,7 @@ env:
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
   - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
-  - SHELLCHECK_URL="https://s3.amazonaws.com/travis-blue-public/binaries/ubuntu/14.04/x86_64/shellcheck-v0.4.5.tar.bz2"
+  - SHELLCHECK_URL="https://s3.amazonaws.com/travis-blue-public/binaries/ubuntu/14.04/x86_64/shellcheck-0.4.5.tar.bz2"
   - SHFMT_URL="https://github.com/mvdan/sh/releases/download/v0.1.0/shfmt_v0.1.0_linux_amd64"
   - SKIP_CHEFDK_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
