@@ -1,5 +1,5 @@
 ---
-description: Travis CI sugilite build env template
+description: Travis CI sugilite build env template!
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"

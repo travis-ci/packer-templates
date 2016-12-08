@@ -85,21 +85,27 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_packer_templates']['job_board']['stack'] = 'amethyst'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
+  cassandra
   chromium
   couchdb
   disabled-ipv6
   docker
   docker-compose
   elasticsearch
+  firefox
   go-toolchain
+  google-chrome
   jdk
   memcached
+  mongodb
   mysql
   nodejs_interpreter
   perl_interpreter
   perlbrew
+  phantomjs
   postgresql
   python_interpreter
+  rabbitmq
   redis
   ruby_interpreter
   sqlite
