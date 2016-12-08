@@ -1,3 +1,5 @@
+override['CI'] = true
+
 override['travis_java']['default_version'] = ''
 override['travis_java']['alternate_versions'] = []
 
