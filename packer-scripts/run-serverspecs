@@ -2,9 +2,11 @@
 set -o errexit
 
 main() {
+  echo 'DEBUG: top of main' >&2
   set -o xtrace
   shopt -s nullglob
 
+  echo 'DEBUG: main exports' >&2
   export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
@@ -37,6 +39,7 @@ main() {
 }
 
 __install_chefdk() {
+  echo 'DEBUG: in __install_chefdk' >&2
   if [[ -f /opt/chefdk/embedded/bin/rspec ]]; then
     return
   fi
@@ -56,6 +59,7 @@ __install_chefdk() {
 }
 
 __run_retry() {
+  echo 'DEBUG: in __run_retry' >&2
   local retries="${1}"
   shift
   local retry_delay="${1}"
@@ -79,6 +83,7 @@ __run_retry() {
 
 # shellcheck disable=SC2120
 __create_sudo_bash() {
+  echo 'DEBUG: in __create_sudo_bash' >&2
   cat >/tmp/sudo-bash <<EOF
 #!/usr/bin/env bash
 exec sudo -- bash "\$@"
@@ -87,12 +92,14 @@ EOF
 }
 
 __remove_chefdk() {
+  echo 'DEBUG: in __remove_chefdk' >&2
   __run_retry 2 30 apt-get purge -y chefdk
   rm -f /etc/apt/sources.list.d/chef-current.list
   __run_retry 2 30 apt-get update -y
 }
 
 __run_suite() {
+  echo 'DEBUG: in __run_suite' >&2
   local suite="${1}"
   local chef_prefix="${2}"
   local runner="${3}"
@@ -109,6 +116,7 @@ __run_suite() {
 }
 
 __run_suite_as_travis() {
+  echo 'DEBUG: in __run_suite_as_travis' >&2
   local suite="${1}"
   local cookbook_dir="${2}"
   local runner="${3}"
@@ -151,6 +159,7 @@ rspec ${SPEC_ARGS} \\
 }
 
 __suite_cookbook_dir() {
+  echo 'DEBUG: in __suite_cookbook_dir' >&2
   local suite="${1}"
   local chef_prefix="${2}"
   local spec_dir
@@ -164,7 +173,9 @@ __suite_cookbook_dir() {
 }
 
 __chown_travis_dirs() {
+  echo 'DEBUG: in __chown_travis_dirs' >&2
   chown -R travis:travis "${1}"/packer-chef-* /var/tmp
 }
 
+echo 'DEBUG: about to run main' >&2
 main "$@"
