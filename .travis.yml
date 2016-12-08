@@ -24,14 +24,14 @@ env:
   - SPEC_RUNNER='bash -lc'
   - SPEC_SUITES='travis_packer_templates'
   - SYSTEM_INFO_JSON="${TRAVIS_BUILD_DIR}/.example_system_info.json"
-matrix:
-  include:
-  - language: ruby
-    rvm: 2.3.1
-    env: DIST=precise
-         TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
-    dist: precise
-    group: edge
+# matrix:
+#   include:
+#   - language: ruby
+#     rvm: 2.3.1
+#     env: DIST=precise
+#          TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-standard.yml"
+#     dist: precise
+#     group: edge
 install:
 - rvm use 2.3.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
