@@ -48,7 +48,7 @@ script:
 - bundle exec make test
 - git diff --exit-code
 - git diff --cached --exit-code
-- travis_retry bundle exec sudo packer-scripts/run-serverspecs
+- travis_retry bundle exec bash -c 'echo "here goes"; sudo packer-scripts/run-serverspecs'
 - for f in ~/.*_rspec.json ; do
     echo "checking $f" ;
     jq . < $f &>/dev/null ;
