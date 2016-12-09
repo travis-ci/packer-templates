@@ -14,6 +14,7 @@ main() {
   __install_packages
   __setup_sshd
   __setup_travis_user
+  __setup_chef_ci
 }
 
 __disable_ipv6() {
@@ -100,6 +101,14 @@ __setup_travis_ssh() {
     cat "${f}" >>/home/travis/.ssh/authorized_keys
   done
   chmod 0600 /home/travis/.ssh/authorized_keys
+}
+
+__setup_chef_ci() {
+  cat >/etc/profile.d/chef-ci-enabled.sh <<EOF
+#!/bin/sh
+export CI=yes
+EOF
+  chmod 0755 /etc/profile.d/chef-ci-enabled.sh
 }
 
 main "$@"
