@@ -1,16 +1,14 @@
-require 'support'
-
 def go_source
-  File.join(Support.tmpdir, 'example.go')
+  Support.tmpdir.join('example.go')
 end
 
 def randint
   @randint ||= rand(10_000..20_000)
 end
 
-describe 'go toolchain installation', dev: true do
+describe 'go toolchain installation' do
   describe command('go version') do
-    its(:stdout) { should match(/^go version go1\.[4567]/) }
+    its(:stdout) { should match(/^go version go1\.[45678]/) }
   end
 
   describe command('go env GOROOT') do
@@ -19,15 +17,13 @@ describe 'go toolchain installation', dev: true do
 
   describe 'compiling something' do
     before do
-      File.open(go_source, 'w') do |f|
-        f.puts <<-EOF.gsub(/^\s+> ?/, '')
-          > package main
-          > import "fmt"
-          > func main() {
-          >   fmt.Println("Good morrow, #{randint}")
-          > }
-        EOF
-      end
+      go_source.write(<<-EOF.gsub(/^\s+> ?/, ''))
+        > package main
+        > import "fmt"
+        > func main() {
+        >   fmt.Println("Good morrow, #{randint}")
+        > }
+      EOF
     end
 
     describe command("go run #{go_source}") do
