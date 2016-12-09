@@ -85,6 +85,7 @@ provisioners:
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
+  - packer-scripts/dump-dpkg-manifest
   - packer-scripts/cleanup
   - packer-scripts/minimize
   environment_vars:

@@ -10,6 +10,7 @@ main() {
   : "${NODE_ATTRIBUTES_YML:=/.node-attributes.yml}"
   : "${RSPEC_JSON_DIR:=/home/travis}"
   : "${SYSTEM_INFO_JSON:=/usr/share/travis/system_info.json}"
+  : "${DPKG_MANIFEST_JSON:=/.dpkg-manifest.json}"
 
   pushd "${TMPDIR:-/var/tmp}"
   local dest
@@ -28,6 +29,7 @@ main() {
   cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register.yml"
   cp -v "${NODE_ATTRIBUTES_YML}" "${dest}/node-attributes.yml"
   cp -v "${SYSTEM_INFO_JSON}" "${dest}/system_info.json"
+  cp -v "${DPKG_MANIFEST_JSON}" "${dest}/dpkg-manifest.json"
   tar -cjvf "${IMAGE_METADATA_TARBALL}" "${dest}"
 }
 

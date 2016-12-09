@@ -21,9 +21,11 @@ main() {
   mkdir -p "${TMPDIR}/packer-env"
   date -u >"${TMPDIR}/packer-env/NOWISH"
 
+  DPKG_MANIFEST_JSON="$(__write_dpkg_manifest_json)"
   JOB_BOARD_REGISTER_YML="$(__write_job_board_register_yml)"
   NODE_ATTRIBUTES_YML="$(__write_node_attributes_yml)"
   SYSTEM_INFO_JSON="$(__write_system_info_json)"
+  export DPKG_MANIFEST_JSON
   export JOB_BOARD_REGISTER_YML
   export NODE_ATTRIBUTES_YML
   export SYSTEM_INFO_JSON
@@ -34,6 +36,21 @@ main() {
     "${TMPDIR}/packer-env" \
     "${TMPDIR}/image-metadata" \
     "${TMPDIR}/image-metadata.tar.bz2"
+}
+
+__write_dpkg_manifest_json() {
+  cat >"${TMPDIR}/.dpkg-manifest.json" <<EOF
+{
+  "__timestamp": "20161208T053730",
+  "adduser": "3.113ubuntu2",
+  "bzip2": "1.0.6-1",
+  "coreutils": "8.13-3ubuntu3.3",
+  "diffutils": "1:3.2-1ubuntu1",
+  "xauth": "1:1.0.6-1",
+  "zlib1g": "1:1.2.3.4.dfsg-3ubuntu4"
+}
+EOF
+  echo "${TMPDIR}/.dpkg-manifest.json"
 }
 
 __write_node_attributes_yml() {
