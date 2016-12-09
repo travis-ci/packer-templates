@@ -8,7 +8,6 @@ version '0.1.0'
 source_url 'https://github.com/travis-ci/packer-templates'
 issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
-depends 'chromium'
 depends 'emacs'
 depends 'firefox'
 depends 'google-chrome'
