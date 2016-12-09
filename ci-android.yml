@@ -32,13 +32,13 @@ builders:
   ssh_pty: true
   image: "travisci/ubuntu-upstart:12.04"
   run_command:
-  - "-d"
-  - "-i"
-  - "-t"
-  - "--privileged=true"
-  - "--storage-opt=size=15G"
-  - "{{.Image}}"
-  - "/sbin/init"
+  - -d
+  - -i
+  - -t
+  - --privileged=true
+  - --storage-opt=size=15G
+  - "{{ .Image }}"
+  - /sbin/init
   commit: true
 provisioners:
 - type: shell
@@ -72,6 +72,9 @@ provisioners:
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   install_command: "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12.9"
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
@@ -79,6 +82,9 @@ provisioners:
   json: {}
   run_list:
   - recipe[travis_ci_android]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user

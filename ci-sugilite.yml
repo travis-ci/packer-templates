@@ -56,6 +56,9 @@ provisioners:
   inline: chmod 0644 /var/tmp/system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
   cookbook_paths:
   - cookbooks
   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
@@ -69,6 +72,9 @@ provisioners:
   json: {}
   run_list:
   - recipe[travis_ci_sugilite]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
