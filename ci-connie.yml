@@ -91,7 +91,9 @@ provisioners:
   json: {}
   run_list:
   - recipe[travis_ci_connie]
+  <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
+  <% end %>
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
