@@ -6,7 +6,6 @@ shopt -s nullglob
 
 rm -rf \
   /etc/apparmor* \
-  /etc/profile.d/chef-ci-enabled.sh \
   /etc/ssh/ssh_host_* \
   /etc/systemd \
   /lib/recovery-mode \
