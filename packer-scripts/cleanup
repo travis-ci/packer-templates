@@ -6,11 +6,16 @@ shopt -s nullglob
 
 rm -rf \
   /etc/apparmor* \
+  /etc/profile.d/jdk.csh \
+  /etc/profile.d/jdk.sh \
   /etc/ssh/ssh_host_* \
   /etc/systemd \
   /lib/recovery-mode \
   /opt/chef* \
   /tmp/* \
+  /usr/lib/jvm/.java-8-oracle-amd64.jinfo \
+  /usr/lib/jvm/default-java \
+  /usr/lib/jvm/java-8-oracle-amd64 \
   /var/chef \
   /var/log/installer \
   /var/tmp/* \
