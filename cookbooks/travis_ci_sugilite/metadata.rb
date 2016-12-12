@@ -9,7 +9,6 @@ source_url 'https://github.com/travis-ci/packer-templates'
 issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'emacs'
-depends 'google-chrome'
 depends 'gradle'
 depends 'maven'
 depends 'memcached'
