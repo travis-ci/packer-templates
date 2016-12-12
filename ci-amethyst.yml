@@ -1,5 +1,5 @@
 ---
-description: Travis CI Amethyst build env template
+description: Travis CI Amethyst build env template!
 variables:
   docker_repository: travisci/ci-amethyst
   docker_tag: packer-{{ timestamp }}
@@ -18,7 +18,7 @@ builders:
   image_description: Travis CI Amethyst
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20161130
+  source_image: ubuntu-1404-trusty-v20161205
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
@@ -75,6 +75,9 @@ provisioners:
   inline: chmod 0644 /var/tmp/amethyst-system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
   cookbook_paths:
   - cookbooks
   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
@@ -88,12 +91,16 @@ provisioners:
   json: {}
   run_list:
   - recipe[travis_ci_amethyst]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
+  - packer-scripts/dump-dpkg-manifest
   - packer-scripts/cleanup
   - packer-scripts/minimize
   environment_vars:

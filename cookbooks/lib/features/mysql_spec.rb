@@ -1,6 +1,22 @@
+def reset_sql
+  Support.tmpdir.join('reset.sql')
+end
+
+def schema_sql
+  Support.tmpdir.join('schema.sql')
+end
+
 describe 'mysql installation' do
   before :all do
-    sh('sudo service mysql start || true')
+    reset_sql.write(<<-EOF.gsub(/^\s+> /, ''))
+      > DROP DATABASE IF EXISTS travis;
+      > CREATE DATABASE travis;
+    EOF
+    schema_sql.write(<<-EOF.gsub(/^\s+> /, ''))
+      > CREATE TABLE test(id int);
+      > INSERT INTO test(id) VALUES(4); -- fair dice roll
+    EOF
+    sh('sudo service mysql start')
   end
 
   describe file('/home/travis/.my.cnf'), precise: false do
@@ -13,8 +29,8 @@ describe 'mysql installation' do
 
   describe 'mysql commands' do
     before do
-      sh("mysql < #{Support.libdir}/features/files/mysql-reset.sql")
-      sh("mysql travis < #{Support.libdir}/features/files/mysql-schema.sql")
+      sh("mysql <#{reset_sql}")
+      sh("mysql travis <#{schema_sql}")
     end
 
     %w(
