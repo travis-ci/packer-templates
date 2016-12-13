@@ -1,0 +1,5 @@
+commands:
+  common:
+    - command: nvm list
+      name: Pre-installed Node.js versions
+      pipe: env GREP_COLORS='mt=01;32' egrep -o '(iojs-)?v[0-9\.]+' | sort | uniq

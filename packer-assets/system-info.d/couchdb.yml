@@ -1,0 +1,5 @@
+commands:
+  common:
+    - command: couchdb -V
+      name: CouchDB version
+      pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'

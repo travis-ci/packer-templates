@@ -1,0 +1,8 @@
+commands:
+  common:
+    - pre: service neo4j restart
+      name: Neo4j version
+      port: 7474
+      command: 'curl http://localhost:7474/db/data 2>/dev/null'
+      pipe: perl -ne '/neo4j_version.*?([0-9\.]+)/ && print $1'
+      post: service neo4j stop
