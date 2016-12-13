@@ -39,6 +39,7 @@ include_recipe 'nodejs::multi'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'postgresql::pgdg'
 include_recipe 'travis_python::pyenv'
+include_recipe 'travis_packer_templates::systemd_purge'
 include_recipe 'travis_system_info'
 
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are

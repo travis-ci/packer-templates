@@ -120,6 +120,7 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   python_interpreter
   rabbitmq
   redis
+  riak
   ruby_interpreter
   sqlite
   xserver
