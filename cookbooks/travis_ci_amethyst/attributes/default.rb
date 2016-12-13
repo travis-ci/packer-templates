@@ -109,7 +109,6 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   redis
   riak
   ruby_interpreter
-  rvm
   sqlite
   xserver
 )
