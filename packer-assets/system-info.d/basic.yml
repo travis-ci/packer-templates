@@ -15,6 +15,8 @@ commands:
     - { command: clang --version, name: clang version }
     - { command: jq --version, name: jq version }
     - { command: bats --version, name: bats version }
+    - { command: shellcheck --version, pipe: "awk '/^version: { print $2 }'", name: shellcheck version }
+    - { command: shfmt -version, name: shfmt version }
     - { command: ccache -V, name: ccache version }
     - { command: cmake --version, name: cmake version }
     - { command: heroku version, name: heroku version }
