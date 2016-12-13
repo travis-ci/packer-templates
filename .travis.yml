@@ -33,6 +33,9 @@ env:
 #     dist: precise
 #     group: edge
 install:
+- if [[ -f .test-branch ]]; then
+    export TRAVIS_COOKBOOKS_TEST_BRANCH="$(cat .test-branch 2>/dev/null)";
+  fi
 - rvm use 2.3.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - if ! shellcheck --version &>/dev/null; then
@@ -40,9 +43,9 @@ install:
     | tar --exclude 'SHA256SUMS' --strip-components=1 -C "${HOME}/bin" -xjf -;
   fi
 - shellcheck --version
-- if ! command -v shfmt ; then
-    curl -sSL "${SHFMT_URL}" -o "${HOME}/bin/shfmt" ;
-    chmod +x "${HOME}/bin/shfmt" ;
+- if ! command -v shfmt; then
+    curl -sSL "${SHFMT_URL}" -o "${HOME}/bin/shfmt";
+    chmod +x "${HOME}/bin/shfmt";
   fi
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
@@ -52,22 +55,22 @@ script:
 - git diff --exit-code
 - git diff --cached --exit-code
 - travis_retry bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
-- for f in ~/.*_rspec.json ; do
-    echo "checking $f" ;
-    jq . < $f &>/dev/null ;
+- for f in ~/.*_rspec.json; do
+    echo "checking $f";
+    jq . < $f &>/dev/null;
   done
-- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]] ; then
-    make docker-build-upstart-12.04 ;
-    DOCKER_DEST="travisci/ubuntu-upstart:12.04" bin/docker-push ;
-    DOCKER_DEST="travisci/ubuntu-upstart:precise" bin/docker-push ;
-    make docker-build-upstart-14.04 ;
-    DOCKER_DEST="travisci/ubuntu-upstart:14.04" bin/docker-push ;
-    DOCKER_DEST="travisci/ubuntu-upstart:trusty" bin/docker-push ;
+- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]]; then
+    make docker-build-upstart-12.04;
+    DOCKER_DEST="travisci/ubuntu-upstart:12.04" bin/docker-push;
+    DOCKER_DEST="travisci/ubuntu-upstart:precise" bin/docker-push;
+    make docker-build-upstart-14.04;
+    DOCKER_DEST="travisci/ubuntu-upstart:14.04" bin/docker-push;
+    DOCKER_DEST="travisci/ubuntu-upstart:trusty" bin/docker-push;
   fi
 after_success:
-- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]] ; then
-    git fetch --unshallow ;
-    bundle exec make packer-build-trigger ;
+- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]]; then
+    git fetch --unshallow;
+    bundle exec make packer-build-trigger;
   else
-    echo 'no packer-build-trigger for you' ;
+    echo 'no packer-build-trigger for you';
   fi
