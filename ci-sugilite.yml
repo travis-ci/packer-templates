@@ -4,8 +4,7 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   image_name: travis-ci-sugilite-trusty-{{ timestamp }}
-  # travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
-  travis_cookbooks_branch: meat-intern-redis
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 builders:
