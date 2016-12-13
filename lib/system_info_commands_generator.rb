@@ -14,7 +14,11 @@ class SystemInfoCommandsGenerator
       return 1
     end
 
-    system_info_commands = { 'linux' => [], 'osx' => [], 'common' => [] }
+    system_info_commands = {
+      'NOTE' => 'this is a generated file', 'stack' => stack,
+      'commands' => { 'linux' => [], 'osx' => [], 'common' => [] }
+    }
+
     %w(features languages).each { |t| merge_tagset!(t, system_info_commands) }
 
     $stdout.puts YAML.dump(system_info_commands)
@@ -51,8 +55,8 @@ class SystemInfoCommandsGenerator
     %w(linux osx common).each do |section|
       value = commands[section]
       next if value.nil? || value.empty?
-      system_info_commands[section] += (
-        value - system_info_commands[section]
+      system_info_commands['commands'][section] += (
+        value - system_info_commands['commands'][section]
       )
     end
   end
