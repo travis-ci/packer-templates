@@ -6,7 +6,7 @@ main() {
   (
     echo '{'
     dpkg --get-selections \
-      | awk '{ print $1 }' \
+      | awk '/\sinstall$/ { print $1 }' \
       | xargs dpkg-query -W -f="\"\${binary:Package}\": \"\${Version}\",\\n"
     echo "\"__timestamp\": \"$(date +%Y%m%dT%H%M%S)\"}"
   ) | python -m json.tool \
