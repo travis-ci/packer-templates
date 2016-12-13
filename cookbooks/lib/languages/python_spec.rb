@@ -29,7 +29,7 @@ describe 'python environment' do
   end
 
   describe pycommand(
-    %q{python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")'}
+    %q(python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")')
   ) do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^\d+\.\d+\.\d+/) }

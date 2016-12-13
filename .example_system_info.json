@@ -1,0 +1,67 @@
+{
+  "system_info": {
+    "build_image_provisioning_date_and_time": {
+      "output": "Fri Nov  5 05:04:02 UTC 1955",
+      "name": "Build image provisioning date and time"
+    },
+    "operating_system_details": {
+      "output": [
+        "Distributor ID:\tUbuntu",
+        "Description:\tUbuntu 14.04.5 LTS",
+        "Release:\t14.04",
+        "Codename:\ttrusty"
+      ],
+      "name": "Operating System Details"
+    },
+    "linux_version": {
+      "output": "4.4.0-51-generic",
+      "name": "Linux Version"
+    },
+    "cookbooks_version": {
+      "output": "fafafaf https://github.com/travis-ci/travis-cookbooks/tree/fafafaf",
+      "name": "Cookbooks Version"
+    },
+    "git_version": {
+      "output": "git version 2.11.0",
+      "name": "git version"
+    },
+    "bash_version": {
+      "output": [
+        "GNU bash, version 4.3.11(1)-release (x86_64-pc-linux-gnu)",
+        "Copyright (C) 2013 Free Software Foundation, Inc.",
+        "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>",
+        "This is free software; you are free to change and redistribute it.",
+        "There is NO WARRANTY, to the extent permitted by law."
+      ],
+      "name": "bash version"
+    },
+    "gcc_version": {
+      "output": [
+        "gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4",
+        "Copyright (C) 2013 Free Software Foundation, Inc.",
+        "This is free software; see the source for copying conditions.  There is NO",
+        "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+      ],
+      "name": "gcc version"
+    },
+    "docker_version": {
+      "output": [
+        "Client:",
+        " Version:      1.12.3",
+        " API version:  1.24",
+        " Go version:   go1.6.3",
+        " Git commit:   6b644ec",
+        " Built:        Wed Oct 26 21:44:32 2016",
+        " OS/Arch:      linux/amd64",
+        "Server:",
+        " Version:      1.12.3",
+        " API version:  1.24",
+        " Go version:   go1.6.3",
+        " Git commit:   6b644ec",
+        " Built:        Wed Oct 26 21:44:32 2016",
+        " OS/Arch:      linux/amd64"
+      ],
+      "name": "docker version"
+    }
+  }
+}

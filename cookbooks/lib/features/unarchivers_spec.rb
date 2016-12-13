@@ -1,66 +1,73 @@
+def test_txt
+  Support.tmpdir.join('test.txt')
+end
+
 describe 'unarchivers installation' do
-  describe 'unarchivers versions' do
-    describe command('gzip --version') do
-      its(:stdout) { should match(/^gzip \d/) }
-      its(:exit_status) { should eq 0 }
-    end
-
-    describe command('bzip2 --version') do
-      its(:stderr) { should match(/^bzip.*Version \d/) }
-      its(:exit_status) { should eq 0 }
-    end
-
-    describe command('zip --version') do
-      its(:stdout) { should match(/Zip \d/) }
-      its(:exit_status) { should eq 0 }
-    end
-
-    describe command('unzip -version') do
-      its(:stdout) { should match(/^UnZip \d/) }
-      its(:exit_status) { should eq 0 }
-    end
+  describe command('gzip --version') do
+    its(:stdout) { should match(/^gzip \d/) }
+    its(:exit_status) { should eq 0 }
   end
 
-  describe 'unarchivers commands' do
-    describe command('dpkg -s libbz2-dev') do
-      its(:stdout) { should match 'Status: install ok installed' }
-    end
+  describe command('bzip2 --version') do
+    its(:stderr) { should match(/^bzip.*Version \d/) }
+    its(:exit_status) { should eq 0 }
+  end
 
-    describe command(
-      %W(
-        gzip #{Support.libdir}/features/files/unarchivers.txt ;
-        ls #{Support.libdir}/features/files/ ;
-        gzip -d #{Support.libdir}/features/files/unarchivers.txt.gz ;
-        cat #{Support.libdir}/features/files/unarchivers.txt
-      ).join(' ')
-    ) do
-      its(:stdout) { should include('unarchivers.txt.gz') }
-      its(:stdout) { should match 'Konstantin broke all the things.' }
-    end
+  describe command('zip --version') do
+    its(:stdout) { should match(/Zip \d/) }
+    its(:exit_status) { should eq 0 }
+  end
 
-    describe command(
-      %W(
-        bzip2 -z #{Support.libdir}/features/files/unarchivers.txt ;
-        ls #{Support.libdir}/features/files/ ;
-        bzip2 -d #{Support.libdir}/features/files/unarchivers.txt.bz2 ;
-        cat #{Support.libdir}/features/files/unarchivers.txt
-      ).join(' ')
-    ) do
-      its(:stdout) { should include('unarchivers.txt.bz2') }
-      its(:stdout) { should match 'Konstantin broke all the things.' }
-    end
+  describe command('unzip -version') do
+    its(:stdout) { should match(/^UnZip \d/) }
+    its(:exit_status) { should eq 0 }
+  end
 
-    describe command(
-      %W(
-        zip #{Support.libdir}/features/files/unarchivers.txt.zip
-        #{Support.libdir}/features/files/unarchivers.txt ;
-        ls #{Support.libdir}/features/files ;
-        unzip #{Support.libdir}/features/files/unarchivers2.txt.zip ;
-        cat unarchivers2.txt
-      ).join(' ')
-    ) do
-      its(:stdout) { should include('unarchivers.txt.zip') }
-      its(:stdout) { should match 'Konstantin broke all the things' }
-    end
+  describe command('dpkg -s libbz2-dev') do
+    its(:stdout) { should match 'Status: install ok installed' }
+  end
+
+  before :each do
+    test_txt.write("Konstantin broke all the things.\n")
+  end
+
+  describe command(
+    %(
+      gzip #{test_txt};
+      rm #{test_txt};
+      ls #{Support.tmpdir};
+      gzip -d #{test_txt}.gz;
+      cat #{test_txt}
+    )
+  ) do
+    its(:stdout) { should include('test.txt.gz') }
+    its(:stdout) { should match 'Konstantin broke all the things.' }
+  end
+
+  describe command(
+    %(
+      bzip2 -z #{test_txt};
+      rm #{test_txt};
+      ls #{Support.tmpdir};
+      bzip2 -d #{test_txt}.bz2;
+      cat #{test_txt}
+    )
+  ) do
+    its(:stdout) { should include('test.txt.bz2') }
+    its(:stdout) { should match 'Konstantin broke all the things.' }
+  end
+
+  describe command(
+    %(
+      cd #{Support.tmpdir};
+      zip test.zip test.txt;
+      rm test.txt;
+      ls #{Support.tmpdir};
+      unzip test.zip;
+      cat test.txt
+    )
+  ) do
+    its(:stdout) { should include('test.zip') }
+    its(:stdout) { should match 'Konstantin broke all the things.' }
   end
 end

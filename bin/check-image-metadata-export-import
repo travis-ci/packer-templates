@@ -21,8 +21,14 @@ main() {
   mkdir -p "${TMPDIR}/packer-env"
   date -u >"${TMPDIR}/packer-env/NOWISH"
 
-  __write_node_attributes_yml
-  __write_job_board_register_yml
+  DPKG_MANIFEST_JSON="$(__write_dpkg_manifest_json)"
+  JOB_BOARD_REGISTER_YML="$(__write_job_board_register_yml)"
+  NODE_ATTRIBUTES_YML="$(__write_node_attributes_yml)"
+  SYSTEM_INFO_JSON="$(__write_system_info_json)"
+  export DPKG_MANIFEST_JSON
+  export JOB_BOARD_REGISTER_YML
+  export NODE_ATTRIBUTES_YML
+  export SYSTEM_INFO_JSON
   ./packer-scripts/create-image-metadata-tarball
   ./bin/job-board-register "${IMAGE_METADATA_TARBALL}"
 
@@ -30,6 +36,21 @@ main() {
     "${TMPDIR}/packer-env" \
     "${TMPDIR}/image-metadata" \
     "${TMPDIR}/image-metadata.tar.bz2"
+}
+
+__write_dpkg_manifest_json() {
+  cat >"${TMPDIR}/.dpkg-manifest.json" <<EOF
+{
+  "__timestamp": "20161208T053730",
+  "adduser": "3.113ubuntu2",
+  "bzip2": "1.0.6-1",
+  "coreutils": "8.13-3ubuntu3.3",
+  "diffutils": "1:3.2-1ubuntu1",
+  "xauth": "1:1.0.6-1",
+  "zlib1g": "1:1.2.3.4.dfsg-3ubuntu4"
+}
+EOF
+  echo "${TMPDIR}/.dpkg-manifest.json"
 }
 
 __write_node_attributes_yml() {
@@ -47,6 +68,7 @@ travis_python:
     - '2.7'
     - '3.5'
 EOF
+  echo "${TMPDIR}/.node-attributes.yml"
 }
 
 __write_job_board_register_yml() {
@@ -72,6 +94,80 @@ tags:
   feature_lulz: true
 tags_string: dist:floof,feature_lulz:true,feature_mongodb:true,feature_mysql:true,language_french:true,language_python:true,language_ruby:true,os:imaginary,packer_chef_time:20160825T203524Z
 EOF
+  echo "${TMPDIR}/.job-board-register.yml"
+}
+
+__write_system_info_json() {
+  cat >"${TMPDIR}/system_info.json" <<EOF
+{
+  "system_info": {
+    "build_image_provisioning_date_and_time": {
+      "output": "Fri Nov  5 05:04:02 UTC 1955",
+      "name": "Build image provisioning date and time"
+    },
+    "operating_system_details": {
+      "output": [
+        "Distributor ID:\tUbuntu",
+        "Description:\tUbuntu 14.04.5 LTS",
+        "Release:\t14.04",
+        "Codename:\ttrusty"
+      ],
+      "name": "Operating System Details"
+    },
+    "linux_version": {
+      "output": "4.4.0-51-generic",
+      "name": "Linux Version"
+    },
+    "cookbooks_version": {
+      "output": "fafafaf https://github.com/travis-ci/travis-cookbooks/tree/fafafaf",
+      "name": "Cookbooks Version"
+    },
+    "git_version": {
+      "output": "git version 2.11.0",
+      "name": "git version"
+    },
+    "bash_version": {
+      "output": [
+        "GNU bash, version 4.3.11(1)-release (x86_64-pc-linux-gnu)",
+        "Copyright (C) 2013 Free Software Foundation, Inc.",
+        "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>",
+        "This is free software; you are free to change and redistribute it.",
+        "There is NO WARRANTY, to the extent permitted by law."
+      ],
+      "name": "bash version"
+    },
+    "gcc_version": {
+      "output": [
+        "gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4",
+        "Copyright (C) 2013 Free Software Foundation, Inc.",
+        "This is free software; see the source for copying conditions.  There is NO",
+        "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+      ],
+      "name": "gcc version"
+    },
+    "docker_version": {
+      "output": [
+        "Client:",
+        " Version:      1.12.3",
+        " API version:  1.24",
+        " Go version:   go1.6.3",
+        " Git commit:   6b644ec",
+        " Built:        Wed Oct 26 21:44:32 2016",
+        " OS/Arch:      linux/amd64",
+        "Server:",
+        " Version:      1.12.3",
+        " API version:  1.24",
+        " Go version:   go1.6.3",
+        " Git commit:   6b644ec",
+        " Built:        Wed Oct 26 21:44:32 2016",
+        " OS/Arch:      linux/amd64"
+      ],
+      "name": "docker version"
+    }
+  }
+}
+EOF
+  echo "${TMPDIR}/system_info.json"
 }
 
 main "$@"
