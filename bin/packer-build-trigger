@@ -24,7 +24,7 @@ fi
 
 set -o xtrace
 exec travis-packer-build \
-  --chef-cookbook-path="${CHEF_COOKBOOK_PATH}" \
+  --chef-cookbook-path="${CHEF_COOKBOOK_PATH} ${TOP}/.git::cookbooks" \
   --packer-templates-path="${TOP}/.git::" \
   --commit-range="${TRAVIS_COMMIT_RANGE}" \
   --pull-request="${TRAVIS_PULL_REQUEST}" \
