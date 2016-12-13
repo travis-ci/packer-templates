@@ -36,6 +36,7 @@ end
 include_recipe 'travis_docker::compose'
 include_recipe 'openssl'
 include_recipe 'travis_java'
+include_recipe 'travis_packer_templates::systemd_purge'
 include_recipe 'postgresql'
 include_recipe 'travis_build_environment::mysql'
 include_recipe 'travis_python::pyenv'
