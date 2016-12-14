@@ -1,0 +1,8 @@
+commands:
+  common:
+    - pre: sudo service rabbitmq-server restart
+      name: RabbitMQ Version
+      port: 5672
+      command: sudo rabbitmqctl status
+      pipe: "awk -F \\\" '/\\\"RabbitMQ\\\"/ {print $4}' "
+      post: sudo service rabbitmq-server stop >/dev/null

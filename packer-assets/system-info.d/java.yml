@@ -1,0 +1,8 @@
+commands:
+  common:
+    - { command: ant -version, name: ant version }
+    - { command: mvn -version, name: mvn version }
+    - { command: gradle -version, name: gradle version }
+    - command: lein1 version
+    - command: lein2 version
+    - command: lein version

@@ -1,0 +1,3 @@
+commands:
+  common:
+    - { command: ls -l /usr/local/ghc, name: ghc installations }
