@@ -1,0 +1,5 @@
+commands:
+  common:
+    - command: dpkg -l
+      name: Pre-installed PostgreSQL versions
+      pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'

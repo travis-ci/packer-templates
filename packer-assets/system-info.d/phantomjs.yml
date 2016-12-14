@@ -1,0 +1,4 @@
+commands:
+  common:
+    - command: /usr/local/phantomjs/bin/phantomjs --version
+      name: PhantomJS version
