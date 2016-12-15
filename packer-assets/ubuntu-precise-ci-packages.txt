@@ -43,6 +43,7 @@ libfreetype6
 libgcc1
 libgdbm-dev
 libgdk-pixbuf2.0-0
+libgl1-mesa-glx
 libglib2.0-0
 libgtk2.0-0
 libicu-dev
