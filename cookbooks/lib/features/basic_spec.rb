@@ -32,6 +32,14 @@ describe command('bats --version'), precise: false do
   its(:stdout) { should match(/^Bats \d/) }
 end
 
+describe command('shellcheck --version'), precise: false do
+  its(:stdout) { should match(/^version: \d\.\d\.\d/) }
+end
+
+describe command('shfmt -version'), precise: false do
+  its(:stdout) { should match(/^v\d\.\d\.\d/) }
+end
+
 def bzr_project
   Support.tmpdir.join('bzr-project')
 end
