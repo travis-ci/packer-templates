@@ -105,6 +105,7 @@ wget
 x11-utils
 x11-xserver-utils
 xserver-xorg-core
+xserver-xorg-video-all
 xvfb
 zip
 zlib1g-dev
