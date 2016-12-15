@@ -35,6 +35,7 @@ libexpat1-dev
 libffi-dev
 libfreetype6-dev
 libgdbm-dev
+libgl1-mesa-glx
 libgmp3-dev
 libicu-dev
 libjpeg8-dev
