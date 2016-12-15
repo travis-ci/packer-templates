@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 set -o errexit
+set -o pipefail
 
 main() {
   : "${DPKG_MANIFEST_JSON:=/.dpkg-manifest.json}"
+  local package_field='binary:Package'
+  if [[ "$(man dpkg-query | grep PackageSpec)" ]]; then
+    package_field='PackageSpec'
+  fi
   (
     echo '{'
     dpkg --get-selections \
-      | awk '{ print $1 }' \
-      | xargs dpkg-query -W -f="\"\${binary:Package}\": \"\${Version}\",\\n"
+      | awk '/\sinstall$/ { print $1 }' \
+      | xargs dpkg-query -W -f="\"\${${package_field}}\": \"\${Version}\",\\n"
     echo "\"__timestamp\": \"$(date +%Y%m%dT%H%M%S)\"}"
   ) | python -m json.tool \
     | tee "${DPKG_MANIFEST_JSON}"
