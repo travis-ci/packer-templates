@@ -36,7 +36,7 @@ describe command('shellcheck --version'), precise: false do
   its(:stdout) { should match(/^version: \d\.\d\.\d/) }
 end
 
-describe command('shfmt -version'), precise: false do
+describe command('shfmt -version'), precise: false, dev: true do
   its(:stdout) { should match(/^v\d\.\d\.\d/) }
 end
 
