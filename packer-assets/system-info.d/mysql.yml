@@ -1,0 +1,3 @@
+commands:
+  common:
+    - { command: mysql --version, name: mysql version }

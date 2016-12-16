@@ -9,7 +9,7 @@ default['travis_ci_sugilite']['prerequisite_packages'] = %w(
 )
 
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/system-info-commands.yml'
+  '/var/tmp/sugilite-system-info-commands.yml'
 
 php_versions = %w(
   5.4.45

@@ -50,10 +50,10 @@ provisioners:
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
-  source: packer-assets/system-info-commands.yml
-  destination: /var/tmp/system-info-commands.yml
+  source: packer-assets/sugilite-system-info-commands.yml
+  destination: /var/tmp/sugilite-system-info-commands.yml
 - type: shell
-  inline: chmod 0644 /var/tmp/system-info-commands.yml
+  inline: chmod 0644 /var/tmp/sugilite-system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>

@@ -36,6 +36,7 @@ libexpat1-dev
 libffi-dev
 libfreetype6-dev
 libgdbm-dev
+libgl1-mesa-glx
 libgmp3-dev
 libicu-dev
 libjpeg8-dev
@@ -92,6 +93,7 @@ vim
 wamerican
 wget
 x11-utils
+x11-xserver-utils
 xfsprogs
 xserver-xorg-core
 xserver-xorg-video-all

@@ -1,0 +1,5 @@
+commands:
+  common:
+    - command: kerl list installations
+    - command: kiex list
+    - command: rebar --version

@@ -1,0 +1,8 @@
+commands:
+  common:
+    - pre: sudo service cassandra restart
+      name: Cassandra version
+      port: 9042
+      command: /usr/local/cassandra/bin/nodetool version
+      pipe: perl -ne '/ReleaseVersion.*?([0-9\.]+)/ && print $1'
+      post: sudo service cassandra stop; sudo rm -rf /var/lib/cassandra/*"

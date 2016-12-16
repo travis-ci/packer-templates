@@ -1,0 +1,8 @@
+commands:
+  common:
+    - command: ls -lad /usr/local/sphinx-*
+      name: Installed Sphinx versions
+      pipe: perl -n -e '/sphinx-([^\/]+)/ && {print "$1"}'
+    - command: ls -l /usr/local/bin/searchd
+      name: Default Sphinx version
+      pipe: perl -n -e '/sphinx-([^\/]+)/ && {print "$1\n"}'
