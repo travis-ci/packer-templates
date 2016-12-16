@@ -39,7 +39,7 @@ override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 ghc_versions = %w(
-  7.6.3
+  7.8.4
   8.0.2
 )
 cabal_versions = %w(
