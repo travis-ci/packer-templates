@@ -18,6 +18,8 @@ chromium-browser
 cron
 curl
 dosemu
+emacs
+emacs23-nox
 flex
 gawk
 gcc
