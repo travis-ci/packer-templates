@@ -63,8 +63,6 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs'
 include_recipe 'travis_phantomjs::2'
-include_recipe 'emacs::nox'
-include_recipe 'vim'
 include_recipe 'travis_system_info'
 
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are
