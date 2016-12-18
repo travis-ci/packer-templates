@@ -25,6 +25,7 @@
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
+include_recipe 'travis_build_environment::haskell'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker::binary'
