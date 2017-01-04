@@ -61,6 +61,8 @@ e2fsprogs
 eatmydata
 ed
 eject
+emacs
+emacs23-nox
 ethtool
 file
 findutils
@@ -185,6 +187,7 @@ libgdbm-dev
 libgdbm3:amd64
 libgeoip1:amd64
 libgirepository-1.0-1
+libgl1-mesa-glx
 libglib2.0-0:amd64
 libglib2.0-data
 libgmp3-dev
@@ -504,6 +507,7 @@ wget
 whiptail
 wireless-regdb
 x11-utils
+x11-xserver-utils
 xauth
 xfsprogs
 xkb-data

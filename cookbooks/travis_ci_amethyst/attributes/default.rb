@@ -38,6 +38,19 @@ gimme_versions = %w(
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
+ghc_versions = %w(
+  7.10.3
+  8.0.2
+)
+cabal_versions = %w(
+  1.22
+  1.24
+)
+override['travis_build_environment']['haskell_ghc_versions'] = ghc_versions
+override['travis_build_environment']['haskell_cabal_versions'] = cabal_versions
+override['travis_build_environment']['haskell_default_ghc'] = ghc_versions.max
+override['travis_build_environment']['haskell_default_cabal'] = cabal_versions.max
+
 override['java']['jdk_version'] = '8'
 override['java']['install_flavor'] = 'oracle'
 override['java']['oracle']['accept_oracle_download_terms'] = true
@@ -120,6 +133,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   dart
   elixir
   erlang
+  haskell
   haxe
   julia
   perl

@@ -25,6 +25,7 @@
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
+include_recipe 'travis_build_environment::haskell'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   include_recipe 'travis_docker::binary'
@@ -62,8 +63,6 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs'
 include_recipe 'travis_phantomjs::2'
-include_recipe 'emacs::nox'
-include_recipe 'vim'
 include_recipe 'travis_system_info'
 
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are

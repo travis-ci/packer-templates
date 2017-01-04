@@ -3,14 +3,24 @@ set -o errexit
 
 main() {
   : "${DPKG_MANIFEST_JSON:=/.dpkg-manifest.json}"
+  local package_field
+  package_field="$(__get_package_field)"
   (
     echo '{'
     dpkg --get-selections \
       | awk '/\sinstall$/ { print $1 }' \
-      | xargs dpkg-query -W -f="\"\${binary:Package}\": \"\${Version}\",\\n"
+      | xargs dpkg-query -W -f="\"\${${package_field}}\": \"\${Version}\",\\n"
     echo "\"__timestamp\": \"$(date +%Y%m%dT%H%M%S)\"}"
   ) | python -m json.tool \
     | tee "${DPKG_MANIFEST_JSON}"
+}
+
+__get_package_field() {
+  man dpkg-query | if grep -q PackageSpec; then
+    echo 'PackageSpec'
+  else
+    echo 'binary:Package'
+  fi
 }
 
 main "$@"

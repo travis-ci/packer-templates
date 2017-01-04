@@ -7,6 +7,11 @@ META_FILES := \
 	$(PWD)/tmp/docker-meta/.dumped \
 	$(PWD)/tmp/job-board-env/.dumped
 PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
+SYSTEM_INFO_COMMANDS_FILES := \
+	packer-assets/amethyst-system-info-commands.yml \
+	packer-assets/connie-system-info-commands.yml \
+	packer-assets/garnet-system-info-commands.yml \
+	packer-assets/sugilite-system-info-commands.yml
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
 CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
@@ -31,7 +36,7 @@ UNZIP ?= unzip
 	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
 
 .PHONY: all
-all: $(META_FILES) $(PHP_PACKAGES_FILE)
+all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
 .PHONY: stacks-short
 stacks-short:
@@ -61,6 +66,7 @@ test:
 .PHONY: clean
 clean:
 	$(RM) -r $(PWD)/tmp/docker-meta $(PWD)/tmp/git-meta
+	find packer-assets/system-info.d -type f | xargs touch
 
 .PHONY: packer-build-trigger
 packer-build-trigger:
@@ -115,4 +121,11 @@ $(META_FILES): .git/HEAD
 $(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
 	chmod 0600 $@
 	$(SED) 's/libcurl4-openssl-dev/libcurl4-gnutls-dev/' < $^ > $@
+	chmod 0400 $@
+
+packer-assets/%-system-info-commands.yml: $(wildcard packer-assets/system-info.d/*.yml)
+	chmod 0600 $@
+	./bin/generate-system-info-commands \
+		$(shell echo $@ | sed 's,packer-assets/,,;s,-system-info-commands.yml,,') \
+		>$@
 	chmod 0400 $@

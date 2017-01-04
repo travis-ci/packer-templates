@@ -1,0 +1,4 @@
+commands:
+  common:
+    - command: phpenv versions
+    - command: composer --version

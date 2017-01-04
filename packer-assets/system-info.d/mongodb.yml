@@ -1,0 +1,5 @@
+commands:
+  common:
+    - command: mongod --version
+      name: MongoDB version
+      pipe: perl -n -e '/version v(.*)$/ && { print "MongoDB $1\n" }'
