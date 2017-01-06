@@ -34,7 +34,9 @@ include_recipe 'java'
 include_recipe 'ant'
 include_recipe 'maven'
 include_recipe 'leiningen'
-include_recipe 'sbt-extras'
+# FIXME: sbt-extras installation currently busted due to incompatibility
+# something something https://github.com/travis-ci/travis-build/pull/701
+# include_recipe 'sbt-extras'
 include_recipe 'gradle::tarball'
 include_recipe 'travis_system_info'
 include_recipe 'sweeper'
