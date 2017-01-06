@@ -10,5 +10,6 @@ issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'nodejs'
 depends 'sweeper'
+depends 'travis_packer_templates'
 depends 'travis_system_info'
 depends 'travis_ci_standard'
