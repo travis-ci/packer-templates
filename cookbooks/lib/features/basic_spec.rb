@@ -142,8 +142,6 @@ end
 ).each do |filename|
   describe file(filename) do
     it { should be_exist }
-    its(:content) { should match(/\$hostname/) }
-    its(:content) { should match(/\$fqdn/) }
     its(:content) { should match(/managed by chef/i) }
     its(:content) { should match(/travis_build_environment/i) }
   end
