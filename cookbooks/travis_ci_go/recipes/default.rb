@@ -24,7 +24,9 @@
 
 include_recipe 'travis_packer_templates'
 
-unless node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
+if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
+  include_recipe 'travis_build_environment::hostname'
+else
   include_recipe 'travis_ci_standard'
 end
 
