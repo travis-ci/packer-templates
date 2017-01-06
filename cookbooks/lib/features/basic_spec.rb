@@ -779,7 +779,7 @@ describe file('/opt') do
   end
 end
 
-describe file('/etc/hosts') do
+describe file('/etc/hosts'), docker: false do
   let :lines do
     subject.content.split("\n").map(&:strip).reject do |line|
       line =~ /^\s*#/ || line.empty?
@@ -802,7 +802,7 @@ describe file('/etc/hosts') do
   end
 end
 
-describe 'disabled ipv6' do
+describe 'disabled ipv6', docker: false do
   describe command('ip addr') do
     its(:stdout) { should_not match(/\binet6\s+.+::.+scope\s+link/) }
   end
