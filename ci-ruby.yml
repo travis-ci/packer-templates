@@ -61,7 +61,7 @@ provisioners:
   only:
   - googlecompute
 - type: shell
-  inline: echo curl >/var/tmp/packages.txt
+  inline: echo man-db >/var/tmp/packages.txt
   only:
   - docker
 - type: shell
