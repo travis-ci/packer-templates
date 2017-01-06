@@ -12,7 +12,7 @@ override['gimme']['versions'] = gimme_versions
 override['gimme']['default_version'] = gimme_versions.max
 
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/system-info-precise-commands.yml'
+  '/var/tmp/system-info-commands.yml'
 
 default['python']['pyenv']['pythons'] = []
 

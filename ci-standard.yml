@@ -48,6 +48,11 @@ provisioners:
   - TRAVIS_COOKBOOKS_EDGE_BRANCH={{ user `travis_cookbooks_edge_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: packer-assets/standard-system-info-commands.yml
+  destination: /var/tmp/system-info-commands.yml
+- type: shell
+  inline: chmod 0644 /var/tmp/system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   install_command: "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12.9"
