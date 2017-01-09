@@ -1,38 +1,47 @@
 #!/usr/bin/env bash
-
 set -o errexit
-set -o xtrace
 
-if [[ $PACKER_BUILDER_TYPE = googlecompute || $PACKER_BUILDER_TYPE = amazon-ebs ]]; then
-  echo "Skipping minimization on $PACKER_BUILDER_TYPE"
-  exit 0
-fi
+main() {
+  set -o xtrace
 
-if [[ $PACKER_BUILDER_TYPE != docker ]]; then
-  readonly SWAP_UUID=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)
-
-  if [[ $SWAP_UUID ]]; then
-    readonly SWAP_PART=$(readlink -f /dev/disk/by-uuid/"$SWAP_UUID")
-    /sbin/swapoff "$SWAP_PART"
-    dd if=/dev/zero of="$SWAP_PART" bs=1M || echo "dd exit $? suppressed"
-    /sbin/mkswap -U "$SWAP_UUID" "$SWAP_PART"
+  if [[ "x${PACKER_BUILDER_TYPE}" = xgooglecompute || "x${PACKER_BUILDER_TYPE}" = xamazon-ebs ]]; then
+    echo "Skipping minimization on ${PACKER_BUILDER_TYPE}"
+    exit 0
   fi
-fi
 
-dd if=/dev/zero of=/EMPTY bs=1M &
-export DD_PID="$!"
-echo 'snoozing a bit here for dd mkay'
-sleep 5
+  if [[ "x${PACKER_BUILDER_TYPE}" != xdocker ]]; then
+    readonly SWAP_UUID
+    SWAP_UUID="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
 
-trap 'kill -9 '"${DD_PID}"' &>/dev/null || true' EXIT QUIT TERM INT
+    if [[ "${SWAP_UUID}" ]]; then
+      readonly SWAP_PART
+      SWAP_PART="$(readlink -f "/dev/disk/by-uuid/${SWAP_UUID}")"
+      /sbin/swapoff "${SWAP_PART}"
+      dd if=/dev/zero of="${SWAP_PART}" bs=1M \
+        || echo "dd exit $? suppressed"
+      /sbin/mkswap -U "${SWAP_UUID}" "${SWAP_PART}"
+    fi
+  fi
 
-while pgrep dd; do
-  kill -USR1 "$DD_PID" || true
+  dd if=/dev/zero of=/EMPTY bs=1M &
+  export DD_PID="$!"
+  echo 'snoozing a bit here for dd mkay'
   sleep 5
-done
 
-rm -f /EMPTY
-sync
+  trap 'kill -9 '"${DD_PID}"' &>/dev/null || true' EXIT QUIT TERM INT
 
-vmware-toolbox-cmd disk shrink / || echo "vmware-toolbox-cmd exit $? suppressed"
-vmware-toolbox-cmd disk shrink /boot || echo "vmware-toolbox-cmd exit $? suppressed"
+  while pgrep dd; do
+    kill -USR1 "${DD_PID}" || true
+    sleep 5
+  done
+
+  rm -f /EMPTY
+  sync
+
+  vmware-toolbox-cmd disk shrink / \
+    || echo "vmware-toolbox-cmd exit $? suppressed"
+  vmware-toolbox-cmd disk shrink /boot \
+    || echo "vmware-toolbox-cmd exit $? suppressed"
+}
+
+main "${@}"
