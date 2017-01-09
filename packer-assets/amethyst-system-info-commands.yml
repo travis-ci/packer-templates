@@ -144,4 +144,6 @@ commands:
   - command: kerl list installations
   - command: kiex list
   - command: rebar --version
+  - command: ls -l /usr/local/ghc
+    name: ghc installations
   - command: perlbrew list
