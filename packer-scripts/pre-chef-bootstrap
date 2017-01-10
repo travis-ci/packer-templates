@@ -26,7 +26,7 @@ __install_packages() {
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
 
-  if [[ "x${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
+  if [[ "x${PACKER_BUILDER_TYPE}" =~ xgooglecompute ]]; then
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
   fi
