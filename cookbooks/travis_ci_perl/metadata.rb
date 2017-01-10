@@ -10,5 +10,7 @@ issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'perlbrew'
 depends 'sweeper'
-depends 'travis_system_info'
+depends 'travis_build_environment'
 depends 'travis_ci_standard'
+depends 'travis_packer_templates'
+depends 'travis_system_info'

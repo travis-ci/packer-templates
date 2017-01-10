@@ -22,7 +22,14 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'travis_ci_standard'
+include_recipe 'travis_packer_templates'
+
+if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
+  include_recipe 'travis_build_environment::hostname'
+else
+  include_recipe 'travis_ci_standard'
+end
+
 include_recipe 'rvm'
 include_recipe 'rvm::multi'
 include_recipe 'java'
