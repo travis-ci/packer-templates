@@ -4,12 +4,12 @@ set -o errexit
 main() {
   set -o xtrace
 
-  if [[ "x${PACKER_BUILDER_TYPE}" = xgooglecompute || "x${PACKER_BUILDER_TYPE}" = xamazon-ebs ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" = googlecompute || "${PACKER_BUILDER_TYPE}" = amazon-ebs ]]; then
     echo "Skipping minimization on ${PACKER_BUILDER_TYPE}"
     exit 0
   fi
 
-  if [[ "x${PACKER_BUILDER_TYPE}" != xdocker ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     readonly SWAP_UUID
     SWAP_UUID="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
 

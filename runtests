@@ -40,7 +40,7 @@ git grep -l '^#!/usr/bin/env bash' | xargs shellcheck
 echo 'Running shfmt'
 git grep -l '^#!/usr/bin/env bash' | xargs shfmt -i 2 -w
 
-if [[ "x$(lsb_release -sc 2>/dev/null)" != xprecise ]]; then
+if [[ "$(lsb_release -sc 2>/dev/null)" != precise ]]; then
   # this code should never *need* to run on precise
   rspec
 fi
