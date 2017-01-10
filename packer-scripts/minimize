@@ -30,7 +30,7 @@ main() {
 
   trap 'kill -9 '"${DD_PID}"' &>/dev/null || true' EXIT QUIT TERM INT
 
-  while pgrep dd; do
+  while kill -0 "${DD_PID}"; do
     kill -USR1 "${DD_PID}" || true
     sleep 5
   done
