@@ -14,11 +14,11 @@ main() {
   : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
   : "${PACKER_BUILDER_TYPE:=docker}"
 
-  if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" = 'docker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "x$(lsb_release -sc)" = 'xprecise' ]]; then
+  if [[ "$(lsb_release -sc)" = 'precise' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~precise:false"
   fi
 

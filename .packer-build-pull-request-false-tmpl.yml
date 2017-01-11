@@ -7,7 +7,7 @@ config:
   group: edge
   sudo: true
   before_install:
-  - if [[ "x${BUILDER}" = "xdocker" ]] ; then
+  - if [[ "${BUILDER}" = "docker" ]] ; then
       sudo apt-get update -yqq ;
       sudo apt-get purge -o Dpkg::Options::="--force-confnew" -yqq docker-engine ;
       sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq docker-engine lvm2 xfsprogs ;
