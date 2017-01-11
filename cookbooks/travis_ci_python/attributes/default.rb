@@ -7,7 +7,7 @@ default['rvm']['gems'] = %w(nokogiri)
 default['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 gimme_versions = %w(
-  1.4.2
+  1.7.4
 )
 
 override['gimme']['versions'] = gimme_versions
