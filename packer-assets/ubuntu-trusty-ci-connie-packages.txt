@@ -489,7 +489,6 @@ unzip
 update-manager-core
 update-notifier-common
 upstart
-ureadahead
 usbutils
 util-linux
 uuid-runtime
