@@ -52,13 +52,8 @@ node_versions = %w(
   6.3.0
 )
 
-override['nodejs']['versions'] = node_versions
-override['nodejs']['default'] = node_versions.max
-override['nodejs']['default_modules'] = [
-  {
-    'module' => 'grunt-cli'
-  }
-]
+override['travis_build_environment']['nodejs_versions'] = node_versions
+override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w(
   2.7.12

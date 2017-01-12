@@ -9,7 +9,6 @@ source_url 'https://github.com/travis-ci/packer-templates'
 issues_url 'https://github.com/travis-ci/packer-templates/issues'
 
 depends 'memcached'
-depends 'nodejs'
 depends 'openssl'
 depends 'postgresql'
 depends 'travis_build_environment'

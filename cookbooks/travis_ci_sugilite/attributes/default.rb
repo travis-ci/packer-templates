@@ -112,16 +112,9 @@ node_versions = %w(
   4.1.2
 )
 
-override['nodejs']['versions'] = node_versions
-override['nodejs']['aliases']['0.10'] = '0.1'
-override['nodejs']['aliases']['0.11.16'] = 'node-unstable'
-override['nodejs']['default'] = node_versions.max
-override['nodejs']['default_modules'] = [
-  {
-    'module' => 'grunt-cli',
-    'required' => '0.10'
-  }
-]
+override['travis_build_environment']['nodejs_versions'] = node_versions
+override['travis_build_environment']['nodejs_aliases'] = {}
+override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w(
   2.6.9
