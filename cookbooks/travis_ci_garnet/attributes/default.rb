@@ -61,7 +61,7 @@ override['nodejs']['default_modules'] = [
 ]
 
 pythons = %w(
-  2.7.12
+  2.7.13
   3.5.2
 )
 
