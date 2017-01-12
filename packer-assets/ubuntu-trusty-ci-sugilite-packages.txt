@@ -35,7 +35,6 @@ bzr
 ca-certificates
 ccache
 chromium-browser
-cloud-init
 command-not-found
 command-not-found-data
 console-setup
