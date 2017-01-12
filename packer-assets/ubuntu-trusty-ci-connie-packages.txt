@@ -396,9 +396,6 @@ policykit-1
 pollinate
 postgresql-client
 powermgmt-base
-ppp
-pppconfig
-pppoeconf
 procps
 psmisc
 python
@@ -484,7 +481,6 @@ tzdata
 ubuntu-keyring
 ubuntu-minimal
 ubuntu-release-upgrader-core
-ubuntu-standard
 ucf
 udev
 ufw
