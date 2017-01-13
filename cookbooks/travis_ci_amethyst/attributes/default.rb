@@ -32,7 +32,7 @@ override['travis_perlbrew']['modules'] = %w(
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w(
-  1.6.3
+  1.7.4
 )
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -69,8 +69,8 @@ override['travis_build_environment']['nodejs_default'] = node_versions.max
 override['travis_python']['pyenv']['pythons'] = []
 
 rubies = %w(
-  2.2.6
   2.3.3
+  2.4.0
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
