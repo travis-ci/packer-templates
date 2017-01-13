@@ -5,7 +5,7 @@ default['rvm']['rubies'] = [
 default['rvm']['gems'] = %w(nokogiri)
 
 gimme_versions = %w(
-  1.4.2
+  1.7.4
 )
 
 override['gimme']['versions'] = gimme_versions
