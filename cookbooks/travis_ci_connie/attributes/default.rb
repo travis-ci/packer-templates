@@ -20,10 +20,10 @@ override['travis_python']['pyenv']['aliases'] = {}
 override['travis_python']['pip']['packages'] = {}
 override['travis_python']['system']['pythons'] = []
 
-override['nodejs']['default'] = ''
-override['nodejs']['versions'] = []
-override['nodejs']['aliases'] = {}
-override['nodejs']['default_modules'] = []
+override['travis_build_environment']['nodejs_default'] = ''
+override['travis_build_environment']['nodejs_versions'] = []
+override['travis_build_environment']['nodejs_aliases'] = {}
+override['travis_build_environment']['nodejs_default_modules'] = []
 
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/connie-system-info-commands.yml'
