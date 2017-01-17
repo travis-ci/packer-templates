@@ -1,4 +1,3 @@
-accountsservice
 acpid
 adduser
 ant
@@ -120,11 +119,9 @@ klibc-utils
 kmod
 krb5-locales
 language-pack-en
-language-selector-common
 laptop-detect
 lemon
 less
-libaccountsservice0:amd64
 libacl1:amd64
 libapparmor-perl
 libapparmor1:amd64
@@ -181,9 +178,6 @@ libfribidi0:amd64
 libfuse2:amd64
 libgc1c2:amd64
 libgcc1:amd64
-libgck-1-0:amd64
-libgcr-3-common
-libgcr-base-3-1:amd64
 libgcrypt11:amd64
 libgdbm-dev
 libgdbm3:amd64
@@ -256,7 +250,6 @@ libpam-cap:amd64
 libpam-modules-bin
 libpam-modules:amd64
 libpam-runtime
-libpam-systemd:amd64
 libpam0g:amd64
 libparse-debianchangelog-perl
 libparted0debian1:amd64
@@ -268,9 +261,6 @@ libplymouth2:amd64
 libpng12-0:amd64
 libpng12-dev
 libpod-latex-perl
-libpolkit-agent-1-0:amd64
-libpolkit-backend-1-0:amd64
-libpolkit-gobject-1-0:amd64
 libpopt0:amd64
 libpq-dev
 libprocps3:amd64
@@ -306,8 +296,6 @@ libssl0.9.8
 libssl1.0.0:amd64
 libstdc++6:amd64
 libsub-name-perl
-libsystemd-daemon0:amd64
-libsystemd-login0:amd64
 libt1-dev
 libtasn1-6:amd64
 libterm-ui-perl
@@ -393,7 +381,6 @@ perl-modules
 pkg-config
 plymouth
 plymouth-theme-ubuntu-text
-policykit-1
 pollinate
 postgresql-client
 powermgmt-base
