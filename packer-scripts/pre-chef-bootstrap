@@ -8,7 +8,7 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
 
-  if [[ "x${PACKER_BUILDER_TYPE}" != xdocker ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
   __install_packages
@@ -22,11 +22,11 @@ __disable_ipv6() {
 }
 
 __install_packages() {
-  if [[ "x${PACKER_BUILDER_TYPE}" =~ xvmware ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
 
-  if [[ "x${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
   fi

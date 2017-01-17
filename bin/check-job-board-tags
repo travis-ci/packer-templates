@@ -49,7 +49,7 @@ main() {
       COMBOS+=(features:incl:ruby:$lang)
     fi
     for excl in android erlang go haskell jvm nodejs perl php python ruby; do
-      if [[ "x${lang}" = "x${excl}" ]]; then
+      if [[ "${lang}" = "${excl}" ]]; then
         continue
       fi
       COMBOS+=(languages:excl:$lang:$excl)

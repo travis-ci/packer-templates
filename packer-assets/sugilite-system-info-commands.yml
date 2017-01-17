@@ -32,6 +32,11 @@ commands:
     name: jq version
   - command: bats --version
     name: bats version
+  - command: shellcheck --version
+    name: shellcheck version
+    pipe: awk '/^version:/ { print $2 }'
+  - command: shfmt -version
+    name: shfmt version
   - command: ccache -V
     name: ccache version
   - command: cmake --version
@@ -72,8 +77,8 @@ commands:
   - command: vim --version
     name: vim version
   - command: lsof -v
-    pipe: awk '/^ +revision:/ { print $2 }'
     name: lsof version
+    pipe: awk '/^ +revision:/ { print $2 }'
   - command: iptables --version
     name: iptables version
   - command: curl --version

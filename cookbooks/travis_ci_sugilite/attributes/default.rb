@@ -55,16 +55,35 @@ override['travis_perlbrew']['modules'] = %w(
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w(
-  1.2.2
   1.3.3
   1.4.3
   1.5.4
-  1.6.3
-  1.7
+  1.6.4
+  1.7.4
 )
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
+
+ghc_versions = %w(
+  7.0.4
+  7.4.2
+  7.6.3
+  7.8.4
+  7.10.3
+  8.0.2
+)
+cabal_versions = %w(
+  1.16
+  1.18
+  1.20
+  1.22
+  1.24
+)
+override['travis_build_environment']['haskell_ghc_versions'] = ghc_versions
+override['travis_build_environment']['haskell_cabal_versions'] = cabal_versions
+override['travis_build_environment']['haskell_default_ghc'] = ghc_versions.max
+override['travis_build_environment']['haskell_default_cabal'] = cabal_versions.max
 
 override['java']['jdk_version'] = '8'
 override['java']['install_flavor'] = 'oracle'
@@ -84,33 +103,26 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 node_versions = %w(
-  0.6.21
-  0.8.28
-  0.10.40
-  0.11.16
-  0.12.7
-  4.1.2
+  0.12.18
+  4.7.2
+  5.12.0
+  6.9.4
+  7.4.0
 )
 
-override['nodejs']['versions'] = node_versions
-override['nodejs']['aliases']['0.10'] = '0.1'
-override['nodejs']['aliases']['0.11.16'] = 'node-unstable'
-override['nodejs']['default'] = node_versions.max
-override['nodejs']['default_modules'] = [
-  {
-    'module' => 'grunt-cli',
-    'required' => '0.10'
-  }
-]
+override['travis_build_environment']['nodejs_versions'] = node_versions
+override['travis_build_environment']['nodejs_aliases'] = {}
+override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w(
   2.6.9
-  2.7.12
+  2.7.13
   3.2.6
   3.3.6
-  3.4.4
+  3.4.5
   3.5.2
-  pypy-5.4.1
+  3.6.0
+  pypy2-5.6.0
   pypy3-2.4.0
 )
 
@@ -135,12 +147,11 @@ pythons.each do |full_name|
 end
 
 rubies = %w(
-  jruby-9.1.2.0
-  1.9.3-p551
-  2.0.0-p648
+  jruby-9.1.6.0
   2.1.10
   2.2.6
   2.3.3
+  2.4.0
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max

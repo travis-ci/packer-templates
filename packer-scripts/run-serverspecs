@@ -14,11 +14,11 @@ main() {
   : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
   : "${PACKER_BUILDER_TYPE:=docker}"
 
-  if [[ "x${PACKER_BUILDER_TYPE}" = 'xdocker' ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" = 'docker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "x$(lsb_release -sc)" = 'xprecise' ]]; then
+  if [[ "$(lsb_release -sc)" = 'precise' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~precise:false"
   fi
 
@@ -48,8 +48,8 @@ __install_chefdk() {
 
   apt-key add "${tmp}/chef.asc"
 
-  echo "deb https://packages.chef.io/current-apt $(lsb_release -cs) main" \
-    >/etc/apt/sources.list.d/chef-current.list
+  echo "deb https://packages.chef.io/stable-apt $(lsb_release -cs) main" \
+    >/etc/apt/sources.list.d/chef-stable.list
 
   __run_retry 2 30 apt-get update -y
   __run_retry 2 30 apt-get install -y chefdk
@@ -88,7 +88,7 @@ EOF
 
 __remove_chefdk() {
   __run_retry 2 30 apt-get purge -y chefdk
-  rm -f /etc/apt/sources.list.d/chef-current.list
+  rm -f /etc/apt/sources.list.d/chef-stable.list
   __run_retry 2 30 apt-get update -y
 }
 

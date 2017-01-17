@@ -17,7 +17,7 @@ main() {
   local sha
   sha="$(git describe --always --dirty)"
 
-  if [[ "x${branch}" = 'xHEAD' ]]; then
+  if [[ "${branch}" = 'HEAD' ]]; then
     branch="${PACKER_TEMPLATES_BRANCH:-HEAD}"
   fi
 

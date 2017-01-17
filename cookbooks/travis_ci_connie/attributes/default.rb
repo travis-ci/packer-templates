@@ -9,7 +9,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w(
-  1.6.3
+  1.7.4
 )
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -20,17 +20,17 @@ override['travis_python']['pyenv']['aliases'] = {}
 override['travis_python']['pip']['packages'] = {}
 override['travis_python']['system']['pythons'] = []
 
-override['nodejs']['default'] = ''
-override['nodejs']['versions'] = []
-override['nodejs']['aliases'] = {}
-override['nodejs']['default_modules'] = []
+override['travis_build_environment']['nodejs_default'] = ''
+override['travis_build_environment']['nodejs_versions'] = []
+override['travis_build_environment']['nodejs_aliases'] = {}
+override['travis_build_environment']['nodejs_default_modules'] = []
 
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/connie-system-info-commands.yml'
 
 rubies = %w(
-  2.2.6
   2.3.3
+  2.4.0
 )
 
 override['travis_build_environment']['default_ruby'] = rubies.max

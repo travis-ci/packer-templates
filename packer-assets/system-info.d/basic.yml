@@ -36,7 +36,7 @@ commands:
     - { command: zip --version, name: zip version }
     - { command: unzip --version, name: unzip version }
     - { command: vim --version, name: vim version }
-    - { command: lsof -v, pipe: "awk '/^ +revision:/ { print $2 }'", name: lsof version }
+    - { command: lsof -v, name: lsof version, pipe: "awk '/^ +revision:/ { print $2 }'" }
     - { command: iptables --version, name: iptables version }
     - { command: curl --version, pipe: head -1, name: curl version }
     - { command: wget --version, pipe: head -1, name: wget version }

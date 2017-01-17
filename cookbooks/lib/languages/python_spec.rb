@@ -36,7 +36,7 @@ describe 'python environment' do
   end
 
   {
-    'python2.7' => '2.7.12',
+    'python2.7' => '2.7.13',
     'python3.5' => '3.5.2'
   }.each do |python_alias, python_version|
     describe pycommand('python -m this', version: python_alias) do

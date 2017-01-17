@@ -5,11 +5,14 @@ default['rvm']['rubies'] = [
 default['rvm']['gems'] = %w(nokogiri)
 
 gimme_versions = %w(
-  1.4.2
+  1.7.4
 )
 
 override['gimme']['versions'] = gimme_versions
 override['gimme']['default_version'] = gimme_versions.max
+
+override['travis_system_info']['commands_file'] = \
+  '/var/tmp/system-info-commands.yml'
 
 default['python']['pyenv']['pythons'] = []
 
