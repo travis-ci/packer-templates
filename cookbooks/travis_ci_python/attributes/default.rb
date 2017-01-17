@@ -14,7 +14,6 @@ override['gimme']['versions'] = gimme_versions
 override['gimme']['default_version'] = gimme_versions.max
 
 pythons = %w(
-  2.6.9
   2.7.13
   3.2.6
   3.3.6
