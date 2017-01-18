@@ -116,8 +116,6 @@ override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w(
   2.7.13
-  3.2.6
-  3.3.6
   3.4.5
   3.5.2
   3.6.0
