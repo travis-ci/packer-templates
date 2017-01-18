@@ -145,6 +145,9 @@ pythons.each do |full_name|
     python_aliases(full_name)
 end
 
+override['python']['pip']['packages']['3.2'] = []
+override['python']['pip']['packages']['3.3'] = []
+
 rubies = %w(
   jruby-9.1.6.0
   2.1.10

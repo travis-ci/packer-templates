@@ -42,6 +42,9 @@ pythons.each do |full_name|
     python_aliases(full_name)
 end
 
+override['python']['pip']['packages']['3.2'] = []
+override['python']['pip']['packages']['3.3'] = []
+
 override['travis_packer_templates']['job_board']['stack'] = 'python'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
