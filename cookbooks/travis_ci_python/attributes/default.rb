@@ -14,7 +14,6 @@ override['gimme']['versions'] = gimme_versions
 override['gimme']['default_version'] = gimme_versions.max
 
 pythons = %w(
-  2.6.9
   2.7.13
   3.2.6
   3.3.6
@@ -37,11 +36,14 @@ def python_aliases(full_name)
   [nodash[0, 3]]
 end
 
-override['travis_python']['pyenv']['pythons'] = pythons
+override['python']['pyenv']['pythons'] = pythons
 pythons.each do |full_name|
-  override['travis_python']['pyenv']['aliases'][full_name] = \
+  override['python']['pyenv']['aliases'][full_name] = \
     python_aliases(full_name)
 end
+
+override['python']['pip']['packages']['3.2'] = []
+override['python']['pip']['packages']['3.3'] = []
 
 override['travis_packer_templates']['job_board']['stack'] = 'python'
 override['travis_packer_templates']['job_board']['features'] = %w(
