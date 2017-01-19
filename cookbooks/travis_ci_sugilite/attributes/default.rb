@@ -115,7 +115,6 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w(
-  2.6.9
   2.7.13
   3.2.6
   3.3.6
@@ -145,6 +144,9 @@ pythons.each do |full_name|
   override['travis_python']['pyenv']['aliases'][full_name] = \
     python_aliases(full_name)
 end
+
+override['python']['pip']['packages']['3.2'] = []
+override['python']['pip']['packages']['3.3'] = []
 
 rubies = %w(
   jruby-9.1.6.0
