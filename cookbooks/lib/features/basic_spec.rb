@@ -33,11 +33,11 @@ describe command('bats --version'), precise: false do
 end
 
 describe command('shellcheck --version'), precise: false do
-  its(:stdout) { should match(/^version: \d\.\d\.\d/) }
+  its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
 end
 
-describe command('shfmt -version'), precise: false, dev: true do
-  its(:stdout) { should match(/^v\d\.\d\.\d/) }
+describe command('shfmt -version'), precise: false do
+  its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
 end
 
 def bzr_project
