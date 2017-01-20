@@ -17,16 +17,13 @@ config:
   install:
   - git clone --branch="%{branch}" "https://github.com/travis-ci/packer-templates.git"
   - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
-  - "./packer-templates/bin/packer-build-install"
+  - ./packer-templates/bin/packer-build-install
   script:
   - export PACKER_TEMPLATES_BRANCH="%{branch}"
   - "./packer-templates/bin/packer-build-script %{template_name}"
-  - export PACKER_BUILD_IMAGE_NAME=$(cat ./packer-templates/tmp/%{template_name}/latest-image-name || echo empty)
-  - touch ./packer-templates/tmp/image-metadata-$PACKER_BUILD_IMAGE_NAME.tar.bz2
-  - cp -v ./packer-templates/tmp/image-metadata-$PACKER_BUILD_IMAGE_NAME.tar.bz2 ./image-metadata-$PACKER_BUILD_IMAGE_NAME.tar.bz2
   addons:
     artifacts:
       paths:
-      - image-metadata-$PACKER_BUILD_IMAGE_NAME.tar.bz2
+      - image-metadata-$(cat .packer-build-image-name).tar.bz2
       target_paths:
       - travis-ci/packer-templates/%{template_name}/$BUILDER
