@@ -20,3 +20,4 @@ rabbitmqadmin
 /coverage/
 /vendor/
 /.bundle/
+image-metadata-*.tar.bz2

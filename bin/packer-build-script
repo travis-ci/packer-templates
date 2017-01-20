@@ -9,12 +9,11 @@ main() {
 
   local template_name="${1}"
   local pt
-  pt="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+  pt="$(__abspath "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")"
 
-  cd "${pt}"
-
-  make
-  make "${template_name}"
+  if [[ ! "${DISABLE_PACKER_BUILD}" ]]; then
+    __packer_build "${pt}" "${template_name}"
+  fi
 
   if [[ ! "${TRAVIS_BUILD_DIR}" ]]; then
     exit 0
@@ -25,9 +24,20 @@ main() {
   __copy_metadata_tarball "${pt}/tmp" "${TRAVIS_BUILD_DIR}" "${template_name}"
 }
 
+__packer_build() {
+  local pt="${1}"
+  local template_name="${2}"
+  pushd "${pt}"
+  make
+  make "${template_name}"
+  popd
+}
+
 __copy_metadata_tarball() {
-  local pttmp="${1}"
-  local top="${2}"
+  local pttmp
+  pttmp="$(__abspath "${1}")"
+  local top
+  top="$(__abspath "${2}")"
   local template_name="${3}"
 
   local packer_build_image_name
@@ -41,6 +51,13 @@ __copy_metadata_tarball() {
   echo "     Writing ${packer_build_image_name} to:" >&2
   echo "         ${top}/.packer-build-image-name" >&2
   echo "${packer_build_image_name}" >"${top}/.packer-build-image-name"
+}
+
+__abspath() {
+  python <<EOPYTHON
+import os, sys
+sys.stdout.write(os.path.abspath("${1}") + "\\n")
+EOPYTHON
 }
 
 main "$@"
