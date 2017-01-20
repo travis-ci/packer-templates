@@ -16,6 +16,8 @@ packer_cache
 /*.pem
 rabbitmqadmin
 .packer-template
+.packer-build-image-name
 /coverage/
 /vendor/
 /.bundle/
+image-metadata-*.tar.bz2

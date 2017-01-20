@@ -24,10 +24,9 @@ config:
   script:
   - export PACKER_TEMPLATES_BRANCH="+refs/pull/%{pull_request}/merge"
   - "./packer-templates/bin/packer-build-script %{template_name}"
-  - touch ./packer-templates/tmp/image-metadata-empty.tar.bz2
   addons:
     artifacts:
       paths:
-      - ./packer-templates/tmp/image-metadata-$(cat ./packer-templates/tmp/%{template_name}/latest-image-name || echo empty).tar.bz2
+      - image-metadata-$(cat .packer-build-image-name).tar.bz2
       target_paths:
       - travis-ci/packer-templates/%{template_name}/$BUILDER
