@@ -22,12 +22,13 @@ main() {
 
   echo "     Found \$TRAVIS_BUILD_DIR." >&2
   echo "     Copying metadata tarball to ${TRAVIS_BUILD_DIR}." >&2
-  __copy_metadata_tarball "${pt}/tmp" "${TRAVIS_BUILD_DIR}"
+  __copy_metadata_tarball "${pt}/tmp" "${TRAVIS_BUILD_DIR}" "${template_name}"
 }
 
 __copy_metadata_tarball() {
   local pttmp="${1}"
   local top="${2}"
+  local template_name="${3}"
 
   local packer_build_image_name
   packer_build_image_name="$(
