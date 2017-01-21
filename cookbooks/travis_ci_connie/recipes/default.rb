@@ -36,7 +36,7 @@ end
 include_recipe 'travis_docker::compose'
 include_recipe 'travis_java'
 include_recipe 'travis_perlbrew::multi'
-include_recipe 'postgresql::pgdg'
+include_recipe 'travis_postgresql::pgdg'
 include_recipe 'travis_python::pyenv'
 include_recipe 'travis_packer_templates::systemd_purge'
 include_recipe 'travis_system_info'
