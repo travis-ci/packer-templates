@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  : "${TMPDIR:=/var/tmp}"
+
+  local index_json
+  index_json="$(mktemp "${TMPDIR}/index.json.XXXXXXXX")"
+
+  curl -sSL -o "${index_json}" 'https://nodejs.org/dist/index.json'
+  trap 'rm -f '"${index_json}" EXIT QUIT INT TERM
+
+  echo -n 'lts: '
+  jq -r '.[]|select(.lts)|.version' <"${index_json}" \
+    | sort --reverse \
+    | head -1
+
+  echo -n 'current: '
+  jq -r '.[]|select(.lts==false)|.version' <"${index_json}" \
+    | sort --reverse \
+    | head -1
+}
+
+main "$@"
