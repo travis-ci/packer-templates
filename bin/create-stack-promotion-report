@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+require 'json'
+require 'uri'
+
+def main
+  $DEBUG = ENV['DEBUG'] == '1'
+  auths = `heroku config:get -a job-board-production AUTH_TOKENS`.split(':')
+  auths.map!(&:strip)
+  auth = auths.last
+
+  groups = Hash[
+    (ENV['GROUPS'] || 'stable:edge').split(',')
+      .map(&:strip).map { |kv| kv.split(':', 2) }
+  ]
+
+  top = `git rev-parse --show-toplevel`.strip
+  Dir.chdir(top)
+
+  `make stacks`.strip.split.each do |stack|
+    groups.each do |cur, nxt|
+      fetch_diff(cur, nxt, stack, auth)
+    end
+  end
+  0
+end
+
+def fetch_diff(cur, nxt, stack, auth)
+  cur_image = latest_image(stack, cur, auth)
+  nxt_image = latest_image(stack, nxt, auth)
+  $stdout.puts "---> stack=#{stack} cur=#{cur_image} nxt=#{nxt_image}"
+  # TODO: fetch image metadata tarball(s) and ... stuff
+end
+
+def latest_image(stack, group, auth)
+  base_url = URI(
+    "https://packer-templates:#{auth}@job-board-production.herokuapp.com/images"
+  )
+  q = URI.encode_www_form(
+    name: "^travis-ci-#{stack}.*",
+    infra: 'gce',
+    tags: "group_#{group}:true",
+    'fields[images]' => 'name'
+  )
+
+  full_url = "#{base_url}?#{q}"
+  $stderr.puts "---> curl -s '#{full_url}'" if $DEBUG
+  body = JSON.parse(`curl -s '#{full_url}'`)
+  body['data'].map { |e| e['name'] }.sort.first
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__
