@@ -47,23 +47,11 @@ stacks: stacks-precise stacks-trusty
 
 .PHONY: stacks-precise
 stacks-precise:
-	@for f in ci-*.yml ; do \
-		if [[ $$f =~ standard ]]; then \
-		  continue; \
-		fi; \
-		grep -lE 'travis_cookbooks_edge_branch:.*precise-stable' $$f | \
-		$(SED) 's/ci-//;s/\.yml//;s/$$/-precise/' ; \
-	done
+	@bin/list-stacks precise
 
 .PHONY: stacks-trusty
 stacks-trusty:
-	@for f in ci-*.yml ; do \
-		if [[ $$f =~ standard ]]; then \
-		  continue; \
-		fi; \
-		grep -lE 'travis_cookbooks_edge_branch:.*master' $$f | \
-		$(SED) 's/ci-//;s/\.yml//;s/$$/-trusty/' ; \
-	done
+	@bin/list-stacks trusty
 
 .PHONY: test
 test:

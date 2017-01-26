@@ -10,17 +10,7 @@ class StackPromotionReporter
   end
 
   def report
-    groups = Hash[
-      env.fetch('GROUPS', 'stable:edge')
-         .split(',')
-         .map(&:strip)
-         .map { |kv| kv.split(':', 2) }
-    ]
-
-    top = `git rev-parse --show-toplevel`.strip
-    Dir.chdir(top)
-
-    `make stacks`.strip.split.each do |stack|
+    stacks.each do |stack|
       groups.each do |cur, nxt|
         fetch_diff(cur, nxt, stack)
       end
@@ -32,6 +22,29 @@ class StackPromotionReporter
 
   def env
     @env ||= Env.new
+  end
+
+  def top
+    @top ||= `git rev-parse --show-toplevel`.strip
+  end
+
+  def stacks
+    @stacks ||= (
+      dists.map { |d| `#{top}/bin/list-stacks #{d}`.strip.split }.flatten
+    )
+  end
+
+  def dists
+    @dists ||= env.fetch('DISTS', 'trusty,precise').split(',').map(&:strip)
+  end
+
+  def groups
+    @groups ||= Hash[
+      env.fetch('GROUPS', 'stable:edge')
+         .split(',')
+         .map(&:strip)
+         .map { |kv| kv.split(':', 2) }
+    ]
   end
 
   def fetch_diff(cur, nxt, stack)
