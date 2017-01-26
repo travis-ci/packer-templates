@@ -11,7 +11,7 @@ class Env
     (state[key] || '').strip
   end
 
-  def_delegators :@state, :[]=, :key?, :clear, :to_hash
+  def_delegators :@state, :[]=, :key?, :clear, :to_hash, :fetch
 
   def load_envdir(path)
     Dir.glob(File.join(path, '*')) do |entry|
