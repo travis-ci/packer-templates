@@ -30,7 +30,9 @@ class ImageMetadata
     @env_hash = env.to_hash
     @files = {}
 
-    dir.children.reject(&:directory?).each do |p|
+    return unless dir.exist?
+
+    dir.children.reject { |c| !c.exist? || c.directory? }.each do |p|
       @files[p.basename.to_s] = p
     end
   end
