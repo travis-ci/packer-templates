@@ -81,9 +81,9 @@ class ImageMetadata
   end
 
   def dir
-    @dir ||= Pathname.new(File.join(
-                            relbase, File.basename(tarball, '.tar.bz2')
-    ))
+    @dir ||= Pathname.new(
+      File.join(relbase, File.basename(tarball, '.tar.bz2'))
+    )
   end
 
   def tarball_exists?
