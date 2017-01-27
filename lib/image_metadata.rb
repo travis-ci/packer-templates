@@ -1,3 +1,4 @@
+require 'logger'
 require 'yaml'
 
 class ImageMetadata
@@ -5,6 +6,12 @@ class ImageMetadata
     @tarball = tarball
     @env = env
     @logger = logger
+    @env_hash = nil
+    @files = {}
+  end
+
+  def to_s
+    tarball
   end
 
   def parent_dir
@@ -19,8 +26,16 @@ class ImageMetadata
     extract_tarball
     load_job_board_register_yml
     load_image_metadata
-    env.to_hash
+
+    @env_hash = env.to_hash
+    @files = {}
+
+    dir.children.reject(&:directory?).each do |p|
+      @files[p.basename.to_s] = p
+    end
   end
+
+  attr_reader :env_hash, :files
 
   private
 
@@ -46,11 +61,11 @@ class ImageMetadata
   end
 
   def extract_tarball
-    system(*extract_command)
+    system(*extract_command, out: '/dev/null')
   end
 
   def extract_command
-    %W(tar -C #{relbase} -xjvf #{File.expand_path(tarball)})
+    %W(tar -C #{relbase} -xjf #{File.expand_path(tarball)})
   end
 
   def load_image_metadata
@@ -64,9 +79,9 @@ class ImageMetadata
   end
 
   def dir
-    @dir ||= File.join(
-      relbase, File.basename(tarball, '.tar.bz2')
-    )
+    @dir ||= Pathname.new(File.join(
+                            relbase, File.basename(tarball, '.tar.bz2')
+    ))
   end
 
   def tarball_exists?
@@ -79,5 +94,9 @@ class ImageMetadata
 
   def envdir
     @envdir ||= File.join(dir, 'env')
+  end
+
+  def logger
+    @logger ||= Logger.new($stdout)
   end
 end

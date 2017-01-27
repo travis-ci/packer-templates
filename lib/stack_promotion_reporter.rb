@@ -1,44 +1,49 @@
 require 'json'
+require 'pathname'
+require 'time'
+require 'tmpdir'
 require 'uri'
 
 require_relative 'env'
+require_relative 'stack_promotion'
 
 class StackPromotionReporter
-  def self.report!
-    exit 0 if new.report
+  def initialize(argv: ARGV)
+    @output_dir = Pathname.new(argv.first).expand_path unless argv.first.nil?
+  end
+
+  def self.report!(argv: ARGV)
+    exit 0 if new(argv: argv).report
     exit 1
   end
 
   def report
     stacks.each do |stack|
       groups.each do |cur, nxt|
-        fetch_diff(cur, nxt, stack)
+        report_promotion(cur, nxt, stack)
       end
     end
     0
   end
 
-  private
-
-  def env
+  private def env
     @env ||= Env.new
   end
 
-  def top
+  private def top
     @top ||= `git rev-parse --show-toplevel`.strip
   end
 
-  def stacks
-    @stacks ||= (
+  private def stacks
+    @stacks ||=
       dists.map { |d| `#{top}/bin/list-stacks #{d}`.strip.split }.flatten
-    )
   end
 
-  def dists
+  private def dists
     @dists ||= env.fetch('DISTS', 'trusty,precise').split(',').map(&:strip)
   end
 
-  def groups
+  private def groups
     @groups ||= Hash[
       env.fetch('GROUPS', 'stable:edge')
          .split(',')
@@ -47,27 +52,18 @@ class StackPromotionReporter
     ]
   end
 
-  def fetch_diff(cur, nxt, stack)
-    cur_image = latest_image(stack, cur)
-    nxt_image = latest_image(stack, nxt)
-    $stdout.puts "---> stack=#{stack} cur=#{cur_image} nxt=#{nxt_image}"
-    # TODO: fetch image metadata tarball(s) and ... stuff
+  private def output_dir
+    @output_dir ||= Pathname.new(
+      env.fetch('OUTPUT_DIR', nil) || File.join(
+        Dir.tmpdir,
+        "stack-promotion-report-#{Time.now.utc.iso8601}"
+      )
+    ).expand_path
   end
 
-  def latest_image(stack, group)
-    q = URI.encode_www_form(
-      name: "^travis-ci-#{stack}.*",
-      infra: 'gce',
-      tags: "group_#{group}:true",
-      'fields[images]' => 'name'
-    )
-
-    JSON.parse(
-      `#{curl_exe} -f -s '#{env['JOB_BOARD_IMAGES_URL']}?#{q}'`
-    ).fetch('data').map { |e| e['name'] }.sort.first
-  end
-
-  def curl_exe
-    @curl_exe ||= env.fetch('CURL_EXE', 'curl')
+  private def report_promotion(cur, nxt, stack)
+    StackPromotion.new(
+      stack: stack, cur: cur, nxt: nxt
+    ).hydrate!(output_dir: output_dir.join(stack))
   end
 end

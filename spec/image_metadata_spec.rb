@@ -23,7 +23,7 @@ describe ImageMetadata do
   it 'constructs an image extraction command' do
     expect(subject.send(:extract_command)).to eq(
       [
-        'tar', '-C', 'somedir', '-xjvf',
+        'tar', '-C', 'somedir', '-xjf',
         File.expand_path('somedir/metadata.tar.bz2')
       ]
     )
