@@ -1,4 +1,5 @@
 require 'json'
+require 'optparse'
 require 'pathname'
 require 'time'
 require 'tmpdir'
@@ -9,7 +10,13 @@ require_relative 'stack_promotion'
 
 class StackPromotionReporter
   def initialize(argv: ARGV)
-    @output_dir = Pathname.new(argv.first).expand_path unless argv.first.nil?
+    @options = {
+      output_dir: default_output_dir,
+      dists: default_dists,
+      groups: default_groups
+    }
+
+    parse_args(argv)
   end
 
   def self.report!(argv: ARGV)
@@ -19,11 +26,36 @@ class StackPromotionReporter
 
   def report
     stacks.each do |stack|
-      groups.each do |cur, nxt|
+      options[:groups].each do |cur, nxt|
         report_promotion(cur, nxt, stack)
       end
     end
     0
+  end
+
+  attr_reader :options
+
+  private def parse_args(argv)
+    OptionParser.new do |opts|
+      opts.on(
+        '-dDIR', '--output-dir=DIR', 'Output directory for report'
+      ) do |v|
+        @options[:output_dir] = Pathname.new(v.strip).expand_path
+      end
+
+      opts.on(
+        '-DDISTS', '--dists=DISTS', '","-delimited dist names'
+      ) do |v|
+        @options[:dists] = v.split(',').map(&:strip)
+      end
+
+      opts.on(
+        '-GGROUPS', '--groups=GROUPS',
+        '","-delimited ":"-paired group name mapping'
+      ) do |v|
+        @options[:groups] = string_to_hash(v.strip)
+      end
+    end.parse!(argv)
   end
 
   private def env
@@ -36,24 +68,27 @@ class StackPromotionReporter
 
   private def stacks
     @stacks ||=
-      dists.map { |d| `#{top}/bin/list-stacks #{d}`.strip.split }.flatten
+      options[:dists].map { |d| `#{top}/bin/list-stacks #{d}`.strip.split }.flatten
   end
 
-  private def dists
-    @dists ||= env.fetch('DISTS', 'trusty,precise').split(',').map(&:strip)
+  private def default_dists
+    env.fetch('DISTS', 'trusty,precise').split(',').map(&:strip)
   end
 
-  private def groups
-    @groups ||= Hash[
-      env.fetch('GROUPS', 'stable:edge')
-         .split(',')
-         .map(&:strip)
-         .map { |kv| kv.split(':', 2) }
+  private def default_groups
+    string_to_hash(env.fetch('GROUPS', 'stable:edge'))
+  end
+
+  private def string_to_hash(s)
+    Hash[
+      s.split(',')
+       .map(&:strip)
+       .map { |kv| kv.split(':', 2) }
     ]
   end
 
-  private def output_dir
-    @output_dir ||= Pathname.new(
+  private def default_output_dir
+    Pathname.new(
       env.fetch('OUTPUT_DIR', nil) || File.join(
         Dir.tmpdir,
         "stack-promotion-report-#{Time.now.utc.iso8601}"
@@ -64,6 +99,6 @@ class StackPromotionReporter
   private def report_promotion(cur, nxt, stack)
     StackPromotion.new(
       stack: stack, cur: cur, nxt: nxt
-    ).hydrate!(output_dir: output_dir.join(stack))
+    ).hydrate!(output_dir: options[:output_dir].join(stack))
   end
 end
