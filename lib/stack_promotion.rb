@@ -21,6 +21,7 @@ class StackPromotion
 
     create_file_diffs(output_dir, cur_metadata, nxt_metadata)
     create_env_diff(output_dir, cur_metadata.env_hash, nxt_metadata.env_hash)
+    create_index_files(output_dir, cur_metadata, nxt_metadata)
   end
 
   private def fetch_metadata
@@ -54,6 +55,19 @@ class StackPromotion
     ).each do |metadata_file|
       next unless cur_metadata.files.key?(metadata_file) &&
                   nxt_metadata.files.key?(metadata_file)
+      if metadata_file == 'travis_packer_templates_rspec.json'
+        [
+          cur_metadata.files[metadata_file],
+          nxt_metadata.files[metadata_file]
+        ].each do |full_path|
+          parsed = JSON.parse(File.read(full_path))
+          parsed['examples'] = parsed['examples'].sort_by do |entry|
+            entry['full_description']
+          end
+          File.write(full_path, JSON.pretty_generate(parsed))
+        end
+      end
+
       diff_command = %W(
         diff -u
         --label #{cur_image}/#{metadata_file}
@@ -88,6 +102,56 @@ class StackPromotion
     diff_filename = output_dir.join('env.diff')
     $stdout.puts "     writing #{diff_filename}"
     system(*diff_command, out: diff_filename.to_s)
+  end
+
+  private def create_index_files(output_dir, cur_metadata, nxt_metadata)
+    packer_templates_diff_url = File.join(
+      'https://github.com/travis-ci/packer-templates/compare',
+      cur_metadata.env_hash['PACKER_TEMPLATES_SHA'] + '...' +
+      nxt_metadata.env_hash['PACKER_TEMPLATES_SHA']
+    )
+
+    travis_cookbooks_diff_url = File.join(
+      'https://github.com/travis-ci/travis-cookbooks/compare',
+      cur_metadata.env_hash['TRAVIS_COOKBOOKS_SHA'] + '...' +
+      nxt_metadata.env_hash['TRAVIS_COOKBOOKS_SHA']
+    )
+
+    buf = []
+    buf << <<-EOF.gsub(/^\s+> ?/, '')
+      > # #{stack} promotion report
+      >
+      > - [packer-templates diff](#{packer_templates_diff_url})
+      > - [travis-cookbooks diff](#{travis_cookbooks_diff_url})
+      >
+    EOF
+
+    output_files = output_dir.children.reject do |child|
+      child.directory? || child.basename == 'README.md' ||
+        child.basename == 'index.json'
+    end
+
+    unless output_files.length.zero?
+      buf << '## output files'
+      output_files.sort.each do |filename|
+        buf << "- [#{filename.basename}](./#{filename.basename})"
+      end
+    end
+
+    readme = output_dir.join('README.md')
+    $stdout.puts "     writing #{readme}"
+    readme.write(buf.join("\n"))
+
+    index_json = output_dir.join('index.json')
+    $stdout.puts "     writing #{index_json}"
+    index_json.write(
+      JSON.pretty_generate(
+        stack: stack,
+        packer_templates_diff_url: packer_templates_diff_url,
+        travis_cookbooks_diff_url: travis_cookbooks_diff_url,
+        output_files: output_files.map(&:basename).map(&:to_s)
+      )
+    )
   end
 
   private def env

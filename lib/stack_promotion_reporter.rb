@@ -9,6 +9,11 @@ require_relative 'env'
 require_relative 'stack_promotion'
 
 class StackPromotionReporter
+  def self.report!(argv: ARGV)
+    exit 0 if new(argv: argv).report
+    exit 1
+  end
+
   def initialize(argv: ARGV)
     @options = {
       output_dir: default_output_dir,
@@ -17,11 +22,6 @@ class StackPromotionReporter
     }
 
     parse_args(argv)
-  end
-
-  def self.report!(argv: ARGV)
-    exit 0 if new(argv: argv).report
-    exit 1
   end
 
   def report

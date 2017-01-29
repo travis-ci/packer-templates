@@ -23,7 +23,6 @@ class Env
     end
   end
 
-  private
-
   attr_reader :state
+  private :state
 end

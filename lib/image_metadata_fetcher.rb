@@ -22,15 +22,15 @@ class ImageMetadataFetcher
     nil
   end
 
-  private
-
   attr_reader :image_name, :packer_builder_name
+  private :image_name
+  private :packer_builder_name
 
-  def env
+  private def env
     @env ||= Env.new
   end
 
-  def candidate_urls
+  private def candidate_urls
     [
       File.join(
         s3_base_url,
@@ -48,14 +48,14 @@ class ImageMetadataFetcher
     ]
   end
 
-  def tarball_path
+  private def tarball_path
     @tarball_path ||= File.join(
       Dir.tmpdir,
       "image-metadata-#{image_name}.tar.bz2"
     )
   end
 
-  def s3_base_url
+  private def s3_base_url
     @s3_base_url ||= env.fetch(
       'IMAGE_METADATA_BASE_URL',
       File.join(
@@ -67,11 +67,11 @@ class ImageMetadataFetcher
     )
   end
 
-  def template_name
+  private def template_name
     @template_name ||= "ci-#{image_name.split('-').fetch(2)}"
   end
 
-  def curl_exe
+  private def curl_exe
     @curl_exe ||= env.fetch('CURL_EXE', 'curl')
   end
 end
