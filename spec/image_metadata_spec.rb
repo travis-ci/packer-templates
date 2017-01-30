@@ -16,7 +16,7 @@ describe ImageMetadata do
   before do
     allow(subject).to receive(:image_job_board_env_exists?)
       .and_return(true)
-    allow(subject).to receive(:load_raw_job_board_register_yml)
+    allow(subject).to receive(:job_board_register_hash)
       .and_return(job_board_attrs)
   end
 
