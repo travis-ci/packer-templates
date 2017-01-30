@@ -152,6 +152,8 @@ class StackPromotionHydrator
         urls.merge(
           stack: stack_promotion.stack,
           output_files: output_files.map(&:basename).map(&:to_s),
+          current_image_name: stack_promotion.cur.name,
+          next_image_name: stack_promotion.nxt.name,
           current_tarball_files: stack_promotion.cur.metadata.tarball_files,
           next_tarball_files: stack_promotion.nxt.metadata.tarball_files
         )
