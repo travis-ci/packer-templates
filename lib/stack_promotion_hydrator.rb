@@ -108,33 +108,32 @@ class StackPromotionHydrator
         child.basename == 'index.json'
     end
 
-    create_readme_md(
-      output_files,
-      packer_templates_diff_url,
-      travis_cookbooks_diff_url
-    )
+    urls = {
+      packer_templates_diff_url: packer_templates_diff_url,
+      travis_cookbooks_diff_url: travis_cookbooks_diff_url,
+      current_image_metadata_tarball_url: stack_promotion.cur.metadata.url,
+      next_image_metadata_tarball_url: stack_promotion.nxt.metadata.url
+    }
 
-    create_index_json(
-      output_files,
-      packer_templates_diff_url,
-      travis_cookbooks_diff_url
-    )
+    create_readme_md(output_files, urls: urls)
+    create_index_json(output_files, urls: urls)
   end
 
-  private def create_readme_md(output_files,
-                               packer_templates_diff_url,
-                               travis_cookbooks_diff_url)
+  private def create_readme_md(output_files, urls: {})
     readme_buf = []
-    readme_buf << <<-EOF.gsub(/^\s+> ?/, '')
-      > # #{stack_promotion.stack} promotion report
-      >
-      > - [packer-templates diff](#{packer_templates_diff_url})
-      > - [travis-cookbooks diff](#{travis_cookbooks_diff_url})
-      >
-    EOF
+    readme_buf << "# #{stack_promotion.stack} promotion report"
+
+    unless urls.length.zero?
+      readme_buf << ''
+      urls.each do |text, url|
+        readme_buf << "- [#{text.to_s.tr('_', ' ').sub(' url', '')}](#{url})"
+      end
+      readme_buf << ''
+    end
 
     unless output_files.length.zero?
       readme_buf << '## output files'
+      readme_buf << ''
       output_files.sort.each do |filename|
         readme_buf << "- [#{filename.basename}](./#{filename.basename})"
       end
@@ -145,17 +144,15 @@ class StackPromotionHydrator
     readme.write(readme_buf.join("\n"))
   end
 
-  private def create_index_json(output_files,
-                                packer_templates_diff_url,
-                                travis_cookbooks_diff_url)
+  private def create_index_json(output_files, urls: {})
     index_json = output_dir.join('index.json')
     logger.info "writing #{index_json}"
     index_json.write(
       JSON.pretty_generate(
-        stack: stack_promotion.stack,
-        packer_templates_diff_url: packer_templates_diff_url,
-        travis_cookbooks_diff_url: travis_cookbooks_diff_url,
-        output_files: output_files.map(&:basename).map(&:to_s)
+        urls.merge(
+          stack: stack_promotion.stack,
+          output_files: output_files.map(&:basename).map(&:to_s)
+        )
       )
     )
   end

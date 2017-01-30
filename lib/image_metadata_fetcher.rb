@@ -16,7 +16,11 @@ class ImageMetadataFetcher
         curl_exe, '-fsSL', '-o', tarball_path, url,
         %i(out err) => '/dev/null'
       )
-        return ImageMetadata.new(tarball: tarball_path, env: Env.new(base: {}))
+        return ImageMetadata.new(
+          tarball: tarball_path,
+          url: url,
+          env: Env.new(base: {})
+        )
       end
     end
     nil

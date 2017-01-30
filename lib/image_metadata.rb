@@ -2,9 +2,10 @@ require 'logger'
 require 'yaml'
 
 class ImageMetadata
-  def initialize(tarball: nil, env: nil, logger: nil)
+  def initialize(tarball: '', env: nil, url: '', logger: nil)
     @tarball = tarball
     @env = env
+    @url = url
     @logger = logger
     @env_hash = nil
     @files = {}
@@ -33,7 +34,7 @@ class ImageMetadata
     end
   end
 
-  attr_reader :env_hash, :files, :tarball, :env
+  attr_reader :env_hash, :files, :tarball, :url, :env
   alias to_s tarball
 
   def job_board_register_hash
