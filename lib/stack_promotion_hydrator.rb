@@ -151,7 +151,9 @@ class StackPromotionHydrator
       JSON.pretty_generate(
         urls.merge(
           stack: stack_promotion.stack,
-          output_files: output_files.map(&:basename).map(&:to_s)
+          output_files: output_files.map(&:basename).map(&:to_s),
+          current_tarball_files: stack_promotion.cur.metadata.tarball_files,
+          next_tarball_files: stack_promotion.nxt.metadata.tarball_files
         )
       )
     )

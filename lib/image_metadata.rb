@@ -34,11 +34,22 @@ class ImageMetadata
     end
   end
 
-  attr_reader :env_hash, :files, :tarball, :url, :env
+  attr_reader :env_hash, :files, :tarball, :tarball_files, :url, :env
   alias to_s tarball
 
   def job_board_register_hash
     YAML.load_file(job_board_register_yml)
+  end
+
+  def tarball_files
+    @tarball_files ||= begin
+      `tar -tf #{tarball}`.split("\n")
+                          .map(&:strip)
+                          .reject { |p| p.end_with?('/') }
+                          .map do |p|
+        p.sub(/#{File.basename(tarball, '.tar.bz2')}/, '')
+      end
+    end
   end
 
   private def relbase
