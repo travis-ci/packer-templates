@@ -26,6 +26,7 @@ class StackPromotionReporter
   end
 
   def report
+    options[:output_dir].mkpath
     job_board_hashes = []
 
     stacks.each do |stack|
@@ -73,7 +74,7 @@ class StackPromotionReporter
   end
 
   private def top
-    @top ||= `git rev-parse --show-toplevel`.strip
+    @top ||= File.expand_path('../../', __FILE__)
   end
 
   private def stacks

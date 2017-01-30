@@ -27,6 +27,8 @@ class StackPromotion
 
   def cur_job_board_hash
     cur.metadata.job_board_register_hash.tap do |h|
+      h['name'] = cur.name
+      h['successor_name'] = nxt.name
       h['tags'].merge!(
         'group' => deprecated,
         "group_#{deprecated}" => true
@@ -34,13 +36,14 @@ class StackPromotion
       h['tags_string'] = %W(
         group:#{deprecated}
         group_#{deprecated}:true
-        #{h['tags_string']}"
+        #{h['tags_string']}
       ).join(',')
     end
   end
 
   def nxt_job_board_hash
     nxt.metadata.job_board_register_hash.tap do |h|
+      h['name'] = nxt.name
       h['tags'].merge!(
         'group' => cur.group,
         "group_#{cur.group}" => true
@@ -48,7 +51,7 @@ class StackPromotion
       h['tags_string'] = %W(
         group:#{cur.group}
         group_#{cur.group}:true
-        #{h['tags_string']}"
+        #{h['tags_string']}
       ).join(',')
     end
   end

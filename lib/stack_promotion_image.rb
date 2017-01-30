@@ -13,16 +13,18 @@ class StackPromotionImage
   attr_reader :stack, :group
 
   def name
-    q = URI.encode_www_form(
-      name: "^travis-ci-#{stack}.*",
-      infra: 'gce',
-      tags: "group_#{group}:true",
-      'fields[images]' => 'name'
-    )
+    @name ||= begin
+      q = URI.encode_www_form(
+        name: "^travis-ci-#{stack}.*",
+        infra: 'gce',
+        tags: "group_#{group}:true",
+        'fields[images]' => 'name'
+      )
 
-    JSON.parse(
-      `#{curl_exe} -f -s '#{env['JOB_BOARD_IMAGES_URL']}?#{q}'`
-    ).fetch('data').map { |e| e['name'] }.sort.last
+      JSON.parse(
+        `#{curl_exe} -f -s '#{env['JOB_BOARD_IMAGES_URL']}?#{q}'`
+      ).fetch('data').map { |e| e['name'] }.sort.last
+    end
   end
 
   def metadata
