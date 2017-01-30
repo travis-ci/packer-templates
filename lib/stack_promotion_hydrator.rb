@@ -5,27 +5,23 @@ require 'pathname'
 class StackPromotionHydrator
   def initialize(
     stack_promotion: nil,
-    output_dir: '.',
-    cur_metadata: nil,
-    nxt_metadata: nil
+    output_dir: '.'
   )
     @stack_promotion = stack_promotion
-    @cur_metadata = cur_metadata
-    @nxt_metadata = nxt_metadata
     @output_dir = Pathname.new(output_dir).expand_path
   end
 
-  attr_reader :stack_promotion, :cur_metadata, :nxt_metadata, :output_dir
+  attr_reader :stack_promotion, :output_dir
 
   def hydrate!
     output_dir.mkpath
 
-    create_file_diffs(output_dir, cur_metadata, nxt_metadata)
-    create_env_diff(output_dir, cur_metadata.env_hash, nxt_metadata.env_hash)
-    create_index_files(output_dir, cur_metadata, nxt_metadata)
+    create_file_diffs
+    create_env_diff
+    create_index_files
   end
 
-  private def create_file_diffs(output_dir, cur_metadata, nxt_metadata)
+  private def create_file_diffs
     %w(
       dpkg-manifest.json
       job-board-register.yml
@@ -33,21 +29,21 @@ class StackPromotionHydrator
       system_info.json
       travis_packer_templates_rspec.json
     ).each do |metadata_file|
-      next unless cur_metadata.files.key?(metadata_file) &&
-                  nxt_metadata.files.key?(metadata_file)
+      next unless stack_promotion.cur.metadata.files.key?(metadata_file) &&
+                  stack_promotion.nxt.metadata.files.key?(metadata_file)
       if metadata_file == 'travis_packer_templates_rspec.json'
         munge_rspec_json([
-                           cur_metadata.files[metadata_file],
-                           nxt_metadata.files[metadata_file]
+                           stack_promotion.cur.metadata.files[metadata_file],
+                           stack_promotion.nxt.metadata.files[metadata_file]
                          ])
       end
 
       diff_command = %W(
         diff -u
-        --label #{stack_promotion.cur_image}/#{metadata_file}
-        #{cur_metadata.files[metadata_file]}
-        --label #{stack_promotion.nxt_image}/#{metadata_file}
-        #{nxt_metadata.files[metadata_file]}
+        --label #{stack_promotion.cur.name}/#{metadata_file}
+        #{stack_promotion.cur.metadata.files[metadata_file]}
+        --label #{stack_promotion.nxt.name}/#{metadata_file}
+        #{stack_promotion.nxt.metadata.files[metadata_file]}
       )
       diff_filename = output_dir.join("#{metadata_file}.diff")
       logger.info "writing #{diff_filename}"
@@ -65,22 +61,28 @@ class StackPromotionHydrator
     end
   end
 
-  private def create_env_diff(output_dir, cur_env, nxt_env)
+  private def create_env_diff
     current_image_env = output_dir.join('current-image.env')
     current_image_env.write(
-      cur_env.map { |k, v| [k, v] }.sort
-             .map { |e| "#{e[0]}=#{e[1]}" }.join("\n") + "\n"
+      stack_promotion.cur.metadata.env_hash
+        .map { |k, v| [k, v] }
+        .sort
+        .map { |e| "#{e[0]}=#{e[1]}" }
+        .join("\n") + "\n"
     )
     next_image_env = output_dir.join('next-image.env')
     next_image_env.write(
-      nxt_env.map { |k, v| [k, v] }.sort
-             .map { |e| "#{e[0]}=#{e[1]}" }.join("\n") + "\n"
+      stack_promotion.nxt.metadata.env_hash
+        .map { |k, v| [k, v] }
+        .sort
+        .map { |e| "#{e[0]}=#{e[1]}" }
+        .join("\n") + "\n"
     )
     diff_command = %W(
       diff -u
-      --label #{stack_promotion.cur_image}/env
+      --label #{stack_promotion.cur.name}/env
       #{current_image_env}
-      --label #{stack_promotion.nxt_image}/env
+      --label #{stack_promotion.nxt.name}/env
       #{next_image_env}
     )
     diff_filename = output_dir.join('env.diff')
@@ -88,17 +90,17 @@ class StackPromotionHydrator
     system(*diff_command, out: diff_filename.to_s)
   end
 
-  private def create_index_files(output_dir, cur_metadata, nxt_metadata)
+  private def create_index_files
     packer_templates_diff_url = File.join(
       'https://github.com/travis-ci/packer-templates/compare',
-      cur_metadata.env_hash['PACKER_TEMPLATES_SHA'] + '...' +
-      nxt_metadata.env_hash['PACKER_TEMPLATES_SHA']
+      stack_promotion.cur.metadata.env_hash['PACKER_TEMPLATES_SHA'] + '...' +
+      stack_promotion.nxt.metadata.env_hash['PACKER_TEMPLATES_SHA']
     )
 
     travis_cookbooks_diff_url = File.join(
       'https://github.com/travis-ci/travis-cookbooks/compare',
-      cur_metadata.env_hash['TRAVIS_COOKBOOKS_SHA'] + '...' +
-      nxt_metadata.env_hash['TRAVIS_COOKBOOKS_SHA']
+      stack_promotion.cur.metadata.env_hash['TRAVIS_COOKBOOKS_SHA'] + '...' +
+      stack_promotion.nxt.metadata.env_hash['TRAVIS_COOKBOOKS_SHA']
     )
 
     output_files = output_dir.children.reject do |child|
@@ -107,19 +109,19 @@ class StackPromotionHydrator
     end
 
     create_readme_md(
-      output_dir, output_files,
+      output_files,
       packer_templates_diff_url,
       travis_cookbooks_diff_url
     )
 
     create_index_json(
-      output_dir, output_files,
+      output_files,
       packer_templates_diff_url,
       travis_cookbooks_diff_url
     )
   end
 
-  private def create_readme_md(output_dir, output_files,
+  private def create_readme_md(output_files,
                                packer_templates_diff_url,
                                travis_cookbooks_diff_url)
     readme_buf = []
@@ -143,7 +145,7 @@ class StackPromotionHydrator
     readme.write(readme_buf.join("\n"))
   end
 
-  private def create_index_json(output_dir, output_files,
+  private def create_index_json(output_files,
                                 packer_templates_diff_url,
                                 travis_cookbooks_diff_url)
     index_json = output_dir.join('index.json')

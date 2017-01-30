@@ -36,19 +36,19 @@ class ImageMetadata
   attr_reader :env_hash, :files, :tarball, :env
   alias to_s tarball
 
+  def job_board_register_hash
+    YAML.load_file(job_board_register_yml)
+  end
+
   private def relbase
     @relbase ||= File.dirname(tarball)
   end
 
   private def load_job_board_register_yml
-    loaded = load_raw_job_board_register_yml
+    loaded = job_board_register_hash
     env['OS'] = loaded['tags']['os']
     env['DIST'] = loaded['tags']['dist']
     env['TAGS'] = loaded['tags_string']
-  end
-
-  private def load_raw_job_board_register_yml
-    YAML.load_file(job_board_register_yml)
   end
 
   private def job_board_register_yml
@@ -66,7 +66,7 @@ class ImageMetadata
   private def load_image_metadata
     if envdir_isdir?
       env.load_envdir(envdir) do |key, _|
-        logger.info "loading #{key}"
+        logger.debug "loading #{key}"
       end
     else
       logger.warn "#{envdir} does not exist"

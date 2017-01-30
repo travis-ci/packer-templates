@@ -1,4 +1,5 @@
 require 'json'
+require 'logger'
 require 'optparse'
 require 'pathname'
 require 'time'
@@ -25,11 +26,20 @@ class StackPromotionReporter
   end
 
   def report
+    job_board_hashes = []
+
     stacks.each do |stack|
-      options[:groups].each do |cur, nxt|
-        report_promotion(cur, nxt, stack)
+      groups.each do |nxt, cur, deprecated|
+        job_board_hashes += report_promotion(
+          cur, nxt, deprecated, stack
+        )
       end
     end
+
+    stack_promotions_json = options[:output_dir].join('stack-promotions.json')
+    logger.info "writing #{stack_promotions_json}"
+    stack_promotions_json.write(JSON.pretty_generate(job_board_hashes))
+
     0
   end
 
@@ -51,9 +61,9 @@ class StackPromotionReporter
 
       opts.on(
         '-GGROUPS', '--groups=GROUPS',
-        '","-delimited ":"-paired group name mapping'
+        '","-delimited ":"-separated group name triplets'
       ) do |v|
-        @options[:groups] = string_to_hash(v.strip)
+        @options[:groups] = v.strip.split(',').map(&:strip)
       end
     end.parse!(argv)
   end
@@ -76,15 +86,13 @@ class StackPromotionReporter
   end
 
   private def default_groups
-    string_to_hash(env.fetch('GROUPS', 'stable:edge'))
+    env.fetch('GROUPS', 'edge:stable:deprecated')
   end
 
-  private def string_to_hash(s)
-    Hash[
-      s.split(',')
-       .map(&:strip)
-       .map { |kv| kv.split(':', 2) }
-    ]
+  private def groups
+    options[:groups].split(',').map do |group_triplet|
+      group_triplet.strip.split(':').map(&:strip)
+    end
   end
 
   private def default_output_dir
@@ -96,9 +104,24 @@ class StackPromotionReporter
     ).expand_path
   end
 
-  private def report_promotion(cur, nxt, stack)
-    StackPromotion.new(
-      stack: stack, cur: cur, nxt: nxt
-    ).hydrate!(output_dir: options[:output_dir].join(stack))
+  private def report_promotion(cur, nxt, deprecated, stack)
+    promotion = StackPromotion.new(
+      stack: stack,
+      cur: cur,
+      nxt: nxt,
+      deprecated: deprecated
+    )
+    promotion.hydrate!(output_dir: options[:output_dir].join(stack))
+    [
+      promotion.cur_job_board_hash,
+      promotion.nxt_job_board_hash
+    ]
+  rescue => e
+    logger.error "stack=#{stack} #{e}"
+    []
+  end
+
+  private def logger
+    @logger ||= Logger.new($stdout)
   end
 end
