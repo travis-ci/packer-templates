@@ -47,7 +47,7 @@ class ImageMetadata
                           .map(&:strip)
                           .reject { |p| p.end_with?('/') }
                           .map do |p|
-        p.sub(/#{File.basename(tarball, '.tar.bz2')}/, '')
+        p.sub(%r{#{File.basename(tarball, '.tar.bz2')}/}, '')
       end
     end
   end
