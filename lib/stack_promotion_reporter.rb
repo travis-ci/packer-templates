@@ -37,9 +37,8 @@ class StackPromotionReporter
       end
     end
 
-    stack_promotions_json = options[:output_dir].join('stack-promotions.json')
-    logger.info "writing #{stack_promotions_json}"
-    stack_promotions_json.write(JSON.pretty_generate(job_board_hashes))
+    create_stack_promotions_json(job_board_hashes)
+    create_stack_promotions_txt(job_board_hashes)
 
     0
   end
@@ -67,6 +66,26 @@ class StackPromotionReporter
         @options[:groups] = v.strip.split(',').map(&:strip)
       end
     end.parse!(argv)
+  end
+
+  private def create_stack_promotions_json(job_board_hashes)
+    stack_promotions_json = options[:output_dir].join('stack-promotions.json')
+    logger.info "writing #{stack_promotions_json}"
+    stack_promotions_json.write(JSON.pretty_generate(job_board_hashes))
+  end
+
+  private def create_stack_promotions_txt(job_board_hashes)
+    stack_promotions_txt = options[:output_dir].join('stack-promotions.txt')
+    logger.info "writing #{stack_promotions_txt}"
+    lines = job_board_hashes.map do |hash|
+      URI.encode_www_form(
+        'tags' => hash['tags_string'],
+        'infra' => hash.fetch('infra', 'gce'),
+        'name' => hash['name'],
+        'is_default' => hash.fetch('is_default', false).to_s
+      )
+    end
+    stack_promotions_txt.write(lines.join("\n") + "\n")
   end
 
   private def env
