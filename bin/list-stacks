@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  local top
+  top="$(git rev-parse --show-toplevel)"
+  local dist="${1:-trusty}"
+  local edge_branch='master'
+  local sed='sed'
+
+  if [[ "${dist}" = precise ]]; then
+    edge_branch='precise-stable'
+  fi
+
+  if [[ "$(uname)" = Darwin ]]; then
+    sed='gsed'
+  fi
+
+  cd "${top}"
+
+  for f in ci-*.yml; do
+    if [[ "${f}" =~ standard ]]; then
+      continue
+    fi
+
+    grep -lE "travis_cookbooks_edge_branch:.*${edge_branch}" "${f}" \
+      | "${sed}" "s/ci-//;s/\\.yml//;s/\$/-${dist}/"
+  done
+}
+
+main "$@"

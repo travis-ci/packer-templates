@@ -16,14 +16,14 @@ describe ImageMetadata do
   before do
     allow(subject).to receive(:image_job_board_env_exists?)
       .and_return(true)
-    allow(subject).to receive(:load_raw_job_board_register_yml)
+    allow(subject).to receive(:job_board_register_hash)
       .and_return(job_board_attrs)
   end
 
   it 'constructs an image extraction command' do
     expect(subject.send(:extract_command)).to eq(
       [
-        'tar', '-C', 'somedir', '-xjvf',
+        'tar', '-C', 'somedir', '-xjf',
         File.expand_path('somedir/metadata.tar.bz2')
       ]
     )
