@@ -143,14 +143,18 @@ post-processors:
   - type: artifice
     files:
     - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
-    only:
-    - googlecompute
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - googlecompute
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
 -
   - type: artifice
     files:
