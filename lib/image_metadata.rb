@@ -1,4 +1,5 @@
 require 'logger'
+require 'pathname'
 require 'yaml'
 
 class ImageMetadata
