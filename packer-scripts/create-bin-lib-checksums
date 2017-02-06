@@ -21,3 +21,5 @@ __checksum() {
     | xargs -0 sha256sum 2>/dev/null \
     | sort -k2
 }
+
+main "$@"
