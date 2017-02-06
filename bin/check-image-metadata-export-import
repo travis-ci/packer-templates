@@ -21,10 +21,12 @@ main() {
   mkdir -p "${TMPDIR}/packer-env"
   date -u >"${TMPDIR}/packer-env/NOWISH"
 
+  BIN_LIB_CHECKSUMS="$(__write_bin_lib_checksums)"
   DPKG_MANIFEST_JSON="$(__write_dpkg_manifest_json)"
   JOB_BOARD_REGISTER_YML="$(__write_job_board_register_yml)"
   NODE_ATTRIBUTES_YML="$(__write_node_attributes_yml)"
   SYSTEM_INFO_JSON="$(__write_system_info_json)"
+  export BIN_LIB_CHECKSUMS
   export DPKG_MANIFEST_JSON
   export JOB_BOARD_REGISTER_YML
   export NODE_ATTRIBUTES_YML
@@ -36,6 +38,19 @@ main() {
     "${TMPDIR}/packer-env" \
     "${TMPDIR}/image-metadata" \
     "${TMPDIR}/image-metadata.tar.bz2"
+}
+
+__write_bin_lib_checksums() {
+  cat >"${TMPDIR}/.bin-lib.SHA256SUMS" <<EOF
+852ee1b5499fce63243f6a8154b060441cb32c0d5506bb4e80cb41f484ef567c  /usr/sbin/useradd
+407a3470ee62c1606b00728ff148c33c674459e42413f3c69a0aa565851d2e75  /usr/sbin/userdel
+1e0418bfef9c97917fc04e90a5bb39d516a80cf98c138060d058115be7f82a89  /usr/sbin/usermod
+aa7f76df23e669d4d438e8cbe4502bfd3888bf31e6dedf16507acddac7af229f  /usr/sbin/validlocale
+eeef8121b82208f7383b79cc2624beed25e3628bb30603563154a25aa69125ed  /usr/sbin/vipw
+08e5dfa2d9d05fa2ebb2b63a3231e7910f6c08113ec5eccd4e1e78ca6ba43a68  /usr/sbin/visudo
+b23725f484f280961e6a0b2910d8ce612f94ac3440a5d36f2eb4373347fe85f4  /usr/sbin/zic
+EOF
+  echo "${TMPDIR}/.bin-lib.SHA256SUMS"
 }
 
 __write_dpkg_manifest_json() {
