@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  : "${BIN_LIB_CHECKSUMS:=/.bin-lib.SHA256SUMS}"
+
+  __checksum \
+    /lib \
+    /usr/lib \
+    /usr/local/lib \
+    ${PATH//:/ } \
+    >"${BIN_LIB_CHECKSUMS}"
+}
+
+__checksum() {
+  find "${@}" \
+    -executable \
+    -type f \
+    -or \
+    -name '*.so' \
+    -or \
+    -name '*.a' 2>/dev/null \
+    | xargs sha256sum 2>/dev/null \
+    | sort -k2
+}
