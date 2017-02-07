@@ -11,6 +11,7 @@ main() {
   : "${RSPEC_JSON_DIR:=/home/travis}"
   : "${SYSTEM_INFO_JSON:=/usr/share/travis/system_info.json}"
   : "${DPKG_MANIFEST_JSON:=/.dpkg-manifest.json}"
+  : "${BIN_LIB_CHECKSUMS:=/.bin-lib.SHA256SUMS}"
 
   pushd "${TMPDIR:-/var/tmp}"
   local dest
@@ -30,6 +31,7 @@ main() {
   cp -v "${NODE_ATTRIBUTES_YML}" "${dest}/node-attributes.yml"
   cp -v "${SYSTEM_INFO_JSON}" "${dest}/system_info.json"
   cp -v "${DPKG_MANIFEST_JSON}" "${dest}/dpkg-manifest.json"
+  cp -v "${BIN_LIB_CHECKSUMS}" "${dest}/bin-lib.SHA256SUMS"
   tar -cjvf "${IMAGE_METADATA_TARBALL}" "${dest}"
 }
 
