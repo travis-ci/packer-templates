@@ -108,6 +108,9 @@ provisioners:
   - DISPLAY=:99.0
   - SPEC_SUITES=travis_packer_templates
   - TRAVIS_OBFUSCATE_PASSWORD=1
+  # HACK HACK HACK
+  - SPEC_FAILURE_SLEEP_FOREVER=1
+  # HACK HACK HACK
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
