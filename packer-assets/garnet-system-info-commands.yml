@@ -125,6 +125,12 @@ commands:
   - command: mongod --version
     name: MongoDB version
     pipe: perl -n -e '/version v(.*)$/ && { print "MongoDB $1\n" }'
+  - pre: service neo4j restart
+    name: Neo4j version
+    port: 7474
+    command: curl http://localhost:7474/db/data 2>/dev/null
+    pipe: perl -ne '/neo4j_version.*?([0-9\.]+)/ && print $1'
+    post: service neo4j stop
   - command: "/usr/local/phantomjs/bin/phantomjs --version"
     name: PhantomJS version
   - command: dpkg -l
