@@ -49,11 +49,11 @@ __install_packages() {
 __upgrade_apt() {
   curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
     | bash
-  apt-get update
-  apt-get install apt=1.2.10
-  apt-get clean
+  apt-get update -yqq
+  apt-get install -yqq apt=1.2.10
+  apt-get clean -yqq
   rm -rf /var/lib/apt/lists
-  apt-get update
+  apt-get update -yqq
 }
 
 __setup_sshd() {
