@@ -1,11 +1,13 @@
+def furbies
+  @furbies ||= rand(200..299)
+end
+
 describe 'neo4j installation' do
   describe command('which neo4j') do
     its(:stdout) { should match 'bin/neo4j' }
   end
 
   describe 'neo4j commands', sudo: true do
-    let(:furbies) { rand(200..299) }
-
     before :all do
       sh('sudo neo4j start')
       tcpwait('127.0.0.1', 7474)
