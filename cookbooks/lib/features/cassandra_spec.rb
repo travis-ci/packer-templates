@@ -25,7 +25,7 @@ describe 'cassandra installation' do
 
   describe 'cassandra commands', sudo: true do
     before :all do
-      sh('sudo hostname localhost')
+      sh('sudo hostname localhost') if docker?
 
       schema_cql.write(<<-EOF.gsub(/^\s+> /, ''))
         > CREATE KEYSPACE travis

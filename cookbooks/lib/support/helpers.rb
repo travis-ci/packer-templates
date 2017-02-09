@@ -1,5 +1,9 @@
 module Support
   module Helpers
+    def docker?
+      File.exist?('/.dockerenv')
+    end
+
     def tcpwait(host, port, timeout = 10)
       require 'socket'
 
