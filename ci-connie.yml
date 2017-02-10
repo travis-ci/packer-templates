@@ -58,6 +58,13 @@ provisioners:
 - type: file
   source: packer-assets/ubuntu-trusty-ci-connie-packages.txt
   destination: /var/tmp/packages.txt
+  only:
+  - googlecompute
+- type: file
+  source: packer-assets/ubuntu-trusty-ci-connie-docker-packages.txt
+  destination: /var/tmp/packages.txt
+  only:
+  - docker
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump
