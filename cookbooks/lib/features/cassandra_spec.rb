@@ -25,6 +25,8 @@ describe 'cassandra installation' do
 
   describe 'cassandra commands', sudo: true do
     before :all do
+      sh('sudo hostname localhost') if docker?
+
       schema_cql.write(<<-EOF.gsub(/^\s+> /, ''))
         > CREATE KEYSPACE travis
         > WITH REPLICATION = {
@@ -51,10 +53,18 @@ describe 'cassandra installation' do
         > SELECT * FROM users WHERE first = 'Slappy';
       EOF
 
-      sh('sudo service cassandra stop')
-      wipe_storage
-      sh('sudo service cassandra start')
-      tcpwait('localhost', 9042, 30)
+      tries = 3
+
+      begin
+        sh('sudo service cassandra stop')
+        wipe_storage
+        sh('sudo service cassandra start')
+        tcpwait('localhost', 9042, 30)
+      rescue => e
+        tries -= 1
+        retry unless tries.zero?
+        raise e
+      end
 
       sh("cqlsh -f #{schema_cql}")
       sh("cqlsh -f #{seed_cql}")
