@@ -40,6 +40,7 @@ override['java']['oracle']['jce']['enabled'] = true
 
 override['travis_java']['default_version'] = 'oraclejdk8'
 override['travis_java']['alternate_versions'] = %w(
+  openjdk7
   openjdk8
   oraclejdk9
 )
