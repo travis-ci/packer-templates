@@ -59,14 +59,6 @@ script:
     echo "checking $f";
     jq . < $f &>/dev/null;
   done
-- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]]; then
-    make docker-build-upstart-12.04;
-    DOCKER_DEST="travisci/ubuntu-upstart:12.04" bin/docker-push;
-    DOCKER_DEST="travisci/ubuntu-upstart:precise" bin/docker-push;
-    make docker-build-upstart-14.04;
-    DOCKER_DEST="travisci/ubuntu-upstart:14.04" bin/docker-push;
-    DOCKER_DEST="travisci/ubuntu-upstart:trusty" bin/docker-push;
-  fi
 after_success:
 - if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]]; then
     git fetch --unshallow;
