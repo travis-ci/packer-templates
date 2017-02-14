@@ -30,7 +30,7 @@ builders:
 - type: docker
   name: docker
   ssh_pty: true
-  image: travisci/ubuntu-upstart:14.04
+  image: "travisci/gce-parity:14.04"
   run_command:
   - -d
   - -i
@@ -58,6 +58,13 @@ provisioners:
 - type: file
   source: packer-assets/ubuntu-trusty-ci-connie-packages.txt
   destination: /var/tmp/packages.txt
+  only:
+  - googlecompute
+- type: file
+  source: packer-assets/ubuntu-trusty-ci-connie-docker-packages.txt
+  destination: /var/tmp/packages.txt
+  only:
+  - docker
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump

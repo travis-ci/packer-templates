@@ -1,0 +1,7 @@
+chromium-browser
+scons
+x11-utils
+x11-xserver-utils
+xserver-xorg-core
+xserver-xorg-video-all
+xvfb
