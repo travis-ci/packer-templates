@@ -13,6 +13,7 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
+  ssh_username: travis
   image_description: Travis CI sugilite
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
