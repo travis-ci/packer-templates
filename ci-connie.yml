@@ -1,5 +1,5 @@
 ---
-description: Travis CI connie build env template <3
+description: Travis CI connie build env template 
 variables:
   docker_repository: travisci/ci-connie
   docker_tag: packer-{{ timestamp }}
