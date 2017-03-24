@@ -42,7 +42,7 @@ describe 'rabbitmq installation' do
     end
 
     describe command(
-      "#{rmq.exe} get queue=my-test-queue requeue=false"
+	    "#{rmq.exe} get queue=my-test-queue ackmode=ack_requeue_false"
     ) do
       its(:stdout) { should include('my-test-queue', 'hello, world') }
     end
