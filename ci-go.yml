@@ -1,5 +1,5 @@
 ---
-description: Travis CI go build env template
+description: Travis CI go build env template!
 variables:
   docker_repository: travisci/ci-go
   docker_tag: packer-{{ timestamp }}
