@@ -47,9 +47,7 @@ provisioners:
   only:
   - googlecompute
 - type: shell
-  inline:
-  - rm /etc/apt/sources.list.d/rwky-redis.list
-  - apt-get update -yqq && apt-get install sudo -yqq
+  inline: apt-get update -yqq && apt-get install sudo -yqq
   only:
   - docker
 - type: file
