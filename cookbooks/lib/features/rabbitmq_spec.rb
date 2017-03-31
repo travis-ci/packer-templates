@@ -40,11 +40,5 @@ describe 'rabbitmq installation' do
     describe command("#{rmq.exe} list queues") do
       its(:stdout) { should include('my-test-queue') }
     end
-
-#    describe command(
-#	    "#{rmq.exe} get queue=my-test-queue ackmode=ack_requeue_false"
-#    ) do
-#      its(:stdout) { should include('my-test-queue', 'hello, world') }
-#    end
   end
 end
