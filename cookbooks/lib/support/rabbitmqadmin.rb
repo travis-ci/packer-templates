@@ -25,7 +25,7 @@ module Support
 
     def url
       ENV['RABBITMQADMIN_URL'] ||
-    'https://raw.githubusercontent.com/rabbitmq/rabbitmq-management/master/bin/rabbitmqadmin'
+        'https://raw.githubusercontent.com/rabbitmq/rabbitmq-management/master/bin/rabbitmqadmin'
     end
   end
 end
