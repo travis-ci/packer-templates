@@ -1,5 +1,5 @@
 ---
-description: Travis CI php build env template!
+description: Travis CI php build env template
 variables:
   docker_repository: travisci/ci-php
   docker_tag: packer-{{ timestamp }}
