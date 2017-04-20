@@ -19,7 +19,7 @@ pythons = %w(
   3.3.6
   3.4.4
   3.5.2
-  pypy-5.3.1
+  pypy2-5.4.1
   pypy3-2.4.0
 )
 # Reorder pythons so that default python2 and python3 come first
