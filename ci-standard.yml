@@ -1,19 +1,19 @@
 ---
-description: Travis CI Ubuntu Precise base docker image
+description: Travis CI Ubuntu Trusty base docker image
 variables:
   docker_repository: travisci/ci-standard
   docker_tag: packer-{{ timestamp }}
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-standard-precise-{{ timestamp }}
+  image_name: travis-ci-standard-trusty-{{ timestamp }}
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
-  travis_cookbooks_edge_branch: precise-stable
+  travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
 builders:
 - type: docker
   name: docker
   ssh_pty: true
-  image: "travisci/ubuntu-upstart:12.04"
+  image: "travisci/ubuntu-upstart:14.04"
   run_command:
   - -d
   - -i
@@ -34,10 +34,10 @@ provisioners:
   source: tmp/git-meta
   destination: /var/tmp/git-meta
 - type: file
-  source: packer-assets/ubuntu-precise-normal-purge.txt
+  source: packer-assets/ubuntu-trusty-normal-purge.txt
   destination: "/var/tmp/purge.txt"
 - type: file
-  source: packer-assets/ubuntu-precise-ci-packages.txt
+  source: packer-assets/ubuntu-trusty-ci-garnet-packages.txt
   destination: "/var/tmp/packages.txt"
 - type: shell
   scripts:
