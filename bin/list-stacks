@@ -8,10 +8,6 @@ main() {
   local edge_branch='master'
   local sed='sed'
 
-  if [[ "${dist}" = precise ]]; then
-    edge_branch='precise-stable'
-  fi
-
   if [[ "$(uname)" = Darwin ]]; then
     sed='gsed'
   fi
