@@ -21,7 +21,7 @@ module Support
     end
 
     def php_versions
-      php_versions_trusty || php_versions_precise || %w(5.6.13 system)
+      php_versions_trusty || %w(5.6.13 system)
     end
 
     def php_versions_trusty
@@ -29,25 +29,14 @@ module Support
                .fetch('travis_build_environment', {})['php_versions']
     end
 
-    def php_versions_precise
-      ::Support.attributes
-               .fetch('php', {})
-               .fetch('multi', {})['versions']
-    end
-
     def php_default_version
-      php_default_version_trusty || php_default_version_precise || ''
+      php_default_version_trusty || ''
     end
 
     def php_default_version_trusty
       ::Support.attributes
                .fetch('travis_build_environment', {})['php_default_version']
     end
-
-    def php_default_version_precise
-      ::Support.attributes
-               .fetch('php', {})
-               .fetch('multi', {})['default_version']
-    end
+    
   end
 end

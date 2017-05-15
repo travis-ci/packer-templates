@@ -18,7 +18,7 @@ module Support
     end
 
     def python_versions
-      python_versions_trusty || python_versions_precise || %w(2.7)
+      python_versions_trusty || %w(2.7)
     end
 
     def python_versions_trusty
@@ -26,11 +26,6 @@ module Support
                .fetch('travis_python', {})
                .fetch('pyenv', {})['pythons']
     end
-
-    def python_versions_precise
-      ::Support.attributes
-               .fetch('python', {})
-               .fetch('pyenv', {})['pythons']
-    end
+    
   end
 end
