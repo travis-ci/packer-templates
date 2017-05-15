@@ -32,7 +32,6 @@ describe command('bats --version') do
   its(:stdout) { should match(/^Bats \d/) }
 end
 
-
 describe command('shellcheck --version') do
   its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
 end
