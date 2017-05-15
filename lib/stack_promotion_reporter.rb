@@ -102,7 +102,7 @@ class StackPromotionReporter
   end
 
   private def default_dists
-    env.fetch('DISTS', 'trusty,precise').split(',').map(&:strip)
+    env.fetch('DISTS', 'trusty').split(',').map(&:strip)
   end
 
   private def default_groups
