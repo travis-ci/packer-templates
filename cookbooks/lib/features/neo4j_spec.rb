@@ -18,7 +18,7 @@ describe 'neo4j installation' do
       it { should be_running }
     end
 
-    describe command("neo4j-shell -v -c 'cd 0 && ls'"), precise: false do
+    describe command("neo4j-shell -v -c 'cd 0 && ls'"), do
       its(:stdout) { should include('furbies =', furbies.to_s) }
       its(:stderr) { should be_empty }
     end
