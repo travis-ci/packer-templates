@@ -28,16 +28,16 @@ describe 'apt installation' do
   end
 end
 
-describe command('bats --version'),  do
+describe command('bats --version') do
   its(:stdout) { should match(/^Bats \d/) }
 end
-end
 
-describe command('shellcheck --version'), do
+
+describe command('shellcheck --version') do
   its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
 end
 
-describe command('shfmt -version'), do
+describe command('shfmt -version') do
   its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
 end
 
@@ -237,11 +237,11 @@ describe 'git installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command('git config user.name'), do
+  describe command('git config user.name') do
     its(:stdout) { should match(/travis/i) }
   end
 
-  describe command('git config user.email'), do
+  describe command('git config user.email') do
     its(:stdout) { should match(/travis@example\.org/) }
   end
 
@@ -276,7 +276,7 @@ describe 'git installation' do
   end
 end
 
-describe command('heroku version'), do
+describe command('heroku version') do
   its(:stdout) { should match(%r{^heroku-toolbelt\/\d}) }
   its(:stdout) { should match(%r{^heroku-cli\/\d}) }
 end
@@ -417,7 +417,7 @@ describe 'openssl installation' do
   end
 end
 
-describe command('packer version'), do
+describe command('packer version') do
   its(:stdout) { should match(/^Packer v\d/) }
   its(:exit_status) { should eq 0 }
 end
