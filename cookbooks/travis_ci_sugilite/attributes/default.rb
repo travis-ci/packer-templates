@@ -246,7 +246,9 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   julia
   legacy
   mega
+  node-js
   node_js
+  nodejs
   perl
   perl6
   php

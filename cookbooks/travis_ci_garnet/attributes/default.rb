@@ -135,7 +135,9 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   go
   groovy
   java
+  node-js
   node_js
+  nodejs
   php
   pure_java
   python
