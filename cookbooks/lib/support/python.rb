@@ -26,6 +26,5 @@ module Support
                .fetch('travis_python', {})
                .fetch('pyenv', {})['pythons']
     end
-    
   end
 end

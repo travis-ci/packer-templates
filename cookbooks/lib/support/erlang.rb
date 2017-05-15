@@ -23,6 +23,5 @@ module Support
     def otp_releases_trusty
       ::Support.attributes.fetch('travis_build_environment', {})['otp_releases']
     end
-    
   end
 end

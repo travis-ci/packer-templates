@@ -37,6 +37,5 @@ module Support
       ::Support.attributes
                .fetch('travis_build_environment', {})['php_default_version']
     end
-    
   end
 end
