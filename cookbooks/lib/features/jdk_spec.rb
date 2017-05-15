@@ -8,7 +8,7 @@ describe 'jdk installation' do
     its(:stderr) { should match(/^java/) }
   end
 
-  describe file('/opt/jdk_switcher/jdk_switcher.sh'), precise: false do
+  describe file('/opt/jdk_switcher/jdk_switcher.sh'), do
     it { should exist }
     it { should be_readable }
   end
@@ -16,7 +16,7 @@ describe 'jdk installation' do
   describe command(%(
     . /opt/jdk_switcher/jdk_switcher.sh;
     jdk_switcher home default
-  )), precise: false do
+  )), do
     its(:stdout) { should match(%r{/usr/lib/jvm}) }
     its(:exit_status) { should eq 0 }
   end
