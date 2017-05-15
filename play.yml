@@ -18,6 +18,7 @@ builders:
   ssh_timeout: 10m
   ssh_port: 22
   image_description: Travis Play
+  ssh_username: travis
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1404-trusty-v20161205

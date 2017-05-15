@@ -1,5 +1,5 @@
 ---
-description: Travis CI connie build env template!
+description: Travis CI connie build env template <3
 variables:
   docker_repository: travisci/ci-connie
   docker_tag: packer-{{ timestamp }}
@@ -15,6 +15,7 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
+  ssh_username: travis
   image_description: Travis CI Connie
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
@@ -74,6 +75,7 @@ provisioners:
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
   source: packer-assets/connie-system-info-commands.yml

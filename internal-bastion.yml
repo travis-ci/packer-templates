@@ -29,6 +29,7 @@ builders:
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1404-trusty-v20170330
   zone: us-central1-b
+  ssh_username: ubuntu
   image_name: bastion-{{ timestamp }}
   machine_type: g1-small
   tags:

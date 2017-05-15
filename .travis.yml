@@ -2,6 +2,7 @@ language: universe
 dist: trusty
 group: edge
 sudo: required
+filter_secrets: false
 cache:
   bundler: true
   directories:
