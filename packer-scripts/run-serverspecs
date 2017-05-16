@@ -18,10 +18,6 @@ main() {
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "$(lsb_release -sc)" = 'precise' ]]; then
-    export SPEC_ARGS="${SPEC_ARGS} --tag ~precise:false"
-  fi
-
   __install_chefdk "${PACKER_CHEF_PREFIX}"
   # shellcheck disable=SC2119
   __create_sudo_bash

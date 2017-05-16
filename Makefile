@@ -6,7 +6,7 @@ META_FILES := \
 	$(SHA_FILE) \
 	$(PWD)/tmp/docker-meta/.dumped \
 	$(PWD)/tmp/job-board-env/.dumped
-PHP_PACKAGES_FILE := packer-assets/ubuntu-precise-ci-php-packages.txt
+
 SYSTEM_INFO_COMMANDS_FILES := \
 	packer-assets/amethyst-system-info-commands.yml \
 	packer-assets/connie-system-info-commands.yml \
@@ -17,8 +17,7 @@ TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
 CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
 	$(TRAVIS_COOKBOOKS_GIT)::cookbooks@master \
 	$(TRAVIS_COOKBOOKS_GIT)::community-cookbooks@master \
-	$(TRAVIS_COOKBOOKS_GIT)::ci_environment@precise-stable \
-	$(TRAVIS_COOKBOOKS_GIT)::worker_host@precise-stable
+
 UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
 BUILDER ?= googlecompute
@@ -39,14 +38,10 @@ all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
 .PHONY: stacks-short
 stacks-short:
-	@$(MAKE) stacks | sed 's/-trusty//;s/-precise//'
+	@$(MAKE) stacks | sed 's/-trusty//'
 
 .PHONY: stacks
-stacks: stacks-precise stacks-trusty
-
-.PHONY: stacks-precise
-stacks-precise:
-	@bin/list-stacks precise
+stacks: stacks-trusty
 
 .PHONY: stacks-trusty
 stacks-trusty:
@@ -96,11 +91,6 @@ $(META_FILES): .git/HEAD
 	./bin/dump-git-meta ./tmp/git-meta
 	./bin/write-envdir $(PWD)/tmp/docker-meta 'DOCKER_LOGIN_(USERNAME|PASSWORD|SERVER)'
 	./bin/write-envdir $(PWD)/tmp/job-board-env 'JOB_BOARD'
-
-$(PHP_PACKAGES_FILE): packer-assets/ubuntu-precise-ci-packages.txt
-	chmod 0600 $@
-	$(SED) 's/libcurl4-openssl-dev/libcurl4-gnutls-dev/' < $^ > $@
-	chmod 0400 $@
 
 packer-assets/%-system-info-commands.yml: $(wildcard packer-assets/system-info.d/*.yml)
 	chmod 0600 $@

@@ -19,7 +19,7 @@ describe 'mysql installation' do
     sh('sudo service mysql start')
   end
 
-  describe file('/home/travis/.my.cnf'), precise: false do
+  describe file('/home/travis/.my.cnf') do
     it { should exist }
     it { should be_readable }
     it { should be_readable }
