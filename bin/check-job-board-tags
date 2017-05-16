@@ -34,7 +34,6 @@ main() {
     languages:excl:garnet:connie
     languages:excl:garnet:amethyst
     features:incl:garnet:amethyst
-    features:incl:sugilite:ruby
   )
 
   cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
