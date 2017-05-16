@@ -27,7 +27,7 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
+  if [[ -z "${SKIP_CHEFDK_REMOVAL}" ]]; then
     __remove_chefdk
   fi
 }
@@ -133,14 +133,14 @@ rspec ${SPEC_ARGS} \\
 
   if [[ $exit_code != 0 ]]; then
     echo "Spec suite exited with ${exit_code}" >&2
-    if [[ -n ${SPEC_FAILURE_SLEEP_FOREVER} ]]; then
+    if [[ "${SPEC_FAILURE_SLEEP_FOREVER}" ]]; then
       while true; do
         date -u
         echo tick
         sleep "${SLEEPYTIME:-60}"
       done
     fi
-    exit ${exit_code}
+    exit "${exit_code}"
   fi
 
   set -o errexit
