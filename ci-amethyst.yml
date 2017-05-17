@@ -83,6 +83,7 @@ provisioners:
   inline: chmod 0644 /var/tmp/amethyst-system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
+  install_command: "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12.9"
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
