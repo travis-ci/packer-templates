@@ -343,6 +343,7 @@ manpages
 mawk
 md5deep
 mercurial
+mercurial-common
 mime-support
 mingw32
 mlocate
