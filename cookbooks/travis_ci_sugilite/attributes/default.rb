@@ -224,7 +224,6 @@ override['travis_packer_templates']['job_board']['features'] = %w(
 )
 override['travis_packer_templates']['job_board']['languages'] = %w(
   __sugilite__
-  android
   c
   c++
   clojure
