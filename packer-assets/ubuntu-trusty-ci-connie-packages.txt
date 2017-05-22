@@ -342,7 +342,6 @@ man-db
 manpages
 mawk
 md5deep
-mercurial
 mime-support
 mingw32
 mlocate
