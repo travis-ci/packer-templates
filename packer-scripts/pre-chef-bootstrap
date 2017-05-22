@@ -70,6 +70,8 @@ __setup_travis_user() {
       useradd -p travis -s /bin/bash -m travis
     else
       useradd -p travis -s /bin/bash -m travis -u 1000
+      groupmod -g 1000 travis
+      usermod -u 1000 travis
     fi
   fi
 

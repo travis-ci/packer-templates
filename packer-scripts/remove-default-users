@@ -23,6 +23,7 @@ __remove_user() {
   fi
 
   userdel -fr "${u}" || echo "Suppressing userdel exit $?"
+  groupdel "${u}" || echo "Suppressing groupdel exit $?"
 }
 
 main "$@"
