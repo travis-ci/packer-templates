@@ -55,7 +55,7 @@ provisioners:
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
-  - TRAVIS_UID_1000=noforce
+  - TRAVIS_UID_2000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   inline:
