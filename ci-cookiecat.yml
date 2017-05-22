@@ -7,13 +7,14 @@ variables:
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
 builders:
 - type: googlecompute
   name: googlecompute
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: travis
+  ssh_username: ubuntu
   image_description: Travis CI cookiecat
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
@@ -43,12 +44,12 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump
-  - packer-scripts/remove-default-users
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
   source: packer-assets/cookiecat-system-info-commands.yml
@@ -90,6 +91,7 @@ provisioners:
   - DISPLAY=:99.0
   - SPEC_SUITES=travis_packer_templates
   - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:

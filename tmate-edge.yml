@@ -56,7 +56,6 @@ provisioners:
   - TRAVIS_COOKBOOKS_URL={{ user `travis_cookbooks_url` }}
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
-  - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: chef-solo
   cookbook_paths:

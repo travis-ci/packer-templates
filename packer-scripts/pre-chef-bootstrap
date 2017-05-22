@@ -66,12 +66,12 @@ __setup_sshd() {
 
 __setup_travis_user() {
   if ! getent passwd travis &>/dev/null; then
-    if [[ "$TRAVIS_UID_1000" == noforce ]]; then
+    if [[ -z "${TRAVIS_UID}" ]]; then
       useradd -p travis -s /bin/bash -m travis
     else
-      useradd -p travis -s /bin/bash -m travis -u 1000
-      groupmod -g 1000 travis
-      usermod -u 1000 travis
+      useradd -p travis -s /bin/bash -m travis -u "${TRAVIS_UID}"
+      groupmod -g "${TRAVIS_UID}" travis
+      usermod -u "${TRAVIS_UID}" travis
     fi
   fi
 
