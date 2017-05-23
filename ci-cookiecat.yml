@@ -60,6 +60,8 @@ provisioners:
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% else %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --force-logger --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   cookbook_paths:
   - cookbooks
