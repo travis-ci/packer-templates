@@ -8,7 +8,7 @@ main() {
   local edge_branch='master'
   local sed='sed'
 
-  if [[ "$(uname)" = Darwin ]]; then
+  if [[ "$(uname)" == Darwin ]]; then
     sed='gsed'
   fi
 

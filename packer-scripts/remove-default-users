@@ -13,7 +13,7 @@ main() {
 __remove_user() {
   local u="${1}"
 
-  if [[ "$(whoami)" = "${u}" ]]; then
+  if [[ "$(whoami)" == "${u}" ]]; then
     echo 'Refusing to remove myself' >&2
     return
   fi
