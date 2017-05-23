@@ -153,13 +153,6 @@ commands:
   - command: ls -l /usr/local/bin/searchd
     name: Default Sphinx version
     pipe: perl -n -e '/sphinx-([^\/]+)/ && {print "$1\n"}'
-  - command: grep Pkg.Revision /usr/local/android-sdk/tools/source.properties
-    name: Android SDK Tools Version
-    pipe: awk -F= '{ print $2 }'
-  - command: android list sdk --no-ui --all --extended
-    name: List of Android SDK components that can be specified in .travis.yml
-    pipe: awk -F\" '/^id/ {print $2}' | sort
-  - command: which android && echo -e "\033[33;1mSee http://docs.travis-ci.com/user/languages/android/#How-to-install-Android-SDK-components\033[0m"
   - command: kerl list installations
   - command: kiex list
   - command: rebar --version

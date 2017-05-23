@@ -5,7 +5,7 @@ end
 describe 'jdk installation' do
   describe command('java -version') do
     its(:exit_status) { should eq 0 }
-    its(:stderr) { should match(/^java/) }
+    its(:stderr) { should match(/^(java|openjdk)/) }
   end
 
   describe file('/opt/jdk_switcher/jdk_switcher.sh') do
