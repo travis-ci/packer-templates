@@ -124,7 +124,7 @@ __write_pre_chef_env() {
 # Managed by Packer :heart:
 
 export TRAVIS_PRE_CHEF_BOOTSTRAP_TIME=$(date -u +%Y-%m-%dT%H:%M:%S)
-export TRAVIS_UID=${TRAVIS_UID:-1000}
+export TRAVIS_UID=${TRAVIS_UID:2000}
 EOF
   chown root:root "${dest}"
   chmod 0755 "${dest}"
