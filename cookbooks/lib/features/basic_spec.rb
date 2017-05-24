@@ -594,7 +594,6 @@ end
 
 describe user('travis') do
   it { should exist }
-#  it { should have_uid Integer(ENV['TRAVIS_UID'] || 2000) }
   it { should have_home_directory '/home/travis' }
   it { should have_login_shell '/bin/bash' }
 end
