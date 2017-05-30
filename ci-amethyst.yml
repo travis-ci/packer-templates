@@ -1,5 +1,5 @@
 ---
-description: Travis CI Amethyst build env template
+description: Travis CI Amethyst build env template :heart:
 variables:
   docker_repository: travisci/ci-amethyst
   docker_tag: packer-{{ timestamp }}
