@@ -17,7 +17,7 @@ builders:
   source_ami: ami-a327a4b5
   ami_name: bastion {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.micro
-  ssh_username: ubuntu
+  ssh_username: bastion
   ami_virtualization_type: hvm
   tags:
     role: bastion
