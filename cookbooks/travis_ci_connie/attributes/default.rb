@@ -15,10 +15,10 @@ gimme_versions = %w(
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
-override['travis_python']['pyenv']['pythons'] = []
-override['travis_python']['pyenv']['aliases'] = {}
-override['travis_python']['pip']['packages'] = {}
-override['travis_python']['system']['pythons'] = []
+override['travis_build_environment']['pyenv']['pythons'] = []
+override['travis_build_environment']['pyenv']['aliases'] = {}
+override['travis_build_environment']['pip']['packages'] = {}
+override['travis_build_environment']['system']['pythons'] = []
 
 override['travis_build_environment']['nodejs_default'] = ''
 override['travis_build_environment']['nodejs_versions'] = []
