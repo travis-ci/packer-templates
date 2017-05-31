@@ -18,7 +18,7 @@ override['travis_build_environment']['gimme']['default_version'] = gimme_version
 override['travis_build_environment']['pyenv']['pythons'] = []
 override['travis_build_environment']['pyenv']['aliases'] = {}
 override['travis_build_environment']['pip']['packages'] = {}
-override['travis_build_environment']['system']['pythons'] = []
+override['travis_build_environment']['system_python']['pythons'] = []
 
 override['travis_build_environment']['nodejs_default'] = ''
 override['travis_build_environment']['nodejs_versions'] = []
