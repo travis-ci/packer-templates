@@ -9,7 +9,7 @@ echo "${GCE_ACCOUNT_FILE_B64_BZ2}" \
   | base64 -d \
   | bunzip2 >tmp/gce.json
 
-if [[ "$(packer version 2>/dev/null)" != "Packer v0.12.3" ]]; then
+if [[ "$(packer version 2>/dev/null)" != "Packer v1.0.0" ]]; then
   make install-packer
 fi
 
