@@ -137,12 +137,9 @@ post-processors:
     tag: "{{ user `docker_tag` }}"
     only:
     - docker
-
-- type: manifest
-  - output: manifest.json
-    strip_path: true
-    - inline:
-    - jq ".builds[].files[].name" manifest.json | xargs tar cfz artifacts.tgz
+  - type: artifice
+    files:
+    - tmp/docker-meta/.dumped
     only:
     - docker
   - type: shell-local
@@ -151,12 +148,10 @@ post-processors:
     - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
     only:
     - docker
-
-- type: manifest
-  - output: manifest.json
-    strip_path: true
-  - inline:
-    - jq ".builds[].files[].name" manifest.json | xargs tar cfz artifacts.tgz
+-
+  - type: artifice
+    files:
+    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -169,13 +164,9 @@ post-processors:
     - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
     only:
     - docker
-
-- type: manifest
-  - output: manifest.json
-    strip_path: true
-    type: manifest
-  - inline:
-    - jq ".builds[].files[].name" manifest.json | xargs tar cfz artifacts.tgz
-    type: shell-local
+-
+  - type: artifice
+    files:
+    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/write-latest-image-name
