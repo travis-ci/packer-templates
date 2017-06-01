@@ -5,12 +5,11 @@ $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 require 'fileutils'
 require 'time'
 
-require 'packer_manifest'
-
-def main(*)
-  metadata_tarball = File.basename(
-    PackerManifest.new.find(/image-metadata.*\.tar\.bz2/).first
+def main
+  matches = Dir.glob(
+    File.expand_path('../../tmp/image-metadata-*.tar.bz2', __FILE__)
   )
+  metadata_tarball = File.basename(matches.sort.last)
   top = File.expand_path('../../', __FILE__)
   template_name = metadata_tarball.match(/\b(ci-[a-z]+)\b/)[1]
   latest_image_name = metadata_tarball.match(/\b(travis-ci-[^\.]+)\b/)[1]

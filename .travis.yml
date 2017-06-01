@@ -50,7 +50,6 @@ install:
   fi
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
-- cp -v .example-packer-manifest.json ./tmp/packer-manifest.json
 
 script:
 - make

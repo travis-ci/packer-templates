@@ -144,8 +144,6 @@ post-processors:
     only:
     - docker
 -
-  - type: manifest
-    output: tmp/packer-manifest.json
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -159,7 +157,5 @@ post-processors:
     only:
     - docker
 -
-  - type: manifest
-    output: tmp/packer-manifest.json
   - type: shell-local
     script: bin/write-latest-image-name
