@@ -1,0 +1,25 @@
+{
+  "builds": [
+    {
+      "name": "docker",
+      "builder_type": "docker",
+      "build_time": 1465548378,
+      "files": [{"name": "connie"}],
+      "artifact_id": "sha256:1e9543ee891b51e2918393bd2ce0840df860ee58eb002dc5f4bc8b4a9531d3f7"
+    },
+    {
+      "name": "candy",
+      "builder_type": "docker",
+      "build_time": 1465548378,
+      "files": null,
+      "artifact_id": "sha256:2771690096bd1967f060a132ae0b2d32ebd99b036983a7f09fccb95449c881f1"
+    },
+    {
+      "name": "cake",
+      "builder_type": "docker",
+      "build_time": 1465548378,
+      "files": null,
+      "artifact_id": "sha256:d0d80a25820a470f56538b6d586af0d6b453a3e3f4697b13de808b04d1b80a26"
+    }
+  ]
+}
