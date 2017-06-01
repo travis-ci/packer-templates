@@ -75,9 +75,9 @@ def python_aliases(full_name)
   [nodash[0, 3]]
 end
 
-override['travis_build_environment']['pyenv']['pythons'] = pythons
+override['travis_build_environment']['pythons'] = pythons
 pythons.each do |full_name|
-  override['travis_build_environment']['pyenv']['aliases'][full_name] = \
+  override['travis_build_environment']['python_aliases'][full_name] = \
     python_aliases(full_name)
 end
 

@@ -22,8 +22,8 @@ gimme_versions = %w(
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
-override['travis_build_environment']['pyenv']['pythons'] = []
-override['travis_build_environment']['pyenv']['aliases'] = {}
+override['travis_build_environment']['pythons'] = []
+override['travis_build_environment']['python_aliases'] = {}
 override['travis_build_environment']['pip']['packages'] = {}
 override['travis_build_environment']['system_python']['pythons'] = []
 
