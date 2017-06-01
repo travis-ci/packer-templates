@@ -7,7 +7,7 @@ require 'time'
 
 require 'packer_manifest'
 
-def main(argv: ARGV)
+def main(*)
   metadata_tarball = File.basename(
     PackerManifest.new.find(/image-metadata.*\.tar\.bz2/).first
   )
