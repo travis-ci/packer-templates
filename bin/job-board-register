@@ -2,5 +2,12 @@
 libdir = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
+require 'packer_manifest'
 require 'job_board_registrar'
-exit JobBoardRegistrar.new(ARGV.first).register! if $PROGRAM_NAME == __FILE__
+
+if $PROGRAM_NAME == __FILE__
+  packer_manifest = PackerManifest.new
+  packer_manifest.find(/image-metadata.*\.tar\.bz2/).each do |filename|
+    JobBoardRegistrar.new(filename).register!
+  end
+end

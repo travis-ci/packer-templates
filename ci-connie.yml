@@ -137,11 +137,6 @@ post-processors:
     tag: "{{ user `docker_tag` }}"
     only:
     - docker
-  - type: artifice
-    files:
-    - tmp/docker-meta/.dumped
-    only:
-    - docker
   - type: shell-local
     scripts: bin/docker-push
     environment_vars:
@@ -149,9 +144,8 @@ post-processors:
     only:
     - docker
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  - type: manifest
+    output: tmp/packer-manifest.json
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -165,8 +159,7 @@ post-processors:
     only:
     - docker
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  - type: manifest
+    output: tmp/packer-manifest.json
   - type: shell-local
     script: bin/write-latest-image-name
