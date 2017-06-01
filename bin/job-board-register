@@ -5,7 +5,10 @@ $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 require 'job_board_registrar'
 
 if $PROGRAM_NAME == __FILE__
-  Dir.glob(File.expand_path('../../tmp/image-metadata-*.tar.bz2', __FILE__)) do |filename|
-    JobBoardRegistrar.new(filename).register!
-  end
+  matches = Dir.glob(
+    File.expand_path(
+      '../../tmp/image-metadata-*.tar.bz2', __FILE__
+    )
+  )
+  JobBoardRegistrar.new(matches.sort.last).register!
 end

@@ -68,11 +68,6 @@ provisioners:
   - googlecompute
 # post-processors:
 # -
-#   - type: artifice
-#     files:
-#     - tmp/image-metadata-{{ user `gce_image_name` }}.tar.bz2
-#     only:
-#     - googlecompute
 #   - type: shell-local
 #     script: bin/job-board-register
 #     environment_vars:

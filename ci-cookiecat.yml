@@ -107,11 +107,6 @@ provisioners:
   direction: download
 post-processors:
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
-    only:
-    - googlecompute
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -119,8 +114,5 @@ post-processors:
     only:
     - googlecompute
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/write-latest-image-name
