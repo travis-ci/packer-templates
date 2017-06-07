@@ -66,7 +66,7 @@ node_versions = %w(
 override['travis_build_environment']['nodejs_versions'] = node_versions
 override['travis_build_environment']['nodejs_default'] = node_versions.max
 
-override['travis_python']['pyenv']['pythons'] = []
+override['travis_build_environment']['pythons'] = []
 
 rubies = %w(
   2.3.3

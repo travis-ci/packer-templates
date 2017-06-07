@@ -4,7 +4,7 @@ set -o errexit
 
 main() {
   local envdir
-  envdir=$(dirname "${1}")
+  envdir="$(git rev-parse --show-toplevel)/tmp/docker-meta"
 
   set +o xtrace
 
@@ -59,12 +59,14 @@ main() {
 
   while true; do
     __log "msg=\"docker push\" attempt=$((attempt + 1))"
-    push_start=$(date +%s)
+    push_start="$(date +%s)"
     if docker push "${DOCKER_DEST}"; then
+      local now_timestamp
+      now_timestamp="$(date +%s)"
       __log 'msg="docker push complete"' \
-        "duration=$(($(date +%s) - push_start))s"
+        "duration=$((now_timestamp - push_start))s"
 
-      if [[ ${DOCKER_LOGOUT_POST_PUSH} = 1 ]]; then
+      if [[ ${DOCKER_LOGOUT_POST_PUSH} == 1 ]]; then
         __log 'msg="docker logout"'
         docker logout "${DOCKER_LOGIN_SERVER}"
         __log 'msg="docker logout complete"'
@@ -74,7 +76,7 @@ main() {
 
     attempt=$((attempt + 1))
 
-    if [[ $attempt -gt ${DOCKER_PUSH_RETRIES} ]]; then
+    if [[ ${attempt} -gt ${DOCKER_PUSH_RETRIES} ]]; then
       break
     fi
 

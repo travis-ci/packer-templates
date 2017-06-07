@@ -4,7 +4,7 @@ set -o pipefail
 
 unset GEM_PATH
 
-if [[ $# -gt 1 && $1 = --env ]]; then
+if [[ $# -gt 1 && $1 == --env ]]; then
   echo "Running isolated with env ${2}"
   exec env -i HOME="${HOME}" PATH="${PATH}" \
     BUNDLE_GEMFILE="${BUNDLE_GEMFILE}" \

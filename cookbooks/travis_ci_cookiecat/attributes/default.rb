@@ -1,5 +1,12 @@
-override['travis_java']['default_version'] = ''
-override['travis_java']['alternate_versions'] = []
+override['maven']['install_java'] = false
+
+default['travis_ci_cookiecat']['prerequisite_packages'] = %w(
+  cron
+  curl
+  git
+  sudo
+  wget
+)
 
 override['travis_phpenv']['prerequisite_recipes'] = []
 override['travis_phpbuild']['prerequisite_recipes'] = []
@@ -25,9 +32,6 @@ override['travis_build_environment']['nodejs_versions'] = []
 override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
-override['travis_system_info']['commands_file'] = \
-  '/var/tmp/connie-system-info-commands.yml'
-
 rubies = %w(
   2.3.3
   2.4.0
@@ -45,23 +49,33 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 
-override['travis_packer_templates']['job_board']['stack'] = 'connie'
+override['travis_system_info']['commands_file'] = \
+  '/var/tmp/cookiecat-system-info-commands.yml'
+
+override['android-sdk']['java_from_system'] = true
+override['android-sdk']['owner'] = 'travis'
+override['android-sdk']['group'] = 'travis'
+override['android-sdk']['license']['default_answer'] = 'y'
+override['android-sdk']['scripts']['owner'] = 'travis'
+override['android-sdk']['scripts']['group'] = 'travis'
+
+override['travis_java']['default_version'] = 'openjdk8'
+override['travis_java']['alternate_versions'] = %w(openjdk7)
+
+override['leiningen']['home'] = '/home/travis'
+override['leiningen']['user'] = 'travis'
+
+override['travis_build_environment']['update_hostname'] = false
+override['travis_build_environment']['use_tmpfs_for_builds'] = false
+override['travis_packer_templates']['job_board']['stack'] = 'cookiecat'
 override['travis_packer_templates']['job_board']['features'] = %w(
   basic
   disabled-ipv6
   docker
   docker-compose
-  go-toolchain
-  perl_interpreter
-  perlbrew
-  python_interpreter
-  ruby_interpreter
+  jdk
 )
 override['travis_packer_templates']['job_board']['languages'] = %w(
-  __connie__
-  bash
-  generic
-  minimal
-  sh
-  shell
+  __cookiecat__
+  android
 )

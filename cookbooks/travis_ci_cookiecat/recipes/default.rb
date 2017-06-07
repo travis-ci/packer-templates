@@ -1,4 +1,4 @@
-# Cookbook Name:: travis_ci_connie
+# Cookbook Name:: travis_ci_cookiecat
 # Recipe:: default
 #
 # Copyright 2017, Travis CI GmbH
@@ -25,21 +25,15 @@
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
-
-if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
-  include_recipe 'travis_docker::binary'
-else
-  include_recipe 'travis_docker'
-  include_recipe 'travis_build_environment::ramfs'
-end
-
+include_recipe 'travis_docker'
+include_recipe 'travis_build_environment::ramfs'
 include_recipe 'travis_docker::compose'
+include_recipe 'openssl'
 include_recipe 'travis_java'
-include_recipe 'travis_perlbrew::multi'
-include_recipe 'travis_postgresql::pgdg'
+include_recipe 'travis_build_environment::maven'
+include_recipe 'travis_build_environment::lein'
+include_recipe 'travis_sbt_extras'
+include_recipe 'travis_build_environment::gradle'
+include_recipe 'android-sdk'
 include_recipe 'travis_packer_templates::systemd_purge'
 include_recipe 'travis_system_info'
-
-# HACK: force removal of ~/.pearrc until a decision is reached on if they are
-# good or bad
-execute 'rm -f /home/travis/.pearrc'

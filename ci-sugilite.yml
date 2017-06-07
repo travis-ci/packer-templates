@@ -7,17 +7,18 @@ variables:
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
 builders:
 - type: googlecompute
   name: googlecompute
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: travis
+  ssh_username: packer
   image_description: Travis CI sugilite
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20170330
+  source_image: ubuntu-1404-trusty-v20170517
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
@@ -49,6 +50,7 @@ provisioners:
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
   source: packer-assets/sugilite-system-info-commands.yml
@@ -90,6 +92,7 @@ provisioners:
   - DISPLAY=:99.0
   - SPEC_SUITES=travis_packer_templates
   - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
@@ -103,11 +106,6 @@ provisioners:
   direction: download
 post-processors:
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
-    only:
-    - googlecompute
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -115,8 +113,5 @@ post-processors:
     only:
     - googlecompute
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/write-latest-image-name

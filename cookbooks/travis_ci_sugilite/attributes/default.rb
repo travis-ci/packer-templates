@@ -95,8 +95,6 @@ override['travis_java']['alternate_versions'] = %w(
   openjdk6
   openjdk7
   openjdk8
-  oraclejdk7
-  oraclejdk9
 )
 
 override['leiningen']['home'] = '/home/travis'
@@ -116,13 +114,11 @@ override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w(
   2.7.13
-  3.2.6
   3.3.6
   3.4.5
   3.5.2
   3.6.0
   pypy2-5.6.0
-  pypy3-2.4.0
 )
 
 # Reorder pythons so that default python2 and python3 come first
@@ -139,9 +135,9 @@ def python_aliases(full_name)
   [nodash[0, 3]]
 end
 
-override['travis_python']['pyenv']['pythons'] = pythons
+override['travis_build_environment']['pythons'] = pythons
 pythons.each do |full_name|
-  override['travis_python']['pyenv']['aliases'][full_name] = \
+  override['travis_build_environment']['python_aliases'][full_name] = \
     python_aliases(full_name)
 end
 
@@ -224,7 +220,6 @@ override['travis_packer_templates']['job_board']['features'] = %w(
 )
 override['travis_packer_templates']['job_board']['languages'] = %w(
   __sugilite__
-  android
   c
   c++
   clojure

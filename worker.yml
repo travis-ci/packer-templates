@@ -16,7 +16,7 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: travis
+  ssh_username: worker
   image_description: Travis Worker
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
@@ -55,7 +55,6 @@ provisioners:
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
-  - TRAVIS_UID_1000=noforce
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   inline:

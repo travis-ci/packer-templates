@@ -3,4 +3,12 @@ libdir = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'job_board_registrar'
-exit JobBoardRegistrar.new(ARGV.first).register! if $PROGRAM_NAME == __FILE__
+
+if $PROGRAM_NAME == __FILE__
+  matches = Dir.glob(
+    File.expand_path(
+      '../../tmp/image-metadata-*.tar.bz2', __FILE__
+    )
+  )
+  JobBoardRegistrar.new(matches.sort.last).register!
+end
