@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Support::Python
 
 require 'features/python_interpreter_spec'

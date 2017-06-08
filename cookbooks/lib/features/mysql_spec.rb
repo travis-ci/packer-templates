@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def reset_sql
   Support.tmpdir.join('reset.sql')
 end
@@ -33,10 +35,10 @@ describe 'mysql installation' do
       sh("mysql travis <#{schema_sql}")
     end
 
-    %w(
+    %w[
       root
       travis
-    ).each do |mysql_user|
+    ].each do |mysql_user|
       describe command(%(mysql -u #{mysql_user} -e 'select "hai"')) do
         its(:exit_status) { should eq 0 }
         its(:stdout) { should match(/hai/) }

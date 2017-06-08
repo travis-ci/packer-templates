@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'redis installation' do
   describe command('redis-server --version') do
     its(:stdout) { should match(/^Redis /) }
@@ -6,7 +8,7 @@ describe 'redis installation' do
 
   describe 'redis commands' do
     before :all do
-      spawn('redis-server', '--port', '16379', [:out, :err] => '/dev/null')
+      spawn('redis-server', '--port', '16379', %i[out err] => '/dev/null')
       tcpwait('127.0.0.1', 16_379)
     end
 

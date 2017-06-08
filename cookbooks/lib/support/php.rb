@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   module Php
     def phpcommand(cmd)
@@ -14,14 +16,14 @@ module Support
       available = `phpenv versions 2>/dev/null`.strip
       php_versions.each do |v|
         next if @phpenv_exec
-        @phpenv_exec = "RBENV_VERSION=#{v} phpenv exec" if available =~ /\b#{v}\b/
+        @phpenv_exec = "RBENV_VERSION=#{v} phpenv exec" if available.match?(/\b#{v}\b/)
       end
       @phpenv_exec ||= ''
       @phpenv_exec
     end
 
     def php_versions
-      php_versions_trusty || %w(5.6.13 system)
+      php_versions_trusty || %w[5.6.13 system]
     end
 
     def php_versions_trusty

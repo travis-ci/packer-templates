@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   module Python
     def pycommand(cmd, version: nil)
@@ -18,7 +20,7 @@ module Support
     end
 
     def python_versions
-      python_versions_trusty || %w(2.7)
+      python_versions_trusty || %w[2.7]
     end
 
     def python_versions_trusty

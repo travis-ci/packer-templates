@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'travis_packer_templates'
 require 'support'
 require 'chef'
@@ -77,7 +79,7 @@ describe TravisPackerTemplates do
 
   context 'with real file IO', integration: true do
     let :tmpdir do
-      Dir.mktmpdir(%w(packer-templates- -rspec))
+      Dir.mktmpdir(%w[packer-templates- -rspec])
     end
 
     let :packer_env_dir do
@@ -135,7 +137,7 @@ describe TravisPackerTemplates do
       it 'assigns packages from packages file' do
         subject.init!(now)
         expect(node['travis_packer_templates']['packages'])
-          .to eq(%w(flim flam flopper doodle))
+          .to eq(%w[flim flam flopper doodle])
       end
     end
 

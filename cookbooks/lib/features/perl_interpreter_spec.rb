@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'perl interpreter' do
   describe command('perl --version') do
     its(:stderr) { should be_empty }

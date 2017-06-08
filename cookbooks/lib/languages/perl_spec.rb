@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'perl installation', dev: true do
   describe command('perlbrew list') do
     its(:stdout) { should match(/\b5\.\d+\s+\(5\.\d+\.\d+\)/) }

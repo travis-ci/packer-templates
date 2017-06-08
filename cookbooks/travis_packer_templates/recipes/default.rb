@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Cookbook Name:: travis_packer_templates
 # Recipe:: default
 #
@@ -26,7 +28,7 @@ init_time = Time.now.utc
 travis_packer_templates = nil
 travis_packer_templates = TravisPackerTemplates.new(node) if
   defined?(TravisPackerTemplates)
-travis_packer_templates.init!(init_time) unless travis_packer_templates.nil?
+travis_packer_templates&.init!(init_time)
 
 template '/etc/profile.d/Z90-travis-packer-templates.sh' do
   source 'etc-profile-d-travis-packer-templates.sh.erb'
@@ -59,6 +61,6 @@ Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
   apt_package slice do
     retries 2
     options '--no-install-recommends --no-install-suggests'
-    action %i(install upgrade)
+    action %i[install upgrade]
   end
 end

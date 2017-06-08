@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'features/go_toolchain_spec'
 
 describe 'go installation', dev: true do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_internal_base'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+travis-internal-base-cookbook@travis-ci.org'

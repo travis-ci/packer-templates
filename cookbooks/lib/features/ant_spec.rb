@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'ant installation' do
   describe command('ant -version') do
     its(:exit_status) { should eq 0 }
