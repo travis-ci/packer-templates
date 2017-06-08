@@ -37,7 +37,7 @@ install:
 - if [[ -f .test-branch ]]; then
     export TRAVIS_COOKBOOKS_TEST_BRANCH="$(cat .test-branch 2>/dev/null)";
   fi
-- rvm use 2.3.1 --install --binary --fuzzy
+- rvm use 2.4.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - if ! shellcheck --version &>/dev/null; then
     curl -sSL "${SHELLCHECK_URL}"
