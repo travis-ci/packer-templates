@@ -24,13 +24,13 @@ class StackPromotionHydrator
   end
 
   private def create_file_diffs
-    %w[
+    %w(
       dpkg-manifest.json
       job-board-register.yml
       node-attributes.yml
       system_info.json
       travis_packer_templates_rspec.json
-    ].each do |metadata_file|
+    ).each do |metadata_file|
       next unless stack_promotion.cur.metadata.files.key?(metadata_file) &&
                   stack_promotion.nxt.metadata.files.key?(metadata_file)
       if metadata_file == 'travis_packer_templates_rspec.json'
@@ -40,13 +40,13 @@ class StackPromotionHydrator
                          ])
       end
 
-      diff_command = %W[
+      diff_command = %W(
         diff -u
         --label #{stack_promotion.cur.name}/#{metadata_file}
         #{stack_promotion.cur.metadata.files[metadata_file]}
         --label #{stack_promotion.nxt.name}/#{metadata_file}
         #{stack_promotion.nxt.metadata.files[metadata_file]}
-      ]
+      )
       diff_filename = output_dir.join("#{metadata_file}.diff")
       logger.info "writing #{diff_filename}"
       system(*diff_command, out: diff_filename.to_s)
@@ -80,13 +80,13 @@ class StackPromotionHydrator
         .map { |e| "#{e[0]}=#{e[1]}" }
         .join("\n") + "\n"
     )
-    diff_command = %W[
+    diff_command = %W(
       diff -u
       --label #{stack_promotion.cur.name}/env
       #{current_image_env}
       --label #{stack_promotion.nxt.name}/env
       #{next_image_env}
-    ]
+    )
     diff_filename = output_dir.join('env.diff')
     logger.info "writing #{diff_filename}"
     system(*diff_command, out: diff_filename.to_s)

@@ -75,7 +75,7 @@ class ImageMetadata
   end
 
   private def extract_command
-    %W[tar -C #{relbase} -xjf #{File.expand_path(tarball)}]
+    %W(tar -C #{relbase} -xjf #{File.expand_path(tarball)})
   end
 
   private def load_image_metadata

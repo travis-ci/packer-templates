@@ -31,6 +31,6 @@ include_recipe 'openssh'
 include_recipe 'openssh::iptables'
 include_recipe 'travis_duo'
 
-package %w[curl pssh] do
-  action %i[install upgrade]
+package %w(curl pssh) do
+  action %i(install upgrade)
 end

@@ -35,11 +35,11 @@ class StackPromotion
         'group' => deprecated,
         "group_#{deprecated}" => true
       )
-      h['tags_string'] = %W[
+      h['tags_string'] = %W(
         group:#{deprecated}
         group_#{deprecated}:true
         #{h['tags_string']}
-      ].join(',')
+      ).join(',')
     end
   end
 
@@ -50,11 +50,11 @@ class StackPromotion
         'group' => cur.group,
         "group_#{cur.group}" => true
       )
-      h['tags_string'] = %W[
+      h['tags_string'] = %W(
         group:#{cur.group}
         group_#{cur.group}:true
         #{h['tags_string']}
-      ].join(',')
+      ).join(',')
     end
   end
 end

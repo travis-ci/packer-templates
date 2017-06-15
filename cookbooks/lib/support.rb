@@ -53,7 +53,7 @@ module Support
   module_function :libdir
 
   def tmpdir
-    @tmpdir ||= Pathname.new(Dir.mktmpdir(%w[packer-templates- -rspec]))
+    @tmpdir ||= Pathname.new(Dir.mktmpdir(%w(packer-templates- -rspec)))
   end
 
   module_function :tmpdir

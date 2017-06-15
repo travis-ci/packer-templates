@@ -8,7 +8,7 @@ describe 'redis installation' do
 
   describe 'redis commands' do
     before :all do
-      spawn('redis-server', '--port', '16379', %i[out err] => '/dev/null')
+      spawn('redis-server', '--port', '16379', %i(out err) => '/dev/null')
       tcpwait('127.0.0.1', 16_379)
     end
 

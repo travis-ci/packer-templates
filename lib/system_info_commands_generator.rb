@@ -11,7 +11,7 @@ class SystemInfoCommandsGenerator
   end
 
   def generate!
-    if !(%w[-h --help help] & argv).empty? || argv.length != 1
+    if !(%w(-h --help help) & argv).empty? || argv.length != 1
       $stderr.puts "Usage: #{File.basename($PROGRAM_NAME)} <stack>"
       return 1
     end
@@ -21,7 +21,7 @@ class SystemInfoCommandsGenerator
       'commands' => { 'linux' => [], 'osx' => [], 'common' => [] }
     }
 
-    %w[features languages].each { |t| merge_tagset!(t, system_info_commands) }
+    %w(features languages).each { |t| merge_tagset!(t, system_info_commands) }
 
     $stdout.puts YAML.dump(system_info_commands)
     0
@@ -54,7 +54,7 @@ class SystemInfoCommandsGenerator
 
   def merge_tagset_commands!(commands, system_info_commands)
     return if commands.nil? || commands.empty?
-    %w[linux osx common].each do |section|
+    %w(linux osx common).each do |section|
       value = commands[section]
       next if value.nil? || value.empty?
       system_info_commands['commands'][section] += (
