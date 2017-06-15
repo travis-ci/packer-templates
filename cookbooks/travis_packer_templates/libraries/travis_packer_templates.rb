@@ -64,7 +64,7 @@ class TravisPackerTemplates
       'packer_chef_time' => init_time.strftime('%Y%m%dT%H%M%SZ')
     }
 
-    %w(language feature).each do |prefix|
+    %w[language feature].each do |prefix|
       job_board_attrs["#{prefix}s"].each do |value|
         tags["#{prefix}_#{value}"] = true
       end

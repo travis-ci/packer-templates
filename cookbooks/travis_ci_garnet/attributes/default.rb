@@ -2,21 +2,21 @@
 
 override['maven']['install_java'] = false
 
-default['travis_ci_garnet']['prerequisite_packages'] = %w(
+default['travis_ci_garnet']['prerequisite_packages'] = %w[
   cron
   curl
   git
   sudo
   wget
-)
+]
 
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/garnet-system-info-commands.yml'
 
-php_versions = %w(
+php_versions = %w[
   5.6.24
   7.0.7
-)
+]
 override['travis_build_environment']['php_versions'] = php_versions
 override['travis_build_environment']['php_default_version'] = '5.6.24'
 override['travis_build_environment']['php_aliases'] = {
@@ -28,9 +28,9 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-gimme_versions = %w(
+gimme_versions = %w[
   1.7.4
-)
+]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
@@ -41,31 +41,31 @@ override['java']['oracle']['accept_oracle_download_terms'] = true
 override['java']['oracle']['jce']['enabled'] = true
 
 override['travis_java']['default_version'] = 'oraclejdk8'
-override['travis_java']['alternate_versions'] = %w(
+override['travis_java']['alternate_versions'] = %w[
   openjdk7
   openjdk8
   oraclejdk9
-)
+]
 
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
-node_versions = %w(
+node_versions = %w[
   6.9.4
   7.4.0
-)
+]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
 override['travis_build_environment']['nodejs_default'] = node_versions.max
 
-pythons = %w(
+pythons = %w[
   2.7.13
   3.5.2
-)
+]
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
-%w(3 2).each do |pyver|
+%w[3 2].each do |pyver|
   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
     pythons.unshift(pythons.delete(py))
   end
@@ -83,11 +83,11 @@ pythons.each do |full_name|
     python_aliases(full_name)
 end
 
-rubies = %w(
+rubies = %w[
   2.2.6
   2.3.3
   2.4.0
-)
+]
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
@@ -96,7 +96,7 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_packer_templates']['job_board']['stack'] = 'garnet'
-override['travis_packer_templates']['job_board']['features'] = %w(
+override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
   chromium
@@ -125,8 +125,8 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   ruby_interpreter
   sqlite
   xserver
-)
-override['travis_packer_templates']['job_board']['languages'] = %w(
+]
+override['travis_packer_templates']['job_board']['languages'] = %w[
   __garnet__
   c
   c++
@@ -143,4 +143,4 @@ override['travis_packer_templates']['job_board']['languages'] = %w(
   python
   ruby
   scala
-)
+]

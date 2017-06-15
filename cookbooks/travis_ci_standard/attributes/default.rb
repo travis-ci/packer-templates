@@ -4,11 +4,11 @@ default['rvm']['default'] = '2.2.6'
 default['rvm']['rubies'] = [
   { name: '2.2.6', arguments: '--binary --fuzzy' }
 ]
-default['rvm']['gems'] = %w(nokogiri)
+default['rvm']['gems'] = %w[nokogiri]
 
-gimme_versions = %w(
+gimme_versions = %w[
   1.7.4
-)
+]
 
 override['gimme']['versions'] = gimme_versions
 override['gimme']['default_version'] = gimme_versions.max

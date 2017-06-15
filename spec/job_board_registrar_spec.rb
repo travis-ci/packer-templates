@@ -189,17 +189,17 @@ describe JobBoardRegistrar do
 
         it { expect(url).to_not be_nil }
 
-        %w(name infra tags).each do |key|
+        %w[name infra tags].each do |key|
           describe(key) { it { expect(query[key]).to_not be_nil } }
         end
 
-        %w(name infra).each do |key|
+        %w[name infra].each do |key|
           describe(key) do
             it { expect(query[key]).to eq(config[:expected][key.to_sym]) }
           end
         end
 
-        %w(os group dist packer_templates_branch).each do |key|
+        %w[os group dist packer_templates_branch].each do |key|
           describe("#{key} tag") do
             it { expect(tags[key]).to eq(config[:expected][:tags][key.to_sym]) }
           end

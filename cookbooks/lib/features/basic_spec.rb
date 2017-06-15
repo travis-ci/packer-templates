@@ -137,11 +137,11 @@ describe file('/etc/cloud/cloud.cfg') do
   its(:content) { should match(/travis_build_environment/i) }
 end
 
-%w(
+%w[
   /etc/cloud/templates/hosts.debian.tmpl
   /etc/cloud/templates/hosts.tmpl
   /etc/cloud/templates/hosts.ubuntu.tmpl
-).each do |filename|
+].each do |filename|
   describe file(filename) do
     it { should be_exist }
     its(:content) { should match(/managed by chef/i) }
@@ -149,11 +149,11 @@ end
   end
 end
 
-%w(
+%w[
   /etc/cloud/templates/sources.list.debian.tmpl
   /etc/cloud/templates/sources.list.tmpl
   /etc/cloud/templates/sources.list.ubuntu.tmpl
-).each do |filename|
+].each do |filename|
   describe file(filename) do
     its(:content) { should match(/managed by chef/i) }
     its(:content) { should match(/travis_build_environment/i) }
@@ -254,7 +254,7 @@ describe 'git installation' do
     end
 
     describe command(
-      %W(
+      %W[
         cd #{git_project};
         git status;
         git add test-file.txt;
@@ -262,7 +262,7 @@ describe 'git installation' do
         git add test-file.txt;
         git rm -f test-file.txt;
         git status
-      ).join(' ')
+      ].join(' ')
     ) do
       its(:stdout) do
         should include(
@@ -376,12 +376,12 @@ describe 'mercurial installation' do
     end
 
     describe command(
-      %W(
+      %W[
         cd #{hg_project};
         hg status;
         hg add .;
         hg status
-      ).join(' ')
+      ].join(' ')
     ) do
       its(:stdout) { should match '\? test-file.txt' }
       its(:stdout) { should match 'A test-file.txt' }
@@ -489,10 +489,10 @@ describe 'rvm installation' do
     end
   end
 
-  %w(
+  %w[
     /home/travis/.rvmrc
     /home/travis/.rvm/user/db
-  ).each do |filename|
+  ].each do |filename|
     describe file(filename) do
       it { should exist }
       it { should be_writable }
@@ -506,7 +506,7 @@ describe command('ssh -V') do
 end
 
 describe 'ssh access' do
-  %w(known_hosts authorized_keys).each do |basename|
+  %w[known_hosts authorized_keys].each do |basename|
     describe file(::File.expand_path("~/.ssh/#{basename}")) do
       it { should exist }
       its(:size) { should be_positive }
@@ -563,7 +563,7 @@ describe 'sudoers setup' do
     it { should be_mode 440 }
     it { should be_owned_by 'root' }
     its(:content) { should match(/^travis ALL=\(ALL\) NOPASSWD:ALL$/) }
-    %w(authenticate env_reset mail_badpass).each do |disabled|
+    %w[authenticate env_reset mail_badpass].each do |disabled|
       its(:content) { should match(/^Defaults !#{disabled}$/) }
     end
   end
@@ -751,7 +751,7 @@ context 'with something listening on 19494' do
   around :each do |example|
     pid = spawn(
       'python', '-m', 'SimpleHTTPServer', '19494',
-      %i(out err) => '/dev/null'
+      %i[out err] => '/dev/null'
     )
     tcpwait('127.0.0.1', 19_494)
     example.run
@@ -785,7 +785,7 @@ describe file('/etc/hosts'), docker: false do
     end
   end
 
-  %w(127.0.0.1 127.0.1.1).each do |ipv4_addr|
+  %w[127.0.0.1 127.0.1.1].each do |ipv4_addr|
     it "has one #{ipv4_addr} entry" do
       expect(lines.grep(/^\s*#{ipv4_addr}\b/).length).to eq(1)
     end
