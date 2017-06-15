@@ -1,5 +1,5 @@
 ---
-description: Travis CI connie build env template! <3
+description: Travis CI connie build env template!
 variables:
   docker_repository: travisci/ci-connie
   docker_tag: packer-{{ timestamp }}
@@ -16,7 +16,7 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: ubuntu
+  ssh_username: packer
   image_description: Travis CI Connie
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
@@ -137,11 +137,6 @@ post-processors:
     tag: "{{ user `docker_tag` }}"
     only:
     - docker
-  - type: artifice
-    files:
-    - tmp/docker-meta/.dumped
-    only:
-    - docker
   - type: shell-local
     scripts: bin/docker-push
     environment_vars:
@@ -149,9 +144,6 @@ post-processors:
     only:
     - docker
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -165,8 +157,5 @@ post-processors:
     only:
     - docker
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/write-latest-image-name

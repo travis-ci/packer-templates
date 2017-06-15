@@ -14,7 +14,7 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: ubuntu
+  ssh_username: packer
   image_description: Travis CI cookiecat
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
@@ -107,11 +107,6 @@ provisioners:
   direction: download
 post-processors:
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
-    only:
-    - googlecompute
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -119,8 +114,5 @@ post-processors:
     only:
     - googlecompute
 -
-  - type: artifice
-    files:
-    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - type: shell-local
     script: bin/write-latest-image-name

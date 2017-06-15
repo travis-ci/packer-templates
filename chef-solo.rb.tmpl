@@ -1,6 +1,7 @@
 # vim:filetype=ruby
 file_atomic_update false
 cookbook_path [{{.CookbookPaths}}]
+force_logger true
 log_level((
   if "{{ user `chef_log_level` }}".empty?
     :info

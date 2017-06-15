@@ -1,10 +1,15 @@
 #!/usr/bin/env ruby
+libdir = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'fileutils'
 require 'time'
 
-def main(argv: ARGV)
-  metadata_tarball = File.basename(argv.fetch(0))
+def main
+  matches = Dir.glob(
+    File.expand_path('../../tmp/image-metadata-*.tar.bz2', __FILE__)
+  )
+  metadata_tarball = File.basename(matches.sort.last)
   top = File.expand_path('../../', __FILE__)
   template_name = metadata_tarball.match(/\b(ci-[a-z]+)\b/)[1]
   latest_image_name = metadata_tarball.match(/\b(travis-ci-[^\.]+)\b/)[1]

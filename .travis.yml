@@ -50,6 +50,7 @@ install:
   fi
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
+
 script:
 - make
 - bundle exec make test

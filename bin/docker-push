@@ -4,7 +4,7 @@ set -o errexit
 
 main() {
   local envdir
-  envdir=$(dirname "${1}")
+  envdir="$(git rev-parse --show-toplevel)/tmp/docker-meta"
 
   set +o xtrace
 

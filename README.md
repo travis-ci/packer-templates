@@ -93,7 +93,7 @@ that match `^(PACKER|TRAVIS)`, and (if present) the files previously written to
 
 The script at `./packer-scripts/remove-default-users` will perform a best-effort
 removal of users defined in `${DEFAULT_USERS}` (default `vagrant ubuntu`).  The
-primary reasons for this are general tidyness and to try to free up uid 1000.
+primary reasons for this are general tidyness and to try to free up uid 2000.
 
 #### pre-chef bootstrapping
 

@@ -23,8 +23,7 @@ module Support
 
     def python_versions_trusty
       ::Support.attributes
-               .fetch('travis_python', {})
-               .fetch('pyenv', {})['pythons']
+               .fetch('travis_build_environment', {})['pythons']
     end
   end
 end
