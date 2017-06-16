@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Support::Postgresql
 
 describe 'postgresql installation' do

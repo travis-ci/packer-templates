@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Support::Python
 
 describe 'python interpreter' do

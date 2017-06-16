@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def furbies
   @furbies ||= rand(200..299)
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'riak installation', sudo: true do
   before :all do
     sh('sudo riak start')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def db_url
   'http://localhost:9200/travis'
 end

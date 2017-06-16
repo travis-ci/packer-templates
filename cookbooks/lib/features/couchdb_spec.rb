@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'couchdb installation' do
   describe package('couchdb') do
     it { should be_installed }

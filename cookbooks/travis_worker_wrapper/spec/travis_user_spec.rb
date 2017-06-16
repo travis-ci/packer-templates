@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe user('travis') do
   it { should exist }
   it { should have_home_directory('/home/travis') }

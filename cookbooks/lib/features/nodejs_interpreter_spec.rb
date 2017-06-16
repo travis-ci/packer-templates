@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'nodejs interpreter' do
   describe command('node -v') do
     its(:stdout) { should match(/v\d/) }

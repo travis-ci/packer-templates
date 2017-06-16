@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'firefox installation' do
   describe command('firefox -v') do
     its(:exit_status) { should eq 0 }

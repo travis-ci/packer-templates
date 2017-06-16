@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'xserver installation' do
   describe command('Xorg -version') do
     its(:exit_status) { should eq 0 }

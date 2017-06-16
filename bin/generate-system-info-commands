@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 [
   File.expand_path('../../lib', __FILE__),
   File.expand_path('../../cookbooks/lib', __FILE__)
@@ -7,7 +9,9 @@
 end
 
 require 'system_info_commands_generator'
-exit SystemInfoCommandsGenerator.new(
-  argv: ARGV,
-  top: `git rev-parse --show-toplevel`.strip
-).generate! if $PROGRAM_NAME == __FILE__
+if $PROGRAM_NAME == __FILE__
+  exit SystemInfoCommandsGenerator.new(
+    argv: ARGV,
+    top: `git rev-parse --show-toplevel`.strip
+  ).generate!
+end

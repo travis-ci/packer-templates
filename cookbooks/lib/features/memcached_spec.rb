@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'memcached installation' do
   describe package('memcached') do
     it { should be_installed }

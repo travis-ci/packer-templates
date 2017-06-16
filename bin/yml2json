@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'erb'
 require 'json'
 require 'yaml'
 
-$stdout.puts JSON.pretty_generate(YAML.load(ERB.new($stdin.read).result))
+$stdout.puts JSON.pretty_generate(YAML.safe_load(ERB.new($stdin.read).result))

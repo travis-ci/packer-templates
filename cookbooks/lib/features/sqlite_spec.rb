@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'sqlite installation' do
   before :each do
     rm_rf(Support.tmpdir.join('test.db'))

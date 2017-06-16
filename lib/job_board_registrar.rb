@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'logger'
 require 'uri'
@@ -51,13 +53,13 @@ class JobBoardRegistrar
   end
 
   def request_command
-    %W(
+    %W[
       #{curl_exe}
       -f
       -s
       -X POST
       '#{env['JOB_BOARD_IMAGES_URL']}?#{registration_request_params}'
-    )
+    ]
   end
 
   def registration_request_params

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_internal_bastion'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+packer-templates@travis-ci.org'

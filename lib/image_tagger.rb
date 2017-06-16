@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImageTagger
   def initialize(env: nil)
     @env = env
@@ -9,10 +11,12 @@ class ImageTagger
         env.key?('PACKER_BUILD_NAME')
       tags[:packer_builder_type] = env['PACKER_BUILDER_TYPE'] if
         env.key?('PACKER_BUILDER_TYPE')
-      env['TAGS'].split(',').each do |tag_pair|
-        key, value = tag_pair.split(':', 2)
-        tags[key.to_sym] = value unless value.to_s.empty?
-      end if env.key?('TAGS')
+      if env.key?('TAGS')
+        env['TAGS'].split(',').each do |tag_pair|
+          key, value = tag_pair.split(':', 2)
+          tags[key.to_sym] = value unless value.to_s.empty?
+        end
+      end
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'env'
 
 describe Env do
@@ -6,9 +8,9 @@ describe Env do
   before do
     allow(Dir).to receive(:glob).and_yield('some/path/KEY')
     allow(File).to receive(:file?).with('some/path/KEY')
-      .and_return(true)
+                                  .and_return(true)
     allow(File).to receive(:read).with('some/path/KEY')
-      .and_return("exciting-value!\n")
+                                 .and_return("exciting-value!\n")
   end
 
   it 'has an initial state' do
