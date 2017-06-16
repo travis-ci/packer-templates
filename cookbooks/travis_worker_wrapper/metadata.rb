@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_worker_wrapper'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+packer-templates@travis-ci.org'

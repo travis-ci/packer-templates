@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_ci_connie'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+travis-ci-connie-cookbook@travis-ci.org'

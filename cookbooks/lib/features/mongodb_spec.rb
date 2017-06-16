@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def mongodb_service_name
   return 'mongod' if `lsb_release -sc 2>/dev/null`.strip == 'trusty'
   'mongodb'

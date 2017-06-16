@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Cookbook Name:: travis_internal_base
 # Recipe:: default
 #
@@ -27,8 +29,8 @@ include_recipe 'openssh'
 include_recipe 'papertrail'
 include_recipe 'travis_sudo'
 
-package %w(fail2ban iptables-persistent whois zsh) do
-  action %i(install upgrade)
+package %w[fail2ban iptables-persistent whois zsh] do
+  action %i[install upgrade]
 end
 
 template '/etc/cloud/cloud.cfg' do
@@ -39,14 +41,14 @@ template '/etc/cloud/cloud.cfg' do
   only_if { File.directory?('/etc/cloud') }
 end
 
-%w(
+%w[
   00-create-users
   00-disable-travis-sudo
   10-configure-fail2ban-ssh
   10-generate-ssh-host-keys
   10-set-hostname-from-template
   50-update-rsyslog-papertrail-config
-).each do |script|
+].each do |script|
   cookbook_file "/var/lib/cloud/scripts/per-instance/#{script}" do
     owner 'root'
     group 'root'

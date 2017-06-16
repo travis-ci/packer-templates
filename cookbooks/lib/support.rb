@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 lib = File.expand_path('../', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -51,7 +53,7 @@ module Support
   module_function :libdir
 
   def tmpdir
-    @tmpdir ||= Pathname.new(Dir.mktmpdir(%w(packer-templates- -rspec)))
+    @tmpdir ||= Pathname.new(Dir.mktmpdir(%w[packer-templates- -rspec]))
   end
 
   module_function :tmpdir

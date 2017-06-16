@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_packer_templates'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+travis-packer-templates-cookbook@travis-ci.org'

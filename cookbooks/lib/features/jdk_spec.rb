@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def hello_java
   Support.tmpdir.join('Hello.java')
 end

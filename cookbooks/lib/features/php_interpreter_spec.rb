@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Support::Php
 
 describe 'php interpreter', dev: true do

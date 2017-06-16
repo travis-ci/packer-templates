@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Cookbook Name:: travis_ci_connie
 # Recipe:: default
 #

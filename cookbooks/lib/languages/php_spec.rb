@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Support::Php
 
 require 'features/php_interpreter_spec'
@@ -18,40 +20,40 @@ describe 'php environment', dev: true do
   end
 end
 
-PHP_MODULES = <<EOF.split("\n")
-Core
-PDO
-Phar
-SPL
-Xdebug
-bcmath
-ctype
-curl
-date
-dom
-ereg
-exif
-filter
-ftp
-gd
-hash
-iconv
-json
-libxml
-mbstring
-pcre
-pdo_mysql
-pdo_sqlite
-posix
-readline
-sqlite3
-standard
-sysvsem
-sysvshm
-tidy
-xmlrpc
-xmlwriter
-xsl
-zip
-zlib
+PHP_MODULES = <<~EOF.split("\n")
+  Core
+  PDO
+  Phar
+  SPL
+  Xdebug
+  bcmath
+  ctype
+  curl
+  date
+  dom
+  ereg
+  exif
+  filter
+  ftp
+  gd
+  hash
+  iconv
+  json
+  libxml
+  mbstring
+  pcre
+  pdo_mysql
+  pdo_sqlite
+  posix
+  readline
+  sqlite3
+  standard
+  sysvsem
+  sysvshm
+  tidy
+  xmlrpc
+  xmlwriter
+  xsl
+  zip
+  zlib
 EOF

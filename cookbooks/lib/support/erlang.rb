@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   module Erlang
     def erlcommand(cmd)
@@ -17,7 +19,7 @@ module Support
     end
 
     def otp_releases
-      otp_releases_trusty || %w(18.2 17.5 R16B03)
+      otp_releases_trusty || %w[18.2 17.5 R16B03]
     end
 
     def otp_releases_trusty

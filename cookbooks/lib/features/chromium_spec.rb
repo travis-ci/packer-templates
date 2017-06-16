@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'chromium installation' do
   describe package('chromium-browser') do
     it { should be_installed }
