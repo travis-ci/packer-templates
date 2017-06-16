@@ -12,3 +12,6 @@ Style/Documentation:
 
 Metrics/MethodLength:
   Max: 30
+
+Performance/RegexpMatch:
+  Enabled: false

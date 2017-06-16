@@ -45,8 +45,8 @@ class ImageTagger
 
   def os
     return env['OS'] unless env['OS'].empty?
-    return 'osx' if RUBY_PLATFORM.match?(/darwin/i)
-    return 'linux' if RUBY_PLATFORM.match?(/linux/i)
+    return 'osx' if RUBY_PLATFORM =~ /darwin/i
+    return 'linux' if RUBY_PLATFORM =~ /linux/i
     'unknown'
   end
 

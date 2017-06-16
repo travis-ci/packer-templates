@@ -16,7 +16,7 @@ module Support
       available = `phpenv versions 2>/dev/null`.strip
       php_versions.each do |v|
         next if @phpenv_exec
-        @phpenv_exec = "RBENV_VERSION=#{v} phpenv exec" if available.match?(/\b#{v}\b/)
+        @phpenv_exec = "RBENV_VERSION=#{v} phpenv exec" if available =~ /\b#{v}\b/
       end
       @phpenv_exec ||= ''
       @phpenv_exec

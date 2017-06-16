@@ -759,7 +759,7 @@ context 'with something listening on 19494' do
   end
 
   describe command('nc -zv 127.0.0.1 19494') do
-    stream = if RbConfig::CONFIG['build_os'].match?(/darwin/)
+    stream = if RbConfig::CONFIG['build_os'] =~ /darwin/
                :stdout
              else
                :stderr
