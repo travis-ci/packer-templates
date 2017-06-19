@@ -61,8 +61,11 @@ override['android-sdk']['license']['default_answer'] = 'y'
 override['android-sdk']['scripts']['owner'] = 'travis'
 override['android-sdk']['scripts']['group'] = 'travis'
 
-override['travis_java']['default_version'] = 'openjdk8'
-override['travis_java']['alternate_versions'] = %w[openjdk7]
+override['travis_java']['default_version'] = 'oraclejdk8'
+override['travis_java']['alternate_versions'] = %w[
+  openjdk7
+  openjdk8
+]
 
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
