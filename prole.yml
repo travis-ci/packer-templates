@@ -33,10 +33,11 @@ builders:
   region: us-east-1
   source_ami_filter:
     filters:
-    - virtualization-type: hvm
+      virtualization-type: hvm
       name: "*ubuntu-trusty-14.04-amd64-server-*"
       root-device-type: ebs
-    owners: 099720109477
+    owners:
+    - 099720109477
     most_recent: true
   ami_name: prole {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.large
