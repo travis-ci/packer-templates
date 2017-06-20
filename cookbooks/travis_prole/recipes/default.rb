@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Cookbook Name:: travis_worker_wrapper
+# Cookbook Name:: travis_prole
 # Recipe:: default
 #
 # Copyright 2017, Travis CI GmbH
@@ -25,5 +25,4 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 include_recipe 'travis_internal_base'
-
-include_recipe "travis_worker::#{node['travis_worker_wrapper']['install_type']}"
+include_recipe 'travis_docker'
