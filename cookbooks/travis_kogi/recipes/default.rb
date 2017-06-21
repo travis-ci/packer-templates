@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Cookbook Name:: travis_prole
+# Cookbook Name:: travis_kogi
 # Recipe:: default
 #
 # Copyright 2017, Travis CI GmbH

@@ -4,7 +4,7 @@ require 'support'
 
 include Support::Helpers
 
-describe 'prole setup', docker: false do
+describe 'kogi setup', docker: false do
   before :all do
     sh('sudo service docker start')
   end
