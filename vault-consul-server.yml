@@ -11,7 +11,7 @@ builders:
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1604-xenial-v20170330
+  source_image: ubuntu-1604-xenial-v20170619a
   zone: us-central1-b
   image_name: vault-consul-{{ timestamp }}
   machine_type: g1-small
