@@ -272,6 +272,10 @@ libpython3-stdlib:amd64
 libpython3.4-minimal:amd64
 libpython3.4-stdlib:amd64
 libqt4-dev
+libqt4-opengl
+libqt4-opengl-dev
+libqtwebkit-dev
+libqtwebkit4
 libreadline-dev
 libreadline6
 libreadline6:amd64
