@@ -1,11 +1,14 @@
 # vim:filetype=ruby
-file_atomic_update false
+color false
 cookbook_path [{{.CookbookPaths}}]
+diff_disabled true
+file_atomic_update false
 force_logger true
 log_level((
   if "{{ user `chef_log_level` }}".empty?
-    :info
+    :warn
   else
     "{{ user `chef_log_level` }}"
   end
 ).to_sym)
+verbose_logging false
