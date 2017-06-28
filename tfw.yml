@@ -1,10 +1,11 @@
 ---
-description: Travis Kogi!
+# wat: http://steven-universe.wikia.com/wiki/Tiny_Floating_Whale
+description: Travis Tiny Floating Whale!
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: kogi-{{ timestamp }}
+  gce_image_name: tfw-{{ timestamp }}
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -16,8 +17,8 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: kogi
-  image_description: Travis Kogi
+  ssh_username: tfw
+  image_description: Travis Tiny Floating Whale
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1404-trusty-v20170330
@@ -25,7 +26,7 @@ builders:
   image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
   tags:
-  - kogi
+  - tfw
   - travis-ci-packer-templates
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
@@ -39,12 +40,12 @@ builders:
     owners:
     - 099720109477
     most_recent: true
-  ami_name: kogi {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  ami_name: tfw {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   instance_type: t2.large
   ssh_username: ubuntu
   ami_virtualization_type: hvm
   tags:
-    role: kogi
+    role: tfw
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
@@ -71,7 +72,7 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   run_list:
-  - recipe[travis_kogi]
+  - recipe[travis_tfw]
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
@@ -81,7 +82,7 @@ provisioners:
   - packer-scripts/cleanup
   - packer-scripts/minimize
   environment_vars:
-  - SPEC_SUITES=travis_internal_base,travis_kogi
+  - SPEC_SUITES=travis_internal_base,travis_tfw
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - PURGE_PACKAGE_DEFAULTS=chef,chefdk
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
