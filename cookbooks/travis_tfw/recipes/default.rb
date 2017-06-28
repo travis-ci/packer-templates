@@ -45,6 +45,13 @@ template '/usr/local/bin/travis-docker-volume-setup' do
   )
 end
 
+template '/usr/local/bin/travis-docker-build-env' do
+  source 'travis-docker-build-env.bash.erb'
+  owner 'root'
+  group 'root'
+  mode 0o755
+end
+
 template '/etc/default/docker-chef' do
   source 'etc-default-docker-chef.sh.erb'
   owner 'root'
