@@ -1,5 +1,4 @@
 ---
-# wat: http://steven-universe.wikia.com/wiki/Tiny_Floating_Whale
 description: Travis Tiny Floating Whale!
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
