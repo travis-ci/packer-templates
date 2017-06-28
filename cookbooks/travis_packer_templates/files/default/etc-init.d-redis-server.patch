@@ -1,0 +1,13 @@
+--- a/etc/init.d/redis-server
++++ b/etc/init.d/redis-server
+@@ -55,7 +55,9 @@
+ 
+ 	if [ -n "$ULIMIT" ]
+ 	then
+-		ulimit -n $ULIMIT
++		# NOTE: patched by github.com/travis-ci/packer-templates
++		#       when docker execution environment detected.
++		: no ulimit
+ 	fi
+ 
+ 	Run_parts pre-up

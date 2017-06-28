@@ -1,4 +1,8 @@
 chromium-browser
+libqt4-opengl
+libqt4-opengl-dev
+libqtwebkit-dev
+libqtwebkit4
 scons
 x11-utils
 x11-xserver-utils
