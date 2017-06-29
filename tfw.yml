@@ -1,10 +1,10 @@
 ---
-description: travis-worker (via docker) image!
+description: Travis Tiny Floating Whale!
 variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: travis-worker-{{ timestamp }}
+  gce_image_name: tfw-{{ timestamp }}
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -16,8 +16,8 @@ builders:
   communicator: ssh
   ssh_timeout: 10m
   ssh_port: 22
-  ssh_username: worker
-  image_description: Travis Worker
+  ssh_username: tfw
+  image_description: Travis Tiny Floating Whale
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1404-trusty-v20170330
@@ -25,19 +25,26 @@ builders:
   image_name: "{{ user `gce_image_name` }}"
   machine_type: n1-standard-4
   tags:
-  - worker
+  - tfw
   - travis-ci-packer-templates
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  source_ami: ami-8e0b9499
-  ami_name: travis-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
-  instance_type: t2.micro
+  source_ami_filter:
+    filters:
+      virtualization-type: hvm
+      name: "*ubuntu-trusty-14.04-amd64-server-*"
+      root-device-type: ebs
+    owners:
+    - 099720109477
+    most_recent: true
+  ami_name: tfw {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  instance_type: t2.large
   ssh_username: ubuntu
   ami_virtualization_type: hvm
   tags:
-    role: worker
+    role: tfw
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
@@ -56,14 +63,6 @@ provisioners:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-- type: shell
-  inline:
-  # Disable direct-lvm on googlecompute since it probably won't work and we
-  # don't need it to given that we're running jobs via the GCE API rather than
-  # local Docker.
-  - echo 'TRAVIS_WORKER_DISABLE_DIRECT_LVM=1' | sudo tee /etc/default/docker-cloud-init
-  only:
-  - googlecompute
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
@@ -72,7 +71,7 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   run_list:
-  - recipe[travis_worker_wrapper]
+  - recipe[travis_tfw]
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
@@ -82,7 +81,7 @@ provisioners:
   - packer-scripts/cleanup
   - packer-scripts/minimize
   environment_vars:
-  - SPEC_SUITES=travis_internal_base,travis_worker_wrapper
+  - SPEC_SUITES=travis_internal_base,travis_tfw
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - PURGE_PACKAGE_DEFAULTS=chef,chefdk
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
