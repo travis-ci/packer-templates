@@ -45,8 +45,7 @@ template '/usr/local/bin/travis-docker-volume-setup' do
   )
 end
 
-template '/usr/local/bin/travis-docker-build-env' do
-  source 'travis-docker-build-env.bash.erb'
+cookbook_file '/usr/local/bin/travis-tfw-combined-env' do
   owner 'root'
   group 'root'
   mode 0o755

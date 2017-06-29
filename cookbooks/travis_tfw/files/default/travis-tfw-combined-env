@@ -13,7 +13,8 @@ main() {
     exec 1>"${out}"
   fi
 
-  for config_file in travis-enterprise \
+  for config_file in \
+    travis-enterprise \
     "${job}-chef" \
     "${job}" \
     "${job}-cloud-init" \
