@@ -12,7 +12,7 @@ describe 'neo4j installation' do
   describe 'neo4j commands' do
     before :all do
       sh('neo4j start')
-      tcpwait('127.0.0.1', 7474)
+      tcpwait('127.0.0.1', 1337, 30)
       sh("neo4j-shell -v -c 'create (n:thing {furbies: #{furbies}});'")
     end
 
