@@ -31,8 +31,8 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/connie-system-info-commands.yml'
 
 rubies = %w[
-  2.3.3
-  2.4.0
+  2.2.7
+  2.4.1
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.max
@@ -62,7 +62,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __connie__
   bash
-  generic
   minimal
   sh
   shell
