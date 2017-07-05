@@ -147,11 +147,11 @@ override['python']['pip']['packages']['3.2'] = []
 override['python']['pip']['packages']['3.3'] = []
 
 rubies = %w[
-  jruby-9.1.6.0
+  jruby-9.1.9.0
   2.1.10
-  2.2.6
-  2.3.3
-  2.4.0
+  2.2.7
+  2.3.4
+  2.4.1
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
@@ -234,6 +234,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   default
   elixir
   erlang
+  generic
   go
   groovy
   haskell
