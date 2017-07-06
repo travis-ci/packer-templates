@@ -2,7 +2,7 @@
 message: "%{source_commit_message}\n:tada: :bomb: commit-range=%{commit_range_string}"
 branch: "%{template_name}"
 config:
-  language: generic
+  language: minimal
   dist: trusty
   group: edge
   sudo: true
