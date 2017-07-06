@@ -47,6 +47,7 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
+override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_packer_templates']['job_board']['stack'] = 'connie'
 override['travis_packer_templates']['job_board']['features'] = %w[
