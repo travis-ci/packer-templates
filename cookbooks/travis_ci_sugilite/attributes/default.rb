@@ -188,6 +188,9 @@ override['travis_build_environment']['default_elixir_version'] = '1.0.4'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
+
+override['travis_build_environment']['mercurial_install_type'] = 'pip'
+
 override['travis_packer_templates']['job_board']['stack'] = 'sugilite'
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic

@@ -89,6 +89,8 @@ elixirs = %w[
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
+override['travis_build_environment']['mercurial_install_type'] = 'pip'
+
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
