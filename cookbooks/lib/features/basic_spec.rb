@@ -599,6 +599,16 @@ describe user('travis') do
   it { should have_login_shell '/bin/bash' }
 end
 
+describe file('/home/travis/bin') do
+  it { should be_directory }
+  it 'is writable' do
+    File.open('/home/travis/bin/.travis-write-test', 'w') do |f|
+      f.puts Time.now.utc.to_s
+    end
+    expect(File.read('/home/travis/bin/.travis-write-test')).to_not be_empty
+  end
+end
+
 def test_txt
   Support.tmpdir.join('test.txt')
 end
