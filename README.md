@@ -115,6 +115,7 @@ provisioning process.  The steps executed include:
 - ensure the `/home/travis/.ssh/authorized_keys` file exists
 - add `/var/tmp/*_rsa.pub` to `/home/travis/.ssh/authorized_keys`
 - ensure `/home/travis/.ssh/authorized_keys` perms are `0600`
+- ensure the `/home/travis/bin` dir exists
 
 #### cloning travis-cookbooks
 

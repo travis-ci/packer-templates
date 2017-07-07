@@ -82,6 +82,9 @@ __setup_travis_user() {
   __setup_sudoers
   __setup_travis_ssh
 
+  # Save users having to create this directory at runtime (it's already on PATH)
+  mkdir -p /home/travis/bin
+
   mkdir -p /opt
   chmod 0755 /opt
   chown -R travis:travis /home/travis /opt
