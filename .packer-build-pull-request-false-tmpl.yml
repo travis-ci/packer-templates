@@ -10,7 +10,7 @@ config:
   - if [[ "${BUILDER}" = "docker" ]] ; then
       sudo apt-get update -yqq ;
       sudo apt-get purge -o Dpkg::Options::="--force-confnew" -yqq docker-ce ;
-      sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq 'docker-ce=17.03.2~ce-0~ubuntu-trusty' lvm2 xfsprogs ;
+      sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq docker-ce lvm2 xfsprogs ;
       echo 'DOCKER_OPTS="$DOCKER_OPTS --storage-driver devicemapper"' | sudo tee -a /etc/default/docker ;
       sudo service docker restart ;
     fi
