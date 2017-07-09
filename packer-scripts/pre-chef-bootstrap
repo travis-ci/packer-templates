@@ -48,6 +48,9 @@ __install_packages() {
 }
 
 __upgrade_apt() {
+  if [[ ${SKIP_APT_UPGRADE} ]]; then
+    return
+  fi
   curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
     | bash
   apt-get update -yqq
