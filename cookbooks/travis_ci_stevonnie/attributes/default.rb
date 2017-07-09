@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+override['travis_docker']['version'] = '17.05.0~ce-0~ubuntu-xenial'
+
 override['travis_java']['default_version'] = ''
 override['travis_java']['alternate_versions'] = []
 
