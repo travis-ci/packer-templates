@@ -20,4 +20,5 @@ rabbitmqadmin
 /coverage/
 /vendor/
 /.bundle/
+/ci-*.json
 image-metadata-*.tar.bz2
