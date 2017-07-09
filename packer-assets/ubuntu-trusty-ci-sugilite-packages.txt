@@ -2,6 +2,7 @@ acpid
 adduser
 ant
 ant-contrib
+ant-optional
 apparmor
 apport
 apport-symptoms
