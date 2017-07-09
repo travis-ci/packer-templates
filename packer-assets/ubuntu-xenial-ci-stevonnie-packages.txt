@@ -427,8 +427,8 @@ python3-problem-report
 python3-pycurl
 python3-software-properties
 python3-update-manager
-python3.4
-python3.4-minimal
+python3.5
+python3.5-minimal
 qt4-qmake
 ragel
 re2c
