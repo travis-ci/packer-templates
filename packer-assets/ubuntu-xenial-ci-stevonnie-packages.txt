@@ -373,7 +373,6 @@ patch
 pciutils
 perl
 perl-base
-perl-modules
 pkg-config
 plymouth
 plymouth-theme-ubuntu-text
