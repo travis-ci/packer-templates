@@ -48,10 +48,16 @@ __install_packages() {
 }
 
 __upgrade_apt() {
-  curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
-    | bash
-  apt-get update -yqq
-  apt-get install -yqq apt=1.2.10
+  ARCH_TYPE=`uname -m`
+  DIST_TYPE=`cat /etc/lsb-release | awk -F "=" 'NR==3 {print $2}'`
+  if ! [[ "${ARCH_TYPE}" =~ ppc64le ]]; then
+    curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
+      | bash
+    apt-get update -yqq
+  fi
+  if ! [[ "${DIST_TYPE}" =~ xenial ]]; then
+      apt-get install -yqq apt=1.2.10
+  fi
   apt-get clean -yqq
   rm -rf /var/lib/apt/lists
   apt-get update -yqq
@@ -81,9 +87,6 @@ __setup_travis_user() {
 
   __setup_sudoers
   __setup_travis_ssh
-
-  # Save users having to create this directory at runtime (it's already on PATH)
-  mkdir -p /home/travis/bin
 
   mkdir -p /opt
   chmod 0755 /opt
