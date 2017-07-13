@@ -1,5 +1,6 @@
 ant
 ant-contrib
+ant-optional
 chromium-browser
 ivy
 libqt4-opengl
