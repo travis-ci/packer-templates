@@ -11,6 +11,7 @@ main() {
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
+  __enable_i386
   __install_packages
   __upgrade_apt
   __setup_sshd
@@ -21,6 +22,10 @@ main() {
 __disable_ipv6() {
   sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
   sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+}
+
+__enable_i386() {
+  dpkg --add-architecture i386
 }
 
 __install_packages() {
