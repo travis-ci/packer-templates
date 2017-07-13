@@ -1,0 +1,6 @@
+ccache
+emacs
+hashdeep
+libmysqlclient-dev
+mysql-client
+postgresql-client

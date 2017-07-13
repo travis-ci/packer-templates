@@ -12,6 +12,7 @@ SYSTEM_INFO_COMMANDS_FILES := \
 	packer-assets/connie-system-info-commands.yml \
 	packer-assets/cookiecat-system-info-commands.yml \
 	packer-assets/garnet-system-info-commands.yml \
+	packer-assets/stevonnie-system-info-commands.yml \
 	packer-assets/sugilite-system-info-commands.yml
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
@@ -86,7 +87,7 @@ tmp/bats/.git:
 	$(GIT) clone https://github.com/sstephenson/bats.git tmp/bats
 
 tmp:
-	mkdir -p tmp
+	mkdir -p tmp/packer-builder-tmp
 
 $(META_FILES): .git/HEAD
 	./bin/dump-git-meta ./tmp/git-meta

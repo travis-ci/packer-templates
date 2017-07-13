@@ -11,6 +11,7 @@ main() {
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
+  __enable_i386
   __install_packages
   __upgrade_apt
   __setup_sshd
@@ -21,6 +22,10 @@ main() {
 __disable_ipv6() {
   sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
   sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+}
+
+__enable_i386() {
+  dpkg --add-architecture i386
 }
 
 __install_packages() {
@@ -48,16 +53,24 @@ __install_packages() {
 }
 
 __upgrade_apt() {
-  ARCH_TYPE=`uname -m`
-  DIST_TYPE=`cat /etc/lsb-release | awk -F "=" 'NR==3 {print $2}'`
-  if ! [[ "${ARCH_TYPE}" =~ ppc64le ]]; then
+  if [[ ${SKIP_APT_UPGRADE} ]]; then
+    return
+  fi
+
+  local arch_type
+  arch_type="$(uname -m)"
+  local dist_name
+  dist_name="$(lsb_release -sc)"
+  
+  if ! [[ "${arch_type}" =~ ppc64le ]]; then
     curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
       | bash
     apt-get update -yqq
   fi
-  if ! [[ "${DIST_TYPE}" =~ xenial ]]; then
-      apt-get install -yqq apt=1.2.10
+  if ! [[ "${dist_name}" =~ xenial ]]; then
+    apt-get install -yqq apt=1.2.10
   fi
+
   apt-get clean -yqq
   rm -rf /var/lib/apt/lists
   apt-get update -yqq

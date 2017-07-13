@@ -97,7 +97,9 @@ describe 'ccache installation' do
     end
 
     describe command('ccache -M 0.5') do
-      its(:stdout) { should match 'Set cache size limit to 512.0 Mbytes' }
+      its(:stdout) do
+        should match(/Set cache size limit to (512\.0 Mbytes|500\.0 MB)/)
+      end
     end
   end
 end
