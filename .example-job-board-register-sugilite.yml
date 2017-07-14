@@ -25,7 +25,8 @@ languages:
 - node_js
 - perl
 - perl6
-- php
+# FIXME: wat
+# - php
 - pure_java
 - python
 - r
