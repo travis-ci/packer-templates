@@ -3,6 +3,7 @@
 include Support::Python
 
 require 'features/python_interpreter_spec'
+require 'features/pyenv_spec'
 
 describe 'python environment' do
   describe pycommand('easy_install --version') do
@@ -47,7 +48,7 @@ describe 'python environment' do
       its(:exit_status) { should eq(0) }
     end
 
-    describe pycommand('python --version', version: python_alias), dev: true do
+    describe pycommand('python --version', version: python_alias) do
       stream = python_alias < 'python3' ? :stderr : :stdout
       its(stream) { should include("Python #{python_version}") }
     end
