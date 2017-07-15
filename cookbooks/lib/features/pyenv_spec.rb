@@ -4,11 +4,11 @@ require 'json'
 
 describe 'pyenv', dev: true do
   describe command('pyenv version-name') do
-    its(:stdout) { should eql('system') }
+    its(:stdout) { should eql("system\n") }
   end
 
   describe command('pyenv root') do
-    its(:stdout) { should eql('/opt/pyenv') }
+    its(:stdout) { should eql("/opt/pyenv\n") }
   end
 
   describe 'PATH' do
