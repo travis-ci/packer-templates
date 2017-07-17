@@ -4,7 +4,7 @@ include Support::Php
 
 require 'features/php_interpreter_spec'
 
-describe 'php environment', dev: true do
+describe 'php environment' do
   describe phpcommand('php-fpm --version') do
     its(:exit_status) { should eq 0 }
     its(:stdout) { should match(/^PHP \d+\.\d+\.\d+.+fpm-fcgi/) }
