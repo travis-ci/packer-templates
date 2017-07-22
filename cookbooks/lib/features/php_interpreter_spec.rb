@@ -2,7 +2,7 @@
 
 include Support::Php
 
-describe 'php interpreter', dev: true do
+describe 'php interpreter' do
   describe phpcommand('php --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^PHP \d+\.\d+/) }

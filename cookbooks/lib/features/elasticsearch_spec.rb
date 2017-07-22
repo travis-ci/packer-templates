@@ -4,7 +4,7 @@ def db_url
   'http://localhost:9200/travis'
 end
 
-describe 'elasticsearch installation', sudo: true, dev: true do
+describe 'elasticsearch installation', sudo: true do
   before :all do
     sh('sudo service elasticsearch start')
     tcpwait('localhost', 9200, 30)
