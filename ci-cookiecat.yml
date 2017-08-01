@@ -1,6 +1,8 @@
 ---
 description: Travis CI cookiecat build env template!
 variables:
+  docker_repository: travisci/ci-cookiecat
+  docker_tag: packer-{{ timestamp }}
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   image_name: travis-ci-cookiecat-trusty-{{ timestamp }}
@@ -26,12 +28,30 @@ builders:
   tags:
   - ci
   - cookiecat
-  - travis-ci-packer-templates
+  - travis-ci-packer-template
+- type: docker
+  name: docker
+  ssh_pty: true
+  image: "travisci/ci-cookiecat:2017Q3"
+  run_command:
+  - -d
+  - -i
+  - -t
+  - --privileged=true
+  - --storage-opt=size=15G
+  - "{{ .Image }}"
+  - /sbin/init
+  commit: true
 provisioners:
 - type: shell
   inline: sleep 10
   only:
   - googlecompute
+- type: shell
+  inline:
+    - apt-get update -yqq && apt-get install sudo -yqq
+  only:
+  - docker
 - type: file
   source: tmp/git-meta
   destination: /var/tmp/git-meta
@@ -41,9 +61,16 @@ provisioners:
 - type: file
   source: packer-assets/ubuntu-trusty-ci-cookiecat-packages.txt
   destination: /var/tmp/packages.txt
+    only:
+  - googlecompute
+- type: shell
+  inline: echo man-db >/var/tmp/packages.txt
+  only:
+  - docker
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump
+  #- packer-scripts/remove-default-users
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
@@ -88,7 +115,7 @@ provisioners:
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
   - packer-scripts/cleanup
-  # - packer-scripts/minimize
+  - packer-scripts/minimize
   environment_vars:
   - DISPLAY=:99.0
   - SPEC_SUITES=travis_packer_templates
@@ -107,12 +134,35 @@ provisioners:
   direction: download
 post-processors:
 -
+  - type: docker-tag
+    repository: "{{ user `docker_repository` }}"
+    tag: "{{ user `docker_tag` }}"
+    only:
+    - docker
+  - type: artifice
+    files:
+    - tmp/docker-meta/.dumped
+    only:
+    - docker
   - type: shell-local
+    scripts: bin/docker-push
+    environment_vars:
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: artifice
+    files:
+    - tmp/image-metadata-{{ user `image_name` }}.tar.bz2  
+    - type: shell-local
     script: bin/job-board-register
     environment_vars:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - googlecompute
+    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
 -
   - type: shell-local
     script: bin/write-latest-image-name
