@@ -124,7 +124,7 @@ override['travis_java']['alternate_versions'] = %w[
 
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
-  override['travis_java']['alternate_versions'] = %w[ openjdk7 ]
+  override['travis_java']['alternate_versions'] = %w[openjdk7]
 end
 
 override['leiningen']['home'] = '/home/travis'
