@@ -2,11 +2,9 @@ commands:
   linux:
     - { command: date -u, name: Build image provisioning date and time }
     - { command: lsb_release -a, name: Operating System Details }
-    - { command: uname -r, name: Linux Version }
   osx:
     - { command: date, name: Build image provisioning date and time }
     - { command: sw_vers, name: Operating System Details }
-    - { command: uname -r, name: Darwin Version }
   common:
     - { command: git --version, name: git version }
     - { command: bash --version, pipe: head -1, name: bash version }
