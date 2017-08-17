@@ -89,7 +89,7 @@ elixirs = %w[
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
-override['travis_build_environment']['mercurial_install_type'] = 'pip'
+override['travis_build_environment']['mercurial_install_type'] = 'src'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_build_environment']['update_hostname'] = false
