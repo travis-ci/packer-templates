@@ -20,6 +20,10 @@ class FakeAttributes < ForeverHash
     self
   end
 
+  def node
+    self
+  end
+
   def languages
     fetch('travis_packer_templates')
       .fetch('job_board')
