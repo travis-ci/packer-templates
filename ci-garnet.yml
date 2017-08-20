@@ -1,5 +1,5 @@
 ---
-description: Travis CI garnet build env template
+description: Travis CI garnet build env template!
 variables:
   docker_repository: travisci/ci-garnet
   docker_tag: packer-{{ timestamp }}
