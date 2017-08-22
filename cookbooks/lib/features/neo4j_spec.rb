@@ -18,7 +18,7 @@ describe 'neo4j installation' do
 
     describe command("neo4j-shell -v -c 'cd 0 && ls'") do
       its(:stdout) { should include('furbies =', furbies.to_s) }
-      its(:stderr) { should be_empty }
+      its(:stderr) { should match 'Picked up _JAVA_OPTIONS: -Xmx2048m -Xms512m\n' }
     end
   end
 end

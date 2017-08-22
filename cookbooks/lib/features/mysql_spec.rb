@@ -8,60 +8,6 @@ def schema_sql
   Support.tmpdir.join('schema.sql')
 end
 
-def user_host_combinations
-  [
-    "'root'@'%'",
-    "'root'@'127.0.0.1'",
-    "'root'@'localhost'",
-    "'travis'@'%'",
-    "'travis'@'127.0.0.1'",
-    "'travis'@'localhost'"
-  ].map { |user_host| user_host.delete("'").split('@', 2) }
-end
-
-def expected_privileges
-  %w[
-    Select
-    Insert
-    Update
-    Delete
-    Create
-    Drop
-    Reload
-    Shutdown
-    Process
-    File
-    Grant
-    Index
-    Show_db
-    Super
-    Create_tmp_table
-    Lock_tables
-    Execute
-    Create_view
-    Show_view
-    Create_routine
-    Alter_routine
-    Create_user
-    Event
-    Trigger
-    Create_tablespace
-  ]
-end
-
-def privilege_check_queries
-  user_host_combinations.map do |user, host|
-    expected_privileges.map do |priv_column|
-      <<-EOF.gsub(/^\s+> /, '')
-        > SELECT #{priv_column}_priv
-        > FROM mysql.user
-        > WHERE Host = '#{host}'
-        >   AND User = '#{user}'
-      EOF
-    end
-  end.flatten
-end
-
 describe 'mysql installation' do
   before :all do
     reset_sql.write(<<-EOF.gsub(/^\s+> /, ''))
@@ -106,12 +52,6 @@ describe 'mysql installation' do
 
     describe command('echo "SELECT id FROM test" | mysql travis') do
       its(:stdout) { should match(/^4$/) }
-    end
-
-    privilege_check_queries.each do |query|
-      describe command(%(echo "#{query}" | mysql -N)), dev: true do
-        its(:stdout) { should eql("Y\n") }
-      end
     end
   end
 end
