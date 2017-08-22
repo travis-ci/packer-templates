@@ -62,7 +62,7 @@ describe 'mysql installation' do
     end
 
     describe command('echo "SHOW VARIABLES LIKE \'performance_schema\'" | mysql') do
-      its(:stdout) { should include('performance_schema      OFF') }
+      its(:stdout) { should include('performance_schema	OFF') }
     end
   end
 end
