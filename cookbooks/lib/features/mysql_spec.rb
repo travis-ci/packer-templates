@@ -60,5 +60,9 @@ describe 'mysql installation' do
     describe command('echo "SELECT id FROM test" | mysql travis') do
       its(:stdout) { should match(/^4$/) }
     end
+
+    describe command('echo "SHOW VARIABLES LIKE \'performance_schema\'" | mysql') do
+      its(:stdout) { should include('performance_schema      OFF') }
+    end
   end
 end
