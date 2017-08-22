@@ -39,6 +39,7 @@ describe 'mysql installation' do
     before do
       sh("mysql <#{reset_sql}")
       sh("mysql travis <#{schema_sql}")
+      sh("sudo service mysql restart")
     end
 
     %w[
