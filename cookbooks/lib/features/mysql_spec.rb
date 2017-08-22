@@ -33,7 +33,6 @@ describe 'mysql installation' do
     it { should be_readable }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
-    it { should include('performance_schema=OFF') }
   end
 
   describe 'mysql commands' do
