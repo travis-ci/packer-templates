@@ -24,15 +24,22 @@ describe 'mysql installation' do
   describe file('/home/travis/.my.cnf') do
     it { should exist }
     it { should be_readable }
-    it { should be_readable }
     it { should be_owned_by 'travis' }
     it { should be_grouped_into 'travis' }
+  end
+
+  describe file('/etc/mysql/conf.d/performance-schema.cnf') do
+    it { should exist }
+    it { should be_readable }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
   end
 
   describe 'mysql commands' do
     before do
       sh("mysql <#{reset_sql}")
       sh("mysql travis <#{schema_sql}")
+      sh('sudo service mysql restart')
     end
 
     %w[
@@ -52,6 +59,10 @@ describe 'mysql installation' do
 
     describe command('echo "SELECT id FROM test" | mysql travis') do
       its(:stdout) { should match(/^4$/) }
+    end
+
+    describe command('echo "SHOW VARIABLES LIKE \'performance_schema\'" | mysql') do
+      its(:stdout) { should include('performance_schema	OFF') }
     end
   end
 end
