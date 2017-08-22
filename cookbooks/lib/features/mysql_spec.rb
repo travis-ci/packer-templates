@@ -24,9 +24,16 @@ describe 'mysql installation' do
   describe file('/home/travis/.my.cnf') do
     it { should exist }
     it { should be_readable }
-    it { should be_readable }
     it { should be_owned_by 'travis' }
     it { should be_grouped_into 'travis' }
+  end
+
+  describe file('/etc/mysql/conf.d/performance-schema.cnf') do
+    it { should exist }
+    it { should be_readable }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should include('performance_schema=OFF')}
   end
 
   describe 'mysql commands' do
