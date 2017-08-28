@@ -10,7 +10,7 @@ cache:
 env:
   matrix:
   - DIST=trusty
-    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sugilite.yml"
+    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-garnet.yml"
   global:
   - DPKG_MANIFEST_JSON="${TRAVIS_BUILD_DIR}/.example-dpkg-manifest.json"
   - LANG=en_US.UTF-8
@@ -54,7 +54,7 @@ script:
     jq . < $f &>/dev/null;
   done
 after_success:
-- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sugilite ]]; then
+- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ garnet ]]; then
     git fetch --unshallow;
     bundle exec make packer-build-trigger;
   else

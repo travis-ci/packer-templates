@@ -1,59 +1,47 @@
 ---
 languages:
-- __sugilite__
-- android
+- __garnet__
 - c
 - c++
 - clojure
 - cplusplus
 - cpp
-- crystal
-- csharp
-- d
-- dart
 - default
-- elixir
-- erlang
 - go
 - groovy
-- haskell
-- haxe
 - java
-- julia
-- legacy
-- mega
 - node_js
-- perl
-- perl6
-# FIXME: wat
-# - php
+- php
 - pure_java
 - python
-- r
 - ruby
-- rust
 - scala
-- universe
 features:
 - basic
-- bazaar
+- cassandra
 - chromium
+- couchdb
+- disabled-ipv6
 - docker
+- docker-compose
 - elasticsearch
-- emacs
 - firefox
 - go-toolchain
 - google-chrome
 - jdk
 - memcached
 - mongodb
+- mysql
+- neo4j
+- nodejs_interpreter
+- perl_interpreter
 - perlbrew
 - phantomjs
-# FIXME: wat
-# - php_interpreter
 - postgresql
+- python_interpreter
 - rabbitmq
 - redis
-- sphinxsearch
+- riak
+- ruby_interpreter
 - sqlite
 - xserver

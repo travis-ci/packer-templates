@@ -12,8 +12,7 @@ SYSTEM_INFO_COMMANDS_FILES := \
 	packer-assets/connie-system-info-commands.yml \
 	packer-assets/cookiecat-system-info-commands.yml \
 	packer-assets/garnet-system-info-commands.yml \
-	packer-assets/stevonnie-system-info-commands.yml \
-	packer-assets/sugilite-system-info-commands.yml
+	packer-assets/stevonnie-system-info-commands.yml
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
 CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
