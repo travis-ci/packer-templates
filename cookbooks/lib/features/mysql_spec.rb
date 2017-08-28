@@ -28,7 +28,7 @@ describe 'mysql installation' do
     it { should be_grouped_into 'travis' }
   end
 
-  describe file('/etc/mysql/conf.d/innodb_flush_log_at_trx_commit.cnf') do
+  describe file('/etc/mysql/conf.d/innodb_flush_log_at_trx_commit.cnf'), dev: true do
     it { should exist }
     it { should be_readable }
     it { should be_owned_by 'root' }
@@ -72,7 +72,7 @@ describe 'mysql installation' do
       its(:stdout) { should include('performance_schema	OFF') }
     end
 
-    describe command('echo "SHOW VARIABLES LIKE \'innodb_flush_log_at_trx_commit\'" | mysql') do
+    describe command('echo "SHOW VARIABLES LIKE \'innodb_flush_log_at_trx_commit\'" | mysql'), dev: true do
       its(:stdout) { should include('innodb_flush_log_at_trx_commit	0') }
     end
   end

@@ -11,7 +11,8 @@ languages:
 - groovy
 - java
 - node_js
-- php
+# FIXME: why no work?
+#- php
 - pure_java
 - python
 - ruby
