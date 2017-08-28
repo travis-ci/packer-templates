@@ -28,6 +28,13 @@ describe 'mysql installation' do
     it { should be_grouped_into 'travis' }
   end
 
+  describe file('/etc/mysql/conf.d/innodb_flush_log_at_trx_commit.cnf') do
+    it { should exist }
+    it { should be_readable }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+
   describe file('/etc/mysql/conf.d/performance-schema.cnf') do
     it { should exist }
     it { should be_readable }
@@ -63,6 +70,10 @@ describe 'mysql installation' do
 
     describe command('echo "SHOW VARIABLES LIKE \'performance_schema\'" | mysql') do
       its(:stdout) { should include('performance_schema	OFF') }
+    end
+
+    describe command('echo "SHOW VARIABLES LIKE \'innodb_flush_log_at_trx_commit\'" | mysql') do
+      its(:stdout) { should include('innodb_flush_log_at_trx_commit	0') }
     end
   end
 end
