@@ -27,6 +27,11 @@ override['travis_build_environment']['php_aliases'] = {
   '5.6' => '5.6.31',
   '7.0' => '7.0.22'
 }
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_build_environment']['php_versions'] = []
+  override['travis_build_environment']['php_default_version'] = []
+  override['travis_build_environment']['php_aliases'] = {}
+end
 
 override['travis_perlbrew']['perls'] = [
   { name: '5.10', version: 'perl-5.10.1' },
@@ -54,6 +59,18 @@ override['travis_perlbrew']['modules'] = %w[
   Test::Pod
   Test::Pod::Coverage
 ]
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_perlbrew']['modules'] = %w[
+    ExtUtils::MakeMaker
+    LWP
+    Module::Install
+    Moose
+    Test::Exception
+    Test::Most
+    Test::Pod
+    Test::Pod::Coverage
+  ]
+end
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
@@ -63,6 +80,12 @@ gimme_versions = %w[
   1.6.4
   1.7.4
 ]
+if node['kernel']['machine'] == 'ppc64le'
+  gimme_versions = %w[
+    1.6.4
+    1.7.4
+  ]
+end
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
@@ -99,6 +122,11 @@ override['travis_java']['alternate_versions'] = %w[
   openjdk8
 ]
 
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_java']['default_version'] = 'openjdk8'
+  override['travis_java']['alternate_versions'] = %w[openjdk7]
+end
+
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
@@ -109,6 +137,14 @@ node_versions = %w[
   6.9.4
   7.4.0
 ]
+if node['kernel']['machine'] == 'ppc64le'
+  node_versions = %w[
+    4.7.2
+    5.12.0
+    6.9.4
+    7.4.0
+  ]
+end
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
 override['travis_build_environment']['nodejs_aliases'] = {}
@@ -122,6 +158,14 @@ pythons = %w[
   3.6.1
   pypy2-5.6.0
 ]
+if node['kernel']['machine'] == 'ppc64le'
+  pythons = %w[
+    2.7.13
+    3.4.5
+    3.5.2
+    3.6.0
+  ]
+end
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
@@ -180,6 +224,13 @@ override['travis_build_environment']['otp_releases'] = %w[
   R16B03
   R16B03-1
 ]
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_build_environment']['otp_releases'] = %w[
+    20.0
+    19.0
+    18.0
+  ]
+end
 override['travis_build_environment']['elixir_versions'] = %w[
   1.0.3
   1.0.4
