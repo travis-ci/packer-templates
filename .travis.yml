@@ -1,4 +1,4 @@
-language: universe
+language: __garnet__
 dist: trusty
 group: edge
 sudo: required
