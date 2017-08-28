@@ -2,7 +2,7 @@
 
 override['maven']['install_java'] = false
 
-default['travis_ci_garnet']['prerequisite_packages'] = %w[
+default['travis_ci_sardonyx']['prerequisite_packages'] = %w[
   cron
   curl
   git
@@ -11,17 +11,17 @@ default['travis_ci_garnet']['prerequisite_packages'] = %w[
 ]
 
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/garnet-system-info-commands.yml'
+  '/var/tmp/sardonyx-system-info-commands.yml'
 
 php_versions = %w[
-  5.6.31
-  7.0.22
+  5.6.24
+  7.0.7
 ]
 override['travis_build_environment']['php_versions'] = php_versions
-override['travis_build_environment']['php_default_version'] = '5.6.31'
+override['travis_build_environment']['php_default_version'] = '5.6.24'
 override['travis_build_environment']['php_aliases'] = {
-  '5.6' => '5.6.31',
-  '7.0' => '7.0.22'
+  '5.6' => '5.6.24',
+  '7.0' => '7.0.7'
 }
 
 override['travis_perlbrew']['perls'] = []
@@ -98,7 +98,7 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
-override['travis_packer_templates']['job_board']['stack'] = 'garnet'
+override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
@@ -130,7 +130,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   xserver
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __garnet__
+  __sardonyx__
   c
   c++
   clojure

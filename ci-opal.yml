@@ -1,11 +1,11 @@
 ---
-description: Travis CI Amethyst build env template
+description: Travis CI opal build env template!
 variables:
-  docker_repository: travisci/ci-amethyst
+  docker_repository: travisci/ci-opal
   docker_tag: packer-{{ timestamp }}
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-amethyst-trusty-{{ timestamp }}
+  image_name: travis-ci-opal-xenial-{{ timestamp }}
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -17,29 +17,29 @@ builders:
   ssh_timeout: 10m
   ssh_port: 22
   ssh_username: packer
-  image_description: Travis CI Amethyst
+  image_description: Travis CI opal
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1404-trusty-v20170619
+  source_image: ubuntu-1604-xenial-v20170815a
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
   disk_size: 15
   tags:
   - ci
-  - amethyst
+  - opal
   - travis-ci-packer-templates
 - type: docker
   name: docker
   ssh_pty: true
-  image: "travisci/gce-parity:14.04"
+  image: "travisci/gce-parity:16.04"
   run_command:
   - -d
-  - -i
-  - -t
+  - -v
+  - <%= Dir.pwd %>/tmp/packer-builder-tmp:/tmp
   - --privileged=true
-  - --storage-opt=size=15G
-  - "{{.Image}}"
+  - --storage-opt=size=11G
+  - "{{ .Image }}"
   - /sbin/init
   commit: true
 provisioners:
@@ -55,15 +55,15 @@ provisioners:
   source: tmp/git-meta
   destination: /var/tmp/git-meta
 - type: file
-  source: packer-assets/ubuntu-trusty-normal-purge.txt
+  source: packer-assets/ubuntu-xenial-normal-purge.txt
   destination: /var/tmp/purge.txt
 - type: file
-  source: packer-assets/ubuntu-trusty-ci-amethyst-packages.txt
+  source: packer-assets/ubuntu-xenial-ci-opal-packages.txt
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
 - type: file
-  source: packer-assets/ubuntu-trusty-ci-amethyst-docker-packages.txt
+  source: packer-assets/ubuntu-xenial-ci-opal-docker-packages.txt
   destination: /var/tmp/packages.txt
   only:
   - docker
@@ -74,15 +74,16 @@ provisioners:
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
+  - SKIP_APT_UPGRADE=1
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
-  source: packer-assets/amethyst-system-info-commands.yml
-  destination: /var/tmp/amethyst-system-info-commands.yml
+  source: packer-assets/opal-system-info-commands.yml
+  destination: /var/tmp/opal-system-info-commands.yml
 - type: shell
-  inline: chmod 0644 /var/tmp/amethyst-system-info-commands.yml
+  inline: chmod 0644 /var/tmp/opal-system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
@@ -100,7 +101,7 @@ provisioners:
   <% end %>
   json: {}
   run_list:
-  - recipe[travis_ci_amethyst]
+  - recipe[travis_ci_opal]
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>
