@@ -61,7 +61,8 @@ __add_github_keys() {
   mkdir -p "${ssh_dir}"
   chmod 0700 "${ssh_dir}"
 
-  ssh-import-id -o "${ssh_dir}/authorized_keys" "gh:${github_username}"
+  URL=https://github.com/%s.keys \
+    ssh-import-id -o "${ssh_dir}/authorized_keys" "${github_username}"
   chown -R "${username}:${username}" "${ssh_dir}"
 }
 
