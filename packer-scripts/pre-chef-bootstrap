@@ -64,7 +64,7 @@ __upgrade_apt() {
   local dist_name
   dist_name="$(lsb_release -sc)"
 
-  if ! [[ "${arch_type}" =~ ppc64le ]]; then
+  if ! [[ "${arch_type}" =~ ppc64 ]]; then
     curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
       | bash
     apt-get update -yqq
