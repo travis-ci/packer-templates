@@ -11,7 +11,7 @@ main() {
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
-  if ! [[ "$(uname -m)" =~ ppc64le ]]; then
+  if ! [[ "$(uname -m)" =~ ppc64 ]]; then
     __enable_i386
   fi
   __install_packages
