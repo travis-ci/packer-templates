@@ -5,7 +5,6 @@ main() {
   local top
   top="$(git rev-parse --show-toplevel)"
   local dist="${1:-trusty}"
-  local edge_branch='master'
   local sed='sed'
 
   if [[ "$(uname)" == Darwin ]]; then
@@ -15,7 +14,7 @@ main() {
   cd "${top}"
 
   for f in ci-*.yml; do
-    grep -lE "travis_cookbooks_edge_branch:.*${edge_branch}" "${f}" \
+    grep -lE "source_image:.*ubuntu-.+-${dist}" "${f}" \
       | "${sed}" "s/ci-//;s/\\.yml//;s/\$/-${dist}/"
   done
 }
