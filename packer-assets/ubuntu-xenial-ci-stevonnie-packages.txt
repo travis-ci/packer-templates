@@ -47,10 +47,8 @@ debconf-i18n
 debianutils
 dh-python
 diffutils
-dmidecode
 dmsetup
 dnsutils
-dosemu
 dosfstools
 dpkg
 e2fslibs
@@ -84,9 +82,6 @@ gpgv
 grep
 groff-base
 grub-common
-grub-gfxpayload-lists
-grub-pc
-grub-pc-bin
 grub2-common
 gzip
 haveged
@@ -360,7 +355,6 @@ netcat-openbsd
 ntfs-3g
 ntp
 ntpdate
-open-vm-tools
 openssh-client
 openssh-server
 openssh-sftp-server

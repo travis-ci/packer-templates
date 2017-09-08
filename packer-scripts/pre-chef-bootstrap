@@ -11,7 +11,9 @@ main() {
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
-  __enable_i386
+  if ! [[ "$(uname -m)" =~ ppc64le ]]; then
+    __enable_i386
+  fi
   __install_packages
   __upgrade_apt
   __setup_sshd
@@ -56,10 +58,21 @@ __upgrade_apt() {
   if [[ ${SKIP_APT_UPGRADE} ]]; then
     return
   fi
-  curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
-    | bash
-  apt-get update -yqq
-  apt-get install -yqq apt=1.2.10
+
+  local arch_type
+  arch_type="$(uname -m)"
+  local dist_name
+  dist_name="$(lsb_release -sc)"
+
+  if ! [[ "${arch_type}" =~ ppc64le ]]; then
+    curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
+      | bash
+    apt-get update -yqq
+  fi
+  if ! [[ "${dist_name}" =~ xenial ]]; then
+    apt-get install -yqq apt=1.2.10
+  fi
+
   apt-get clean -yqq
   rm -rf /var/lib/apt/lists
   apt-get update -yqq
