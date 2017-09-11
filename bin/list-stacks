@@ -14,8 +14,8 @@ main() {
   cd "${top}"
 
   for f in ci-*.yml; do
-    grep -lE "source_image:.*ubuntu-.+-${dist}" "${f}" \
-      | "${sed}" "s/ci-//;s/\\.yml//;s/\$/-${dist}/"
+    grep -lE "source_image:.*ubuntu-.+-${dist}" "${f}" |
+      "${sed}" "s/ci-//;s/\\.yml//;s/\$/-${dist}/"
   done
 }
 

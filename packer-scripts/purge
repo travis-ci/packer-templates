@@ -36,8 +36,8 @@ __purge_from_manifest() {
 }
 
 __purge_packages() {
-  dpkg --list | awk '{ print $2 }' | grep -- "$1" \
-    | grep -v -- "${2:-^$}" | xargs apt-get -y purge
+  dpkg --list | awk '{ print $2 }' | grep -- "$1" |
+    grep -v -- "${2:-^$}" | xargs apt-get -y purge
 }
 
 __run_retry() {

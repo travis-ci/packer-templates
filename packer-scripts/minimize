@@ -17,8 +17,8 @@ main() {
       readonly SWAP_PART
       SWAP_PART="$(readlink -f "/dev/disk/by-uuid/${SWAP_UUID}")"
       /sbin/swapoff "${SWAP_PART}"
-      dd if=/dev/zero of="${SWAP_PART}" bs=1M \
-        || echo "dd exit $? suppressed"
+      dd if=/dev/zero of="${SWAP_PART}" bs=1M ||
+        echo "dd exit $? suppressed"
       /sbin/mkswap -U "${SWAP_UUID}" "${SWAP_PART}"
     fi
   fi
@@ -38,10 +38,10 @@ main() {
   rm -f /EMPTY
   sync
 
-  vmware-toolbox-cmd disk shrink / \
-    || echo "vmware-toolbox-cmd exit $? suppressed"
-  vmware-toolbox-cmd disk shrink /boot \
-    || echo "vmware-toolbox-cmd exit $? suppressed"
+  vmware-toolbox-cmd disk shrink / ||
+    echo "vmware-toolbox-cmd exit $? suppressed"
+  vmware-toolbox-cmd disk shrink /boot ||
+    echo "vmware-toolbox-cmd exit $? suppressed"
 }
 
 main "${@}"
