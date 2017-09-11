@@ -65,8 +65,8 @@ __upgrade_apt() {
   dist_name="$(lsb_release -sc)"
 
   if ! [[ "${arch_type}" =~ ppc64le ]]; then
-    curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh \
-      | bash
+    curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh |
+      bash
     apt-get update -yqq
   fi
   if ! [[ "${dist_name}" =~ xenial ]]; then
