@@ -32,8 +32,8 @@ main() {
   )"
   hosts_line="${instance_ipv4} ${instance_hostname} ${instance_hostname%%.*}"
 
-  echo "${instance_hostname}" \
-    | tee "${ETCDIR}/hostname" >"${RUNDIR}/instance-hostname"
+  echo "${instance_hostname}" |
+    tee "${ETCDIR}/hostname" >"${RUNDIR}/instance-hostname"
   hostname -F "${ETCDIR}/hostname"
 
   if ! grep -q "^${hosts_line}" "${ETCDIR}/hosts"; then

@@ -15,13 +15,13 @@ main() {
   set -o pipefail
 
   case "$1" in
-    -h | --help | help)
-      __usage
-      exit 0
-      ;;
-    -l | --list-only)
-      CHECK_JOB_BOARD_TAGS_LIST_ONLY=1
-      ;;
+  -h | --help | help)
+    __usage
+    exit 0
+    ;;
+  -l | --list-only)
+    CHECK_JOB_BOARD_TAGS_LIST_ONLY=1
+    ;;
   esac
 
   COMBOS=(
@@ -51,8 +51,8 @@ ${rec}
 "
   done
 
-  echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i \
-    | grep --color -E '^✘:.*|$'
+  echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i |
+    grep --color -E '^✘:.*|$'
 }
 
 __usage() {

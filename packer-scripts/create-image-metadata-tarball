@@ -21,8 +21,8 @@ main() {
 
   find "${RSPEC_JSON_DIR}" \
     -maxdepth 1 \
-    -name '.*_rspec.json' \
-    | while read -r rspec_json; do
+    -name '.*_rspec.json' |
+    while read -r rspec_json; do
       cp -v "${rspec_json}" "${dest}/${rspec_json##*/.}"
     done
 
