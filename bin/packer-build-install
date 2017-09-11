@@ -7,9 +7,9 @@ cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 mkdir -p tmp/
 
 if [[ -n "${GCE_ACCOUNT_FILE_B64_BZ2}" ]]; then
-  echo "${GCE_ACCOUNT_FILE_B64_BZ2}" \
-    | base64 -d \
-    | bunzip2 >tmp/gce.json
+  echo "${GCE_ACCOUNT_FILE_B64_BZ2}" |
+    base64 -d |
+    bunzip2 >tmp/gce.json
 fi
 
 if [[ "$(packer version 2>/dev/null)" != "Packer v1.0.0" ]]; then

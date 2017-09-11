@@ -15,8 +15,8 @@ main() {
   cd "${top}"
 
   for f in ci-*.yml; do
-    grep -lE "travis_cookbooks_edge_branch:.*${edge_branch}" "${f}" \
-      | "${sed}" "s/ci-//;s/\\.yml//;s/\$/-${dist}/"
+    grep -lE "travis_cookbooks_edge_branch:.*${edge_branch}" "${f}" |
+      "${sed}" "s/ci-//;s/\\.yml//;s/\$/-${dist}/"
   done
 }
 
