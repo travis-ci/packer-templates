@@ -17,9 +17,9 @@ __checksum() {
   find "${@}" \
     -executable -type f -print0 \
     -or -name '*.so' -print0 \
-    -or -name '*.a' -print0 2>/dev/null \
-    | xargs -0 sha256sum 2>/dev/null \
-    | sort -k2
+    -or -name '*.a' -print0 2>/dev/null |
+    xargs -0 sha256sum 2>/dev/null |
+    sort -k2
 }
 
 main "$@"
