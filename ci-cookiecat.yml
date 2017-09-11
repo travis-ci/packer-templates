@@ -3,7 +3,7 @@ description: Travis CI cookiecat build env template
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-cookiecat-trusty-{{ timestamp }}
+  image_name: travis-ci-cookiecat-trusty-{{ timestamp }}-<%= git_desc %>
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"

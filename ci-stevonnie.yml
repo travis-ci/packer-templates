@@ -2,10 +2,10 @@
 description: Travis CI stevonnie build env template
 variables:
   docker_repository: travisci/ci-stevonnie
-  docker_tag: packer-{{ timestamp }}
+  docker_tag: packer-{{ timestamp }}-<%= git_desc %>
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-stevonnie-xenial-{{ timestamp }}
+  image_name: travis-ci-stevonnie-xenial-{{ timestamp }}-<%= git_desc %>
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
