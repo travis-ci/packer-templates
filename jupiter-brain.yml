@@ -12,7 +12,7 @@ builders:
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
   source_ami: ami-8e0b9499
-  ami_name: travis-ci-jupiter-brain {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  ami_name: travis-ci-jupiter-brain {{ isotime "2006-01-02 15:04:06" | clean_ami_name }} <%= git_desc %>
   instance_type: t2.micro
   ssh_username: jupiterbrain
   ami_virtualization_type: hvm

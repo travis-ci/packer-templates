@@ -15,7 +15,7 @@ builders:
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
   source_ami: ami-a327a4b5
-  ami_name: bastion {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  ami_name: bastion {{ isotime "2006-01-02 15:04:06" | clean_ami_name }} <%= git_desc %>
   instance_type: t2.micro
   ssh_username: bastion
   ami_virtualization_type: hvm
@@ -30,7 +30,7 @@ builders:
   source_image: ubuntu-1404-trusty-v20170330
   zone: us-central1-b
   ssh_username: ubuntu
-  image_name: bastion-{{ timestamp }}
+  image_name: bastion-{{ timestamp }}-<%= git_desc %>
   machine_type: g1-small
   tags:
   - internal
