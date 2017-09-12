@@ -13,7 +13,7 @@ builders:
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1604-xenial-v20170619a
   zone: us-central1-b
-  image_name: vault-consul-{{ timestamp }}
+  image_name: vault-consul-{{ timestamp }}-<%= git_desc %>
   machine_type: g1-small
   ssh_username: ubuntu
   tags:
