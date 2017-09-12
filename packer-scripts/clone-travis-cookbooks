@@ -8,7 +8,7 @@ cd /tmp/chef-stuff
 
 rm -rf ./travis-cookbooks
 
-: "${TRAVIS_COOKBOOKS_BRANCH:=ibmjava-travisci"
+: "${TRAVIS_COOKBOOKS_BRANCH:=ibmjava-travisci}"
 : "${TRAVIS_COOKBOOKS_BRANCH:=master}"
 : "${TRAVIS_COOKBOOKS_URL:=https://github.com/chandrams/travis-cookbooks.git}"
 
