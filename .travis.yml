@@ -27,6 +27,7 @@ install:
 - if [[ -f .test-branch ]]; then
     export TRAVIS_COOKBOOKS_TEST_BRANCH="$(cat .test-branch 2>/dev/null)";
   fi
+- export GIT_DESC="$(git describe --always --dirty --tags)"
 - rvm use 2.4.1 --install --binary --fuzzy
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - ./bin/packer-build-install

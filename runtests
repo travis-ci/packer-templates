@@ -25,7 +25,7 @@ for f in $(git ls-files '*.yml'); do
   ./bin/yml2json <"${f}" | ./bin/json2yml &>/dev/null
   if grep -q ^builders: "$f"; then
     ruby -ryaml -rerb \
-      -e "YAML.load(ERB.new(File.read('${f}')).result).fetch('description')"
+      -e "def git_desc;'x';end;YAML.load(ERB.new(File.read('${f}')).result).fetch('description')"
     echo -en "(packer validate ...) "
     packer validate <(bin/yml2json <"$f")
     echo "\`--> ✓"
