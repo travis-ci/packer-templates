@@ -484,6 +484,7 @@ update-notifier-common
 upstart
 usbutils
 util-linux
+uuid-dev
 uuid-runtime
 vim
 vim-common
