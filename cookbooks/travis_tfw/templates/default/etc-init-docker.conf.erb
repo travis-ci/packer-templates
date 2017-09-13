@@ -4,10 +4,16 @@ description "Docker daemon"
 
 start on (local-filesystems and stopped cloud-final and net-device-up IFACE!=lo)
 stop on runlevel [!2345]
+
 limit nofile 524288 1048576
-limit nproc 524288 1048576
+
+# Having non-zero limits causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+limit nproc unlimited unlimited
 
 respawn
+
+kill timeout 20
 
 pre-start script
   # see also https://github.com/tianon/cgroupfs-mount/blob/master/cgroupfs-mount
@@ -43,7 +49,8 @@ pre-start script
 end script
 
 script
-  DOCKER=/usr/bin/$UPSTART_JOB
+  # modify these in /etc/default/$UPSTART_JOB (/etc/default/docker)
+  DOCKERD=/usr/bin/dockerd
   DOCKER_OPTS=
   for filename in ${UPSTART_JOB}-chef ${UPSTART_JOB}-cloud-init ; do
     if [ -f /etc/default/${filename} ] ; then
@@ -58,7 +65,7 @@ script
   if [ -z $TRAVIS_DOCKER_DISABLE_DIRECT_LVM ] ; then
     DOCKER_OPTS="$DOCKER_OPTS --config-file=/etc/docker/daemon-direct-lvm.json"
   fi
-  exec "$DOCKER" daemon $DOCKER_OPTS
+  exec "$DOCKERD" $DOCKER_OPTS --raw-logs
 end script
 
 # Don't emit "started" event until docker.sock is ready.
@@ -80,7 +87,7 @@ post-start script
   if ! printf "%s" "$DOCKER_OPTS" | grep -qE -e '-H|--host'; then
     DOCKER_SOCKET=/var/run/docker.sock
   else
-    DOCKER_SOCKET=$(printf "%s" "$DOCKER_OPTS" | grep -oP -e '(-H|--host)\W*unix://\K(\S+)')
+    DOCKER_SOCKET=$(printf "%s" "$DOCKER_OPTS" | grep -oP -e '(-H|--host)\W*unix://\K(\S+)' | sed 1q)
   fi
 
   if [ -n "$DOCKER_SOCKET" ]; then
