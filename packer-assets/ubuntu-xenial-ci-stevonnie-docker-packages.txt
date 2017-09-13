@@ -4,3 +4,4 @@ hashdeep
 libmysqlclient-dev
 mysql-client
 postgresql-client
+uuid-dev

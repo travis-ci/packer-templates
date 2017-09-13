@@ -44,11 +44,15 @@ stacks-short:
 	@$(MAKE) stacks | sed 's/-trusty//'
 
 .PHONY: stacks
-stacks: stacks-trusty
+stacks: stacks-trusty stacks-xenial
 
 .PHONY: stacks-trusty
 stacks-trusty:
 	@bin/list-stacks trusty
+
+.PHONY: stacks-xenial
+stacks-xenial:
+	@bin/list-stacks xenial
 
 .PHONY: test
 test:
