@@ -5,4 +5,8 @@ require 'erb'
 require 'json'
 require 'yaml'
 
+def git_desc
+  ENV.fetch('GIT_DESC', `git describe --always --dirty --tags`.strip)
+end
+
 $stdout.puts JSON.pretty_generate(YAML.safe_load(ERB.new($stdin.read).result))
