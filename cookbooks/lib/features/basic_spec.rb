@@ -603,12 +603,7 @@ end
 
 describe file('/home/travis/bin') do
   it { should be_directory }
-  it 'is writable' do
-    File.open('/home/travis/bin/.travis-write-test', 'w') do |f|
-      f.puts Time.now.utc.to_s
-    end
-    expect(File.read('/home/travis/bin/.travis-write-test')).to_not be_empty
-  end
+  it { should be_writable }
 end
 
 def test_txt
@@ -781,12 +776,7 @@ end
 
 describe file('/opt') do
   it { should be_directory }
-  it 'is writable' do
-    File.open('/opt/.travis-write-test', 'w') do |f|
-      f.puts Time.now.utc.to_s
-    end
-    expect(File.read('/opt/.travis-write-test')).to_not be_empty
-  end
+  it { should be_writable }
 end
 
 describe file('/etc/hosts'), docker: false do
