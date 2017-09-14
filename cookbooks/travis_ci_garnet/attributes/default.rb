@@ -45,6 +45,8 @@ override['travis_java']['alternate_versions'] = %w[
   openjdk7
   openjdk8
   oraclejdk9
+  ibmjava8
+  ibmjava9
 ]
 
 override['leiningen']['home'] = '/home/travis'
