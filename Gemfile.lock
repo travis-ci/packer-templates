@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/travis-ci/travis-packer-build
-  revision: 425bcb1b870ab05b6590007c6b405361a304183d
+  revision: 1b57c6cb3db1ec8853736cf52ecbb6184ad86cbb
   specs:
     travis-packer-build (0.1.0)
       faraday (~> 0.9)
@@ -89,7 +89,7 @@ GEM
     diff-lcs (1.3)
     docile (1.1.5)
     erubis (2.7.0)
-    faraday (0.12.1)
+    faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
     ffi-yajl (2.3.0)
@@ -283,4 +283,4 @@ DEPENDENCIES
   travis-packer-build!
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
