@@ -8,6 +8,7 @@ libqt4-opengl-dev
 libqtwebkit-dev
 libqtwebkit4
 scons
+uuid-dev
 x11-utils
 x11-xserver-utils
 xserver-xorg-core
