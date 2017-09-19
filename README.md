@@ -380,3 +380,50 @@ tagset_a = %w(a b c d e f)
 tagset_b = %w(f d b)
 assert (tagset_a & tagset_b).sort == tagset_b.sort
 ```
+
+
+## Testing cookbook changes
+
+When submitting changes to this repository, please be aware that
+the top level-specs are shallow and don't include logic changes in the cookbooks.
+
+Any cookbook specs are ran as part of the actual image building
+process, which is triggered when any of the `ci-<image-name>.yml`
+templates are modified.
+
+The image build is ran as part of the
+[packer-build](https://github.com/travis-infrastructure/packer-build)
+repo on the branch corresponding to each template and is triggered by
+[travis-packer-build](https://github.com/travis-ci/travis-packer-build).
+
+This can be installed and invoked locally by running `bundle install`
+and then `bundle exec travis-packer-build [options]`.
+
+Example:
+
+```
+bundle exec travis-packer-build \
+	-I ci-garnet.yml \
+    --target-repo-slug="travis-infrastructure/packer-build" \
+	--github-api-token="<your-token-here>" \
+	--body-tmpl=".packer-build-pull-request-false-tmpl.yml"
+```
+
+The file `.packer-build-pull-request-false-tmpl.yml` here is just an
+example, but you can also create a different template that specifies
+other travis-cookbooks or packer-template branches.
+
+Additionaly, if you just want to test a change in
+[travis-cookbooks](https://github.com/travis-ci/travis-cookbooks), you
+can use the shortcut script in `./bin/packer-build-cookbooks-branch`:
+
+```
+./bin/packer-build-cookbooks-branch <travis-cookbooks-branch-name>
+<template-name>
+```
+
+**Note:**  *The above script expects the `GITHUB_API_TOKEN`
+environment variable to be set.*
+
+Once created, the images will be registered in job-board under the
+`group: dev` tag.
