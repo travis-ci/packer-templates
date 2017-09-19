@@ -155,7 +155,7 @@ cookbooks/travis_ci_connie
 ├── recipes
 │   └── default.rb
 └── spec
-    ├── ...
+	├── ...
 ```
 
 #### travis user double check
@@ -404,7 +404,7 @@ Example:
 ```
 bundle exec travis-packer-build \
 	-I ci-garnet.yml \
-    --target-repo-slug="travis-infrastructure/packer-build" \
+	--target-repo-slug="travis-infrastructure/packer-build" \
 	--github-api-token="<your-token-here>" \
 	--body-tmpl=".packer-build-pull-request-false-tmpl.yml"
 ```
@@ -418,8 +418,7 @@ Additionaly, if you just want to test a change in
 can use the shortcut script in `./bin/packer-build-cookbooks-branch`:
 
 ```
-./bin/packer-build-cookbooks-branch <travis-cookbooks-branch-name>
-<template-name>
+./bin/packer-build-cookbooks-branch <travis-cookbooks-branch-name> <template-name>
 ```
 
 **Note:**  *The above script expects the `GITHUB_API_TOKEN`
