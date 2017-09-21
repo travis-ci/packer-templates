@@ -14,6 +14,10 @@ main() {
   : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
   : "${PACKER_BUILDER_TYPE:=docker}"
 
+  if [[ "$(uname -m)" =~ ppc64 ]]; then
+     exit 0
+  fi
+
   if [[ "${PACKER_BUILDER_TYPE}" == 'docker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
