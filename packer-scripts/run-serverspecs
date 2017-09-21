@@ -15,7 +15,7 @@ main() {
   : "${PACKER_BUILDER_TYPE:=docker}"
 
   if [[ "$(uname -m)" =~ ppc64 ]]; then
-     exit 0
+    exit 0
   fi
 
   if [[ "${PACKER_BUILDER_TYPE}" == 'docker' ]]; then
