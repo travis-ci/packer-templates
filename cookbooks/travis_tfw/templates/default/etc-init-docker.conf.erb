@@ -39,12 +39,16 @@ pre-start script
 
   for filename in ${UPSTART_JOB}-chef ${UPSTART_JOB}-cloud-init ${UPSTART_JOB} ${UPSTART_JOB}-local ; do
     if [ -f /etc/default/${filename} ] ; then
+      echo "Sourcing /etc/default/${filename}"
       . /etc/default/${filename}
     fi
   done
 
   if [ -z $TRAVIS_DOCKER_DISABLE_DIRECT_LVM ] ; then
+    echo "Running travis-docker-volume-setup, as TRAVIS_DOCKER_DISABLE_DIRECT_LVM is not set"
     travis-docker-volume-setup
+  else
+    echo "NOT running travis-docker-volume-setup, as TRAVIS_DOCKER_DISABLE_DIRECT_LVM is set"
   fi
 end script
 
@@ -63,7 +67,10 @@ script
     fi
   done
   if [ -z $TRAVIS_DOCKER_DISABLE_DIRECT_LVM ] ; then
+    echo "Using Direct LVM, as TRAVIS_DOCKER_DISABLE_DIRECT_LVM is not set"
     DOCKER_OPTS="$DOCKER_OPTS --config-file=/etc/docker/daemon-direct-lvm.json"
+  else
+    echo "Direct LVM is disabled, as TRAVIS_DOCKER_DISABLE_DIRECT_LVM is set"
   fi
   exec "$DOCKERD" $DOCKER_OPTS --raw-logs
 end script
