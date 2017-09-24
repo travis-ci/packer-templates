@@ -1,0 +1,73 @@
+---
+description: Travis CI onion build env template
+variables:
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+  image_name: travis-ci-onion-2016-{{ timestamp }}-<%= git_desc %>
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_edge_branch: master
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
+builders:
+- type: googlecompute
+  name: googlecompute
+  communicator: winrm
+  winrm_username: packer_user
+  winrm_use_ssl: true
+  winrm_insecure: true
+  image_description: Travis CI Onion
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image: windows-server-2016-dc-v20170913
+  zone: us-central1-a
+  image_name: "{{ user `image_name` }}"
+  machine_type: n1-standard-4
+  disk_size: 50
+  metadata:
+    windows-startup-script-cmd: "winrm quickconfig -quiet & net user /add packer_user & net localgroup administrators packer_user /add & winrm set winrm/config/service/auth @{Basic=\"true\"}"
+  tags:
+  - ci
+  - onion
+  - travis-ci-packer-templates
+provisioners:
+- type: powershell
+  inline:
+  - mkdir c:\\packertmp
+- type: file
+  source: tmp/git-meta
+  destination: c:\\packertmp\\git-meta
+- type: file
+  source: packer-assets/windows-server-2016-normal-purge.txt
+  destination: c:\\packertmp\\purge.txt
+- type: file
+  source: packer-assets/windows-server-2016-ci-onion-packages.txt
+  destination: c:\\packertmp\\packages.txt
+- type: powershell
+  scripts:
+  - packer-scripts/InstallChocolatey.ps1
+  - packer-scripts/PreChefBootstrap.ps1
+  - packer-scripts/CloneTravisCookbooks.ps1
+  environment_vars:
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+- type: chef-solo
+  config_template: chef-solo.rb.tmpl
+  cookbook_paths:
+  - cookbooks
+  remote_cookbook_paths:
+  - c:\\packertmp\\chef-stuff\\travis-cookbooks\\cookbooks
+  - c:\\packertmp\\chef-stuff\\travis-cookbooks\\community-cookbooks
+  json: {}
+  run_list:
+  - recipe[travis_ci_onion]
+post-processors:
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - googlecompute
+-
+  - type: shell-local
+    script: bin/write-latest-image-name
