@@ -30,18 +30,15 @@ builders:
   - onion
   - travis-ci-packer-templates
 provisioners:
-- type: powershell
-  inline:
-  - mkdir c:\\packertmp
 - type: file
   source: tmp/git-meta
-  destination: c:\\packertmp\\git-meta
+  destination: c:/windows/temp/git-meta
 - type: file
   source: packer-assets/windows-server-2016-normal-purge.txt
-  destination: c:\\packertmp\\purge.txt
+  destination: c:/windows/temp/purge.txt
 - type: file
   source: packer-assets/windows-server-2016-ci-onion-packages.txt
-  destination: c:\\packertmp\\packages.txt
+  destination: c:/windows/temp/packages.txt
 - type: powershell
   scripts:
   - packer-scripts/InstallChocolatey.ps1
@@ -51,12 +48,13 @@ provisioners:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
 - type: chef-solo
+  guest_os_type: windows
   config_template: chef-solo.rb.tmpl
   cookbook_paths:
   - cookbooks
   remote_cookbook_paths:
-  - c:\\packertmp\\chef-stuff\\travis-cookbooks\\cookbooks
-  - c:\\packertmp\\chef-stuff\\travis-cookbooks\\community-cookbooks
+  - c:/windows/temp/chef-stuff/travis-cookbooks/cookbooks
+  - c:/windows/temp/chef-stuff/travis-cookbooks/community-cookbooks
   json: {}
   run_list:
   - recipe[travis_ci_onion]
