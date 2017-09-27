@@ -4,7 +4,7 @@ branch: "%{template_name}"
 config:
   language: minimal
   dist: trusty
-  group: edge
+  group: dev
   sudo: true
   before_install:
   - if [[ "${BUILDER}" = "docker" ]] ; then
@@ -15,7 +15,7 @@ config:
       sudo service docker restart ;
     fi
   install:
-  - git clone --branch="%{branch}" "https://github.com/travis-ci/packer-templates.git"
+  - git clone --branch="bv-test-ibmjava" "https://github.com/travis-ci/packer-templates.git"
   - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
   - ./packer-templates/bin/packer-build-install
   script:
