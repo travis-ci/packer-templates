@@ -1,3 +1,10 @@
+chromedriver
+firefox
 git.install
 jq
+mysql
+postgresql
+python
+python2
+ruby
 visualstudio2017buildtools
