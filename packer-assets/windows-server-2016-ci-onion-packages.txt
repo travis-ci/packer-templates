@@ -1,4 +1,3 @@
 git.install
-curl
 jq
 visualstudio2017buildtools
