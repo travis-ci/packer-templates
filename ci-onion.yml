@@ -47,25 +47,25 @@ provisioners:
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
-- type: chef-solo
-  guest_os_type: windows
-  config_template: chef-solo.rb.tmpl
-  cookbook_paths:
-  - cookbooks
-  remote_cookbook_paths:
-  - c:/windows/temp/chef-stuff/travis-cookbooks/cookbooks
-  - c:/windows/temp/chef-stuff/travis-cookbooks/community-cookbooks
-  json: {}
-  run_list:
-  - recipe[travis_ci_onion]
-post-processors:
--
-  - type: shell-local
-    script: bin/job-board-register
-    environment_vars:
-    - IMAGE_NAME={{ user `image_name` }}
-    only:
-    - googlecompute
--
-  - type: shell-local
-    script: bin/write-latest-image-name
+# - type: chef-solo
+#   guest_os_type: windows
+#   config_template: chef-solo.rb.tmpl
+#   cookbook_paths:
+#   - cookbooks
+#   remote_cookbook_paths:
+#   - c:/windows/temp/chef-stuff/travis-cookbooks/cookbooks
+#   - c:/windows/temp/chef-stuff/travis-cookbooks/community-cookbooks
+#   json: {}
+#   run_list:
+#   - recipe[travis_ci_onion]
+# post-processors:
+# -
+#   - type: shell-local
+#     script: bin/job-board-register
+#     environment_vars:
+#     - IMAGE_NAME={{ user `image_name` }}
+#     only:
+#     - googlecompute
+# -
+#   - type: shell-local
+#     script: bin/write-latest-image-name
