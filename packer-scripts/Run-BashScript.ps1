@@ -8,8 +8,10 @@ $nowTime = Get-Date -Format o `
 $tmpBasename = "script.${nowTime}.bash"
 $tmpDest = "c:/windows/temp/${tmpBasename}"
 $bashDest = "/c/windows/temp/${tmpBasename}"
-
-cp "${bashscript}" "${tmpDest}"
 $bash = "c:/program files/git/usr/bin/bash.exe"
+
+echo "copying script bashscript=${bashscript} tmpDest=${tmpDest}"
+cp "${bashscript}" "${tmpDest}"
+
 echo "starting process FilePath=${bash} ArgumentList=${bashDest}"
 Start-Process -FilePath $bash -ArgumentList $bashDest -Wait
