@@ -4,6 +4,7 @@ function Main {
   Install-Chocolatey
   Install-Packages
   Create-TravisUser
+  Create-StubFiles
 }
 
 function Install-Chocolatey {
@@ -35,6 +36,11 @@ function Create-TravisUser {
     -Description "travis user from packer" `
     -Password $pw
   Add-LocalGroupMember -Group "Administrators" -Member "travis"
+}
+
+function Create-StubFiles {
+  "---" >$env:JOB_BOARD_REGISTER_FILE
+  "{}" >$env:SYSTEM_INFO_JSON
 }
 
 Main

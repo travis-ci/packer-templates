@@ -1,6 +1,6 @@
-Set-StrictMode -Version 1.0
-
 param([string]$bashscript = "")
+
+Set-StrictMode -Version 1.0
 
 $nowTime = Get-Date -Format o `
            | foreach {$_ -replace ":", "."} `
@@ -8,10 +8,11 @@ $nowTime = Get-Date -Format o `
 $tmpBasename = "script.${nowTime}.bash"
 $tmpDest = "c:/windows/temp/${tmpBasename}"
 $bashDest = "/c/windows/temp/${tmpBasename}"
-$bash = "c:/program files/git/usr/bin/bash.exe"
+$env:PATH = "${env:PATH};c:/program files/git/usr/bin"
 
 echo "copying script bashscript=${bashscript} tmpDest=${tmpDest}"
 cp "${bashscript}" "${tmpDest}"
 
-echo "starting process FilePath=${bash} ArgumentList=${bashDest}"
-Start-Process -FilePath $bash -ArgumentList $bashDest -Wait
+echo "running bash ${bashDest}"
+bash $bashDest
+exit $LastExitCode

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  : "${JOB_BOARD_REGISTER_FILE:=/c/travis-job-board-register.yml}"
+
+  local nowtime
+  nowtime=$(date -u +%Y%m%dT%H%M%SZ)
+
+  cat >"${JOB_BOARD_REGISTER_FILE}" <<EOF
+---
+stack: onion
+languages:
+- powershell
+features:
+- dotnet
+tags:
+  dist: server-2016
+  os: windows
+  packer_chef_time: "${nowtime}"
+  language_powershell: true
+  feature_dotnet: true
+tags_string: "dist:server-2016,os:windows,packer_chef_time:${nowtime},language_powershell:true,feature_dotnet:true"
+EOF
+}
+
+main "$@"
