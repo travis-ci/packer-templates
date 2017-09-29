@@ -1,11 +1,11 @@
-# chromedriver
-# firefox
-# mysql
-# postgresql
-# visualstudio2017buildtools
 7zip.install
+chromedriver
+firefox
 git.install
 jq
+mysql
+postgresql
 python
 python2
 ruby
+visualstudio2017buildtools
