@@ -86,7 +86,7 @@ update-gce-images:
 	bin/gce-image-update $$(git grep -lE 'source_image: ubuntu' *.yml)
 
 tmp/packer.zip:
-	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/1.0.4/packer_1.0.4_$(UNAME)_amd64.zip'
+	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_$(UNAME)_amd64.zip'
 
 tmp/bats/.git:
 	$(GIT) clone https://github.com/sstephenson/bats.git tmp/bats
