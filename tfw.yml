@@ -63,7 +63,8 @@ builders:
   run_tags:
     Name: "packer-docker-images-generator"
   secret_key: "{{ user `aws_secret_key` }}"
-  snapshot_groups: all
+  snapshot_groups:
+    - all
   source_ami_filter:
     filters:
       name: "tfw*"
@@ -76,8 +77,6 @@ builders:
   ssh_username: FIXME
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
-  tags:
-    role: docker
 
 provisioners:
 - type: shell
