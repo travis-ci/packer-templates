@@ -31,7 +31,7 @@ builders:
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
   region: us-east-1
-  availability_zone: a
+  availability_zone: b
   source_ami_filter:
     filters:
       virtualization-type: hvm
