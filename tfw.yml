@@ -48,6 +48,37 @@ builders:
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
+- type: amazon-ebsvolume
+  access_key: "{{ user `aws_access_key` }}"
+  ebs_volumes:
+    - delete_on_termination: false
+      device_name: /dev/xvdx
+      tags:
+        Name: packer-docker-images
+        role: docker-images
+      volume_size: 80
+      volume_type: gp2
+  instance_type: t2.medium
+  region: us-east-1
+  run_tags:
+    Name: "packer-docker-images-generator"
+  secret_key: "{{ user `aws_secret_key` }}"
+  snapshot_groups: all
+  source_ami_filter:
+    filters:
+      name: "tfw*"
+      root-device-type: ebs
+      tag:role: "tfw"
+      virtualization-type: hvm
+    most_recent: true
+    owners:
+    - 341288657826
+  ssh_username: FIXME
+  subnet_id: "{{ user `travis_subnet_id` }}"
+  vpc_id: "{{ user `travis_vpc_id` }}"
+  tags:
+    role: docker
+
 provisioners:
 - type: shell
   inline:
