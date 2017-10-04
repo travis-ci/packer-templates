@@ -63,8 +63,6 @@ builders:
   run_tags:
     Name: "packer-docker-images-generator"
   secret_key: "{{ user `aws_secret_key` }}"
-  snapshot_groups:
-    - all
   source_ami_filter:
     filters:
       name: "tfw*"
