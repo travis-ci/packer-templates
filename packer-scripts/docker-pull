@@ -13,6 +13,11 @@ main() {
   #rm /var/tmp/travis-worker.service
   #echo "Killing travis-worker"
   #pkill -INT travis-worker
+  docker info
+  service docker stop
+  echo 'DOCKER_OPTS="-g /mnt/docker --storage-driver overlay2"' | sudo tee -a /etc/default/docker
+  service docker start
+  docker info
   mkfs -t ext3 /dev/xvdx
   mount /dev/xvdx /mnt -o _netdev
   docker pull alpine
