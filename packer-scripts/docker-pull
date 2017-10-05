@@ -13,7 +13,10 @@ main() {
   #rm /var/tmp/travis-worker.service
   #echo "Killing travis-worker"
   #pkill -INT travis-worker
+  mkfs -t ext3 /dev/xvdx
+  mount /dev/xvdx /mnt -o _netdev
   docker pull alpine
+  umount /mnt
 }
 
 main "$@"
