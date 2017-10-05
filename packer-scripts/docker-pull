@@ -4,8 +4,12 @@ set -o errexit
 
 main() {
   # Start travis-worker, but only long enough to pull images
+  echo "Starting travis-worker"
   start travis-worker
+  echo "Removing travis-worker.conf"
   rm /var/tmp/travis-worker.conf
+  echo "Removing travis-worker.service"
   rm /var/tmp/travis-worker.service
+  echo "Killing travis-worker"
   pkill -INT travis-worker
 }
