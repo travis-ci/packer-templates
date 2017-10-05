@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+    echo "FIXME: should we start travis-worker to pull docker images here?"
+}
