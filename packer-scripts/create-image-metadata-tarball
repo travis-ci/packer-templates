@@ -26,12 +26,22 @@ main() {
       cp -v "${rspec_json}" "${dest}/${rspec_json##*/.}"
     done
 
-  rsync -av "${PACKER_ENV_DIR}/" "${dest}/env/"
+  cp -vR "${PACKER_ENV_DIR}/"* "${dest}/env/"
   cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register.yml"
-  cp -v "${NODE_ATTRIBUTES_YML}" "${dest}/node-attributes.yml"
   cp -v "${SYSTEM_INFO_JSON}" "${dest}/system_info.json"
-  cp -v "${DPKG_MANIFEST_JSON}" "${dest}/dpkg-manifest.json"
-  cp -v "${BIN_LIB_CHECKSUMS}" "${dest}/bin-lib.SHA256SUMS"
+
+  if [[ -f "${NODE_ATTRIBUTES_YML}" ]]; then
+    cp -v "${NODE_ATTRIBUTES_YML}" "${dest}/node-attributes.yml"
+  fi
+
+  if [[ -f "${DPKG_MANIFEST_JSON}" ]]; then
+    cp -v "${DPKG_MANIFEST_JSON}" "${dest}/dpkg-manifest.json"
+  fi
+
+  if [[ -f "${BIN_LIB_CHECKSUMS}" ]]; then
+    cp -v "${BIN_LIB_CHECKSUMS}" "${dest}/bin-lib.SHA256SUMS"
+  fi
+
   tar -cjvf "${IMAGE_METADATA_TARBALL}" "${dest}"
 }
 

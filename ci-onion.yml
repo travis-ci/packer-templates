@@ -1,0 +1,98 @@
+---
+description: Travis CI onion build env template
+variables:
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+  image_name: travis-ci-onion-2016-{{ timestamp }}-<%= git_desc %>
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_edge_branch: master
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
+builders:
+- type: googlecompute
+  name: googlecompute
+  communicator: winrm
+  winrm_username: packer_user
+  winrm_use_ssl: true
+  winrm_insecure: true
+  image_description: Travis CI Onion
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image: windows-server-2016-dc-v20170913
+  zone: us-central1-a
+  image_name: "{{ user `image_name` }}"
+  machine_type: n1-standard-4
+  disk_size: 50
+  metadata:
+    windows-startup-script-cmd: "winrm quickconfig -quiet & net user /add packer_user & net localgroup administrators packer_user /add & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell -Command \"& {Set-ExecutionPolicy AllSigned -Force}\""
+  tags:
+  - ci
+  - onion
+  - travis-ci-packer-templates
+provisioners:
+- type: file
+  source: tmp/git-meta
+  destination: c:/windows/temp/
+- type: file
+  source: packer-assets/windows-server-2016-normal-purge.txt
+  destination: c:/windows/temp/purge.txt
+- type: file
+  source: packer-assets/windows-server-2016-ci-onion-packages.txt
+  destination: c:/windows/temp/packages.txt
+- type: file
+  source: packer-scripts/Run-BashScript.ps1
+  destination: c:/windows/temp/Run-BashScript.ps1
+- type: powershell
+  scripts:
+  - packer-scripts/Bootstrap-Windows.ps1
+  environment_vars:
+  - "JOB_BOARD_REGISTER_FILE=c:/travis-job-board-register.yml"
+  - "SYSTEM_INFO_JSON=c:/travis_system_info.json"
+- type: powershell
+  scripts:
+  - packer-scripts/packer-env-dump
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - CHEF_TMP=/c/windows/temp/chef-stuff
+  - GIT_META_DIR=/c/windows/temp/git-meta
+  - PACKER_ENV_DIR=/c/.packer-env
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  execute_command: "{{ .Vars }} c:/windows/temp/Run-BashScript.ps1 -bashscript '{{ .Path }}'"
+# TODO: use chef to do things (???)
+# - type: chef-solo
+#   guest_os_type: windows
+#   config_template: chef-solo.rb.tmpl
+#   cookbook_paths:
+#   - cookbooks
+#   remote_cookbook_paths:
+#   - c:/windows/temp/chef-stuff/travis-cookbooks/cookbooks
+#   - c:/windows/temp/chef-stuff/travis-cookbooks/community-cookbooks
+#   json: {}
+#   run_list:
+#   - recipe[travis_ci_onion]
+- type: powershell
+  scripts:
+  # TODO: write job board data via chef
+  - packer-scripts/create-windows-job-board-data
+  - packer-scripts/create-image-metadata-tarball
+  environment_vars:
+  - "IMAGE_METADATA_TARBALL=/c/windows/temp/image-metadata-{{ user `image_name` }}.tar.bz2"
+  - JOB_BOARD_REGISTER_FILE=/c/travis-job-board-register.yml
+  - PACKER_ENV_DIR=/c/.packer-env
+  - SYSTEM_INFO_JSON=/c/travis_system_info.json
+  - TMPDIR=/c/windows/temp
+  execute_command: "{{ .Vars }} c:/windows/temp/Run-BashScript.ps1 -bashscript '{{ .Path }}'"
+- type: file
+  source: "c:/windows/temp/image-metadata-{{ user `image_name` }}.tar.bz2"
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+post-processors:
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+-
+  - type: shell-local
+    script: bin/write-latest-image-name

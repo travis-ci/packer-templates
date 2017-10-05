@@ -5,6 +5,7 @@ set -o xtrace
 
 main() {
   : "${PACKER_ENV_DIR:=/.packer-env}"
+  : "${GIT_META_DIR:=/var/tmp/git-meta}"
 
   mkdir -p "${PACKER_ENV_DIR}"
 
@@ -12,15 +13,15 @@ main() {
     eval "echo \$$var" >"${PACKER_ENV_DIR}/$var"
   done
 
-  if [[ -f /var/tmp/git-meta/packer-templates-branch ]]; then
+  if [[ -f "${GIT_META_DIR}/packer-templates-branch" ]]; then
     cp -v \
-      /var/tmp/git-meta/packer-templates-branch \
+      "${GIT_META_DIR}/packer-templates-branch" \
       "${PACKER_ENV_DIR}/PACKER_TEMPLATES_BRANCH"
   fi
 
-  if [[ -f /var/tmp/git-meta/packer-templates-sha ]]; then
+  if [[ -f "${GIT_META_DIR}/packer-templates-sha" ]]; then
     cp -v \
-      /var/tmp/git-meta/packer-templates-sha \
+      "${GIT_META_DIR}/packer-templates-sha" \
       "${PACKER_ENV_DIR}/PACKER_TEMPLATES_SHA"
   fi
 }
