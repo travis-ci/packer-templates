@@ -34,7 +34,6 @@ builders:
     owners:
     - 099720109477
     most_recent: true
-  ami_name: tfw-worker-preseed {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
   #source_ami_filter:
     #filters:
       #name: "tfw*"
