@@ -13,6 +13,7 @@ variables:
 builders:
 - type: amazon-ebsvolume
   access_key: "{{ user `aws_access_key` }}"
+  availability_zone: us-east-1b
   ebs_volumes:
     - delete_on_termination: false
       device_name: /dev/xvdx
