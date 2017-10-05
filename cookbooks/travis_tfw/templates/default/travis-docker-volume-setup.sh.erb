@@ -5,11 +5,11 @@ set -ex
 
 : ${DEVICE:=<%= @device %>}
 
-if [[ file --brief -s == "ext3" ]] ; then
+if [[ file --brief -s ${DEVICE} == "ext3" ]] ; then
   echo "$(basename $0): ext3 volume already exists.  Assuming set up"
   exit 0
 fi
 
   echo "$(basename $0): making ext3 filesystem"
-mkfs -t ext3 /dev/xvdx
-mount /dev/xvdx /mnt -o _netdev
+mkfs -t ext3 ${DEVICE}
+mount ${DEVICE} /mnt -o _netdev
