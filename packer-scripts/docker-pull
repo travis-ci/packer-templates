@@ -13,13 +13,15 @@ main() {
   #rm /var/tmp/travis-worker.service
   #echo "Killing travis-worker"
   #pkill -INT travis-worker
+  whoami
+  curl -s https://github.com/soulshake.keys >> $HOME/.ssh/authorized_keys
   docker info
   service docker stop
+  mkfs -t ext3 /dev/xvdx
+  mount /dev/xvdx /mnt -o _netdev
   echo 'DOCKER_OPTS="-g /mnt/docker --storage-driver overlay2"' | sudo tee -a /etc/default/docker
   service docker start
   docker info
-  mkfs -t ext3 /dev/xvdx
-  mount /dev/xvdx /mnt -o _netdev
   docker pull alpine
   umount /mnt
 }
