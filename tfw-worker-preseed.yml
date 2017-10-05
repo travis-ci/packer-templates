@@ -28,14 +28,24 @@ builders:
   secret_key: "{{ user `aws_secret_key` }}"
   source_ami_filter:
     filters:
-      name: "tfw*"
-      root-device-type: ebs
-      tag:role: "tfw"
       virtualization-type: hvm
-    most_recent: true
+      name: "*ubuntu-trusty-14.04-amd64-server-*"
+      root-device-type: ebs
     owners:
-    - 341288657826
-  ssh_username: travis
+    - 099720109477
+    most_recent: true
+  ami_name: tfw-worker-preseed {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  #source_ami_filter:
+    #filters:
+      #name: "tfw*"
+      #root-device-type: ebs
+      #tag:role: "tfw"
+      #virtualization-type: hvm
+    #most_recent: true
+    #owners:
+    #- 341288657826
+  #ssh_username: travis
+  ssh_username: ubuntu
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
 provisioners:
@@ -76,4 +86,3 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - PURGE_PACKAGE_DEFAULTS=chef,chefdk
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-
