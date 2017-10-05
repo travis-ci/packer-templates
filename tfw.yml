@@ -48,7 +48,6 @@ builders:
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
-
 provisioners:
 - type: shell
   inline:

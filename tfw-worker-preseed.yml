@@ -13,7 +13,6 @@ variables:
 builders:
 - type: amazon-ebsvolume
   access_key: "{{ user `aws_access_key` }}"
-  availability_zone: us-east-1b
   ebs_volumes:
     - delete_on_termination: false
       device_name: /dev/xvdx
@@ -39,12 +38,11 @@ builders:
   ssh_username: travis
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
-
 provisioners:
 - type: shell
   inline:
-    sudo rm -rf /var/lib/apt/lists* ; 
-    sudo apt-get update -yqq ; 
+    sudo rm -rf /var/lib/apt/lists* ;
+    sudo apt-get update -yqq ;
     sudo apt-get install -f
 - type: shell
   scripts:
