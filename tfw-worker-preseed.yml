@@ -35,7 +35,7 @@ builders:
     most_recent: true
     owners:
     - 341288657826
-  ssh_username: FIXME
+  ssh_username: travis
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
 

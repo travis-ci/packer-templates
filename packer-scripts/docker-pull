@@ -3,5 +3,9 @@
 set -o errexit
 
 main() {
-    echo "FIXME: should we start travis-worker to pull docker images here?"
+  # Start travis-worker, but only long enough to pull images
+  start travis-worker
+  rm /var/tmp/travis-worker.conf
+  rm /var/tmp/travis-worker.service
+  pkill -INT travis-worker
 }
