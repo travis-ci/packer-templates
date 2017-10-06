@@ -6,6 +6,9 @@ main() {
   shopt -s nullglob
 
   export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
+  if [[ "$(uname -m)" =~ ppc64 ]]; then
+    export CHEF_PATH=$CHEF_PATH:/opt/chef/embedded
+  fi
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
   export RUBYOPT='-W0'
@@ -14,15 +17,16 @@ main() {
   : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
   : "${PACKER_BUILDER_TYPE:=docker}"
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
-    exit 0
-  fi
-
   if [[ "${PACKER_BUILDER_TYPE}" == 'docker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  __install_chefdk "${PACKER_CHEF_PREFIX}"
+  if [[ "$(uname -m)" =~ ppc64 ]]; then
+    __install_serverspec
+  else
+    __install_chefdk "${PACKER_CHEF_PREFIX}"
+  fi
+
   # shellcheck disable=SC2119
   __create_sudo_bash
   __chown_travis_dirs "${PACKER_CHEF_PREFIX}"
@@ -31,11 +35,16 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
+  if [[ "$(uname -m)" =~ ppc64 ]]; then
+    __remove_serverspec_chef
+  elif [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
     __remove_chefdk
   fi
 }
 
+__install_serverspec() {
+  gem install -v 2.39.1 serverspec
+}
 __install_chefdk() {
   if [[ -f /opt/chefdk/embedded/bin/rspec ]]; then
     return
@@ -92,6 +101,11 @@ __remove_chefdk() {
   __run_retry 2 30 apt-get update -y
 }
 
+__remove_serverspec_chef() {
+  __run_retry 2 30 gem uninstall serverspec --version 2.39.1
+  __run_retry 2 30 apt-get purge -y chef
+  __run_retry 2 30 apt-get update -y
+}
 __run_suite() {
   local suite="${1}"
   local chef_prefix="${2}"
