@@ -436,16 +436,9 @@ if os[:arch] !~ /ppc64/
   end
 end
 
-if os[:release] == '16.04'
-  describe command('psql --version') do
-    its(:stdout) { should match(/^psql.+10\.[0-9]/) }
-    its(:exit_status) { should eq 0 }
-  end
-else
-  describe command('psql --version') do
-    its(:stdout) { should match(/^psql.+9\.[2-6]+\.[0-9]+/) }
-    its(:exit_status) { should eq 0 }
-  end
+describe command('psql --version') do
+  its(:stdout) { should match(/^psql.+9\.[2-6]+\.[0-9]+/) }
+  its(:exit_status) { should eq 0 }
 end
 
 describe 'ragel installation' do

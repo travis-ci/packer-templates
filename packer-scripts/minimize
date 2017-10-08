@@ -9,7 +9,7 @@ main() {
     exit 0
   fi
 
-  if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" != docker && "${PACKER_BUILDER_TYPE}" != openstack ]]; then
     readonly SWAP_UUID
     SWAP_UUID="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
 

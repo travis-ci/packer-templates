@@ -7,7 +7,7 @@ main() {
 
   export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
   if [[ "$(uname -m)" =~ ppc64 ]]; then
-    export CHEF_PATH=$CHEF_PATH:/opt/chef/embedded
+    export CHEF_PATH=$CHEF_PATH:/opt/chef/embedded/bin
   fi
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
