@@ -155,7 +155,7 @@ cookbooks/travis_ci_connie
 ├── recipes
 │   └── default.rb
 └── spec
-	├── ...
+    ├── ...
 ```
 
 #### travis user double check
