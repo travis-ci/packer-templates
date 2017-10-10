@@ -45,7 +45,7 @@ builders:
   commit: true
 - type: openstack
   name: openstack
-  flavor: m1.medium
+  flavor: m1.large-travis-ci
   image_name: "{{ user `image_name` }}"
   ssh_username: ubuntu
   networks:
