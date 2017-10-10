@@ -38,8 +38,10 @@ describe command('shellcheck --version') do
   its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
 end
 
-describe command('shfmt -version') do
-  its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
+if os[:arch] !~ /ppc64/
+  describe command('shfmt -version') do
+    its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
+  end
 end
 
 def bzr_project
@@ -221,8 +223,14 @@ describe 'gimme installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
-    its(:stdout) { should match 'go version go1.6.3' }
+  if os[:arch] !~ /ppc64/
+    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
+      its(:stdout) { should match 'go version go1.6.3' }
+    end
+  elsif os[:arch] =~ /ppc64/
+    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.4)" 2>&1)) do
+      its(:stdout) { should match 'go version go1.6.4 linux/ppc64le' }
+    end
   end
 end
 
@@ -279,8 +287,10 @@ describe 'git installation' do
   end
 end
 
-describe command('heroku version') do
-  its(:stdout) { should match(%r{^heroku-cli\/\d}) }
+if os[:arch] !~ /ppc64/
+  describe command('heroku version') do
+    its(:stdout) { should match(%r{^heroku-cli\/\d}) }
+  end
 end
 
 describe 'imagemagick installation' do
@@ -419,9 +429,11 @@ describe 'openssl installation' do
   end
 end
 
-describe command('packer version') do
-  its(:stdout) { should match(/^Packer v\d/) }
-  its(:exit_status) { should eq 0 }
+if os[:arch] !~ /ppc64/
+  describe command('packer version') do
+    its(:stdout) { should match(/^Packer v\d/) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe command('psql --version') do

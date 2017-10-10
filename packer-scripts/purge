@@ -6,7 +6,11 @@ main() {
   set -o xtrace
   shopt -s nullglob
 
-  : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chefdk}"
+  if [[ "$(uname -m)" =~ ppc ]]; then
+    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chefdk}"
+  else
+    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chefdk}"
+  fi
   export DEBIAN_FRONTEND='noninteractive'
 
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
