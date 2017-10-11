@@ -11,7 +11,7 @@ main() {
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
-  if ! [[ "$(uname -m)" =~ ppc64le ]]; then
+  if ! [[ "$(uname -m)" =~ ppc64 ]]; then
     __enable_i386
   fi
   __install_packages
@@ -64,7 +64,7 @@ __upgrade_apt() {
   local dist_name
   dist_name="$(lsb_release -sc)"
 
-  if ! [[ "${arch_type}" =~ ppc64le ]]; then
+  if ! [[ "${arch_type}" =~ ppc64 ]]; then
     curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh |
       bash
     apt-get update -yqq

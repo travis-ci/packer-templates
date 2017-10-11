@@ -84,6 +84,7 @@ groff-base
 grub-common
 grub2-common
 gzip
+hashdeep
 haveged
 hdparm
 hostname
@@ -335,7 +336,6 @@ makedev
 man-db
 manpages
 mawk
-md5deep
 mime-support
 mingw-w64
 mlocate
