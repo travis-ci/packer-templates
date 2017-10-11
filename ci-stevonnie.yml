@@ -73,6 +73,7 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
+  - openstack
 - type: file
   source: packer-assets/ubuntu-xenial-ci-stevonnie-docker-packages.txt
   destination: /var/tmp/packages.txt
