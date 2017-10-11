@@ -8,11 +8,6 @@ describe 'postgresql installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe pgcommand('pg_config --bindir') do
-    its(:stdout) { should match(%r{/usr/lib/postgresql/9\.[2-6]/bin}) }
-    its(:exit_status) { should eq 0 }
-  end
-
   describe 'psql commands' do
     before do
       sh("#{pg_path} dropdb -U travis test_db || true")
