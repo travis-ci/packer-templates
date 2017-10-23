@@ -24,6 +24,12 @@ override['travis_build_environment']['php_aliases'] = {
   '7.0' => '7.0.7'
 }
 
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_build_environment']['php_versions'] = []
+  override['travis_build_environment']['php_default_version'] = []
+  override['travis_build_environment']['php_aliases'] = {}
+end
+
 override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
@@ -46,6 +52,11 @@ override['travis_java']['alternate_versions'] = %w[
   openjdk8
   oraclejdk9
 ]
+
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_java']['default_version'] = 'openjdk8'
+  override['travis_java']['alternate_versions'] = %w[openjdk7]
+end
 
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
