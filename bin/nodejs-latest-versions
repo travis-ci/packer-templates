@@ -11,14 +11,14 @@ main() {
   trap 'rm -f '"${index_json}" EXIT QUIT INT TERM
 
   echo -n 'lts: '
-  jq -r '.[]|select(.lts)|.version' <"${index_json}" \
-    | sort --reverse \
-    | head -1
+  jq -r '.[]|select(.lts)|.version' <"${index_json}" |
+    sort --reverse |
+    head -1
 
   echo -n 'current: '
-  jq -r '.[]|select(.lts==false)|.version' <"${index_json}" \
-    | sort --reverse \
-    | head -1
+  jq -r '.[]|select(.lts==false)|.version' <"${index_json}" |
+    sort --reverse |
+    head -1
 }
 
 main "$@"

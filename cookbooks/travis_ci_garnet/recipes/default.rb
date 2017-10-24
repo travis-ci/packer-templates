@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Cookbook Name:: travis_ci_garnet
 # Recipe:: default
 #
@@ -43,8 +45,6 @@ include_recipe 'travis_build_environment::gradle'
 include_recipe 'travis_packer_templates::systemd_purge'
 include_recipe 'travis_postgresql'
 include_recipe 'travis_build_environment::mysql'
-include_recipe 'travis_python::pyenv'
-include_recipe 'travis_python::system'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::neo4j'
 include_recipe 'travis_build_environment::riak'

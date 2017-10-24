@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'features/ruby_interpreter_spec'
 require 'features/rvm_spec'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def go_source
   Support.tmpdir.join('example.go')
 end

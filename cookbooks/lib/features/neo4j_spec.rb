@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def furbies
   @furbies ||= rand(200..299)
 end
@@ -7,20 +9,16 @@ describe 'neo4j installation' do
     its(:stdout) { should match 'bin/neo4j' }
   end
 
-  describe 'neo4j commands', sudo: true do
+  describe 'neo4j commands' do
     before :all do
-      sh('sudo service neo4j start')
-      tcpwait('127.0.0.1', 7474)
+      sh('service neo4j start')
+      tcpwait('127.0.0.1', 1337, 30)
       sh("neo4j-shell -v -c 'create (n:thing {furbies: #{furbies}});'")
     end
 
-    describe service('neo4j') do
-      it { should be_running }
-    end
-
-    describe command("neo4j-shell -v -c 'cd 0 && ls'"), precise: false do
+    describe command("neo4j-shell -v -c 'cd 0 && ls'") do
       its(:stdout) { should include('furbies =', furbies.to_s) }
-      its(:stderr) { should be_empty }
+      its(:stderr) { should match 'Picked up _JAVA_OPTIONS: -Xmx2048m -Xms512m\n' }
     end
   end
 end

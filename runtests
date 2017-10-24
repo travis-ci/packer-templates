@@ -4,7 +4,7 @@ set -o pipefail
 
 unset GEM_PATH
 
-if [[ $# -gt 1 && $1 = --env ]]; then
+if [[ $# -gt 1 && $1 == --env ]]; then
   echo "Running isolated with env ${2}"
   exec env -i HOME="${HOME}" PATH="${PATH}" \
     BUNDLE_GEMFILE="${BUNDLE_GEMFILE}" \
@@ -25,9 +25,9 @@ for f in $(git ls-files '*.yml'); do
   ./bin/yml2json <"${f}" | ./bin/json2yml &>/dev/null
   if grep -q ^builders: "$f"; then
     ruby -ryaml -rerb \
-      -e "YAML.load(ERB.new(File.read('${f}')).result).fetch('description')"
+      -e "def git_desc;'x';end;YAML.load(ERB.new(File.read('${f}')).result).fetch('description')"
     echo -en "(packer validate ...) "
-    packer validate <(bin/yml2json <"$f")
+    packer validate -except openstack <(bin/yml2json <"$f")
     echo "\`--> ✓"
   else
     echo "✓"
@@ -39,11 +39,6 @@ git grep -l '^#!/usr/bin/env bash' | xargs shellcheck
 
 echo 'Running shfmt'
 git grep -l '^#!/usr/bin/env bash' | xargs shfmt -i 2 -w
-
-if [[ "$(lsb_release -sc 2>/dev/null)" != precise ]]; then
-  # this code should never *need* to run on precise
-  rspec
-fi
 
 rubocop
 ./run-foodcritic cookbooks

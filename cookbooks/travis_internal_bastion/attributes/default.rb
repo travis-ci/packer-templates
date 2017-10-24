@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include_attribute 'travis_internal_base'
 
 override['openssh']['server']['force_command'] = '/usr/sbin/login_duo'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'couchdb installation' do
   describe package('couchdb') do
     it { should be_installed }
@@ -9,8 +11,15 @@ describe 'couchdb installation' do
 
   describe 'couchdb commands', sudo: true do
     before :all do
-      sh('sudo service couchdb start')
-      tcpwait('127.0.0.1', 5984)
+      tries = 5
+      begin
+        sh('sudo service couchdb start')
+        tcpwait('127.0.0.1', 5984, 30)
+      rescue => e
+        tries -= 1
+        retry unless tries.zero?
+        raise e
+      end
       sh('curl -X PUT http://127.0.0.1:5984/bicycle')
       sh('curl -X PUT http://127.0.0.1:5984/bicycle/bell ' \
          '-H \'Content-Type: application/json\' -d \'{"Name":"Testname"}\'')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_ci_connie'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+travis-ci-connie-cookbook@travis-ci.org'
@@ -14,5 +16,4 @@ depends 'travis_java'
 depends 'travis_packer_templates'
 depends 'travis_perlbrew'
 depends 'travis_postgresql'
-depends 'travis_python'
 depends 'travis_system_info'

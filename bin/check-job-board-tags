@@ -15,46 +15,23 @@ main() {
   set -o pipefail
 
   case "$1" in
-    -h | --help | help)
-      __usage
-      exit 0
-      ;;
-    -l | --list-only)
-      CHECK_JOB_BOARD_TAGS_LIST_ONLY=1
-      ;;
+  -h | --help | help)
+    __usage
+    exit 0
+    ;;
+  -l | --list-only)
+    CHECK_JOB_BOARD_TAGS_LIST_ONLY=1
+    ;;
   esac
 
   COMBOS=(
-    languages:incl:sugilite:amethyst
-    features:incl:sugilite:amethyst
-    languages:incl:sugilite:garnet
-    features:incl:sugilite:garnet
-    languages:excl:sugilite:connie
     languages:excl:amethyst:connie
     languages:excl:garnet:connie
     languages:excl:garnet:amethyst
     features:incl:garnet:amethyst
-    features:incl:sugilite:ruby
   )
 
   cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
-
-  for lang in android erlang go haskell jvm nodejs perl php python ruby; do
-    if [[ $lang != ruby ]]; then
-      # Ruby is the "default" image on precise, but some of the languages covered
-      # by the ruby precise image are covered by the connie image on trusty, so we
-      # can't enforce the inclusive relationship with sugilite.
-      COMBOS+=(languages:incl:sugilite:$lang)
-      COMBOS+=(features:incl:sugilite:$lang)
-      COMBOS+=(features:incl:ruby:$lang)
-    fi
-    for excl in android erlang go haskell jvm nodejs perl php python ruby; do
-      if [[ "${lang}" = "${excl}" ]]; then
-        continue
-      fi
-      COMBOS+=(languages:excl:$lang:$excl)
-    done
-  done
 
   if [[ "${CHECK_JOB_BOARD_TAGS_LIST_ONLY}" ]]; then
     for cmd in "${COMBOS[@]}"; do
@@ -74,8 +51,8 @@ ${rec}
 "
   done
 
-  echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i \
-    | grep --color -E '^✘:.*|$'
+  echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i |
+    grep --color -E '^✘:.*|$'
 }
 
 __usage() {

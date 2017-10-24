@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 def wipe_storage
-  %w(
+  %w[
     /var/lib/cassandra/data
     /var/lib/cassandra/commitlog
     /var/lib/cassandra/saved_caches
-  ).each { |dir| rm_rf(dir) }
+  ].each { |dir| rm_rf(dir) }
 end
 
 def schema_cql
@@ -53,7 +55,7 @@ describe 'cassandra installation' do
         > SELECT * FROM users WHERE first = 'Slappy';
       EOF
 
-      tries = 3
+      tries = 8
 
       begin
         sh('sudo service cassandra stop')

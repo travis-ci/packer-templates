@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'image_metadata'
 require 'env'
 require 'support'

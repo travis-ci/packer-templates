@@ -9,7 +9,6 @@ rm -rf \
   /etc/profile.d/jdk.csh \
   /etc/profile.d/jdk.sh \
   /etc/ssh/ssh_host_* \
-  /etc/systemd \
   /lib/recovery-mode \
   /opt/chef* \
   /tmp/* \
@@ -21,6 +20,10 @@ rm -rf \
   /var/tmp/* \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.?
+
+if ! [[ "$(lsb_release -sc)" =~ xenial ]]; then
+  rm -rf /etc/systemd
+fi
 
 if [[ $CLEANUP_APT_LISTS ]]; then
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"

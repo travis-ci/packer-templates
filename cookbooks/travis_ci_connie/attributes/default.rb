@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 override['travis_java']['default_version'] = ''
 override['travis_java']['alternate_versions'] = []
 
@@ -8,17 +10,17 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-gimme_versions = %w(
+gimme_versions = %w[
   1.7.4
-)
+]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
-override['travis_python']['pyenv']['pythons'] = []
-override['travis_python']['pyenv']['aliases'] = {}
-override['travis_python']['pip']['packages'] = {}
-override['travis_python']['system']['pythons'] = []
+override['travis_build_environment']['pythons'] = []
+override['travis_build_environment']['python_aliases'] = {}
+override['travis_build_environment']['pip']['packages'] = {}
+override['travis_build_environment']['system_python']['pythons'] = []
 
 override['travis_build_environment']['nodejs_default'] = ''
 override['travis_build_environment']['nodejs_versions'] = []
@@ -28,10 +30,10 @@ override['travis_build_environment']['nodejs_default_modules'] = []
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/connie-system-info-commands.yml'
 
-rubies = %w(
-  2.3.3
-  2.4.0
-)
+rubies = %w[
+  2.2.7
+  2.4.1
+]
 
 override['travis_build_environment']['default_ruby'] = rubies.max
 override['travis_build_environment']['rubies'] = rubies
@@ -44,9 +46,11 @@ override['travis_build_environment']['hhvm_enabled'] = false
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
+override['travis_build_environment']['mercurial_install_type'] = 'pip'
+override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_packer_templates']['job_board']['stack'] = 'connie'
-override['travis_packer_templates']['job_board']['features'] = %w(
+override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   disabled-ipv6
   docker
@@ -56,12 +60,11 @@ override['travis_packer_templates']['job_board']['features'] = %w(
   perlbrew
   python_interpreter
   ruby_interpreter
-)
-override['travis_packer_templates']['job_board']['languages'] = %w(
+]
+override['travis_packer_templates']['job_board']['languages'] = %w[
   __connie__
   bash
-  generic
   minimal
   sh
   shell
-)
+]

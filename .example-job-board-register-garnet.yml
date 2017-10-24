@@ -1,0 +1,47 @@
+---
+languages:
+- __garnet__
+- c
+- c++
+- clojure
+- cplusplus
+- cpp
+- default
+- go
+- groovy
+- java
+- node_js
+# FIXME: why no work?
+#- php
+- pure_java
+- python
+- ruby
+- scala
+features:
+- basic
+- cassandra
+- chromium
+- couchdb
+- disabled-ipv6
+- docker
+- docker-compose
+- elasticsearch
+- firefox
+- go-toolchain
+- google-chrome
+- jdk
+- memcached
+- mongodb
+- mysql
+- nodejs_interpreter
+- perl_interpreter
+- perlbrew
+- phantomjs
+- postgresql
+- python_interpreter
+- rabbitmq
+- redis
+- riak
+- ruby_interpreter
+- sqlite
+- xserver

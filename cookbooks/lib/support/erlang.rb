@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   module Erlang
     def erlcommand(cmd)
@@ -17,15 +19,11 @@ module Support
     end
 
     def otp_releases
-      otp_releases_trusty || otp_releases_precise || %w(18.2 17.5 R16B03)
+      otp_releases_trusty || %w[18.2 17.5 R16B03]
     end
 
     def otp_releases_trusty
       ::Support.attributes.fetch('travis_build_environment', {})['otp_releases']
-    end
-
-    def otp_releases_precise
-      ::Support.attributes.fetch('kerl', {})['releases']
     end
   end
 end

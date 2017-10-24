@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'travis_ci_amethyst'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+packer-templates@travis-ci.org'
@@ -17,5 +19,4 @@ depends 'travis_packer_templates'
 depends 'travis_perlbrew'
 depends 'travis_phantomjs'
 depends 'travis_postgresql'
-depends 'travis_python'
 depends 'travis_system_info'

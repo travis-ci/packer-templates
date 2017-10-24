@@ -269,6 +269,10 @@ libpython3-stdlib:amd64
 libpython3.4-minimal:amd64
 libpython3.4-stdlib:amd64
 libqt4-dev
+libqt4-opengl
+libqt4-opengl-dev
+libqtwebkit-dev
+libqtwebkit4
 libreadline-dev
 libreadline6
 libreadline6:amd64
@@ -342,7 +346,6 @@ man-db
 manpages
 mawk
 md5deep
-mercurial
 mime-support
 mingw32
 mlocate
@@ -477,6 +480,7 @@ update-notifier-common
 upstart
 usbutils
 util-linux
+uuid-dev
 uuid-runtime
 vim
 vim-common

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'maven installation' do
   describe command('mvn -version') do
     its(:exit_status) { should eq 0 }

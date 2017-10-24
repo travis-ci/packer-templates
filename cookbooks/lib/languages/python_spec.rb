@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 include Support::Python
 
 require 'features/python_interpreter_spec'
+require 'features/pyenv_spec'
 
 describe 'python environment' do
   describe pycommand('easy_install --version') do
@@ -37,9 +40,9 @@ describe 'python environment' do
 
   {
     'python2.7' => '2.7.13',
-    'python3.5' => '3.5.2'
+    'python3.6' => '3.6.2'
   }.each do |python_alias, python_version|
-    describe pycommand('python -m this', version: python_alias) do
+    describe pycommand('python -m this', version: python_alias), dev: true do
       its(:stderr) { should be_empty }
       its(:stdout) { should include('Now is better than never') }
       its(:exit_status) { should eq(0) }

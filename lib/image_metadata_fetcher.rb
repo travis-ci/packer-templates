@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tmpdir'
 require_relative 'env'
 require_relative 'image_metadata'
@@ -14,7 +16,7 @@ class ImageMetadataFetcher
     candidate_urls.each do |url|
       if system(
         curl_exe, '-fsSL', '-o', tarball_path, url,
-        %i(out err) => '/dev/null'
+        %i[out err] => '/dev/null'
       )
         return ImageMetadata.new(
           tarball: tarball_path,

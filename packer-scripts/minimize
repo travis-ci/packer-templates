@@ -4,12 +4,12 @@ set -o errexit
 main() {
   set -o xtrace
 
-  if [[ "${PACKER_BUILDER_TYPE}" = googlecompute || "${PACKER_BUILDER_TYPE}" = amazon-ebs ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" == googlecompute || "${PACKER_BUILDER_TYPE}" == amazon-ebs ]]; then
     echo "Skipping minimization on ${PACKER_BUILDER_TYPE}"
     exit 0
   fi
 
-  if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
+  if [[ "${PACKER_BUILDER_TYPE}" != docker && "${PACKER_BUILDER_TYPE}" != openstack ]]; then
     readonly SWAP_UUID
     SWAP_UUID="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
 
@@ -17,8 +17,8 @@ main() {
       readonly SWAP_PART
       SWAP_PART="$(readlink -f "/dev/disk/by-uuid/${SWAP_UUID}")"
       /sbin/swapoff "${SWAP_PART}"
-      dd if=/dev/zero of="${SWAP_PART}" bs=1M \
-        || echo "dd exit $? suppressed"
+      dd if=/dev/zero of="${SWAP_PART}" bs=1M ||
+        echo "dd exit $? suppressed"
       /sbin/mkswap -U "${SWAP_UUID}" "${SWAP_PART}"
     fi
   fi
@@ -38,10 +38,10 @@ main() {
   rm -f /EMPTY
   sync
 
-  vmware-toolbox-cmd disk shrink / \
-    || echo "vmware-toolbox-cmd exit $? suppressed"
-  vmware-toolbox-cmd disk shrink /boot \
-    || echo "vmware-toolbox-cmd exit $? suppressed"
+  vmware-toolbox-cmd disk shrink / ||
+    echo "vmware-toolbox-cmd exit $? suppressed"
+  vmware-toolbox-cmd disk shrink /boot ||
+    echo "vmware-toolbox-cmd exit $? suppressed"
 }
 
 main "${@}"

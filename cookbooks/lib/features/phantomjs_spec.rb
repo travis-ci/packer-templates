@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def test_js
   Support.tmpdir.join('test.js')
 end

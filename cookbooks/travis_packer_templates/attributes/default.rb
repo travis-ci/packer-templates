@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 default['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] = ''
 default['travis_packer_templates']['env']['PACKER_BUILD_NAME'] = ''
 default['travis_packer_templates']['env']['PACKER_TEMPLATES_BRANCH'] = ''

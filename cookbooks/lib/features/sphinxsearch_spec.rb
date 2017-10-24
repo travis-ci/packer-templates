@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'sphinx installation' do
   describe command('searchd') do
     its(:stdout) { should match 'Sphinx' }

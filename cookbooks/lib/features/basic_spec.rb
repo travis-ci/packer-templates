@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'apt installation' do
   describe command('apt-get -v') do
     its(:exit_status) { should eq 0 }
@@ -28,16 +30,18 @@ describe 'apt installation' do
   end
 end
 
-describe command('bats --version'), precise: false do
+describe command('bats --version') do
   its(:stdout) { should match(/^Bats \d/) }
 end
 
-describe command('shellcheck --version'), precise: false do
+describe command('shellcheck --version') do
   its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
 end
 
-describe command('shfmt -version'), precise: false do
-  its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
+if os[:arch] !~ /ppc64/
+  describe command('shfmt -version') do
+    its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
+  end
 end
 
 def bzr_project
@@ -95,7 +99,9 @@ describe 'ccache installation' do
     end
 
     describe command('ccache -M 0.5') do
-      its(:stdout) { should match 'Set cache size limit to 512.0 Mbytes' }
+      its(:stdout) do
+        should match(/Set cache size limit to (512\.0 Mbytes|500\.0 MB)/)
+      end
     end
   end
 end
@@ -135,11 +141,11 @@ describe file('/etc/cloud/cloud.cfg') do
   its(:content) { should match(/travis_build_environment/i) }
 end
 
-%w(
+%w[
   /etc/cloud/templates/hosts.debian.tmpl
   /etc/cloud/templates/hosts.tmpl
   /etc/cloud/templates/hosts.ubuntu.tmpl
-).each do |filename|
+].each do |filename|
   describe file(filename) do
     it { should be_exist }
     its(:content) { should match(/managed by chef/i) }
@@ -147,11 +153,11 @@ end
   end
 end
 
-%w(
+%w[
   /etc/cloud/templates/sources.list.debian.tmpl
   /etc/cloud/templates/sources.list.tmpl
   /etc/cloud/templates/sources.list.ubuntu.tmpl
-).each do |filename|
+].each do |filename|
   describe file(filename) do
     its(:content) { should match(/managed by chef/i) }
     its(:content) { should match(/travis_build_environment/i) }
@@ -217,8 +223,14 @@ describe 'gimme installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
-    its(:stdout) { should match 'go version go1.6.3' }
+  if os[:arch] !~ /ppc64/
+    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
+      its(:stdout) { should match 'go version go1.6.3' }
+    end
+  elsif os[:arch] =~ /ppc64/
+    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.4)" 2>&1)) do
+      its(:stdout) { should match 'go version go1.6.4 linux/ppc64le' }
+    end
   end
 end
 
@@ -236,11 +248,11 @@ describe 'git installation' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command('git config user.name'), precise: false do
+  describe command('git config user.name') do
     its(:stdout) { should match(/travis/i) }
   end
 
-  describe command('git config user.email'), precise: false do
+  describe command('git config user.email') do
     its(:stdout) { should match(/travis@example\.org/) }
   end
 
@@ -252,7 +264,7 @@ describe 'git installation' do
     end
 
     describe command(
-      %W(
+      %W[
         cd #{git_project};
         git status;
         git add test-file.txt;
@@ -260,7 +272,7 @@ describe 'git installation' do
         git add test-file.txt;
         git rm -f test-file.txt;
         git status
-      ).join(' ')
+      ].join(' ')
     ) do
       its(:stdout) do
         should include(
@@ -275,9 +287,10 @@ describe 'git installation' do
   end
 end
 
-describe command('heroku version'), precise: false do
-  its(:stdout) { should match(%r{^heroku-toolbelt\/\d}) }
-  its(:stdout) { should match(%r{^heroku-cli\/\d}) }
+if os[:arch] !~ /ppc64/
+  describe command('heroku version') do
+    its(:stdout) { should match(%r{^heroku-cli\/\d}) }
+  end
 end
 
 describe 'imagemagick installation' do
@@ -374,12 +387,12 @@ describe 'mercurial installation' do
     end
 
     describe command(
-      %W(
+      %W[
         cd #{hg_project};
         hg status;
         hg add .;
         hg status
-      ).join(' ')
+      ].join(' ')
     ) do
       its(:stdout) { should match '\? test-file.txt' }
       its(:stdout) { should match 'A test-file.txt' }
@@ -416,9 +429,11 @@ describe 'openssl installation' do
   end
 end
 
-describe command('packer version'), precise: false do
-  its(:stdout) { should match(/^Packer v\d/) }
-  its(:exit_status) { should eq 0 }
+if os[:arch] !~ /ppc64/
+  describe command('packer version') do
+    its(:stdout) { should match(/^Packer v\d/) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe command('psql --version') do
@@ -487,10 +502,10 @@ describe 'rvm installation' do
     end
   end
 
-  %w(
+  %w[
     /home/travis/.rvmrc
     /home/travis/.rvm/user/db
-  ).each do |filename|
+  ].each do |filename|
     describe file(filename) do
       it { should exist }
       it { should be_writable }
@@ -504,10 +519,10 @@ describe command('ssh -V') do
 end
 
 describe 'ssh access' do
-  %w(known_hosts authorized_keys).each do |basename|
+  %w[known_hosts authorized_keys].each do |basename|
     describe file(::File.expand_path("~/.ssh/#{basename}")) do
       it { should exist }
-      its(:size) { should be > 0 }
+      its(:size) { should be_positive }
       it { should be_readable }
       it { should be_writable }
     end
@@ -561,7 +576,7 @@ describe 'sudoers setup' do
     it { should be_mode 440 }
     it { should be_owned_by 'root' }
     its(:content) { should match(/^travis ALL=\(ALL\) NOPASSWD:ALL$/) }
-    %w(authenticate env_reset mail_badpass).each do |disabled|
+    %w[authenticate env_reset mail_badpass].each do |disabled|
       its(:content) { should match(/^Defaults !#{disabled}$/) }
     end
   end
@@ -579,7 +594,7 @@ end
 
 describe file('/usr/share/travis/system_info') do
   it { should exist }
-  its(:size) { should be > 0 }
+  its(:size) { should be_positive }
 end
 
 describe file('/var/ramfs'), docker: false do
@@ -594,9 +609,13 @@ end
 
 describe user('travis') do
   it { should exist }
-  it { should have_uid 1000 }
   it { should have_home_directory '/home/travis' }
   it { should have_login_shell '/bin/bash' }
+end
+
+describe file('/home/travis/bin') do
+  it { should be_directory }
+  it { should be_writable }
 end
 
 def test_txt
@@ -750,7 +769,7 @@ context 'with something listening on 19494' do
   around :each do |example|
     pid = spawn(
       'python', '-m', 'SimpleHTTPServer', '19494',
-      [:out, :err] => '/dev/null'
+      %i[out err] => '/dev/null'
     )
     tcpwait('127.0.0.1', 19_494)
     example.run
@@ -769,12 +788,7 @@ end
 
 describe file('/opt') do
   it { should be_directory }
-  it 'is writable' do
-    File.open('/opt/.travis-write-test', 'w') do |f|
-      f.puts Time.now.utc.to_s
-    end
-    expect(File.read('/opt/.travis-write-test')).to_not be_empty
-  end
+  it { should be_writable }
 end
 
 describe file('/etc/hosts'), docker: false do
@@ -784,7 +798,7 @@ describe file('/etc/hosts'), docker: false do
     end
   end
 
-  %w(127.0.0.1 127.0.1.1).each do |ipv4_addr|
+  %w[127.0.0.1 127.0.1.1].each do |ipv4_addr|
     it "has one #{ipv4_addr} entry" do
       expect(lines.grep(/^\s*#{ipv4_addr}\b/).length).to eq(1)
     end

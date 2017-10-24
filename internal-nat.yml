@@ -4,7 +4,6 @@ variables:
   aws_access_key: "{{ env `AWS_ACCESS_KEY` }}"
   aws_secret_key: "{{ env `AWS_SECRET_KEY` }}"
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
-  gce_image_name: travis-ci-connie-trusty-{{ timestamp }}
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
@@ -14,7 +13,8 @@ builders:
   project_id: "{{ user `gce_project_id` }}"
   source_image: ubuntu-1404-trusty-v20170330
   zone: us-central1-b
-  image_name: nat-{{ timestamp }}
+  ssh_username: ubuntu
+  image_name: nat-{{ timestamp }}-<%= git_desc %>
   machine_type: g1-small
   tags:
   - internal

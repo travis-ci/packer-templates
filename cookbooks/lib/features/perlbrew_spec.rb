@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'perlbrew installation' do
   describe command('perlbrew --version') do
     its(:stdout) do
