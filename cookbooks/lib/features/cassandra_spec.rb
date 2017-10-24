@@ -55,7 +55,7 @@ describe 'cassandra installation' do
         > SELECT * FROM users WHERE first = 'Slappy';
       EOF
 
-      tries = 3
+      tries = 8
 
       begin
         sh('sudo service cassandra stop')
