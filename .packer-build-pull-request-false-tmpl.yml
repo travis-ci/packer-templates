@@ -1,5 +1,6 @@
 ---
 message: "%{source_commit_message}\n:tada: :bomb: commit-range=%{commit_range_string}"
+branch: "%{template_name}"
 config:
   language: minimal
   dist: trusty
@@ -14,11 +15,11 @@ config:
       sudo service docker restart ;
     fi
   install:
-  - git clone --branch="bv-pin-chef-version" "https://github.com/travis-ci/packer-templates.git"
+  - git clone --branch="%{branch}" "https://github.com/travis-ci/packer-templates.git"
   - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
   - ./packer-templates/bin/packer-build-install
   script:
-  - export PACKER_TEMPLATES_BRANCH="bv-pin-chef-version}"
+  - export PACKER_TEMPLATES_BRANCH="%{branch}"
   - "./packer-templates/bin/packer-build-script %{template_name}"
   addons:
     artifacts:
