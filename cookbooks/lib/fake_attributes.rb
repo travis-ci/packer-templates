@@ -16,6 +16,10 @@ class FakeAttributes < ForeverHash
     self
   end
 
+  def node
+    self
+  end
+
   def override
     self
   end
