@@ -47,6 +47,7 @@ __install_packages() {
     ca-certificates \
     cron \
     curl \
+    gawk \
     git \
     sudo \
     wget \
