@@ -53,8 +53,6 @@ builders:
   - <%= network %>
   <% end %>
   source_image_name: "{{ user `openstack_source_image_name` }}"
-  ssh_keypair_name: osu_openstack_key
-  ssh_private_key_file: /root/osu_openstack_key
 provisioners:
 - type: shell
   inline: sleep 10

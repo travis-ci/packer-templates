@@ -29,7 +29,11 @@ include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
-  include_recipe 'travis_docker::binary'
+  if node['kernel']['machine'] == 'ppc64le'
+    include_recipe 'travis_docker::package'
+  else
+    include_recipe 'travis_docker::binary'
+  end
 else
   include_recipe 'travis_docker'
   include_recipe 'travis_build_environment::ramfs'
