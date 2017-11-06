@@ -61,6 +61,11 @@ override['java']['oracle']['jce']['enabled'] = true
 override['travis_java']['default_version'] = 'oraclejdk8'
 override['travis_java']['alternate_versions'] = []
 
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_java']['default_version'] = 'openjdk8'
+  override['travis_java']['alternate_versions'] = %w[openjdk7]
+end
+
 node_versions = %w[
   6.11.3
 ]
@@ -86,6 +91,13 @@ elixirs = %w[
   1.3.2
   1.2.6
 ]
+
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_build_environment']['php_versions'] = []
+  override['travis_build_environment']['php_default_version'] = []
+  override['travis_build_environment']['php_aliases'] = {}
+end
+
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 

@@ -27,10 +27,15 @@
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
-include_recipe 'travis_build_environment::haskell'
-
+if node['kernel']['machine'] != 'ppc64le'
+  include_recipe 'travis_build_environment::haskell'
+end
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
-  include_recipe 'travis_docker::binary'
+  if node['kernel']['machine'] == 'ppc64le'
+    include_recipe 'travis_docker::package'
+  else
+    include_recipe 'travis_docker::binary'
+  end
 else
   include_recipe 'travis_docker'
   include_recipe 'travis_build_environment::ramfs'
@@ -43,7 +48,9 @@ include_recipe 'travis_postgresql'
 include_recipe 'travis_build_environment::mysql'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::neo4j'
-include_recipe 'travis_build_environment::riak'
+if node['kernel']['machine'] != 'ppc64le'
+  include_recipe 'travis_build_environment::riak'
+end
 include_recipe 'travis_build_environment::redis'
 include_recipe 'travis_build_environment::mongodb'
 include_recipe 'memcached'
@@ -52,8 +59,14 @@ include_recipe 'travis_build_environment::rabbitmq'
 include_recipe 'travis_build_environment::couchdb'
 include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
-include_recipe 'travis_build_environment::google_chrome'
+if node['kernel']['machine'] != 'ppc64le'
+  include_recipe 'travis_build_environment::google_chrome'
+  include_recipe 'travis_phantomjs'
+end
 include_recipe 'travis_build_environment::firefox'
-include_recipe 'travis_phantomjs'
 include_recipe 'travis_phantomjs::2'
+
+# HACK: sardonyx-specific shims!
+execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
+
 include_recipe 'travis_system_info'
