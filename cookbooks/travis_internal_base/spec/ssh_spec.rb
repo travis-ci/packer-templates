@@ -8,24 +8,28 @@ end
 
 EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   addressfamily any
+  allowagentforwarding yes
+  allowstreamlocalforwarding yes
   allowtcpforwarding no
-  authenticationmethods
   authorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2
   challengeresponseauthentication no
   ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
   clientalivecountmax 3
   clientaliveinterval 0
   compression delayed
+  fingerprinthash SHA256
   gatewayports no
   gssapiauthentication no
   gssapicleanupcredentials yes
   gssapikeyexchange no
   gssapistorecredentialsonrekey no
   gssapistrictacceptorcheck yes
+  hostbasedacceptedkeytypes ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,rsa-sha2-512,rsa-sha2-256,ssh-rsa
   hostbasedauthentication no
   hostbasedusesnamefrompacketonly no
   hostkey /etc/ssh/ssh_host_ed25519_key
   hostkey /etc/ssh/ssh_host_rsa_key
+  hostkeyalgorithms ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,rsa-sha2-512,rsa-sha2-256,ssh-rsa
   ignorerhosts yes
   ignoreuserknownhosts no
   ipqos lowdelay throughput
@@ -38,6 +42,7 @@ EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   listenaddress 0.0.0.0:22
   listenaddress [::]:22
   logingracetime 120
+  loglevel INFO
   macs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
   maxauthtries 6
   maxsessions 10
@@ -49,24 +54,27 @@ EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   permittty yes
   permittunnel no
   permituserenvironment no
+  permituserrc yes
   pidfile /var/run/sshd.pid
   port 22
   printlastlog yes
   printmotd yes
   protocol 2
+  pubkeyacceptedkeytypes ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,rsa-sha2-512,rsa-sha2-256,ssh-rsa
   pubkeyauthentication yes
   rekeylimit 0 0
   rhostsrsaauthentication no
   rsaauthentication yes
   serverkeybits 1024
+  streamlocalbindmask 0177
   strictmodes yes
   syslogfacility AUTH
   tcpkeepalive yes
-  usedns yes
+  usedns no
   uselogin no
-  usepam 1
-  useprivilegeseparation yes
-  versionaddendum
+  usepam yes
+  useprivilegeseparation sandbox
+  versionaddendum none
   x11displayoffset 10
   x11forwarding no
   x11uselocalhost yes
