@@ -9,7 +9,7 @@ main() {
   : "${APT_GET:=apt-get}"
   : "${CURL:=curl}"
   : "${DPKG:=dpkg}"
-  : "${KERNEL_VERSION:=4.13.11}"
+  : "${KERNEL_VERSION:=4.9.60}"
   : "${TMPDIR:=/var/tmp}"
 
   local kv="${KERNEL_VERSION}"
