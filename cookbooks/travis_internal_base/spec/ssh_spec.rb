@@ -71,7 +71,6 @@ EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   usedns no
   uselogin no
   usepam yes
-  useprivilegeseparation sandbox
   x11displayoffset 10
   x11forwarding no
   x11uselocalhost yes
