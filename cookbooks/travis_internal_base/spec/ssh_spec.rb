@@ -8,7 +8,6 @@ end
 
 EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   addressfamily any
-  allowagentforwarding yes
   allowstreamlocalforwarding yes
   allowtcpforwarding no
   authorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2
