@@ -8,7 +8,6 @@ end
 
 EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   addressfamily any
-  allowstreamlocalforwarding yes
   allowtcpforwarding no
   authorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2
   challengeresponseauthentication no
@@ -73,7 +72,6 @@ EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   uselogin no
   usepam yes
   useprivilegeseparation sandbox
-  versionaddendum none
   x11displayoffset 10
   x11forwarding no
   x11uselocalhost yes
