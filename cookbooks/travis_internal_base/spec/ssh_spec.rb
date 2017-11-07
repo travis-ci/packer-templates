@@ -15,14 +15,12 @@ EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   clientalivecountmax 3
   clientaliveinterval 0
   compression delayed
-  fingerprinthash SHA256
   gatewayports no
   gssapiauthentication no
   gssapicleanupcredentials yes
   gssapikeyexchange no
   gssapistorecredentialsonrekey no
   gssapistrictacceptorcheck yes
-  hostbasedacceptedkeytypes ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,rsa-sha2-512,rsa-sha2-256,ssh-rsa
   hostbasedauthentication no
   hostbasedusesnamefrompacketonly no
   hostkey /etc/ssh/ssh_host_ed25519_key
@@ -52,23 +50,19 @@ EXPECTED_SSHD_CONFIG = <<~EOF.split("\n")
   permittty yes
   permittunnel no
   permituserenvironment no
-  permituserrc yes
   pidfile /var/run/sshd.pid
   port 22
   printlastlog yes
   printmotd yes
   protocol 2
-  pubkeyacceptedkeytypes ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,rsa-sha2-512,rsa-sha2-256,ssh-rsa
   pubkeyauthentication yes
   rekeylimit 0 0
   rhostsrsaauthentication no
   rsaauthentication yes
   serverkeybits 1024
-  streamlocalbindmask 0177
   strictmodes yes
   syslogfacility AUTH
   tcpkeepalive yes
-  usedns no
   uselogin no
   x11displayoffset 10
   x11forwarding no
