@@ -28,8 +28,12 @@ builders:
   tags:
   - tfw
   - travis-ci-packer-templates
+  <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
   - "cookbooks-branch-{{ user `travis_cookbooks_branch` }}"
+  <% end %>
+  <% if !ENV['TRAVIS_BRANCH'].to_s.empty? %>
   - "branch-{{ user `packer_templates_branch` }}"
+  <% end %>
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
@@ -48,8 +52,12 @@ builders:
   ami_virtualization_type: hvm
   tags:
     role: tfw
+    <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
     cookbooks_branch: "{{ user `travis_cookbooks_branch` }}"
+    <% end %>
+    <% if !ENV['TRAVIS_BRANCH'].to_s.empty? %>
     branch: "{{ user `packer_templates_branch` }}"
+    <% end %>
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
