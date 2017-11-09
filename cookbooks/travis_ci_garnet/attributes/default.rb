@@ -51,8 +51,8 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 node_versions = %w[
-  6.11.3
-  8.4.0
+  6.12.0
+  8.9.1
 ]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
