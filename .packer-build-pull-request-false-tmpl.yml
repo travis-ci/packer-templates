@@ -7,6 +7,7 @@ config:
   group: edge
   sudo: true
   before_install:
+  - TRAVIS_COOKBOOKS_BRANCH="bv-build-image-fixes"
   - if [[ "${BUILDER}" = "docker" ]] ; then
       sudo apt-get update -yqq ;
       sudo apt-get purge -o Dpkg::Options::="--force-confnew" -yqq docker-ce ;
