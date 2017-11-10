@@ -4,19 +4,19 @@ set -o errexit
 set -o xtrace
 
 main() {
-  : ${DEVICE:=<%= @device %>}
-  : ${METADATA_SIZE:=<%= @metadata_size %>}
+  : "${DEVICE:=<%= @device %>}"
+  : "${METADATA_SIZE:=<%= @metadata_size %>}"
 
-  if [[ -e /dev/direct-lvm/metadata ]] ; then
-    echo "$(basename $0): Metadata volume already exists.  Assuming set up"
+  if [[ -e /dev/direct-lvm/metadata ]]; then
+    echo "$(basename "${0}"): Metadata volume already exists.  Assuming set up"
     exit 0
   fi
 
-  pvcreate -y "$DEVICE"
+  pvcreate -y "${DEVICE}"
 
-  vgcreate direct-lvm $DEVICE
+  vgcreate direct-lvm "${DEVICE}"
 
-  lvcreate -n metadata direct-lvm --size "$METADATA_SIZE"
+  lvcreate -n metadata direct-lvm --size "${METADATA_SIZE}"
   dd if=/dev/zero of=/dev/direct-lvm/metadata bs=1M count=10
 
   lvcreate -n data direct-lvm -l '100%FREE'
