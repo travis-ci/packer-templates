@@ -6,11 +6,20 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: tfw-{{ timestamp }}-<%= git_desc %>
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  packer_templates_branch: "{{ env `PACKER_TEMPLATES_BRANCH` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
+  <% if !ENV['PACKER_TEMPLATES_BRANCH'].to_s.empty? %>
+  clean_packer_templates_branch: <%= ENV['PACKER_TEMPLATES_BRANCH'].gsub(/[^-a-zA-Z0-9]/, '-').gsub(/^-/, '').gsub(/-$/, '') %>
+  <% else %>
+  clean_packer_templates_branch: notset
+  <% end %>
+  <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
+  clean_travis_cookbooks_branch: <%= ENV['TRAVIS_COOKBOOKS_BRANCH'].gsub(/[^-a-zA-Z0-9]/, '-').gsub(/^-/, '').gsub(/-$/, '') %>
+  <% else %>
+  clean_travis_cookbooks_branch: notset
+  <% end %>
 builders:
 - type: googlecompute
   name: googlecompute
@@ -28,12 +37,8 @@ builders:
   tags:
   - tfw
   - travis-ci-packer-templates
-  <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
-  - "cookbooks-branch-{{ user `travis_cookbooks_branch` | clean_image_name }}"
-  <% end %>
-  <% if !ENV['PACKER_TEMPLATES_BRANCH'].to_s.empty? %>
-  - "branch-{{ user `packer_templates_branch` | clean_image_name }}"
-  <% end %>
+  - "cookbooks-branch-{{ user `clean_travis_cookbooks_branch` }}"
+  - "branch-{{ user `clean_packer_templates_branch` }}"
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
@@ -52,12 +57,8 @@ builders:
   ami_virtualization_type: hvm
   tags:
     role: tfw
-    <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
-    cookbooks_branch: "{{ user `travis_cookbooks_branch` | clean_image_name }}"
-    <% end %>
-    <% if !ENV['PACKER_TEMPLATES_BRANCH'].to_s.empty? %>
-    branch: "{{ user `packer_templates_branch` | clean_image_name }}"
-    <% end %>
+    cookbooks_branch: "{{ user `clean_travis_cookbooks_branch` }}"
+    branch: "{{ user `clean_packer_templates_branch` }}"
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"
