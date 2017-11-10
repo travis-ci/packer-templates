@@ -6,7 +6,7 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_image_name: tfw-{{ timestamp }}-<%= git_desc %>
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  packer_templates_branch: "{{ env `TRAVIS_BRANCH` }}"
+  packer_templates_branch: "{{ env `PACKER_TEMPLATES_BRANCH` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
@@ -31,7 +31,7 @@ builders:
   <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
   - "cookbooks-branch-{{ user `travis_cookbooks_branch` }}"
   <% end %>
-  <% if !ENV['TRAVIS_BRANCH'].to_s.empty? %>
+  <% if !ENV['PACKER_TEMPLATES_BRANCH'].to_s.empty? %>
   - "branch-{{ user `packer_templates_branch` }}"
   <% end %>
 - type: amazon-ebs
@@ -55,7 +55,7 @@ builders:
     <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
     cookbooks_branch: "{{ user `travis_cookbooks_branch` }}"
     <% end %>
-    <% if !ENV['TRAVIS_BRANCH'].to_s.empty? %>
+    <% if !ENV['PACKER_TEMPLATES_BRANCH'].to_s.empty? %>
     branch: "{{ user `packer_templates_branch` }}"
     <% end %>
   associate_public_ip_address: true
