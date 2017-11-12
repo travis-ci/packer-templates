@@ -64,7 +64,9 @@ if node['kernel']['machine'] != 'ppc64le'
   include_recipe 'travis_phantomjs'
 end
 include_recipe 'travis_build_environment::firefox'
-include_recipe 'travis_phantomjs::2'
+# TODO: Uncomment when the Xenial phantomjs archive exists:
+# https://s3.amazonaws.com/travis-phantomjs/binaries/ubuntu/16.04/x86_64/phantomjs-1.9.8.tar.bz2
+#include_recipe 'travis_phantomjs::2'
 
 # HACK: sardonyx-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
