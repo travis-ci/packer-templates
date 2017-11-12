@@ -24,9 +24,13 @@ override['travis_build_environment']['php_aliases'] = {
   '7.0' => '7.0.7'
 }
 
-# TODO: Remove the `|| true` once php-src-builder Xenial builds work:
+# TODO: Remove once php-src-builder Xenial builds work:
 # https://github.com/travis-ci/travis-ci/issues/8737
-if node['kernel']['machine'] == 'ppc64le' || true
+override['travis_build_environment']['php_versions'] = []
+override['travis_build_environment']['php_default_version'] = []
+override['travis_build_environment']['php_aliases'] = {}
+
+if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
   override['travis_build_environment']['php_aliases'] = {}

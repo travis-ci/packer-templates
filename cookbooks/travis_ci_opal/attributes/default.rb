@@ -98,9 +98,13 @@ override['travis_build_environment']['otp_releases'] = []
 override['travis_build_environment']['elixir_versions'] = []
 override['travis_build_environment']['default_elixir_version'] = ''
 
-# TODO: Remove the `|| true` once php-src-builder Xenial builds work:
+# TODO: Remove once php-src-builder Xenial builds work:
 # https://github.com/travis-ci/travis-ci/issues/8737
-if node['kernel']['machine'] == 'ppc64le' || true
+override['travis_build_environment']['php_versions'] = []
+override['travis_build_environment']['php_default_version'] = []
+override['travis_build_environment']['php_aliases'] = {}
+
+if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
   override['travis_build_environment']['php_aliases'] = {}
