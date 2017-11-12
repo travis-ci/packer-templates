@@ -24,7 +24,9 @@ override['travis_build_environment']['php_aliases'] = {
   '7.0' => '7.0.7'
 }
 
-if node['kernel']['machine'] == 'ppc64le'
+# TODO: Remove the `|| true` once php-src-builder Xenial builds work:
+# https://github.com/travis-ci/travis-ci/issues/8737
+if node['kernel']['machine'] == 'ppc64le' || true
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
   override['travis_build_environment']['php_aliases'] = {}
@@ -87,6 +89,10 @@ def python_aliases(full_name)
   return [nodash] unless nodash.include?('.')
   [nodash[0, 3]]
 end
+
+# TODO: Remove once cpython-builder supports Xenial:
+# https://github.com/travis-ci/cpython-builder/pull/25
+pythons = []
 
 override['travis_build_environment']['pythons'] = pythons
 pythons.each do |full_name|
