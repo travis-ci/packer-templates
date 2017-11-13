@@ -62,7 +62,7 @@ override['travis_java']['default_version'] = 'oraclejdk8'
 override['travis_java']['alternate_versions'] = []
 
 node_versions = %w[
-  6.11.3
+  6.12.0
 ]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
