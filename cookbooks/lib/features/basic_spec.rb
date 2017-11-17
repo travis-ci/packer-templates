@@ -28,6 +28,16 @@ describe 'apt installation' do
       its(:stdout) { should match(/Reading state/) }
     end
   end
+
+  describe 'apt architecture' do
+    describe command('dpkg --print-architecture') do
+      its(:stdout) { should match(/amd64/) }
+    end
+
+    describe command('dpkg --print-foreign-architectures') do
+      its(:stdout) { should match(/i386/) }
+    end
+  end
 end
 
 describe command('bats --version') do
