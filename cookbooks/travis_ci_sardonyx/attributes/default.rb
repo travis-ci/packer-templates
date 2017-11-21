@@ -16,12 +16,14 @@ override['travis_system_info']['commands_file'] = \
 php_versions = %w[
   5.6.32
   7.0.25
+  7.1.11
 ]
 override['travis_build_environment']['php_versions'] = php_versions
 override['travis_build_environment']['php_default_version'] = '5.6.32'
 override['travis_build_environment']['php_aliases'] = {
   '5.6' => '5.6.32',
-  '7.0' => '7.0.25'
+  '7.0' => '7.0.25',
+  '7.1' => '7.1.11'
 }
 
 if node['kernel']['machine'] == 'ppc64le'
