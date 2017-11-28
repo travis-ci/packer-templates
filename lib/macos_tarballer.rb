@@ -3,9 +3,10 @@
 require 'optparse'
 
 require_relative 'env'
+require_relative 'macos_image_metadata_writer'
 
 class MacosTarballer
-  def generate!(argv: argv)
+  def generate!(argv: ARGV)
     parse_argv!(argv)
     create_contents!
   end
@@ -15,7 +16,7 @@ class MacosTarballer
       opts.on(
         '-n', '--image-name=IMAGE_NAME', String, 'name of the image'
       ) do |v|
-        options[:image_name] = v.strip
+        options[:image_name] = "#{v.strip}-#{image_timestamp}"
       end
 
       opts.on(
@@ -41,16 +42,30 @@ class MacosTarballer
   end
 
   private def create_contents!
-    image_metadata = ImageMetadata.new(
-      # stuffff
+    dest = File.join(
+      options[:output_dir],
+      "image-metadata-#{options[:image_name]}.tar.bz2"
     )
 
-    '/some/nonexistent/thing.tar.bz2'
+    MacosImageMetadataWriter.new(
+      image_name: options[:image_name],
+      osx_image: options[:osx_image],
+      is_default: options[:is_default]
+    ).write(dest)
+
+    dest
+  end
+
+  private def image_timestamp
+    @image_timestamp ||= Time.now.utc.to_i.to_s
   end
 
   private def options
     @options ||= {
-      osx_image: 'notset'
+      osx_image: 'notset',
+      image_name: 'notset',
+      is_default: false,
+      output_dir: Dir.pwd
     }
   end
 
@@ -58,3 +73,5 @@ class MacosTarballer
     @env ||= Env.new
   end
 end
+
+MacosTarballer.new.generate! if $PROGRAM_NAME == __FILE__
