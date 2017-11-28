@@ -33,12 +33,6 @@ override['travis_perlbrew']['modules'] = %w[
 ]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-# TODO: Remove when perl-builder supports Xenial:
-# https://github.com/travis-ci/perl-builder/issues/3
-override['travis_perlbrew']['perls'] = []
-override['travis_perlbrew']['modules'] = []
-override['travis_perlbrew']['prerequisite_packages'] = []
-
 gimme_versions = %w[
   1.7.4
 ]
