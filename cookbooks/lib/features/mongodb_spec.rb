@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 def mongodb_service_name
-  return 'mongod' if `lsb_release -sc 2>/dev/null`.strip == 'trusty'
+  return 'mongod' if %w[trusty xenial].include?(Support.distro)
   'mongodb'
 end
 
 describe 'mongodb installation' do
   describe service(mongodb_service_name) do
+    # Note these will pass even if the service doesn't exist / has a different name.
+    # Unfortunately serverspec doesn't support `exists` for services, however the
+    # DB inserts below will at least fail if mongodb_service_name is incorrect.
     it { should_not be_enabled }
     it { should_not be_running }
   end
