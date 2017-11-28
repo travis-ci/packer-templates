@@ -33,6 +33,12 @@ override['travis_perlbrew']['modules'] = %w[
 ]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
+# TODO: Remove when perl-builder supports Xenial:
+# https://github.com/travis-ci/perl-builder/issues/3
+override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['prerequisite_packages'] = []
+
 gimme_versions = %w[
   1.7.4
 ]
@@ -92,6 +98,12 @@ elixirs = %w[
   1.2.6
 ]
 
+# TODO: Remove once php-src-builder Xenial builds work:
+# https://github.com/travis-ci/travis-ci/issues/8737
+override['travis_build_environment']['php_versions'] = []
+override['travis_build_environment']['php_default_version'] = []
+override['travis_build_environment']['php_aliases'] = {}
+
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
@@ -100,6 +112,12 @@ end
 
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
+
+# TODO: Remove once travis-erlang-builder supports Xenial:
+# https://github.com/travis-ci/travis-erlang-builder/pull/6
+override['travis_build_environment']['otp_releases'] = []
+override['travis_build_environment']['elixir_versions'] = []
+override['travis_build_environment']['default_elixir_version'] = ''
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
