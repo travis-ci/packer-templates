@@ -51,6 +51,12 @@ cookbook_file '/usr/local/bin/travis-tfw-combined-env' do
   mode 0o755
 end
 
+cookbook_file '/usr/local/bin/travis-docker-wrapper' do
+  owner 'root'
+  group 'root'
+  mode 0o755
+end
+
 template '/etc/default/docker-chef' do
   source 'etc-default-docker-chef.sh.erb'
   owner 'root'
@@ -104,6 +110,21 @@ template '/etc/init/docker.conf' do
   owner 'root'
   group 'root'
   mode 0o644
+end
+
+directory '/etc/systemd/system/docker.service.d' do
+  owner 'root'
+  group 'root'
+  mode 0o755
+  only_if { ::File.directory?('/etc/systemd/system') }
+end
+
+template '/etc/systemd/system/docker.service.d/travis.conf' do
+  source 'etc-systemd-system-docker.service.d-travis.conf.erb'
+  owner 'root'
+  group 'root'
+  mode 0o644
+  only_if { ::File.directory?('/etc/systemd/system') }
 end
 
 service 'docker' do

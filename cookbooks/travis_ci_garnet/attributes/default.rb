@@ -14,14 +14,16 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/garnet-system-info-commands.yml'
 
 php_versions = %w[
-  5.6.31
-  7.0.22
+  5.6.32
+  7.0.25
+  7.1.11
 ]
 override['travis_build_environment']['php_versions'] = php_versions
-override['travis_build_environment']['php_default_version'] = '5.6.31'
+override['travis_build_environment']['php_default_version'] = '5.6.32'
 override['travis_build_environment']['php_aliases'] = {
-  '5.6' => '5.6.31',
-  '7.0' => '7.0.22'
+  '5.6' => '5.6.32',
+  '7.0' => '7.0.25',
+  '7.1' => '7.1.11'
 }
 
 override['travis_perlbrew']['perls'] = []
@@ -51,16 +53,16 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 node_versions = %w[
-  6.11.3
-  8.4.0
+  6.12.0
+  8.9.1
 ]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
 override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w[
-  2.7.13
-  3.6.2
+  2.7.14
+  3.6.3
 ]
 
 # Reorder pythons so that default python2 and python3 come first

@@ -73,7 +73,7 @@ if node['kernel']['machine'] == 'ppc64le'
 end
 
 node_versions = %w[
-  6.11.3
+  6.12.0
 ]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
