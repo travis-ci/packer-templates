@@ -95,10 +95,6 @@ def python_aliases(full_name)
   [nodash[0, 3]]
 end
 
-# TODO: Remove once cpython-builder supports Xenial:
-# https://github.com/travis-ci/cpython-builder/pull/25
-pythons = []
-
 override['travis_build_environment']['pythons'] = pythons
 pythons.each do |full_name|
   override['travis_build_environment']['python_aliases'][full_name] = \
