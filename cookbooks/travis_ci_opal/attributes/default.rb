@@ -126,6 +126,8 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_packer_templates']['job_board']['stack'] = 'opal'
+
+# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
@@ -146,7 +148,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
-  phantomjs
   postgresql
   python_interpreter
   rabbitmq
@@ -156,6 +157,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
+# TODO: erlang (travis-ci/travis-erlang-builder#6)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __opal__
   crystal
@@ -163,7 +165,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   d
   dart
   elixir
-  erlang
   haskell
   haxe
   julia

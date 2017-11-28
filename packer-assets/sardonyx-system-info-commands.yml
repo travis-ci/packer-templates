@@ -127,8 +127,6 @@ commands:
     command: curl http://localhost:7474/db/data 2>/dev/null
     pipe: perl -ne '/neo4j_version.*?([0-9\.]+)/ && print $1'
     post: service neo4j stop
-  - command: "/usr/local/phantomjs/bin/phantomjs --version"
-    name: PhantomJS version
   - command: dpkg -l
     name: Pre-installed PostgreSQL versions
     pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'
@@ -157,8 +155,6 @@ commands:
   - command: nvm list
     name: Pre-installed Node.js versions
     pipe: env GREP_COLORS='mt=01;32' egrep -o '(iojs-)?v[0-9\.]+' | sort | uniq
-  - command: phpenv versions
-  - command: composer --version
   - command: rvm list
     name: Pre-installed Ruby versions
     pipe: env GREP_COLORS='mt=01;32' egrep -o '(j?ruby|rbx|ree)-[^ ]+' | sort | uniq
