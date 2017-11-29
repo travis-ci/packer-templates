@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+libdir = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+
+require 'job_board_registrar'
+require 'macos_tarballer'
+
+if $PROGRAM_NAME == __FILE__
+  JobBoardRegistrar.new(
+    MacosTarballer.new.generate!(argv: ARGV)
+  ).register!
+end
