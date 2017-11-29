@@ -43,16 +43,19 @@ builders:
   - "{{ .Image }}"
   - /sbin/init
   commit: true
-- type: openstack
-  name: openstack
-  flavor: m1.large-travis-ci
-  image_name: "{{ user `image_name` }}"
-  ssh_username: ubuntu
-  networks:
-  <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
-  - <%= network %>
-  <% end %>
-  source_image_name: "{{ user `openstack_source_image_name` }}"
+# Openstack builds disabled for failing with an error that's not possible to debug
+# until a fix for the Packer error reporting is released:
+# https://github.com/travis-ci/packer-templates/issues/555
+# - type: openstack
+#   name: openstack
+#   flavor: m1.large-travis-ci
+#   image_name: "{{ user `image_name` }}"
+#   ssh_username: ubuntu
+#   networks:
+#   <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
+#   - <%= network %>
+#   <% end %>
+#   source_image_name: "{{ user `openstack_source_image_name` }}"
 provisioners:
 - type: shell
   inline: sleep 10
@@ -79,7 +82,7 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
-  - openstack
+  # - openstack
 - type: file
   source: packer-assets/ubuntu-xenial-ci-stevonnie-docker-packages.txt
   destination: /var/tmp/packages.txt
