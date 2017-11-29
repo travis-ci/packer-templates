@@ -15,8 +15,10 @@ module Support
           begin
             require spec_name
           rescue LoadError => e
-            $stderr.puts "TODO: missing #{spec_name}" unless draconian?
-            raise e if draconian?
+            # The path must be checked to ensure the LoadError is not
+            # from a broken require within the file being loaded.
+            raise e if draconian? || e.path != spec_name
+            $stderr.puts "TODO: missing #{spec_name}"
           end
         end
       end
