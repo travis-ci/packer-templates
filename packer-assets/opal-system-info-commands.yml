@@ -127,8 +127,6 @@ commands:
     command: curl http://localhost:7474/db/data 2>/dev/null
     pipe: perl -ne '/neo4j_version.*?([0-9\.]+)/ && print $1'
     post: service neo4j stop
-  - command: "/usr/local/phantomjs/bin/phantomjs --version"
-    name: PhantomJS version
   - command: dpkg -l
     name: Pre-installed PostgreSQL versions
     pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'
@@ -143,9 +141,6 @@ commands:
     pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
   - command: riak version
     name: riak version
-  - command: kerl list installations
-  - command: kiex list
-  - command: rebar --version
   - command: ls -l /usr/local/ghc
     name: ghc installations
   - command: perlbrew list

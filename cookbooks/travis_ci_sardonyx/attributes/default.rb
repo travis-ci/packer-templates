@@ -95,10 +95,6 @@ def python_aliases(full_name)
   [nodash[0, 3]]
 end
 
-# TODO: Remove once cpython-builder supports Xenial:
-# https://github.com/travis-ci/cpython-builder/pull/25
-pythons = []
-
 override['travis_build_environment']['pythons'] = pythons
 pythons.each do |full_name|
   override['travis_build_environment']['python_aliases'][full_name] = \
@@ -127,6 +123,7 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
+# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
@@ -147,7 +144,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
-  phantomjs
   postgresql
   python_interpreter
   rabbitmq
@@ -157,6 +153,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
+# TODO: php (travis-ci/travis-ci#8737)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __sardonyx__
   c
@@ -169,7 +166,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   groovy
   java
   node_js
-  php
   pure_java
   python
   ruby
