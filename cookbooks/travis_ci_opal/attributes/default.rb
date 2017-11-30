@@ -33,12 +33,6 @@ override['travis_perlbrew']['modules'] = %w[
 ]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-# TODO: Remove when perl-builder supports Xenial:
-# https://github.com/travis-ci/perl-builder/issues/3
-override['travis_perlbrew']['perls'] = []
-override['travis_perlbrew']['modules'] = []
-override['travis_perlbrew']['prerequisite_packages'] = []
-
 gimme_versions = %w[
   1.7.4
 ]
@@ -129,6 +123,8 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_packer_templates']['job_board']['stack'] = 'opal'
+
+# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
@@ -149,7 +145,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
-  phantomjs
   postgresql
   python_interpreter
   rabbitmq
@@ -159,6 +154,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
+# TODO: erlang (travis-ci/travis-erlang-builder#6)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __opal__
   crystal
@@ -166,7 +162,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   d
   dart
   elixir
-  erlang
   haskell
   haxe
   julia
