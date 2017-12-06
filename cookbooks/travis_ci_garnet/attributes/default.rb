@@ -133,6 +133,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __garnet__
+  generic
   c
   c++
   clojure
