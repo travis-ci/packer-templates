@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def mongodb_service_name
-  return 'mongod' if %w[trusty xenial].include?(Support.distro)
+  return 'mongod' if %w[trusty xenial].include?(Support.distro) and os[:arch] !~ /ppc64/
   'mongodb'
 end
 
