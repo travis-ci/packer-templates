@@ -439,11 +439,9 @@ describe 'openssl installation' do
   end
 end
 
-if os[:arch] !~ /ppc64/
-  describe command('packer version') do
-    its(:stdout) { should match(/^Packer v\d/) }
-    its(:exit_status) { should eq 0 }
-  end
+describe command('packer version') do
+  its(:stdout) { should match(/^Packer v\d/) }
+  its(:exit_status) { should eq 0 }
 end
 
 describe command('psql --version') do
