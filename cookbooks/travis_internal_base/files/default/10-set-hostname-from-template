@@ -8,7 +8,7 @@ main() {
   : "${RUNDIR:=/var/tmp/travis-run.d}"
 
   if [ ! -f "${RUNDIR}/instance-hostname.tmpl" ]; then
-    echo "Missing ${RUNDIR}/instance-hostname.tmpl"
+    echo "Missing ${RUNDIR}/instance-hostname.tmpl" >&2
     exit 0
   fi
 
@@ -17,8 +17,13 @@ main() {
   local instance_id
   local instance_ipv4
 
-  curl -sSL 'http://169.254.169.254/latest/meta-data/instance-id' \
-    >"${RUNDIR}/instance-id"
+  local instance_id_url='http://169.254.169.254/latest/meta-data/instance-id'
+  if ! curl -sf "${instance_id_url}" &>/dev/null; then
+    echo 'No metadata API at 169.254.169.254; exiting' >&2
+    exit 0
+  fi
+
+  curl -sSL "${instance_id_url}" >"${RUNDIR}/instance-id"
   instance_id="$(cat "${RUNDIR}/instance-id")"
   instance_id="${instance_id:0:9}"
 
