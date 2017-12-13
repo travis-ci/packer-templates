@@ -17,6 +17,7 @@ main() {
   local instance_id=notset
   local instance_ipv4=127.0.0.1
   local ec2_metadata='http://169.254.169.254/latest/meta-data'
+  local packet_metadata='https://metadata.packet.net/metadata'
 
   if curl -sfSL "${ec2_metadata}/instance-id" &>/dev/null; then
     curl -sSL "${ec2_metadata}/instance-id" >"${RUNDIR}/instance-id"
@@ -26,6 +27,17 @@ main() {
     curl -sSL "${ec2_metadata}/local-ipv4" \
       >"${RUNDIR}/instance-ipv4"
     instance_ipv4="$(cat "${RUNDIR}/instance-ipv4")"
+  fi
+
+  if curl -sFSL "${packet_metadata}" &>/dev/null; then
+    cur -sSL "${packet_metadata}" >"${RUNDIR}/metadata.json"
+    instance_id="$(jq -r .id <"${RUNDIR}/metadata.json" | cut -d- -f 1)"
+
+    instance_ipv4="$(
+      jq -r ".network.addresses | .[] | \
+        select(.address_family==4 and .public==false) | \
+        .address" <"${RUNDIR}/metadata.json"
+    )"
   fi
 
   instance_hostname="$(
