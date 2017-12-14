@@ -24,7 +24,7 @@ main() {
   local packet_metadata='https://metadata.packet.net/metadata'
 
   if curl --connect-timeout 3 -sfSL \
-     "${ec2_metadata}/instance-id" &>/dev/null; then
+    "${ec2_metadata}/instance-id" &>/dev/null; then
     curl -sSL "${ec2_metadata}/instance-id" >"${RUNDIR}/instance-id"
     instance_id="$(cat "${RUNDIR}/instance-id")"
     instance_id="${instance_id:0:9}"
