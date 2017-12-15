@@ -122,10 +122,10 @@ __write_system_info_json() {
     },
     "operating_system_details": {
       "output": [
-        "Distributor ID:\tUbuntu",
-        "Description:\tUbuntu 14.04.5 LTS",
-        "Release:\t14.04",
-        "Codename:\ttrusty"
+        "Distributor ID:\\tUbuntu",
+        "Description:\\tUbuntu 14.04.5 LTS",
+        "Release:\\t14.04",
+        "Codename:\\ttrusty"
       ],
       "name": "Operating System Details"
     },

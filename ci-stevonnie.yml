@@ -43,16 +43,19 @@ builders:
   - "{{ .Image }}"
   - /sbin/init
   commit: true
-- type: openstack
-  name: openstack
-  flavor: m1.large-travis-ci
-  image_name: "{{ user `image_name` }}"
-  ssh_username: ubuntu
-  networks:
-  <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
-  - <%= network %>
-  <% end %>
-  source_image_name: "{{ user `openstack_source_image_name` }}"
+# Openstack builds disabled for failing with an error that's not possible to debug
+# until a fix for the Packer error reporting is released:
+# https://github.com/travis-ci/packer-templates/issues/555
+# - type: openstack
+#   name: openstack
+#   flavor: m1.large-travis-ci
+#   image_name: "{{ user `image_name` }}"
+#   ssh_username: ubuntu
+#   networks:
+#   <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
+#   - <%= network %>
+#   <% end %>
+#   source_image_name: "{{ user `openstack_source_image_name` }}"
 provisioners:
 - type: shell
   inline: sleep 10
@@ -60,6 +63,12 @@ provisioners:
   - googlecompute
 - type: shell
   inline: apt-get update -yqq && apt-get install sudo -yqq
+  # Delay script execution until after /sbin/init has cleared out /tmp,
+  # otherwise the uploaded script gets deleted before it can be run.
+  # TODO: Decide if the container startup command should be /bin/bash and the
+  # /sbin/init call made the first provision step instead of this workaround:
+  # https://github.com/travis-ci/packer-templates/issues/544#issuecomment-344971947
+  pause_before: 5s
   only:
   - docker
 - type: file
@@ -73,7 +82,7 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
-  - openstack
+  # - openstack
 - type: file
   source: packer-assets/ubuntu-xenial-ci-stevonnie-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -107,7 +116,6 @@ provisioners:
   inline: chmod 0644 /var/tmp/stevonnie-system-info-commands.yml
 - type: chef-solo
   config_template: chef-solo.rb.tmpl
-  version: 13.5.3
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
