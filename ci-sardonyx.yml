@@ -33,7 +33,11 @@ builders:
 - type: docker
   name: docker
   ssh_pty: true
+  <% if RUBY_PLATFORM =~ /powerpc64/ %>
+  image: "travisci/gce-parity:16.04-ppc64le"
+  <% else %>
   image: "travisci/gce-parity:16.04"
+  <% end %>
   run_command:
   - -d
   - -v
