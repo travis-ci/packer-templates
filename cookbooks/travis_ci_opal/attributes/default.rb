@@ -102,6 +102,9 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
   override['travis_build_environment']['php_aliases'] = {}
+
+  # TODO: remove if/when an HHVM version is available on ppc64
+  override['travis_build_environment']['hhvm_enabled'] = false
 end
 
 override['travis_build_environment']['elixir_versions'] = elixirs
