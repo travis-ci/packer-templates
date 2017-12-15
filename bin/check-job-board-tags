@@ -42,7 +42,7 @@ main() {
 
   BATCH_INPUT=""
   for cmd in "${COMBOS[@]}"; do
-    parts=(${cmd//:/ })
+    IFS=':' read -r -a parts <<<"${cmd}"
     rec="${parts[0]}:${parts[1]}"
     rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
     rec="${rec}:./cookbooks/travis_ci_${parts[3]}/attributes/default.rb"
