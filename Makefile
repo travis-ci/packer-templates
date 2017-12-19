@@ -41,7 +41,7 @@ all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
 .PHONY: stacks-short
 stacks-short:
-	@$(MAKE) stacks | sed 's/-trusty//'
+	@$(MAKE) -s stacks | sed 's/-trusty//;s/-xenial//'
 
 .PHONY: stacks
 stacks: stacks-trusty stacks-xenial
