@@ -1,5 +1,5 @@
 ---
-description: Travis CI sardonyx build env template!
+description: Travis CI sardonyx build env template
 variables:
   docker_repository: travisci/ci-sardonyx
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>

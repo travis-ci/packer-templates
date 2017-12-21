@@ -1,5 +1,5 @@
 ---
-description: Travis CI opal build env template
+description: Travis CI opal build env template!
 variables:
   docker_repository: travisci/ci-opal
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>
