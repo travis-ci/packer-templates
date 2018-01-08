@@ -76,7 +76,6 @@ provisioners:
   scripts:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
-  - packer-scripts/install-ubuntu-mainline-kernel
   - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
   - packer-scripts/minimize
