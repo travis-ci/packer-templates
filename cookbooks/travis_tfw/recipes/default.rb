@@ -44,7 +44,7 @@ apt_repository 'canonical-kernel-team-pti' do
   action :add
 end
 
-package 'linux' do
+package node['travis_tfw']['linux_kernel_package'] do
   version node['travis_tfw']['linux_kernel_version']
 end
 
