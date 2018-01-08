@@ -22,10 +22,6 @@ describe 'rabbitmq installation' do
   end
 
   describe 'rabbitmq commands', sudo: true do
-    describe service('rabbitmq-server') do
-      it { should be_running }
-    end
-
     if os[:release] !~ /16/
       describe command('sudo service rabbitmq-server status') do
         its(:stdout) { should match 'running_applications' }

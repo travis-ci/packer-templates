@@ -67,7 +67,7 @@ if node['kernel']['machine'] == 'ppc64le'
 end
 
 node_versions = %w[
-  6.11.3
+  6.12.0
 ]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
@@ -92,22 +92,42 @@ elixirs = %w[
   1.2.6
 ]
 
+# TODO: Remove once php-src-builder Xenial builds work:
+# https://github.com/travis-ci/travis-ci/issues/8737
+override['travis_build_environment']['php_versions'] = []
+override['travis_build_environment']['php_default_version'] = []
+override['travis_build_environment']['php_aliases'] = {}
+
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
   override['travis_build_environment']['php_aliases'] = {}
+
+  # TODO: remove if/when an HHVM version is available on ppc64
+  override['travis_build_environment']['hhvm_enabled'] = false
 end
 
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
+# TODO: Remove once travis-erlang-builder supports Xenial:
+# https://github.com/travis-ci/travis-erlang-builder/pull/6
+override['travis_build_environment']['otp_releases'] = []
+override['travis_build_environment']['elixir_versions'] = []
+override['travis_build_environment']['default_elixir_version'] = ''
+
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_build_environment']['update_hostname'] = false
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_build_environment']['update_hostname'] = true
+end
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_packer_templates']['job_board']['stack'] = 'opal'
+
+# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
@@ -128,7 +148,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
-  phantomjs
   postgresql
   python_interpreter
   rabbitmq
@@ -138,6 +157,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
+# TODO: erlang (travis-ci/travis-erlang-builder#6)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __opal__
   crystal
@@ -145,7 +165,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   d
   dart
   elixir
-  erlang
   haskell
   haxe
   julia

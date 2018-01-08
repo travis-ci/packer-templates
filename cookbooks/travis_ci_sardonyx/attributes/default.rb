@@ -14,20 +14,31 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
 php_versions = %w[
-  5.6.24
-  7.0.7
+  5.6.32
+  7.0.25
+  7.1.11
 ]
 override['travis_build_environment']['php_versions'] = php_versions
-override['travis_build_environment']['php_default_version'] = '5.6.24'
+override['travis_build_environment']['php_default_version'] = '5.6.32'
 override['travis_build_environment']['php_aliases'] = {
-  '5.6' => '5.6.24',
-  '7.0' => '7.0.7'
+  '5.6' => '5.6.32',
+  '7.0' => '7.0.25',
+  '7.1' => '7.1.11'
 }
+
+# TODO: Remove once php-src-builder Xenial builds work:
+# https://github.com/travis-ci/travis-ci/issues/8737
+override['travis_build_environment']['php_versions'] = []
+override['travis_build_environment']['php_default_version'] = []
+override['travis_build_environment']['php_aliases'] = {}
 
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
   override['travis_build_environment']['php_aliases'] = {}
+
+  # TODO: remove if/when an HHVM version is available on ppc64
+  override['travis_build_environment']['hhvm_enabled'] = false
 end
 
 override['travis_perlbrew']['perls'] = []
@@ -48,7 +59,6 @@ override['java']['oracle']['jce']['enabled'] = true
 
 override['travis_java']['default_version'] = 'oraclejdk8'
 override['travis_java']['alternate_versions'] = %w[
-  openjdk7
   openjdk8
   oraclejdk9
 ]
@@ -62,16 +72,16 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 node_versions = %w[
-  6.11.3
-  8.4.0
+  6.12.0
+  8.9.1
 ]
 
 override['travis_build_environment']['nodejs_versions'] = node_versions
 override['travis_build_environment']['nodejs_default'] = node_versions.max
 
 pythons = %w[
-  2.7.13
-  3.6.2
+  2.7.14
+  3.6.3
 ]
 
 # Reorder pythons so that default python2 and python3 come first
@@ -103,13 +113,23 @@ rubies = %w[
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
+# TODO: Remove once travis-erlang-builder supports Xenial:
+# https://github.com/travis-ci/travis-erlang-builder/pull/6
+override['travis_build_environment']['otp_releases'] = []
+override['travis_build_environment']['elixir_versions'] = []
+override['travis_build_environment']['default_elixir_version'] = ''
+
 override['travis_build_environment']['update_hostname'] = false
+if node['kernel']['machine'] == 'ppc64le'
+  override['travis_build_environment']['update_hostname'] = true
+end
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
+# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   cassandra
@@ -130,7 +150,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
-  phantomjs
   postgresql
   python_interpreter
   rabbitmq
@@ -140,6 +159,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
+# TODO: php (travis-ci/travis-ci#8737)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __sardonyx__
   c
@@ -152,7 +172,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   groovy
   java
   node_js
-  php
   pure_java
   python
   ruby

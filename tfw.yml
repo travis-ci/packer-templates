@@ -10,6 +10,16 @@ variables:
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
+  <% if !ENV['PACKER_TEMPLATES_BRANCH'].to_s.empty? %>
+  clean_packer_templates_branch: <%= ENV['PACKER_TEMPLATES_BRANCH'].gsub(/[^-a-zA-Z0-9]/, '-').gsub(/^-/, '').gsub(/-$/, '') %>
+  <% else %>
+  clean_packer_templates_branch: notset
+  <% end %>
+  <% if !ENV['TRAVIS_COOKBOOKS_BRANCH'].to_s.empty? %>
+  clean_travis_cookbooks_branch: <%= ENV['TRAVIS_COOKBOOKS_BRANCH'].gsub(/[^-a-zA-Z0-9]/, '-').gsub(/^-/, '').gsub(/-$/, '') %>
+  <% else %>
+  clean_travis_cookbooks_branch: notset
+  <% end %>
 builders:
 - type: googlecompute
   name: googlecompute
@@ -27,6 +37,8 @@ builders:
   tags:
   - tfw
   - travis-ci-packer-templates
+  - "cookbooks-branch-{{ user `clean_travis_cookbooks_branch` }}"
+  - "branch-{{ user `clean_packer_templates_branch` }}"
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
   secret_key: "{{ user `aws_secret_key` }}"
@@ -34,7 +46,7 @@ builders:
   source_ami_filter:
     filters:
       virtualization-type: hvm
-      name: "*ubuntu-trusty-14.04-amd64-server-*"
+      name: "*ubuntu-xenial-16.04-amd64-server-*"
       root-device-type: ebs
     owners:
     - 099720109477
@@ -45,6 +57,8 @@ builders:
   ami_virtualization_type: hvm
   tags:
     role: tfw
+    cookbooks_branch: "{{ user `clean_travis_cookbooks_branch` }}"
+    branch: "{{ user `clean_packer_templates_branch` }}"
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
   vpc_id: "{{ user `travis_vpc_id` }}"

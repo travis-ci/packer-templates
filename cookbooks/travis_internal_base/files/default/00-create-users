@@ -13,7 +13,7 @@ main() {
     source "${GITHUB_USERS_ENV}"
   fi
 
-  DEFAULT_GROUPS=(${DEFAULT_GROUPS})
+  IFS=' ' read -r -a DEFAULT_GROUPS <<<"${DEFAULT_GROUPS}"
 
   for pair in ${GITHUB_USERS}; do
     __create_user "${pair%%:*}" "${DEFAULT_GROUPS[@]}"

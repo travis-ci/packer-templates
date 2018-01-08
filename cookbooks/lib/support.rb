@@ -46,6 +46,12 @@ module Support
 
   module_function :attributes
 
+  def distro
+    @distro ||= `lsb_release -sc 2>/dev/null`.strip
+  end
+
+  module_function :distro
+
   def libdir
     @libdir ||= Pathname.new(File.expand_path('../', __FILE__))
   end

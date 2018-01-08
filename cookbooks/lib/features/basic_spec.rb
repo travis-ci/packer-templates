@@ -28,6 +28,16 @@ describe 'apt installation' do
       its(:stdout) { should match(/Reading state/) }
     end
   end
+
+  describe 'apt architecture' do
+    describe command('dpkg --print-architecture') do
+      its(:stdout) { should match(/amd64/) }
+    end
+
+    describe command('dpkg --print-foreign-architectures') do
+      its(:stdout) { should match(/i386/) }
+    end
+  end
 end
 
 describe command('bats --version') do
@@ -429,11 +439,9 @@ describe 'openssl installation' do
   end
 end
 
-if os[:arch] !~ /ppc64/
-  describe command('packer version') do
-    its(:stdout) { should match(/^Packer v\d/) }
-    its(:exit_status) { should eq 0 }
-  end
+describe command('packer version') do
+  its(:stdout) { should match(/^Packer v\d/) }
+  its(:exit_status) { should eq 0 }
 end
 
 describe command('psql --version') do
