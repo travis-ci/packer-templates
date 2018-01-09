@@ -34,6 +34,11 @@ package %w[
   xfsprogs
 ]
 
+execute 'add-apt-repository ppa:canonical-kernel-team/pti'
+execute 'apt-get update'
+execute 'apt dist-upgrade -y'
+execute 'apt-get autoremove'
+
 template '/usr/local/bin/travis-docker-volume-setup' do
   source 'travis-docker-volume-setup.sh.erb'
   owner 'root'
