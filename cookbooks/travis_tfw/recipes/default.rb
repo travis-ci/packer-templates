@@ -34,10 +34,19 @@ package %w[
   xfsprogs
 ]
 
-execute 'add-apt-repository ppa:canonical-kernel-team/pti'
-execute 'apt-get update'
-execute 'apt dist-upgrade -y'
-execute 'apt-get autoremove'
+apt_repository 'canonical-kernel-team-pti' do
+  uri 'http://ppa.launchpad.net/canonical-kernel-team/pti/ubuntu'
+  components %w[main]
+  key 'B892ACEA'
+  keyserver 'hkp://ha.pool.sks-keyservers.net'
+  retries 2
+  retry_delay 30
+  action :add
+end
+
+package node['travis_tfw']['linux_kernel_package'] do
+  version node['travis_tfw']['linux_kernel_version']
+end
 
 template '/usr/local/bin/travis-docker-volume-setup' do
   source 'travis-docker-volume-setup.sh.erb'
