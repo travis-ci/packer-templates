@@ -50,3 +50,5 @@ after_success:
   else
     echo 'no packer-build-trigger for you';
   fi
+notifications:
+  email: false
