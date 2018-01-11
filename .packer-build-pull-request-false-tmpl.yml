@@ -27,3 +27,5 @@ config:
       - image-metadata-$(cat .packer-build-image-name).tar.bz2
       target_paths:
       - travis-ci/packer-templates/%{template_name}/$BUILDER
+  notifications:
+    email: false
