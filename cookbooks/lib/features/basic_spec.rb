@@ -36,7 +36,7 @@ describe 'apt installation' do
       end
 
       describe command('dpkg --print-foreign-architectures') do
-        its(:stdout) { should match(//) }
+        its(:stdout) { should be_empty }
       end
     else
       describe command('dpkg --print-architecture') do
