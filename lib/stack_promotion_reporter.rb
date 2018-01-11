@@ -54,13 +54,11 @@ class StackPromotionReporter
       ) do |v|
         @options[:output_dir] = Pathname.new(v.strip).expand_path
       end
-
       opts.on(
         '-DDISTS', '--dists=DISTS', '","-delimited dist names'
       ) do |v|
         @options[:dists] = v.split(',').map(&:strip)
       end
-
       opts.on(
         '-GGROUPS', '--groups=GROUPS',
         '","-delimited ":"-separated group name triplets'
@@ -138,7 +136,7 @@ class StackPromotionReporter
       promotion.cur_job_board_hash,
       promotion.nxt_job_board_hash
     ]
-  rescue => e
+  rescue StandardError => e
     logger.error "stack=#{stack} #{e}"
     []
   end

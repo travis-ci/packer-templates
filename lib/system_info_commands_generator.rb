@@ -12,7 +12,7 @@ class SystemInfoCommandsGenerator
 
   def generate!
     if !(%w[-h --help help] & argv).empty? || argv.length != 1
-      $stderr.puts "Usage: #{File.basename($PROGRAM_NAME)} <stack>"
+      warn "Usage: #{File.basename($PROGRAM_NAME)} <stack>"
       return 1
     end
 
@@ -47,7 +47,7 @@ class SystemInfoCommandsGenerator
           system_info_commands
         )
       else
-        $stderr.puts "INFO: skipping missing tag file #{merge_file}"
+        warn "INFO: skipping missing tag file #{merge_file}"
       end
     end
   end

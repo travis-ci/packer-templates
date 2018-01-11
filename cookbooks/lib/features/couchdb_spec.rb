@@ -15,7 +15,7 @@ describe 'couchdb installation' do
       begin
         sh('sudo service couchdb start')
         tcpwait('127.0.0.1', 5984, 30)
-      rescue => e
+      rescue StandardError => e
         tries -= 1
         retry unless tries.zero?
         raise e
