@@ -47,7 +47,7 @@ class JobBoardRegistrar
       env['JOB_BOARD_NO_PARSE_RESPONSE'].empty?
     $stdout.puts output
     true
-  rescue => e
+  rescue StandardError => e
     logger.error e
     false
   end
