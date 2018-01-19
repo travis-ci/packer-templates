@@ -120,9 +120,7 @@ override['travis_build_environment']['elixir_versions'] = []
 override['travis_build_environment']['default_elixir_version'] = ''
 
 override['travis_build_environment']['update_hostname'] = false
-if node['kernel']['machine'] == 'ppc64le'
-  override['travis_build_environment']['update_hostname'] = true
-end
+override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
