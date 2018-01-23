@@ -1,6 +1,6 @@
 ---
 languages:
-- __garnet__
+- __sardonyx__
 - c
 - c++
 - clojure

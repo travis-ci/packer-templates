@@ -8,10 +8,6 @@ META_FILES := \
 	$(PWD)/tmp/job-board-env/.dumped
 
 SYSTEM_INFO_COMMANDS_FILES := \
-	packer-assets/amethyst-system-info-commands.yml \
-	packer-assets/connie-system-info-commands.yml \
-	packer-assets/cookiecat-system-info-commands.yml \
-	packer-assets/garnet-system-info-commands.yml \
 	packer-assets/opal-system-info-commands.yml \
 	packer-assets/sardonyx-system-info-commands.yml \
 	packer-assets/stevonnie-system-info-commands.yml

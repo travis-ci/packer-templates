@@ -1,5 +1,5 @@
-language: __garnet__
-dist: trusty
+language: __sardonyx__
+dist: xenial
 group: edge
 sudo: required
 filter_secrets: false
@@ -10,7 +10,7 @@ cache:
 env:
   matrix:
   - DIST=trusty
-    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-garnet.yml"
+    TRAVIS_JOB_BOARD_REGISTER_YML="${TRAVIS_BUILD_DIR}/.example-job-board-register-sardonyx.yml"
   global:
   - DPKG_MANIFEST_JSON="${TRAVIS_BUILD_DIR}/.example-dpkg-manifest.json"
   - LANG=en_US.UTF-8
@@ -45,7 +45,7 @@ script:
     jq . < $f &>/dev/null;
   done
 after_success:
-- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ garnet ]]; then
+- if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sardonyx ]]; then
     git fetch --unshallow;
     bundle exec make packer-build-trigger;
   else
