@@ -21,7 +21,8 @@ features:
 - basic
 - cassandra
 - chromium
-- couchdb
+# FIXME: uncomment once working on xenial
+# - couchdb
 - disabled-ipv6
 - docker
 - docker-compose
