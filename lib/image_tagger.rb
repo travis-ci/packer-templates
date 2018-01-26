@@ -54,7 +54,7 @@ class ImageTagger
     return 'edge' if
       travis_cookbooks_branch == travis_cookbooks_edge_branch &&
       env['TRAVIS_COOKBOOKS_SHA'] !~ /dirty/ &&
-      env['PACKER_TEMPLATES_BRANCH'] == 'master' &&
+      env['PACKER_TEMPLATES_BRANCH'] == 'trusty-stable' &&
       env['PACKER_TEMPLATES_SHA'] !~ /dirty/
 
     'dev'
@@ -76,7 +76,7 @@ class ImageTagger
   def travis_cookbooks_edge_branch
     value = env['TRAVIS_COOKBOOKS_EDGE_BRANCH']
     return value unless value.empty?
-    'master'
+    'trusty-stable'
   end
 
   attr_reader :env

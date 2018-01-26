@@ -18,7 +18,7 @@ module Support
             # The path must be checked to ensure the LoadError is not
             # from a broken require within the file being loaded.
             raise e if draconian? || e.path != spec_name
-            $stderr.puts "TODO: missing #{spec_name}"
+            warn "TODO: missing #{spec_name}"
           end
         end
       end

@@ -18,8 +18,8 @@ SYSTEM_INFO_COMMANDS_FILES := \
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
 CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
-	$(TRAVIS_COOKBOOKS_GIT)::cookbooks@master \
-	$(TRAVIS_COOKBOOKS_GIT)::community-cookbooks@master \
+	$(TRAVIS_COOKBOOKS_GIT)::cookbooks@trusty-stable \
+	$(TRAVIS_COOKBOOKS_GIT)::community-cookbooks@trusty-stable \
 
 UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
