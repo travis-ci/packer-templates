@@ -62,7 +62,7 @@ describe 'cassandra installation' do
         wipe_storage
         sh('sudo service cassandra start')
         tcpwait('localhost', 9042, 30)
-      rescue => e
+      rescue StandardError => e
         tries -= 1
         retry unless tries.zero?
         raise e

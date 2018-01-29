@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# vim:fileencoding=utf-8
 # frozen_string_literal: true
 
 lib = File.expand_path('../../cookbooks/lib', __FILE__)
@@ -20,7 +19,7 @@ def main(argv: ARGV)
   any_failed = false
   assertions.each do |tagset, op, base, other|
     if op !~ /eq|excl|incl/
-      $stderr.puts "unknown op #{op.inspect}"
+      warn "unknown op #{op.inspect}"
       any_failed = true
       next
     end

@@ -94,7 +94,7 @@ describe JobBoardRegistrar do
         PACKER_TEMPLATES_SHA: 'fafafaf',
         PACKER_BUILDER_TYPE: 'googlecompute',
         TRAVIS_COOKBOOKS_BRANCH: 'serious-experimentation-time',
-        TRAVIS_COOKBOOKS_EDGE_BRANCH: 'master',
+        TRAVIS_COOKBOOKS_EDGE_BRANCH: 'trusty-stable',
         TRAVIS_COOKBOOKS_SHA: 'fafafaf',
         dist: 'frosty',
         os: 'lintux'
@@ -115,11 +115,11 @@ describe JobBoardRegistrar do
         CURL_EXE: ':',
         IMAGE_NAME: 'travis-ci-foo-flah-99999999999',
         JOB_BOARD_IMAGES_URL: 'http://flim:flam@job-board.example.org/images',
-        PACKER_TEMPLATES_BRANCH: 'master',
+        PACKER_TEMPLATES_BRANCH: 'trusty-stable',
         PACKER_TEMPLATES_SHA: 'fafafaf',
         PACKER_BUILDER_TYPE: 'googlecompute',
-        TRAVIS_COOKBOOKS_BRANCH: 'master',
-        TRAVIS_COOKBOOKS_EDGE_BRANCH: 'master',
+        TRAVIS_COOKBOOKS_BRANCH: 'trusty-stable',
+        TRAVIS_COOKBOOKS_EDGE_BRANCH: 'trusty-stable',
         TRAVIS_COOKBOOKS_SHA: 'fafafaf',
         dist: 'crusty',
         os: 'linnix'
@@ -131,7 +131,7 @@ describe JobBoardRegistrar do
           dist: 'crusty',
           group: 'edge',
           os: 'linnix',
-          packer_templates_branch: 'master'
+          packer_templates_branch: 'trusty-stable'
         }
       }
     }

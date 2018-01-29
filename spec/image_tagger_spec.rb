@@ -23,8 +23,8 @@ describe ImageTagger do
         env['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
       end
 
-      it 'falls back to "master"' do
-        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('master')
+      it 'falls back to "trusty-stable"' do
+        expect(subject.send(:travis_cookbooks_edge_branch)).to eq('trusty-stable')
       end
     end
 
@@ -69,8 +69,8 @@ describe ImageTagger do
         env['TRAVIS_COOKBOOKS_EDGE_BRANCH'] = ''
       end
 
-      it 'uses master' do
-        expect(subject.send(:travis_cookbooks_branch)).to eq('master')
+      it 'uses trusty-stable' do
+        expect(subject.send(:travis_cookbooks_branch)).to eq('trusty-stable')
       end
     end
   end
