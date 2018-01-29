@@ -440,7 +440,6 @@ shared-mime-info
 software-properties-common
 sqlite3
 ssh-import-id
-sshguard
 strace
 subversion
 sudo
