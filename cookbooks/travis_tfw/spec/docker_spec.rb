@@ -2,9 +2,9 @@
 
 require 'support'
 
-describe 'tiny floating whale docker setup', docker: false do
-  include Support::Helpers
+include Support::Helpers
 
+describe 'tiny floating whale docker setup', docker: false do
   before :all do
     sh('sudo service docker start')
   end

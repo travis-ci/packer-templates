@@ -7,9 +7,9 @@ require 'fileutils'
 require 'pathname'
 require 'tmpdir'
 
-module Support
-  include FileUtils
+include FileUtils
 
+module Support
   autoload :Erlang, 'support/erlang'
   autoload :Helpers, 'support/helpers'
   autoload :JobBoardTags, 'support/job_board_tags'

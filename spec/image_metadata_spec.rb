@@ -4,9 +4,9 @@ require 'image_metadata'
 require 'env'
 require 'support'
 
-describe ImageMetadata do
-  include Support
+include Support
 
+describe ImageMetadata do
   let(:env) { Env.new }
   let(:tarball) { 'somedir/metadata.tar.bz2' }
   let(:attrs) { job_board_attrs }

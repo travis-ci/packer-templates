@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
+include Support::Php
+
 if os[:arch] !~ /ppc64/
   describe 'php interpreter' do
-    include Support::Php
-
     describe phpcommand('php --version') do
       its(:stderr) { should be_empty }
       its(:stdout) { should match(/^PHP \d+\.\d+/) }

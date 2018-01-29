@@ -4,9 +4,9 @@ require 'travis_packer_templates'
 require 'support'
 require 'chef'
 
-describe TravisPackerTemplates do
-  include Support
+include Support
 
+describe TravisPackerTemplates do
   subject { described_class.new(node) }
 
   let :node do
