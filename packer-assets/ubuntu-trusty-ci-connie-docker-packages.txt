@@ -1,3 +1,0 @@
-libmysqlclient-dev
-mysql-client
-uuid-dev
