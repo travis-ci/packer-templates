@@ -8,16 +8,8 @@ module Support
 
     def tcpwait(host, port, timeout = 10)
       require 'socket'
-
       now = Time.now
-
-      loop do
-        TCPSocket.new(host, port)
-        break
-      rescue Errno::ECONNREFUSED, Errno::EINVAL => e
-        raise e if Time.now - now >= timeout
-        sleep 0.1
-      end
+      loop { tcpwait_tick(host, port, now, timeout) }
     end
 
     def procwait(proc_pattern, timeout = 10)
@@ -36,5 +28,13 @@ module Support
     end
 
     TimesUp = Class.new(StandardError)
+
+    private def tcpwait_tick(host, port, now, timeout)
+      TCPSocket.new(host, port)
+      break
+    rescue Errno::ECONNREFUSED, Errno::EINVAL => e
+      raise e if Time.now - now >= timeout
+      sleep 0.1
+    end
   end
 end
