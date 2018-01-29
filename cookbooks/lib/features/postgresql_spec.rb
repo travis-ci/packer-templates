@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-include Support::Postgresql
-
 describe 'postgresql installation' do
+  include Support::Postgresql
+
   describe pgcommand('psql --version') do
     its(:stdout) { should match(/^psql.+9\.[2-6]+\.[0-9]+/) }
     its(:exit_status) { should eq 0 }

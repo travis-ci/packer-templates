@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-include Support::Php
-
 require 'features/php_interpreter_spec'
 
 if os[:arch] !~ /ppc64/
   describe 'php environment' do
+    include Support::Php
+
     describe phpcommand('php-fpm --version') do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^PHP \d+\.\d+\.\d+.+fpm-fcgi/) }

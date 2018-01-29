@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-include Support::Erlang
-
 describe 'erlang environment' do
+  include Support::Erlang
+
   describe erlcommand(
     'erl -eval "' \
       'erlang:display(erlang:system_info(otp_release)), halt().' \
