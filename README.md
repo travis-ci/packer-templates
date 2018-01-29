@@ -5,22 +5,22 @@ Collection of Packer templates used for various infrastructure layers.
 ## How to build stuff
 
 To build a given template, one may use the `make` implicit builder, like the
-following for `ci-connie`:
+following for `ci-stevonnie`:
 
 ``` bash
-make ci-connie
+make ci-stevonnie
 ```
 
 or, with a specific builder:
 
 ``` bash
-make ci-connie BUILDER=docker
+make ci-stevonnie BUILDER=docker
 ```
 
 or forget about the `Makefile` and run with `packer` directly:
 
 ``` bash
-packer build -only=docker <(bin/yml2json < ci-connie.yml)
+packer build -only=docker <(bin/yml2json < ci-stevonnie.yml)
 ```
 
 ## env config bits
@@ -143,11 +143,11 @@ either trusty or xenial stacks is `12.9`, which means that *all* cookbook
 dependencies must be declared in `metadata.rb`, a requirement that is also
 enforced by the `foodcritic` checks.
 
-For example, the minimal trusty image "ci-connie" has a wrapper cookbook at
-`./cookbooks/travis-ci_connie` that looks like this:
+For example, the minimal trusty image "ci-stevonnie" has a wrapper cookbook at
+`./cookbooks/travis-ci_stevonnie` that looks like this:
 
 ```
-cookbooks/travis_ci_connie
+cookbooks/travis_ci_stevonnie
 ├── README.md
 ├── attributes
 │   └── default.rb
@@ -403,7 +403,7 @@ Example:
 
 ```
 bundle exec travis-packer-build \
-	-I ci-garnet.yml \
+	-I ci-sardonyx.yml \
 	--target-repo-slug="travis-infrastructure/packer-build" \
 	--github-api-token="<your-token-here>" \
 	--body-tmpl=".packer-build-pull-request-false-tmpl.yml"

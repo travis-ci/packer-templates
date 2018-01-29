@@ -56,22 +56,21 @@ __install_packages() {
 }
 
 __upgrade_apt() {
-  if [[ ${SKIP_APT_UPGRADE} ]]; then
-    return
-  fi
-
   local arch_type
   arch_type="$(uname -m)"
   local dist_name
   dist_name="$(lsb_release -sc)"
 
-  if ! [[ "${arch_type}" =~ ppc64 ]]; then
+  if [[ "${SKIP_APT_UPGRADE}" || "${dist_name}" =~ xenial ]]; then
+    return
+  fi
+
+  if [[ "${arch_type}" =~ ppc64 ]]; then
+    apt-get install -yqq apt=1.2.10
+  else
     curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh |
       bash
     apt-get update -yqq
-  fi
-  if ! [[ "${dist_name}" =~ xenial ]]; then
-    apt-get install -yqq apt=1.2.10
   fi
 
   apt-get clean -yqq

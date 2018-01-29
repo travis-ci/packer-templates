@@ -39,7 +39,6 @@ class StackPromotionHydrator
                            stack_promotion.nxt.metadata.files[metadata_file]
                          ])
       end
-
       diff_command = %W[
         diff -u
         --label #{stack_promotion.cur.name}/#{metadata_file}
@@ -98,25 +97,21 @@ class StackPromotionHydrator
       stack_promotion.cur.metadata.env_hash['PACKER_TEMPLATES_SHA'] + '...' +
       stack_promotion.nxt.metadata.env_hash['PACKER_TEMPLATES_SHA']
     )
-
     travis_cookbooks_diff_url = File.join(
       'https://github.com/travis-ci/travis-cookbooks/compare',
       stack_promotion.cur.metadata.env_hash['TRAVIS_COOKBOOKS_SHA'] + '...' +
       stack_promotion.nxt.metadata.env_hash['TRAVIS_COOKBOOKS_SHA']
     )
-
     output_files = output_dir.children.reject do |child|
       child.directory? || child.basename == 'README.md' ||
         child.basename == 'index.json'
     end
-
     urls = {
       packer_templates_diff_url: packer_templates_diff_url,
       travis_cookbooks_diff_url: travis_cookbooks_diff_url,
       current_image_metadata_tarball_url: stack_promotion.cur.metadata.url,
       next_image_metadata_tarball_url: stack_promotion.nxt.metadata.url
     }
-
     create_readme_md(output_files, urls: urls)
     create_index_json(output_files, urls: urls)
   end
@@ -124,7 +119,6 @@ class StackPromotionHydrator
   private def create_readme_md(output_files, urls: {})
     readme_buf = []
     readme_buf << "# #{stack_promotion.stack} promotion report"
-
     unless urls.length.zero?
       readme_buf << ''
       urls.each do |text, url|
@@ -132,7 +126,6 @@ class StackPromotionHydrator
       end
       readme_buf << ''
     end
-
     unless output_files.length.zero?
       readme_buf << '## output files'
       readme_buf << ''
@@ -140,7 +133,6 @@ class StackPromotionHydrator
         readme_buf << "- [#{filename.basename}](./#{filename.basename})"
       end
     end
-
     readme = output_dir.join('README.md')
     logger.info "writing #{readme}"
     readme.write(readme_buf.join("\n"))

@@ -30,12 +30,22 @@ describe 'apt installation' do
   end
 
   describe 'apt architecture' do
-    describe command('dpkg --print-architecture') do
-      its(:stdout) { should match(/amd64/) }
-    end
+    if os[:arch] =~ /ppc64/
+      describe command('dpkg --print-architecture') do
+        its(:stdout) { should match(/ppc/) }
+      end
 
-    describe command('dpkg --print-foreign-architectures') do
-      its(:stdout) { should match(/i386/) }
+      describe command('dpkg --print-foreign-architectures') do
+        its(:stdout) { should be_empty }
+      end
+    else
+      describe command('dpkg --print-architecture') do
+        its(:stdout) { should match(/amd64/) }
+      end
+
+      describe command('dpkg --print-foreign-architectures') do
+        its(:stdout) { should match(/i386/) }
+      end
     end
   end
 end

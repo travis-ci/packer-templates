@@ -25,10 +25,10 @@ main() {
   esac
 
   COMBOS=(
-    languages:excl:amethyst:connie
-    languages:excl:garnet:connie
-    languages:excl:garnet:amethyst
-    features:incl:garnet:amethyst
+    languages:excl:opal:stevonnie
+    languages:excl:sardonyx:stevonnie
+    languages:excl:sardonyx:opal
+    features:incl:sardonyx:opal
   )
 
   cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
