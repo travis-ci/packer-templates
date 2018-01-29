@@ -1,5 +1,5 @@
 ---
-description: Travis CI stevonnie build env template!
+description: Travis CI stevonnie build env template
 variables:
   docker_repository: travisci/ci-stevonnie
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>
