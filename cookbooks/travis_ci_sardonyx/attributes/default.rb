@@ -130,7 +130,6 @@ override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
 # TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
-  cassandra
   chromium
   couchdb
   disabled-ipv6

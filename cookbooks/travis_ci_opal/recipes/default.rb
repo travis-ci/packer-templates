@@ -50,7 +50,9 @@ include_recipe 'travis_build_environment::riak' if node['kernel']['machine'] != 
 include_recipe 'travis_build_environment::redis'
 include_recipe 'travis_build_environment::mongodb'
 include_recipe 'memcached'
-include_recipe 'travis_build_environment::cassandra'
+# TODO: Uncomment when cassandra works on Java 8 again
+# https://github.com/travis-ci/packer-templates/issues/589
+# include_recipe 'travis_build_environment::cassandra'
 include_recipe 'travis_build_environment::rabbitmq'
 include_recipe 'travis_build_environment::couchdb'
 include_recipe 'travis_build_environment::elasticsearch'
