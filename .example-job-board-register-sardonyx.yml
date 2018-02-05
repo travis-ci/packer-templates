@@ -19,7 +19,8 @@ languages:
 - scala
 features:
 - basic
-- cassandra
+# FIXME: uncomment once working on xenial
+# - cassandra
 - chromium
 # FIXME: uncomment once working on xenial
 # - couchdb
@@ -43,7 +44,8 @@ features:
 - python_interpreter
 - rabbitmq
 - redis
-- riak
+# FIXME: uncomment once working on xenial
+# - riak
 - ruby_interpreter
 - sqlite
 - xserver
