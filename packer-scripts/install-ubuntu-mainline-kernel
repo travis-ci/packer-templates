@@ -16,7 +16,7 @@ main() {
   local url_prefix='http://kernel.ubuntu.com/~kernel-ppa/mainline'
   local re_prefix='[0-9a-f]{64}  linux'
   local image_suffix="[0-9]{6}-generic_${kv}-[0-9]{6}\\.[0-9]{12}_amd64\\.deb\$"
-  local image_path headers_path
+  local image_path headers_path generic_headers_path
 
   export DEBIAN_FRONTEND=noninteractive
 
@@ -37,6 +37,12 @@ main() {
       "${TMPDIR}/CHECKSUMS"
   )"
 
+  generic_headers_path="$(
+    awk \
+      "/${re_prefix}-headers-${kv}.+generic.+_amd64\\.deb\$/ { print \$NF }" \
+      "${TMPDIR}/CHECKSUMS"
+  )"
+
   [[ "${image_path}" ]] || {
     echo "Failed to find matching image deb for kernel ${kv}"
     exit 1
@@ -47,10 +53,17 @@ main() {
     exit 1
   }
 
+  [[ "${generic_headers_path}" ]] || {
+    echo "Failed to find matching generic headers deb for kernel ${kv}"
+    exit 1
+  }
+
   "${CURL}" -sSL -o "${TMPDIR}/linux-image.deb" \
     "${url_prefix}/v${kv}/${image_path}"
   "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
     "${url_prefix}/v${kv}/${headers_path}"
+  "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
+    "${url_prefix}/v${kv}/${generic_headers_path}"
 
   sudo "${DPKG}" -i \
     "${TMPDIR}/linux-headers.deb" \
