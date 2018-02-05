@@ -49,6 +49,7 @@ __install_packages() {
     curl \
     gawk \
     git \
+    libelf-dev
     sudo \
     wget \
     python \
