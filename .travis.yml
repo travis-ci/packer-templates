@@ -36,10 +36,10 @@ install:
 
 script:
 - make
-- travis_retry 60 bundle exec make test
+- bundle exec make test
 - git diff --exit-code
 - git diff --cached --exit-code
-- travis_retry bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
+- travis_retry 60 bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
 - for f in ~/.*_rspec.json; do
     echo "checking $f";
     jq . < $f &>/dev/null;
