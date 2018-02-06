@@ -36,7 +36,7 @@ install:
 
 script:
 - make
-- bundle exec make test
+- travis_retry 60 bundle exec make test
 - git diff --exit-code
 - git diff --cached --exit-code
 - travis_retry bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
