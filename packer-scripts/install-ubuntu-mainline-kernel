@@ -62,11 +62,12 @@ main() {
     "${url_prefix}/v${kv}/${image_path}"
   "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
     "${url_prefix}/v${kv}/${headers_path}"
-  "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
+  "${CURL}" -sSL -o "${TMPDIR}/linux-headers-generic.deb" \
     "${url_prefix}/v${kv}/${generic_headers_path}"
 
   sudo "${DPKG}" -i \
     "${TMPDIR}/linux-headers.deb" \
+    "${TMPDIR}/linux-headers-generic.deb" \
     "${TMPDIR}/linux-image.deb"
 }
 
