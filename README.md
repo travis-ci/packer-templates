@@ -1,4 +1,4 @@
-# packer-templates
+# packer-templates [![Build Status](https://travis-ci.org/travis-ci/packer-templates.svg?branch=master)](https://travis-ci.org/travis-ci/packer-templates)
 
 Collection of Packer templates used for various infrastructure layers.
 
