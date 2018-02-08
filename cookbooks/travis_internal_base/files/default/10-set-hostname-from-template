@@ -19,8 +19,10 @@ main() {
   local hosts_line
   local instance_hostname=localhost
   local instance_id=notset
+  local region_zone=notset
   local instance_ipv4=127.0.0.1
   local ec2_metadata='http://169.254.169.254/latest/meta-data'
+  local gce_metadata='http://metadata.google.internal/computeMetadata/v1'
   local packet_metadata='https://metadata.packet.net/metadata'
 
   if curl --connect-timeout 3 -sfSL \
@@ -45,9 +47,28 @@ main() {
     )"
   fi
 
+  if curl --connect-timeout 3 -sfSL -H 'Metadata-Flavor: Google' \
+          "${gce_metadata}/instance" &>/dev/null; then
+    curl -sSL -H 'Metadata-Flavor: Google' \
+      "${gce_metadata}/instance/id" >"${RUNDIR}/instance-id"
+    instance_id="$(cat "${RUNDIR}/instance-id")"
+    instance_id="${instance_id:0:9}"
+
+    curl -sSL -H 'Metadata-Flavor: Google' \
+      "${gce_metadata}/instance/network-interfaces/0/ip" \
+      >"${RUNDIR}/instance-ipv4"
+    instance_ipv4="$(cat "${RUNDIR}/instance-ipv4")"
+
+    curl -sSL -H 'Metadata-Flavor: Google' \
+      "${gce_metadata}/instance/zone" |
+      awk -F/ '{ print $NF }' >"${RUNDIR}/instance-region-zone"
+    region_zone="$(cat "${RUNDIR}/instance-region-zone")"
+  fi
+
   instance_hostname="$(
-    sed "s/___INSTANCE_ID___/${instance_id}/g" \
-      "${RUNDIR}/instance-hostname.tmpl"
+    sed -e "s/___INSTANCE_ID___/${instance_id}/g" \
+        -e "s/___REGION_ZONE___/${region_zone}/g" \
+      <"${RUNDIR}/instance-hostname.tmpl"
   )"
   hosts_line="${instance_ipv4} ${instance_hostname} ${instance_hostname%%.*}"
 
