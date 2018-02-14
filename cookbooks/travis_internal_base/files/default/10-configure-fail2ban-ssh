@@ -18,7 +18,7 @@ main() {
 
   cat >"${ETC_FAIL2BAN}/jail.local" <<EOF
 # Written via cloud-init :heart:
-[ssh]
+[sshd]
 enabled = true
 maxretry = ${FAIL2BAN_SSH_MAXRETRY}
 bantime = ${FAIL2BAN_SSH_BANTIME}
