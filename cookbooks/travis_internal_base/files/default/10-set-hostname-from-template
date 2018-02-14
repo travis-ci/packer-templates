@@ -48,7 +48,7 @@ main() {
   fi
 
   if curl --connect-timeout 3 -sfSL -H 'Metadata-Flavor: Google' \
-          "${gce_metadata}/instance" &>/dev/null; then
+    "${gce_metadata}/instance" &>/dev/null; then
     curl -sSL -H 'Metadata-Flavor: Google' \
       "${gce_metadata}/instance/id" >"${RUNDIR}/instance-id"
     instance_id="$(cat "${RUNDIR}/instance-id")"
@@ -67,7 +67,7 @@ main() {
 
   instance_hostname="$(
     sed -e "s/___INSTANCE_ID___/${instance_id}/g" \
-        -e "s/___REGION_ZONE___/${region_zone}/g" \
+      -e "s/___REGION_ZONE___/${region_zone}/g" \
       <"${RUNDIR}/instance-hostname.tmpl"
   )"
   hosts_line="${instance_ipv4} ${instance_hostname} ${instance_hostname%%.*}"
