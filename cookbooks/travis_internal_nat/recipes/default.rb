@@ -46,3 +46,15 @@ cookbook_file '/etc/collectd/collectd.conf' do
   group 'root'
   mode 0o644
 end
+
+service 'apparmor' do
+  action %i[stop]
+end
+
+package %w[apparmor] do
+  action %i[purge]
+end
+
+execute 'systemctl reset-failed apparmor' do
+  action :nothing
+end
