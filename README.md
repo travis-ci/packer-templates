@@ -409,6 +409,8 @@ bundle exec travis-packer-build \
 	--body-tmpl=".packer-build-pull-request-false-tmpl.yml"
 ```
 
+You can specify the branch using `-B` (if you don't want to build from master).
+
 The file `.packer-build-pull-request-false-tmpl.yml` here is just an
 example, but you can also create a different template that specifies
 other travis-cookbooks or packer-template branches.
