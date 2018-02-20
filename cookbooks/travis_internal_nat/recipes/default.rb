@@ -34,9 +34,13 @@ include_recipe 'travis_duo'
 package %w[
   collectd
   collectd-utils
+  conntrack
   curl
   fail2ban
+  nfacct
+  nftables
   pssh
+  xtables-addons-common
 ] do
   action %i[install upgrade]
 end
