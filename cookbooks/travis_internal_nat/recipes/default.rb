@@ -37,9 +37,13 @@ package %w[
   conntrack
   curl
   fail2ban
+  git
+  make
   nfacct
   nftables
   pssh
+  python-netaddr
+  python-pip
   xtables-addons-common
 ] do
   action %i[install upgrade]
@@ -50,6 +54,26 @@ cookbook_file '/etc/collectd/collectd.conf' do
   group 'root'
   mode 0o644
 end
+
+git node['travis_internal_nat']['nat_conntracker']['clone_dir'] do
+  repository node['travis_internal_nat']['nat_conntracker']['git_repo']
+  revision node['travis_internal_nat']['nat_conntracker']['git_rev']
+  user 'root'
+  group 'root'
+  action :sync
+end
+
+execute 'make sysinstall' do
+  cwd node['travis_internal_nat']['nat_conntracker']['clone_dir']
+  user 'root'
+end
+
+service 'nat-conntracker' do
+  action %i[enable start]
+end
+
+# TODO: configure fail2ban to watch /var/log/nat-conntracker.log
+#       with pattern 'WARNING over threshold=\d+ src=<HOST>`
 
 service 'apparmor' do
   action %i[stop]
