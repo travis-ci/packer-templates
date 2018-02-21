@@ -46,6 +46,7 @@ script:
 - bundle exec make test
 - git diff --exit-code
 - git diff --cached --exit-code
+- sudo lsof | grep dpkg
 - travis_retry bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
 - for f in ~/.*_rspec.json; do
     echo "checking $f";
