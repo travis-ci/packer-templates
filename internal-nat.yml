@@ -59,20 +59,13 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   run_list:
-  - recipe[travis_internal_base]
+  - recipe[travis_internal_nat]
 - type: shell
   scripts:
-  - packer-scripts/ensure-travis-user
   - packer-scripts/purge
-  - packer-scripts/install-ubuntu-mainline-kernel
   - packer-scripts/run-serverspecs
   - packer-scripts/cleanup
   environment_vars:
   - SPEC_SUITES=travis_internal_base
-  - TRAVIS_OBFUSCATE_PASSWORD=1
   - PURGE_PACKAGE_DEFAULTS=chef,chefdk
-  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-- type: shell
-  scripts:
-  - packer-scripts/configure-nat
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"

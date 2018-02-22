@@ -27,24 +27,26 @@ features:
 - disabled-ipv6
 - docker
 - docker-compose
-- elasticsearch
+# FIXME: uncomment once working on xenial
+# - elasticsearch
 - firefox
 - go-toolchain
 - google-chrome
 - jdk
 - memcached
-- mongodb
-- mysql
+# FIXME: uncomment once working on xenial
+# - mongodb
+# - mysql
 - nodejs_interpreter
 - perl_interpreter
 - perlbrew
 # FIXME: uncomment once working on xenial
 # - phantomjs
-- postgresql
+# - postgresql
 - python_interpreter
-- rabbitmq
-- redis
 # FIXME: uncomment once working on xenial
+# - rabbitmq
+# - redis
 # - riak
 - ruby_interpreter
 - sqlite

@@ -16,9 +16,9 @@ main() {
   : "${FAIL2BAN_SSH_MAXRETRY:=4}"
   : "${FAIL2BAN_SSH_BANTIME:=86400}"
 
-  cat >"${ETC_FAIL2BAN}/jail.local" <<EOF
+  cat >"${ETC_FAIL2BAN}/jail.d/99-enable-sshd.local" <<EOF
 # Written via cloud-init :heart:
-[ssh]
+[sshd]
 enabled = true
 maxretry = ${FAIL2BAN_SSH_MAXRETRY}
 bantime = ${FAIL2BAN_SSH_BANTIME}
