@@ -1,0 +1,43 @@
+---
+description: Travis CI macOS build env template
+variables:
+  image_name: travis-ci-macos-10.13-{{ timestamp }}-<%= git_desc %>
+  ssh_password: "{{ env `TRAVIS_PACKER_SSH_PASSWORD` }}"
+  vcenter_server: "{{ env `VCENTER_SERVER` }}"
+  vcenter_user: "{{ env `VCENTER_USER` }}"
+  vcenter_password: "{{ env `VCENTER_PASSWORD` }}"
+  vcenter_insecure: "{{ env `VCENTER_INSECURE` }}"
+builders:
+- type: vsphere
+  name: vsphere
+  ssh_timeout: 10m
+  ssh_port: 22
+  ssh_username: travis
+  vcenter_server: "{{ user `vcenter_server` }}"
+  username: "{{ user `vcenter_user` }}"
+  password: "{{ user `vcenter_password` }}"
+  insecure_connection: "{{ user `vcenter_insecure` }}"
+  datacenter: "pod-1"
+  host: "MacPro_Pod_1"
+  datastore: "DataCore1_1"
+  folder: "In Progress Base VMs"
+  template: "travis-ci-macos-10.13-vanilla-1519677570"
+  vm_name: "{{ user `image_name` }}"
+  CPUs: 1
+  CPU_reservation: 1000
+  CPU_limit: 2000
+  RAM: 2048
+  RAM_reservation: 2048
+  ssh_password: "{{ user `ssh_password` }}"
+  shutdown_command: "sudo shutdown -h now"
+  shutdown_timeout: 5m
+  create_snapshot: true
+  convert_to_template: false
+provisioners:
+- type: shell
+  inline:
+  - sudo gem install --no-document xcode-install
+  - xcversion install 9.2
+  - curl -o bootstrap.sh https://raw.githubusercontent.com/travis-ci/osx-image-bootstrap/master/bootstrap.sh
+  - chmod +x bootstrap.sh
+  - ./bootstrap.sh
