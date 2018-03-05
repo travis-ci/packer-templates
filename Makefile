@@ -72,6 +72,8 @@ install-packer: tmp/packer.zip
 	mkdir -p ~/bin
 	$(UNZIP) -o -d ~/bin $<
 	chmod +x ~/bin/packer
+	curl -o ~/bin/packer-builder-vsphere https://github.com/jetbrains-infra/packer-builder-vsphere/releases/download/v1.6/packer-builder-vsphere.linux
+	chmod +x ~/bin/packer-builder-vsphere
 
 .PHONY: install-bats
 install-bats: tmp/bats/.git
