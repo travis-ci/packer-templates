@@ -41,3 +41,4 @@ provisioners:
   - curl -o bootstrap.sh https://raw.githubusercontent.com/travis-ci/osx-image-bootstrap/master/bootstrap.sh
   - chmod +x bootstrap.sh
   - ./bootstrap.sh
+  
