@@ -7,6 +7,8 @@ variables:
   vcenter_user: "{{ env `VCENTER_USER` }}"
   vcenter_password: "{{ env `VCENTER_PASSWORD` }}"
   vcenter_insecure: "{{ env `VCENTER_INSECURE` }}"
+  xcode_install_user: "{{ env `XCODE_INSTALL_USER` }}"
+  xcode_install_password: "{{ env `XCODE_INSTALL_PASSWORD` }}"
 builders:
 - type: vsphere
   name: vsphere
@@ -35,6 +37,9 @@ builders:
   convert_to_template: false
 provisioners:
 - type: shell
+  environment_vars:
+  - XCODE_INSTALL_USER={{ user `xcode_install_user` }}
+  - XCODE_INSTALL_PASSWORD={{ user `xcode_install_password` }}
   scripts:
   - packer-scripts/macos-image-bootstrap
-  execute_command: "{{ .Vars }} bash -l '{{ .Path }}'"
+  execute_command: "{{ .Vars }} bash -lx '{{ .Path }}'"
