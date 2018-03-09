@@ -12,7 +12,7 @@ DEFAULT_RUBY="2.4.2"
 declare -a GEMS=('nomad-cli' 'cocoapods' 'bundler' 'rake' 'xcpretty' 'fastlane')
 declare -a BREW_PKGS=('git' 'wget' 'mercurial' 'xctool' 'node' \
   'coreutils' 'postgresql' 'postgis' 'sqlite' 'go' 'gpg' 'carthage' \
-  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven')
+  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven', 'gpg2')
 declare -a BREW_CASK_PKGS=('java' 'oclint' 'rubymotion' 'xquartz')
 declare -a PIP_PKGS=('virtualenv' 'numpy' 'scipy' 'tox')
 declare -a NODE_VERSIONS=('6' '5' '4' '0.12' '0.10' '0.8' 'iojs')
@@ -206,7 +206,8 @@ rvm_install() {
   }
 
   echo "--- Installing rvm."
-  command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+  gpg --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+  command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
   curl -sSL https://get.rvm.io | bash -s stable
   rvm_common
   source "$HOME/.rvm/scripts/rvm" # needed for future rvm usage in this script
