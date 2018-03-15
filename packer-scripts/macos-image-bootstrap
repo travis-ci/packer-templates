@@ -5,6 +5,8 @@ if [[ `id -u` -eq 0 ]]; then
 	exit 1
 fi
 
+set -o errexit
+set -o pipefail
 
 IOS_VERSIONS="8.1,8.2,8.3,8.4,9.0,9.1,9.2,9.3,10.0,10.1,10.2,10.3"
 declare -a RUBIES=('2.3.5' '2.4.2')
@@ -12,7 +14,7 @@ DEFAULT_RUBY="2.4.2"
 declare -a GEMS=('nomad-cli' 'cocoapods' 'bundler' 'rake' 'xcpretty' 'fastlane')
 declare -a BREW_PKGS=('git' 'wget' 'mercurial' 'xctool' 'node' \
   'coreutils' 'postgresql' 'postgis' 'sqlite' 'go' 'gpg' 'carthage' \
-  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven', 'gpg2')
+  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven' 'gpg2')
 declare -a BREW_CASK_PKGS=('java' 'oclint' 'rubymotion' 'xquartz')
 declare -a PIP_PKGS=('virtualenv' 'numpy' 'scipy' 'tox')
 declare -a NODE_VERSIONS=('6' '5' '4' '0.12' '0.10' '0.8' 'iojs')
@@ -133,8 +135,8 @@ disable_scheduled_software_updates() {
   sudo softwareupdate --schedule off
 }
 
-brew_setup_update() {
-  echo "--- Install/upgrade brew."
+brew_setup() {
+  echo "--- Install brew."
   echo | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 }
 
@@ -148,13 +150,9 @@ brew_packages_install() {
   brew cleanup
 }
 
-brew_cask_setup_update() {
+brew_cask_setup() {
   echo "--- Install brew-cask"
   brew tap caskroom/cask
-
-  echo "--- Update installed casks"
-  brew tap buo/cask-upgrade # needed to update casks
-  brew cu --all --yes
 }
 
 brew_cask_packages_install() {
@@ -165,14 +163,6 @@ brew_cask_packages_install() {
 
   echo "--- Cleaning up after brew-cask"
   brew cask cleanup
-}
-
-rubymotion_update() {
-  echo "--- Update RubyMotion"
-  # To prevent RubyMotion permission errors because `sudo motion update` created
-  # this
-  mkdir -p ~/Library/RubyMotion
-  sudo motion update
 }
 
 python_libraries_install() {
@@ -233,9 +223,6 @@ common_rubygems_install() {
     done
   done
 
-  echo "--- Upgrading existing gems."
-
-  rvm all 'do' gem update
   rvm all 'do' gem cleanup
 }
 
@@ -356,9 +343,10 @@ bootstrap() {
   install_xcode
   gemrc_setup
   disable_scheduled_software_updates
-  brew_setup_update
+  brew_setup
+  brew_cask_setup
+  brew_cask_packages_install
   brew_packages_install
-  rubymotion_update
   ###python_libraries_install # pip is unhappy in 10.12.6 and we need to figure out why
   nvm_install
   node_versions_install
