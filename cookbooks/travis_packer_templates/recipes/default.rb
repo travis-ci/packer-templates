@@ -64,3 +64,13 @@ Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
     action %i[install upgrade]
   end
 end
+
+%w[
+  apt-daily-upgrade.service
+  apt-daily-upgrade.timer
+  apt-daily.service
+  apt-daily.timer
+].each do |unit|
+  execute "systemctl disable #{unit}"
+  execute "systemctl stop #{unit}"
+end

@@ -3,3 +3,4 @@ ppp
 pppconfig
 pppoeconf
 sshguard
+unattended-upgrades
