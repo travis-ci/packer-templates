@@ -26,10 +26,12 @@ env:
 install:
 # {
 # FIXME: remove these once addressed in sardonyx image
+- sudo systemctl disable apt-daily
 - sudo systemctl disable apt-daily.timer
+- sudo systemctl disable apt-daily-upgrade
 - sudo systemctl disable apt-daily-upgrade.timer
-- sudo systemctl stop apt-daily.timer
-- sudo systemctl stop apt-daily-upgrade.timer
+- sudo systemctl stop apt-daily
+- sudo systemctl stop apt-daily-upgrade
 # }
 - if [[ -f .test-branch ]]; then
     export TRAVIS_COOKBOOKS_TEST_BRANCH="$(cat .test-branch 2>/dev/null)";
