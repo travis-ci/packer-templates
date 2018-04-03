@@ -7,6 +7,10 @@ variables:
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   image_name: travis-ci-sardonyx-xenial-{{ timestamp }}-<%= git_desc %>
   openstack_source_image_name: "{{ env `OS_SOURCE_IMAGE_XENIAL` }}"
+  openstack_ssh_key: "{{ env `OS_SSH_KEY` }}"
+  openstack_bastion_host_ip: "{{ env `OS_BASTION_HOST` }}"
+  openstack_zone: "{{ env `OS_ZONE` }}"
+  openstack_vm_flavor: "{{ env `OS_VM_FLAVOR` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -52,7 +56,7 @@ builders:
 # https://github.com/travis-ci/packer-templates/issues/555
 # - type: openstack
 #   name: openstack
-#   flavor: m1.medium-travis-ci
+#   flavor: "{{ user `openstack_vm_flavor` }}"
 #   image_name: "{{ user `image_name` }}"
 #   ssh_username: ubuntu
 #   networks:
@@ -60,6 +64,15 @@ builders:
 #   - <%= network %>
 #   <% end %>
 #   source_image_name: "{{ user `openstack_source_image_name` }}"
+#   availability_zone: "{{ user `openstack_zone` }}"
+#   <% if ! ENV['OS_BASTION_HOST'].to_s.empty? %>
+#   ssh_bastion_host: "{{ user `openstack_bastion_host_ip` }}"
+#   ssh_bastion_port: 22
+#   ssh_bastion_username: ubuntu
+#   ssh_bastion_private_key_file: "{{ user `openstack_ssh_key` }}"
+#   <% end %>
+#   ssh_keypair_name: "{{ user `openstack_ssh_key` }}"
+#   ssh_private_key_file: "{{ user `openstack_ssh_key` }}"
 provisioners:
 - type: shell
   inline: sleep 10
