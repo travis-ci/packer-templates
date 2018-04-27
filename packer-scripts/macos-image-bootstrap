@@ -12,9 +12,10 @@ IOS_VERSIONS="8.1,8.2,8.3,8.4,9.0,9.1,9.2,9.3,10.0,10.1,10.2,10.3"
 declare -a RUBIES=('2.3.5' '2.4.2')
 DEFAULT_RUBY="2.4.2"
 declare -a GEMS=('nomad-cli' 'cocoapods' 'bundler' 'rake' 'xcpretty' 'fastlane')
-declare -a BREW_PKGS=('git' 'wget' 'mercurial' 'xctool' 'node' \
+declare -a BREW_PKGS=('git' 'wget' 'mercurial' 'node' \
   'coreutils' 'postgresql' 'postgis' 'sqlite' 'go' 'gpg' 'carthage' \
-  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven' 'gpg2')
+  'md5deep' 'pyenv' 'tmate' 'cmake' 'maven' 'gpg2')
+declare -a BREW_XCODE_PKGS=('xctool' 'swiftlint')
 declare -a BREW_CASK_PKGS=('java' 'oclint' 'rubymotion' 'xquartz')
 declare -a PIP_PKGS=('virtualenv' 'numpy' 'scipy' 'tox')
 declare -a NODE_VERSIONS=('6' '5' '4' '0.12' '0.10' '0.8' 'iojs')
@@ -28,6 +29,22 @@ install_xcode() {
   echo "--- installing xcode"
   sudo gem install --no-document xcode-install
   xcversion install 9.2
+
+  echo "--- installing xcode command line tools"
+  xcode-select -p &> /dev/null
+  if [ $? -ne 0 ]; then
+    echo "Xcode CLI tools not found. Installing them..."
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
+    PROD=$(softwareupdate -l |
+      grep "\*.*Command Line" |
+      head -n 1 | awk -F"*" '{print $2}' |
+      sed -e 's/^ *//' |
+      tr -d '\n')
+    softwareupdate -i "$PROD" -v;
+    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
+  else
+    echo "Xcode CLI tools OK"
+  fi
 }
 
 
@@ -150,6 +167,18 @@ brew_packages_install() {
   brew cleanup
 }
 
+brew_xcode_packages_install() {
+  # This is separate for when we want to test the packer build process without installing
+  # xcode every single time.
+  echo "Installing brew packages that depend on xcode"
+  for PKG in "${BREW_XCODE_PKGS[@]}"; do
+    brew install $PKG
+  done
+
+  echo "--- Cleaning up after brew"
+  brew cleanup
+}
+
 brew_cask_setup() {
   echo "--- Install brew-cask"
   brew tap caskroom/cask
@@ -174,16 +203,25 @@ python_libraries_install() {
   done
 }
 nvm_install() {
-    echo "--- Install nvm"
+    echo "--- Install nvm (version $NVM_VERSION)"
     wget -qO- "https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh" | bash
 }
 
 node_versions_install() {
+  echo "--- Sourcing nvm.sh"
   source $HOME/.nvm/nvm.sh
+
+  echo "--- Setting up nvm dir"
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+  echo "WHICH ENNN VEEEEE EMMMMMM `which nvm`"
 
   # for now we just call install each time, so that already
   # installed versions also get updated.
+  echo "--- Installing or updating node versions..."
   for VER in "${NODE_VERSIONS[@]}"; do
+    echo "   --- node version $VER"
     nvm install $VER
   done
 }
@@ -335,20 +373,24 @@ bootstrap() {
 
   macos_system_prefs_setup
   travis_ssh_key_setup
-  passwordless_sudo_setup
-  harden_sshd_config
+  #passwordless_sudo_setup
+  #harden_sshd_config
   dot_bashrc_setup
   dot_profile_setup
   dot_bash_profile_setup
-  install_xcode
+#  install_xcode
   gemrc_setup
   disable_scheduled_software_updates
   brew_setup
   brew_cask_setup
   brew_cask_packages_install
   brew_packages_install
+  #brew_xcode_packages_install
   ###python_libraries_install # pip is unhappy in 10.12.6 and we need to figure out why
   nvm_install
+
+  echo "WHICH NVM: `which nvm`"
+
   node_versions_install
   rvm_install
   rubies_install

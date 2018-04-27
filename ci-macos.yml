@@ -42,4 +42,4 @@ provisioners:
   - XCODE_INSTALL_PASSWORD={{ user `xcode_install_password` }}
   scripts:
   - packer-scripts/macos-image-bootstrap
-  execute_command: "{{ .Vars }} bash -lx '{{ .Path }}'"
+  execute_command: "{{ .Vars }} bash -l '{{ .Path }}'"
