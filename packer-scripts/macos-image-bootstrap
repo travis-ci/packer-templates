@@ -215,14 +215,13 @@ node_versions_install() {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-  echo "WHICH ENNN VEEEEE EMMMMMM `which nvm`"
-
   # for now we just call install each time, so that already
   # installed versions also get updated.
   echo "--- Installing or updating node versions..."
   for VER in "${NODE_VERSIONS[@]}"; do
     echo "   --- node version $VER"
-    nvm install $VER
+    #nvm install $VER
+    . ~/.nvm/nvm.sh install $VER
   done
 }
 
@@ -388,9 +387,6 @@ bootstrap() {
   #brew_xcode_packages_install
   ###python_libraries_install # pip is unhappy in 10.12.6 and we need to figure out why
   nvm_install
-
-  echo "WHICH NVM: `which nvm`"
-
   node_versions_install
   rvm_install
   rubies_install
