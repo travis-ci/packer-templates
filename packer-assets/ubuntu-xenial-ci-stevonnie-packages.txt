@@ -461,7 +461,6 @@ ubuntu-release-upgrader-core
 ucf
 udev
 ufw
-unattended-upgrades
 unzip
 update-manager-core
 update-notifier-common
