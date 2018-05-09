@@ -2,6 +2,7 @@
 *.class
 *.rbc
 *env
+*.swp
 *~
 .DS_Store
 .env*
