@@ -119,6 +119,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/stevonnie-system-info-commands.yml
 - type: chef-solo
+  version: 13.8.5
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
