@@ -478,6 +478,7 @@ wamerican
 wget
 whiptail
 wireless-regdb
+x11-utils
 xauth
 xfsprogs
 xkb-data
