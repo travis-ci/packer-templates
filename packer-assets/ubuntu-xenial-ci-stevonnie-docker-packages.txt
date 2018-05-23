@@ -5,5 +5,4 @@ hashdeep
 libmysqlclient-dev
 locales
 mysql-client
-postgresql-client
 uuid-dev
