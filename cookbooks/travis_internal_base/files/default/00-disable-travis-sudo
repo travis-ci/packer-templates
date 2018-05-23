@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-# vim:filetype=sh
-set -o errexit
-
-main() {
-  rm -vf "${SUDOERS_D:-/etc/sudoers.d}/travis"
-}
-
-main "$@"
