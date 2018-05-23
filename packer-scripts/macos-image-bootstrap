@@ -5,6 +5,8 @@ if [[ `id -u` -eq 0 ]]; then
 	exit 1
 fi
 
+set -o errexit
+set -o pipefail
 
 IOS_VERSIONS="8.1,8.2,8.3,8.4,9.0,9.1,9.2,9.3,10.0,10.1,10.2,10.3"
 declare -a RUBIES=('2.3.5' '2.4.2')
@@ -12,14 +14,22 @@ DEFAULT_RUBY="2.4.2"
 declare -a GEMS=('nomad-cli' 'cocoapods' 'bundler' 'rake' 'xcpretty' 'fastlane')
 declare -a BREW_PKGS=('git' 'wget' 'mercurial' 'xctool' 'node' \
   'coreutils' 'postgresql' 'postgis' 'sqlite' 'go' 'gpg' 'carthage' \
-  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven')
+  'md5deep' 'pyenv' 'tmate' 'cmake' 'swiftlint' 'maven' 'gpg2')
 declare -a BREW_CASK_PKGS=('java' 'oclint' 'rubymotion' 'xquartz')
 declare -a PIP_PKGS=('virtualenv' 'numpy' 'scipy' 'tox')
 declare -a NODE_VERSIONS=('6' '5' '4' '0.12' '0.10' '0.8' 'iojs')
 export NVM_VERSION="v0.33.2"
 export RVM_VERSION="1.29.2"
+export DEBUG=1
 
 TRAVIS_SSH_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDEe8yPui0lLZpgaRNghw1H/2SGrpWV7Frw5FkftKGvMjkCL/FP6FeNZOUfWk5qISlhgkjZPu78nioZrUndTjOnSS8pWbecTrQCLKijufOS7A4n212bsdLpMwNuUE8lI1T0i9GcMRYfyK2jm/mosJkED2MomVzBi45NkEjG9IK/OncDcw+i15PDZcwONKZujc04KfNevhCIEt1sGJ0/mffwmQW5KVeKl5RjkKBxlmjo4ZSEVJV0CfzFQaua3c3cSswl3i5RX1wP6ciGfJlI/OZlXdQO4AwtcNFumklJFa2wf6BbRzXsaAieBnc1O2z885rEpXeeOsNzI/z6A+jLwEte2jZgMDh2x5fN3b4Au/iZt7ZhD7241QxN2quz3ej1zjr9MDJizQyzCrOvjvdNWE6CyAjoyF7aYptHCXuSjUbe7i+xx1PQk/MA+lEWAAzW+N4v4nSkHhVcyHnCzZB1WOlmSDNh19CvpF7zwnzs95D25goAH/veImF3RUMzKT5VTETqDgzF1CneAPq16//cIE/fnxtej0e5ZVPbj7oAgPEt0ERIgUo852iLjCHhD2n4juV564yGhs4Gf8eu3aGV+6kzzt8jBZlsiATF1WIwXJQy9Ga8F36v/GZmWVv+NIyRVw0aW1n8xaUzpVBdiNR8u+LvpOX9St6B4Z1iB6m0nhV2Sw== travis@mac"
+
+install_xcode() {
+  echo "--- installing xcode"
+  sudo gem install --no-document xcode-install
+  xcversion install 9.2
+}
+
 
 macos_system_prefs_setup() {
   echo "--- setting system preferences."
@@ -33,11 +43,9 @@ macos_system_prefs_setup() {
 }
 
 travis_ssh_key_setup() {
-  if [[ ! -d ~/.ssh ]]; then
-    echo "--- make .ssh/ && set permissions."
-    mkdir -p ~/.ssh
-    chmod 0700 ~/.ssh
-  fi
+  echo "--- make .ssh/ && set permissions."
+  mkdir -p ~/.ssh
+  chmod 0700 ~/.ssh
 
   echo "--- Add Travis SSH key to authorized_keys && set permissions."
   echo "$TRAVIS_SSH_KEY" > ~/.ssh/authorized_keys
@@ -127,81 +135,47 @@ disable_scheduled_software_updates() {
   sudo softwareupdate --schedule off
 }
 
-brew_setup_update() {
-  echo "--- Install/upgrade brew."
-  brew upgrade || ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install) </dev/null"
-
-  echo "--- Update installed packages"
-  brew update
+brew_setup() {
+  echo "--- Install brew."
+  echo | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 }
 
 brew_packages_install() {
   echo "--- Install tools with brew"
   for PKG in "${BREW_PKGS[@]}"; do
-    if [[ ! $(brew list | grep $PKG) ]]; then
       brew install $PKG
-    else
-     echo "$PKG present"
-    fi
   done
 
   echo "--- Cleaning up after brew"
   brew cleanup
 }
 
-brew_cask_setup_update() {
+brew_cask_setup() {
   echo "--- Install brew-cask"
   brew tap caskroom/cask
-
-  echo "--- Update installed casks"
-  brew tap buo/cask-upgrade # needed to update casks
-  brew cu --all --yes
 }
 
 brew_cask_packages_install() {
   echo "--- Install tools with brew-cask"
   for PKG in "${BREW_CASK_PKGS[@]}"; do
-    if [[ ! $(brew cask list | grep $PKG) ]]; then
-      brew cask install $PKG
-    else
-     echo "$PKG present"
-    fi
+    brew cask install $PKG
   done
 
   echo "--- Cleaning up after brew-cask"
   brew cask cleanup
 }
 
-rubymotion_update() {
-  echo "--- Update RubyMotion"
-  # To prevent RubyMotion permission errors because `sudo motion update` created
-  # this
-  mkdir -p ~/Library/RubyMotion
-  sudo motion update
-}
-
 python_libraries_install() {
   echo "--- Checking Python Libraries."
   # pip installs should be idempotent.
   for PKG in "${PIP_PKGS[@]}"; do
-    if [[ ! $(pip show $PKG) ]]; then
-        echo "--- Installing $PKG"
-        pip install $PKG
-    elif [[ $(pip list --format=legacy --outdated | grep -v latest | grep $PKG) ]]; then
-        echo "--- Upgrading $PKG"
-        pip install $PKG --upgrade
-    fi
+    echo "--- Installing $PKG"
+    pip install $PKG
   done
 }
 nvm_install() {
-  # nvm
-
-  if [[ ! -d $HOME/.nvm ]]; then
     echo "--- Install nvm"
     wget -qO- "https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh" | bash
-  else
-    echo "--- nvm present. Skipping."
-  fi
 }
 
 node_versions_install() {
@@ -221,32 +195,18 @@ rvm_install() {
     rvm cleanup all
   }
 
-  if [[ ! -d $HOME/.rvm ]]; then
-    echo "--- Installing rvm."
-    command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
-    curl -sSL https://get.rvm.io | bash -s stable
-    rvm_common
-  else
-    export RVM_REMOTE_VERSION="$(curl  https://raw.githubusercontent.com/rvm/rvm/master/VERSION)"
-    if [[ $RVM_REMOTE_VERSION != $RVM_VERSION ]]; then
-      echo "--- Updating rvm."
-      rvm get stable
-      rvm_common
-    else
-      echo "--- rvm up to date. Skipping."
-    fi
-  fi
+  echo "--- Installing rvm."
+  gpg --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+  command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+  curl -sSL https://get.rvm.io | bash -s stable
+  rvm_common
   source "$HOME/.rvm/scripts/rvm" # needed for future rvm usage in this script
 }
 
 rubies_install() {
   echo "--- Install rubies with rvm"
   for RUBY in "${RUBIES[@]}"; do
-    if [[ ! $(rvm list | grep $RUBY) ]]; then
-      rvm install $RUBY
-    else
-      echo "--- ruby version $RUBY is present. Skipping."
-    fi
+    rvm install $RUBY
   done
 
   rvm alias create default $DEFAULT_RUBY
@@ -258,17 +218,11 @@ common_rubygems_install() {
 
   for G in "${GEMS[@]}"; do
     for R in $(rvm list strings|grep 'ruby'); do
-      if [[ $(gem list '^'$G'$') ]]; then
-        echo "--- $G already installed. Skipping."
-      else
         echo "--- Installing $G"
-        rvm $R do gem install $G
-      fi
+        rvm $R 'do' gem install $G
     done
   done
 
-  echo "--- Upgrading existing gems."
-  rvm all 'do' gem update
   rvm all 'do' gem cleanup
 }
 
@@ -386,11 +340,13 @@ bootstrap() {
   dot_bashrc_setup
   dot_profile_setup
   dot_bash_profile_setup
+  install_xcode
   gemrc_setup
   disable_scheduled_software_updates
-  brew_setup_update
+  brew_setup
+  brew_cask_setup
+  brew_cask_packages_install
   brew_packages_install
-  rubymotion_update
   ###python_libraries_install # pip is unhappy in 10.12.6 and we need to figure out why
   nvm_install
   node_versions_install
@@ -402,13 +358,9 @@ bootstrap() {
   setup_travis_runner
   ###xcode_simulator_reset #fastlane isn't working with xcode 9 yet
   software_updates
-
-  if [[ ! $(find /usr/local/travis/* -cmin -50) ]]; then
-    system_info
-  else
-    echo "--- system_info updated recently. Skipping."
-  fi
+  system_info
 }
 
 # Check for Xcode, otherwise bootstrap things
-xcodebuild -version > /dev/null && bootstrap || echo "You need to install Xcode" && exit 1
+#xcodebuild -version > /dev/null && bootstrap || echo "You need to install Xcode" && exit 1
+bootstrap
