@@ -1,8 +1,0 @@
-# vim:filetype=pamconf
-# Managed by Chef on <%= node.name %> :heart:
-# cookbook:: travis_internal_base
-#     file:: templates/default/pam.d-common-auth.conf.erb
-
-auth [success=1 default=ignore] pam_unix.so nullok_secure
-auth requisite pam_deny.so
-auth required pam_permit.so
