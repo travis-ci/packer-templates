@@ -1,19 +1,29 @@
 #!/usr/bin/env bash
 set -o errexit
+set -o pipefail
 
 main() {
+  echo 'ensuring travis user'
+
   : "${TRAVIS_USER_PASSWORD:=travis}"
 
-  if [[ ${TRAVIS_OBFUSCATE_PASSWORD} ]]; then
+  if [[ "${TRAVIS_OBFUSCATE_PASSWORD}" ]]; then
     TRAVIS_USER_PASSWORD="$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)"
   fi
 
+  if [[ ! "${QUIET}" ]]; then
+    set -o xtrace
+  fi
+
   getent passwd | grep -q travis
+
+  set +o xtrace
   echo "travis:${TRAVIS_USER_PASSWORD}" | chpasswd
+  set -o xtrace
 
   for f in .ssh/authorized_keys .ssh/known_hosts; do
     mkdir -p "/home/travis/$(dirname "${f}")"
-    touch /home/travis/$f
+    touch "/home/travis/${f}"
     chmod 0600 "/home/travis/${f}"
   done
 
@@ -24,4 +34,4 @@ main() {
   chown -R travis:travis /home/travis /opt
 }
 
-main "$@"
+main "${@}"
