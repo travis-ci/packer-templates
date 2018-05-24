@@ -31,6 +31,15 @@ main() {
       "/${re_prefix}-image-${kv}-${image_suffix}/ { print \$NF }" \
       "${TMPDIR}/CHECKSUMS"
   )"
+
+  if [[ ! "${image_path}" ]]; then
+    image_path="$(
+      awk \
+        "/${re_prefix}-image-unsigned-${kv}-${image_suffix}/ { print \$NF }" \
+        "${TMPDIR}/CHECKSUMS"
+    )"
+  fi
+
   headers_path="$(
     awk \
       "/${re_prefix}-headers-${kv}.+_all\\.deb\$/ { print \$NF }" \
