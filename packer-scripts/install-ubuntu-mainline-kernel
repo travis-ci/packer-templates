@@ -16,7 +16,7 @@ main() {
   local url_prefix='http://kernel.ubuntu.com/~kernel-ppa/mainline'
   local re_prefix='[0-9a-f]{64}  linux'
   local image_suffix="[0-9]{6}-generic_${kv}-[0-9]{6}\\.[0-9]{12}_amd64\\.deb\$"
-  local image_path headers_path generic_headers_path
+  local modules_path image_path headers_path generic_headers_path
 
   export DEBIAN_FRONTEND=noninteractive
 
@@ -25,6 +25,12 @@ main() {
 
   "${CURL}" -sSL -o "${TMPDIR}/CHECKSUMS" \
     "${url_prefix}/v${kv}/CHECKSUMS"
+
+  modules_path="$(
+    awk \
+      "/${re_prefix}-modules-${kv}.+generic.+_amd64\\.deb\$/ { print \$NF }" \
+      "${TMPDIR}/CHECKSUMS"
+  )"
 
   image_path="$(
     awk \
@@ -52,6 +58,11 @@ main() {
       "${TMPDIR}/CHECKSUMS"
   )"
 
+  [[ "${modules_path}" ]] || {
+    echo "Failed to find matching modules deb for kernel ${kv}"
+    exit 1
+  }
+
   [[ "${image_path}" ]] || {
     echo "Failed to find matching image deb for kernel ${kv}"
     exit 1
@@ -67,6 +78,8 @@ main() {
     exit 1
   }
 
+  "${CURL}" -sSL -o "${TMPDIR}/linux-modules.deb" \
+    "${url_prefix}/v${kv}/${modules_path}"
   "${CURL}" -sSL -o "${TMPDIR}/linux-image.deb" \
     "${url_prefix}/v${kv}/${image_path}"
   "${CURL}" -sSL -o "${TMPDIR}/linux-headers.deb" \
@@ -75,6 +88,7 @@ main() {
     "${url_prefix}/v${kv}/${generic_headers_path}"
 
   sudo "${DPKG}" -i \
+    "${TMPDIR}/linux-modules.deb" \
     "${TMPDIR}/linux-headers.deb" \
     "${TMPDIR}/linux-headers-generic.deb" \
     "${TMPDIR}/linux-image.deb"
