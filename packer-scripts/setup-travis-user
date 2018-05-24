@@ -9,6 +9,7 @@ main() {
     set -o xtrace
   fi
 
+  shopt -s nullglob
   __setup_travis_user
 }
 
