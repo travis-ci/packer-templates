@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -o errexit
 
 main() {
@@ -11,8 +10,6 @@ main() {
 
   getent passwd | grep -q travis
   echo "travis:${TRAVIS_USER_PASSWORD}" | chpasswd
-
-  [[ -d /home/travis ]]
 
   for f in .ssh/authorized_keys .ssh/known_hosts; do
     mkdir -p "/home/travis/$(dirname "${f}")"
