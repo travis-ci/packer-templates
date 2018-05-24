@@ -16,6 +16,8 @@ ensure_tfw() {
 }
 
 main() {
+  export DEBIAN_FRONTEND=noninteractive
+
   ensure_tfw
   tfw bootstrap
 }
