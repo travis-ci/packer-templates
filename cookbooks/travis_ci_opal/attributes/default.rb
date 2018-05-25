@@ -59,7 +59,7 @@ override['java']['oracle']['accept_oracle_download_terms'] = true
 override['java']['oracle']['jce']['enabled'] = true
 
 override['travis_java']['default_version'] = 'oraclejdk8'
-override['travis_java']['alternate_versions'] = []
+override['travis_java']['alternate_versions'] = %w[openjdk8]
 
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
