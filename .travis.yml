@@ -46,6 +46,7 @@ install:
 script:
 - make
 - bundle exec make test
+- make update-gce-images
 - git diff --exit-code
 - git diff --cached --exit-code
 - sudo lsof | grep dpkg || true
