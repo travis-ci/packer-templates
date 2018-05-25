@@ -149,7 +149,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   perlbrew
   postgresql
   python_interpreter
-  rabbitmq
   redis
   riak
   ruby_interpreter
