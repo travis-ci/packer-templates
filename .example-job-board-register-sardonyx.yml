@@ -45,7 +45,6 @@ features:
 # - postgresql
 - python_interpreter
 # FIXME: uncomment once working on xenial
-# - rabbitmq
 # - redis
 # - riak
 - ruby_interpreter
