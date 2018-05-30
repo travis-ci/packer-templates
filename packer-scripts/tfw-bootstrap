@@ -20,6 +20,7 @@ main() {
 
   ensure_tfw
   tfw bootstrap
+  tfw admin-upgrade-kernel
 }
 
 main "${@}"
