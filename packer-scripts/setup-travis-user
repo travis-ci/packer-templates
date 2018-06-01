@@ -3,8 +3,6 @@ set -o errexit
 set -o pipefail
 
 main() {
-  echo 'ensuring travis user'
-
   if [[ ! "${QUIET}" ]]; then
     set -o xtrace
   fi
