@@ -9,7 +9,7 @@ main() {
   set +o xtrace
 
   if [[ -f "${envdir}/DOCKER_LOGIN_USERNAME" ]]; then
-    for f in ${envdir}/*; do
+    for f in "${envdir}/"*; do
       eval "export $(basename "${f}")='$(cat "${f}")'"
     done
   fi
