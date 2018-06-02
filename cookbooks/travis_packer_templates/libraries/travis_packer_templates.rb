@@ -60,7 +60,7 @@ class TravisPackerTemplates
   def job_board_tags(job_board_attrs)
     tags = {
       'dist' => node['lsb']['codename'].to_s,
-      'os' => node['platform'].to_s,
+      'os' => node['os'].to_s,
       'packer_chef_time' => init_time.strftime('%Y%m%dT%H%M%SZ')
     }
 
