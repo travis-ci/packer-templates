@@ -1,2 +1,3 @@
 chromium-browser
+postgresql-client
 uuid-dev
