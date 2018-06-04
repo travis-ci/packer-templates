@@ -124,6 +124,11 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
 
 override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
+
+override['travis_postgresql']['default_version'] = '9.6'
+override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 10]
+override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
+
 # TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
