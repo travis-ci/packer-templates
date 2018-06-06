@@ -23,7 +23,7 @@ builders:
   host: "MacPro_Pod_1"
   datastore: "DataCore1_1"
   folder: "In Progress Base VMs"
-  template: "travis-ci-macos-10.13-vanilla-1519677570"
+  template: "xcode9.4-vanilla"
   vm_name: "{{ user `image_name` }}"
   CPUs: 1
   CPU_reservation: 1000
@@ -36,10 +36,13 @@ builders:
   create_snapshot: true
   convert_to_template: false
 provisioners:
+- type: file
+  source: packer-assets/rvm-gpg.key
+  destination: /tmp/rvm-gpg.key
 - type: shell
   environment_vars:
   - XCODE_INSTALL_USER={{ user `xcode_install_user` }}
   - XCODE_INSTALL_PASSWORD={{ user `xcode_install_password` }}
   scripts:
   - packer-scripts/macos-image-bootstrap
-  execute_command: "{{ .Vars }} bash -l '{{ .Path }}'"
+  execute_command: "{{ .Vars }} bash -il '{{ .Path }}'"
