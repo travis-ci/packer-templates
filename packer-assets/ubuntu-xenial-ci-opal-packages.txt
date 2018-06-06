@@ -57,8 +57,7 @@ e2fsprogs
 eatmydata
 ed
 eject
-emacs
-emacs24-nox
+emacs-nox
 ethtool
 file
 findutils
