@@ -56,8 +56,7 @@ e2fsprogs
 eatmydata
 ed
 eject
-emacs
-emacs24-nox
+emacs-nox
 ethtool
 file
 findutils
@@ -461,7 +460,6 @@ ubuntu-release-upgrader-core
 ucf
 udev
 ufw
-unattended-upgrades
 unzip
 update-manager-core
 update-notifier-common
@@ -479,6 +477,7 @@ wamerican
 wget
 whiptail
 wireless-regdb
+x11-utils
 xauth
 xfsprogs
 xkb-data

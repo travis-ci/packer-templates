@@ -15,7 +15,6 @@
 /.bundle/
 /ci-*.json
 /coverage/
-/internal-*.json
 /jupiter-brain.json
 /output-*
 /tfw.json

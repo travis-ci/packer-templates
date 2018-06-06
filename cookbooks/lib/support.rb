@@ -17,7 +17,6 @@ module Support
   autoload :Php, 'support/php'
   autoload :Postgresql, 'support/postgresql'
   autoload :Python, 'support/python'
-  autoload :RabbitMQAdmin, 'support/rabbitmqadmin'
 
   def base_packages
     @base_packages ||= []
