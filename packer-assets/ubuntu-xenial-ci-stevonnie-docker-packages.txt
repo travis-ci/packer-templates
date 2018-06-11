@@ -1,6 +1,6 @@
 bridge-utils
 ccache
-emacs
+emacs-nox
 hashdeep
 libmysqlclient-dev
 locales

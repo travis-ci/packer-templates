@@ -1,3 +1,4 @@
 chromium-browser
+emacs-nox
 postgresql-client
 uuid-dev
