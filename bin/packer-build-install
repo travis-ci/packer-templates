@@ -7,7 +7,7 @@ main() {
   mkdir -p tmp/
 
   if [[ -n "${GCE_SERVICE_ACCOUNT_FILE_BZ2_B64}" ]]; then
-    export GCE_ACCOUNT_FILE="$(pwd)/tmp/gce.json"
+    export GCE_ACCOUNT_FILE="${PWD}/tmp/gce.json"
     echo "${GCE_SERVICE_ACCOUNT_FILE_BZ2_B64}" |
       base64 -d |
       bunzip2 >"${GCE_ACCOUNT_FILE}"
