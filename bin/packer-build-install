@@ -6,18 +6,17 @@ main() {
 
   mkdir -p tmp/
 
-  if [[ -n "${GCE_ACCOUNT_FILE_B64_BZ2}" ]]; then
-    echo "${GCE_ACCOUNT_FILE_B64_BZ2}" |
+  if [[ -n "${GCE_SERVICE_ACCOUNT_FILE_BZ2_B64}" ]]; then
+    export GCE_ACCOUNT_FILE="$(pwd)/tmp/gce.json"
+    echo "${GCE_SERVICE_ACCOUNT_FILE_BZ2_B64}" |
       base64 -d |
-      bunzip2 >tmp/gce.json
+      bunzip2 >"${GCE_ACCOUNT_FILE}"
   fi
 
-  if [[ "${GCE_ACCOUNT_ID}" ]]; then
-    gcloud config set account "${GCE_ACCOUNT_ID}"
-    gcloud auth login --brief
-  fi
+  gcloud auth activate-service-account "${GCE_SERVICE_ACCOUNT_ID}" \
+    --key-file="${GCE_ACCOUNT_FILE}" --project="${GCE_PROJECT_ID}"
 
-  if [[ ! "$(packer version 2>/dev/null)" =~ Packer\ v1.1.0 ]]; then
+  if [[ ! "$(packer version 2>/dev/null)" =~ Packer\ v1.2.4 ]]; then
     make install-packer
   fi
 
