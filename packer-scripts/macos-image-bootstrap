@@ -321,7 +321,7 @@ EOF
 EOF
   sudo chown root ~/Library/LaunchAgents/com.travis-ci.runner.plist
   # needed because of newer security restrictions
-  sudo launchctl load ~/Library/LaunchAgents/com.travis-ci.runner.plist
+  launchctl load ~/Library/LaunchAgents/com.travis-ci.runner.plist
 }
 
 xcode_simulator_reset() {
