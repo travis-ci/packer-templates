@@ -23,7 +23,7 @@ builders:
   host: "MacPro_Pod_1"
   datastore: "DataCore1_1"
   folder: "In Progress Base VMs"
-  template: "xcode9.4-vanilla"
+  template: "travis-ci-macos10.13-xcode9.4-vanilla"
   vm_name: "{{ user `image_name` }}"
   CPUs: 1
   CPU_reservation: 1000
