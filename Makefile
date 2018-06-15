@@ -29,16 +29,16 @@ SED ?= sed
 TRAVIS_PACKER_BUILD ?= travis-packer-build
 UNZIP ?= unzip
 
-ci-macos: ci-macos.yml $(META_FILES)
-	$(PACKER) build -only=vsphere \
-		-var "xcode_version=$(XCODE)" \
-		<(bin/yml2json < $<)
-
 %: %.yml $(META_FILES)
 	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
 
 .PHONY: all
 all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
+
+ci-macos: ci-macos.yml $(META_FILES)
+	$(PACKER) build -only=vsphere \
+		-var "xcode_version=$(XCODE)" \
+		<(bin/yml2json < $<)
 
 .PHONY: stacks-short
 stacks-short:
