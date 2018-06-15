@@ -25,11 +25,11 @@ builders:
   folder: "In Progress Base VMs"
   template: "travis-ci-macos10.13-xcode9.4-vanilla"
   vm_name: "{{ user `image_name` }}"
-  CPUs: 1
+  CPUs: 2
   CPU_reservation: 1000
   CPU_limit: 2000
-  RAM: 2048
-  RAM_reservation: 2048
+  RAM: 4096
+  RAM_reservation: 4096
   ssh_password: "{{ user `ssh_password` }}"
   shutdown_command: "sudo shutdown -h now"
   shutdown_timeout: 5m
