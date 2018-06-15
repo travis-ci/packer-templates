@@ -8,7 +8,7 @@ fi
 set -o errexit
 set -o pipefail
 
-declare -a XCODE_VERSION="9.4"
+declare -a XCODE_VERSION="9.4.1"
 IOS_VERSIONS="8.1,8.2,8.3,8.4,9.0,9.1,9.2,9.3,10.0,10.1,10.2,10.3"
 declare -a RUBIES=('2.3.5' '2.4.3')
 DEFAULT_RUBY="2.4.3"
@@ -19,7 +19,7 @@ declare -a BREW_PKGS=('git' 'wget' 'mercurial' 'node' \
 declare -a BREW_XCODE_PKGS=('xctool' 'swiftlint')
 declare -a BREW_CASK_PKGS=('java' 'oclint' 'rubymotion' 'xquartz')
 declare -a PIP_PKGS=('virtualenv' 'numpy' 'scipy' 'tox')
-declare -a NODE_VERSIONS=('6' '5' '4' '0.12' '0.10' '0.8' 'iojs')
+declare -a NODE_VERSIONS=('6' '5' '4')
 export NVM_VERSION="v0.33.2"
 export RVM_VERSION="1.29.3"
 export DEBUG=1
@@ -48,6 +48,14 @@ install_xcode() {
   fi
 }
 
+install_xcode_simulators() {
+  echo "--- Installing xcode simulators"
+  IFS=',' read -a IOS <<< $IOS_VERSIONS
+  for i in ${IOS[@]}; do
+    echo " --- Installing simulator for ios $i"
+    echo "" | xcversion simulators --install="iOS $i"
+  done
+}
 
 macos_system_prefs_setup() {
   echo "--- setting system preferences."
@@ -58,6 +66,7 @@ macos_system_prefs_setup() {
   sudo systemsetup -setharddisksleep Off
   sudo systemsetup -setremotelogin on
   defaults write NSGlobalDomain NSAppSleepDisabled -bool YES
+  defaults -currentHost write com.apple.screensaver askForPassword 0
 }
 
 travis_ssh_key_setup() {
@@ -200,8 +209,11 @@ python_libraries_install() {
 }
 
 nvm_install() {
-    echo "--- Install nvm (version $NVM_VERSION)"
-    wget -qO- "https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh" | bash
+  echo "--- Install nvm (version $NVM_VERSION)"
+  wget -qO- "https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh" | bash
+
+  echo "--- Finalizing nvm installation"
+  source ~/.bashrc  # complete nvm environment setup
 }
 
 node_versions_install() {
@@ -214,7 +226,7 @@ node_versions_install() {
   echo "--- Installing or updating node versions..."
   for VER in "${NODE_VERSIONS[@]}"; do
     echo "   --- node version $VER"
-    . ~/.nvm/nvm.sh install $VER
+    nvm install $VER
   done
 }
 
@@ -273,7 +285,8 @@ EOF
 }
 
 setup_travis_runner() {
-  cat > ~/runner.rb <<EOF
+  echo "--- Creating runner.rb file"
+  cat > $HOME/runner.rb <<EOF
 #!/usr/bin/env ruby
 
 require "pty"
@@ -292,14 +305,22 @@ end
 socket.close
 EOF
 
-  chmod +x ~/runner.rb
+  echo "--- Setting runner permissions"
+  chmod +x $HOME/runner.rb
 
-  mkdir -p ~/Library/LaunchAgents
-  if [[ -f ~/Library/LaunchAgents/com.travis-ci.runner.plist ]]; then
-    sudo chown travis ~/Library/LaunchAgents/com.travis-ci.runner.plist
+  # Set ownership on the runner files so the runner can actually run
+  touch $HOME/runner.rb.out
+  touch $HOME/runner.rb.err
+  sudo chown travis $HOME/runner.rb.out
+  sudo chown travis $HOME/runner.rb.err
+
+  echo "--- Creating runner launch agent"
+  mkdir -p $HOME/Library/LaunchAgents
+  if [[ -f $HOME/Library/LaunchAgents/com.travis-ci.runner.plist ]]; then
+    sudo chown travis $HOME/Library/LaunchAgents/com.travis-ci.runner.plist
   fi
 
-  cat > ~/Library/LaunchAgents/com.travis-ci.runner.plist <<EOF
+  cat > $HOME/Library/LaunchAgents/com.travis-ci.runner.plist <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -319,9 +340,11 @@ EOF
 </dict>
 </plist>
 EOF
-  sudo chown root ~/Library/LaunchAgents/com.travis-ci.runner.plist
+
+  echo "--- Setting runner launch permissions"
+  sudo chown root $HOME/Library/LaunchAgents/com.travis-ci.runner.plist
   # needed because of newer security restrictions
-  sudo launchctl load ~/Library/LaunchAgents/com.travis-ci.runner.plist
+  launchctl load $HOME/Library/LaunchAgents/com.travis-ci.runner.plist
 }
 
 xcode_simulator_reset() {
@@ -371,6 +394,7 @@ bootstrap() {
   dot_profile_setup
   dot_bash_profile_setup
   install_xcode
+  install_xcode_simulators
   gemrc_setup
   disable_scheduled_software_updates
   brew_setup
@@ -395,3 +419,7 @@ bootstrap() {
 
 # Bootstrap things!
 bootstrap
+
+# Clean up
+rm -r $HOME/.bash_history $HOME/.bash_sessions
+rm -rf $HOME/.Trash/

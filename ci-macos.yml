@@ -23,13 +23,12 @@ builders:
   host: "MacPro_Pod_1"
   datastore: "DataCore1_1"
   folder: "In Progress Base VMs"
-  template: "xcode9.4-vanilla"
+  template: "travis-ci-macos10.13-xcode9.4-vanilla"
   vm_name: "{{ user `image_name` }}"
-  CPUs: 1
-  CPU_reservation: 1000
-  CPU_limit: 2000
-  RAM: 2048
-  RAM_reservation: 2048
+  CPUs: 2
+  CPU_reservation: 0
+  RAM: 4096
+  RAM_reservation: 0
   ssh_password: "{{ user `ssh_password` }}"
   shutdown_command: "sudo shutdown -h now"
   shutdown_timeout: 5m
