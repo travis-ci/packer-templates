@@ -28,7 +28,7 @@ TRAVIS_SSH_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDEe8yPui0lLZpgaRNghw1H/2SG
 install_xcode() {
   echo "--- installing xcode"
   sudo gem install --no-document xcode-install
-  xcversion install $XCODE_VERSION
+  xcversion install "$XCODE_VERSION"
 
   echo "--- installing xcode command line tools"
   xcode-select -p &> /dev/null
