@@ -35,6 +35,11 @@ UNZIP ?= unzip
 .PHONY: all
 all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
+ci-macos: ci-macos.yml $(META_FILES)
+	$(PACKER) build -only=vsphere \
+		-var "xcode_version=$(XCODE)" \
+		<(bin/yml2json < $<)
+
 .PHONY: stacks-short
 stacks-short:
 	@$(MAKE) -s stacks | sed 's/-trusty//;s/-xenial//'

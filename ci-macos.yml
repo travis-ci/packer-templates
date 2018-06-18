@@ -40,6 +40,7 @@ provisioners:
   destination: /tmp/rvm-gpg.key
 - type: shell
   environment_vars:
+  - XCODE_VERSION={{ user `xcode_version` }}
   - XCODE_INSTALL_USER={{ user `xcode_install_user` }}
   - XCODE_INSTALL_PASSWORD={{ user `xcode_install_password` }}
   scripts:
