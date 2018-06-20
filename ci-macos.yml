@@ -25,8 +25,9 @@ builders:
   folder: "In Progress Base VMs"
   template: "travis-ci-macos10.13-xcode9.4-vanilla"
   vm_name: "{{ user `image_name` }}"
-  CPUs: 2
+  CPUs: 4
   CPU_reservation: 0
+  CPU_limit: 99999
   RAM: 4096
   RAM_reservation: 0
   ssh_password: "{{ user `ssh_password` }}"
