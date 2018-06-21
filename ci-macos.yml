@@ -20,7 +20,7 @@ builders:
   password: "{{ user `vcenter_password` }}"
   insecure_connection: "{{ user `vcenter_insecure` }}"
   datacenter: "pod-1"
-  host: "MacPro_Pod_1"
+  host: "packer_image_dev"
   datastore: "DataCore1_1"
   folder: "In Progress Base VMs"
   template: "travis-ci-macos10.13-xcode9.4-vanilla"
