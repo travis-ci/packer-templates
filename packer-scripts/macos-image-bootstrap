@@ -8,10 +8,6 @@ fi
 set -o errexit
 set -o pipefail
 
-# We should change these to be computed dynamically based on the Xcode version
-IOS_VERSIONS="8.1,8.2,8.3,8.4,9.0,9.1,9.2,9.3,10.0,10.1,10.2,10.3,11.0,11.1,11.2,11.3"
-WATCHOS_VERSIONS="2.0,2.1,2.2,3.1,3.2,4.0,4.1,4.2"
-TVOS_VERSIONS="9.0,9.1,9.2,10.0,10.1,10.2,11.0,11.1,11.2,11.3"
 declare -a RUBIES=('2.3.5' '2.4.3')
 DEFAULT_RUBY="2.4.3"
 declare -a GEMS=('nomad-cli' 'cocoapods' 'bundler' 'rake' 'xcpretty' 'fastlane')
@@ -52,20 +48,10 @@ install_xcode() {
 
 install_xcode_simulators() {
   echo "--- Installing xcode simulators"
-  IFS=',' read -a IOS <<< $IOS_VERSIONS
-  for i in ${IOS[@]}; do
-    echo " --- Installing simulator for iOS $i"
-    echo "" | xcversion simulators --install="iOS $i"
-  done
-  IFS=',' read -a WATCHOS <<< $WATCHOS_VERSIONS
-  for i in ${WATCHOS[@]}; do
-    echo " --- Installing simulator for watchOS $i"
-    echo "" | xcversion simulators --install="watchOS $i"
-  done
-  IFS=',' read -a TVOS <<< $TVOS_VERSIONS
-  for i in ${TVOS[@]}; do
-    echo " --- Installing simulator for tvOS $i"
-    echo "" | xcversion simulators --install="tvOS $i"
+
+  xcversion simulators | grep 'not installed' | cut -d\  -f1,2 | while read -r line; do
+    echo " --- Installing simulator for $line"
+    echo "" | xcversion simulators --install="$line"
   done
 }
 
