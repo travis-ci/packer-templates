@@ -23,11 +23,13 @@ builders:
   host: "packer_image_dev"
   datastore: "DataCore1_1"
   folder: "In Progress Base VMs"
-  template: "travis-ci-macos10.13-xcode9.4-vanilla"
+  template: "travis-ci-macos10.13-xcode9.4-vanilla-large"
   vm_name: "{{ user `image_name` }}"
+  # CPUs: 12
   CPUs: 2
   CPU_reservation: 0
   CPU_limit: 99999
+  # RAM: 32768
   RAM: 4096
   RAM_reservation: 0
   ssh_password: "{{ user `ssh_password` }}"
