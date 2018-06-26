@@ -49,9 +49,19 @@ install_xcode() {
 install_xcode_simulators() {
   echo "--- Installing xcode simulators"
 
+  local s=0
   xcversion simulators | grep 'not installed' | cut -d\  -f1,2 | while read -r line; do
-    echo " --- Installing simulator for $line"
-    echo "" | xcversion simulators --install="$line"
+    for i in {1..5}; do
+      echo " --- Installing simulator for $line (attempt $i)"
+      echo '' | xcversion simulators --install="$line" && break && s=0 || s=$? && sleep 5
+    done
+
+    # delete cached installer packages to free up disk space
+    rm ~/Library/Caches/XcodeInstall/*.{pkg,dmg}
+
+    if [ $s -ne 0 ]; then
+      exit $s
+    fi
   done
 }
 
