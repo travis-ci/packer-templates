@@ -257,6 +257,9 @@ rvmrc_setup(){
 }
 
 rubies_install() {
+  # hack to get RVM to accept our binary even though GDBM updated version
+  ln -s /usr/local/opt/gdbm/lib/libgdbm.dylib /usr/local/opt/gdbm/lib/libgdbm.5.dylib
+
   echo "--- Install rubies with rvm"
   for RUBY in "${RUBIES[@]}"; do
     echo "--- Installing ruby version $RUBY"
