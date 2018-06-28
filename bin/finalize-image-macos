@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o errexit
+
 if [[ -z "$(which vsphere-images)" ]]; then
   echo "Could not find vsphere-images tool in PATH. Exiting." >&2
   exit 1
@@ -13,6 +15,7 @@ SOURCE_URL="https://${ENCODED_USER}:${VCENTER_PASSWORD}@${VCENTER_SERVER}/sdk"
 DESTINATION_URL="https://${ENCODED_USER}:${VCENTER_SECONDARY_PASSWORD}@${VCENTER_SECONDARY_SERVER}/sdk"
 
 SOURCE_DATACENTER="pod-1"
+SOURCE_POOL="MacPro_Pod_1"
 DESTINATION_DATACENTER="pod-2"
 DESTINATION_DATASTORE="DataCore1_3"
 DESTINATION_POOL="MacPro_Pod_2"
@@ -27,6 +30,12 @@ IN_PROGRESS_FOLDER="In Progress Base VMs"
 FINAL_FOLDER="Base VMs"
 
 echo "Finalizing VM '${VM_NAME}' as '${NEW_VM_NAME}'"
+
+vsphere-images migrate-image \
+  --vsphere-url="$SOURCE_URL" \
+  --vsphere-insecure-skip-verify \
+  --pool="/$SOURCE_DATACENTER/host/$SOURCE_POOL" \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/$VM_NAME"
 
 vsphere-images configure-image \
   --vsphere-url="$SOURCE_URL" \
