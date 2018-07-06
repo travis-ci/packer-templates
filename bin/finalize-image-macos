@@ -16,6 +16,7 @@ DESTINATION_URL="https://${ENCODED_USER}:${VCENTER_SECONDARY_PASSWORD}@${VCENTER
 
 SOURCE_DATACENTER="pod-1"
 SOURCE_POOL="MacPro_Pod_1"
+SOURCE_NETWORK="Jobs-1"
 DESTINATION_DATACENTER="pod-2"
 DESTINATION_DATASTORE="DataCore1_3"
 DESTINATION_POOL="MacPro_Pod_2"
@@ -43,6 +44,7 @@ vsphere-images configure-image \
   --num-cpus=$NUM_CPUS \
   --cores-per-socket=$CORES_PER_SOCKET \
   --ram=$RAM \
+  --network="/$SOURCE_DATACENTER/network/$SOURCE_NETWORK" \
   "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/$VM_NAME"
 
 vsphere-images move-image \
