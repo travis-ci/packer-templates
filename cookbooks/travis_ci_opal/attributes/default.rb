@@ -143,7 +143,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   postgresql
   python_interpreter
   redis
-  riak
   ruby_interpreter
   sqlite
   xserver
