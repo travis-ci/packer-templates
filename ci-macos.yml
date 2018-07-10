@@ -25,12 +25,10 @@ builders:
   folder: "In Progress Base VMs"
   template: "travis-ci-macos10.13-xcode9.4-vanilla-large"
   vm_name: "{{ user `image_name` }}"
-  # CPUs: 12
-  CPUs: 2
+  CPUs: 12             # will be changed later when finalized
   CPU_reservation: 0
   CPU_limit: 99999
-  # RAM: 32768
-  RAM: 4096
+  RAM: 32768           # will be changed later when finalized
   RAM_reservation: 0
   ssh_password: "{{ user `ssh_password` }}"
   shutdown_command: "sudo shutdown -h now"
@@ -49,3 +47,10 @@ provisioners:
   scripts:
   - packer-scripts/macos-image-bootstrap
   execute_command: "{{ .Vars }} bash -il '{{ .Path }}'"
+post-processors:
+- type: shell-local
+  environment_vars:
+  - IMAGE_NAME={{ user `image_name` }}
+  - FINAL_IMAGE_NAME=travis-ci-macos-10.13-xcode{{ user `xcode_version` }}-{{ timestamp }}
+  inline:
+  - bin/finalize-image-macos "$IMAGE_NAME" "$FINAL_IMAGE_NAME"
