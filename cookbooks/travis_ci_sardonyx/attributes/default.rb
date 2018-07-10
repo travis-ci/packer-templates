@@ -13,24 +13,14 @@ default['travis_ci_sardonyx']['prerequisite_packages'] = %w[
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
-php_versions = %w[
-  5.6.32
-  7.0.25
-  7.1.11
-]
-override['travis_build_environment']['php_versions'] = php_versions
-override['travis_build_environment']['php_default_version'] = '5.6.32'
-override['travis_build_environment']['php_aliases'] = {
-  '5.6' => '5.6.32',
-  '7.0' => '7.0.25',
-  '7.1' => '7.1.11'
+php_aliases = {
+  '5.6' => '5.6.36',
+  '7.1' => '7.1.19',
+  '7.2' => '7.2.7'
 }
-
-# TODO: Remove once php-src-builder Xenial builds work:
-# https://github.com/travis-ci/travis-ci/issues/8737
-override['travis_build_environment']['php_versions'] = []
-override['travis_build_environment']['php_default_version'] = []
-override['travis_build_environment']['php_aliases'] = {}
+override['travis_build_environment']['php_versions'] = php_aliases.values
+override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
+override['travis_build_environment']['php_aliases'] = php_aliases
 
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
@@ -170,6 +160,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   groovy
   java
   node_js
+  php
   pure_java
   python
   ruby
