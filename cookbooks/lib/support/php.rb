@@ -9,14 +9,14 @@ module Support
     def phpenv_exec
       return @phpenv_exec if @phpenv_exec
       unless php_default_version.empty?
-        @phpenv_exec = "RBENV_VERSION=#{php_default_version} phpenv exec"
+        @phpenv_exec = "PHPENV_VERSION=#{php_default_version} phpenv exec"
         return @phpenv_exec
       end
 
       available = `phpenv versions 2>/dev/null`.strip
       php_versions.each do |v|
         next if @phpenv_exec
-        @phpenv_exec = "RBENV_VERSION=#{v} phpenv exec" if available =~ /\b#{v}\b/
+        @phpenv_exec = "PHPENV_VERSION=#{v} phpenv exec" if available =~ /\b#{v}\b/
       end
       @phpenv_exec ||= ''
       @phpenv_exec
