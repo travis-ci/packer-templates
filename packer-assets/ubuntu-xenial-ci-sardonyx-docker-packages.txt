@@ -1,4 +1,5 @@
 chromium-browser
 emacs-nox
+libtidy-dev
 postgresql-client
 uuid-dev
