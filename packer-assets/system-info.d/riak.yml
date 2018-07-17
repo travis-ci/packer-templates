@@ -1,3 +1,0 @@
-commands:
-  common:
-    - { command: riak version, name: riak version }

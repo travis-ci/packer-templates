@@ -34,19 +34,16 @@ features:
 - google-chrome
 - jdk
 - memcached
-# FIXME: uncomment once working on xenial
-# - mongodb
-# - mysql
+- mongodb
+- mysql
 - nodejs_interpreter
 - perl_interpreter
 - perlbrew
 # FIXME: uncomment once working on xenial
 # - phantomjs
-# - postgresql
+- postgresql
 - python_interpreter
-# FIXME: uncomment once working on xenial
-# - redis
-# - riak
+- redis
 - ruby_interpreter
 - sqlite
 - xserver
