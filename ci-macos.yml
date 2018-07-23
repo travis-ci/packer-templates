@@ -10,7 +10,7 @@ variables:
   xcode_install_user: "{{ env `XCODE_INSTALL_USER` }}"
   xcode_install_password: "{{ env `XCODE_INSTALL_PASSWORD` }}"
 builders:
-- type: vsphere
+- type: vsphere-clone
   name: vsphere
   ssh_timeout: 10m
   ssh_port: 22

@@ -92,20 +92,11 @@ elixirs = %w[
   1.2.6
 ]
 
-# TODO: Remove once php-src-builder Xenial builds work:
-# https://github.com/travis-ci/travis-ci/issues/8737
 override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_default_version'] = []
 override['travis_build_environment']['php_aliases'] = {}
 
-if node['kernel']['machine'] == 'ppc64le'
-  override['travis_build_environment']['php_versions'] = []
-  override['travis_build_environment']['php_default_version'] = []
-  override['travis_build_environment']['php_aliases'] = {}
-
-  # TODO: remove if/when an HHVM version is available on ppc64
-  override['travis_build_environment']['hhvm_enabled'] = false
-end
+override['travis_build_environment']['hhvm_enabled'] = false
 
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
@@ -152,7 +143,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   postgresql
   python_interpreter
   redis
-  riak
   ruby_interpreter
   sqlite
   xserver
