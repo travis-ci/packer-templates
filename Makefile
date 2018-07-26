@@ -19,6 +19,7 @@ CHEF_COOKBOOK_PATH := $(TOP)/.git::cookbooks \
 	$(TRAVIS_COOKBOOKS_GIT)::community-cookbooks@master \
 
 UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
+VSPHERE_IMAGES := $(shell command -v vsphere-images 2> /dev/null)
 
 BUILDER ?= googlecompute
 
@@ -37,6 +38,10 @@ UNZIP ?= unzip
 all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
 ci-macos: ci-macos.yml $(META_FILES)
+ifndef VSPHERE_IMAGES
+	$(error "vsphere-images is not in the PATH. Please install it using `go get github.com/travis-ci/vsphere-images`")
+endif
+	bin/assert-host-macos
 	$(PACKER) build -only=vsphere \
 		-var "xcode_version=$(XCODE)" \
 		<(bin/yml2json < $<)

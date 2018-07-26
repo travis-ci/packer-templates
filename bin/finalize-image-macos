@@ -1,0 +1,88 @@
+#!/bin/bash
+
+set -o errexit
+
+if [[ -z "$(which vsphere-images)" ]]; then
+  echo "Could not find vsphere-images tool in PATH. Exiting." >&2
+  exit 1
+fi
+
+VM_NAME="$1"
+NEW_VM_NAME="$2"
+
+ENCODED_USER=$(python -c "import urllib; print urllib.quote('''$VCENTER_USER''')")
+SOURCE_URL="https://${ENCODED_USER}:${VCENTER_PASSWORD}@${VCENTER_SERVER}/sdk"
+DESTINATION_URL="https://${ENCODED_USER}:${VCENTER_SECONDARY_PASSWORD}@${VCENTER_SECONDARY_SERVER}/sdk"
+
+SOURCE_DATACENTER="pod-1"
+SOURCE_POOL="MacPro_Pod_1"
+SOURCE_NETWORK="Jobs-1"
+DESTINATION_DATACENTER="pod-2"
+DESTINATION_DATASTORE="DataCore1_3"
+DESTINATION_POOL="MacPro_Pod_2"
+DESTINATION_HOST="10.88.242.51"
+DESTINATION_NETWORK="Jobs-2"
+
+NUM_CPUS=2
+CORES_PER_SOCKET=1
+RAM=4096
+
+IN_PROGRESS_FOLDER="In Progress Base VMs"
+FINAL_FOLDER="Base VMs"
+
+echo "Finalizing VM '${VM_NAME}' as '${NEW_VM_NAME}'"
+
+vsphere-images migrate-image \
+  --vsphere-url="$SOURCE_URL" \
+  --vsphere-insecure-skip-verify \
+  --pool="/$SOURCE_DATACENTER/host/$SOURCE_POOL" \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/$VM_NAME"
+
+vsphere-images configure-image \
+  --vsphere-url="$SOURCE_URL" \
+  --vsphere-insecure-skip-verify \
+  --num-cpus=$NUM_CPUS \
+  --cores-per-socket=$CORES_PER_SOCKET \
+  --ram=$RAM \
+  --network="/$SOURCE_DATACENTER/network/$SOURCE_NETWORK" \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/$VM_NAME"
+
+vsphere-images move-image \
+  --vsphere-url="$SOURCE_URL" \
+  --vsphere-insecure-skip-verify \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/${VM_NAME}" \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/${NEW_VM_NAME}"
+
+vsphere-images copy-image \
+  --src-url="$SOURCE_URL" \
+  --dest-url="$DESTINATION_URL" \
+  --src-insecure-skip-verify \
+  --dest-insecure-skip-verify \
+  --dest-datastore-path="/$DESTINATION_DATACENTER/datastore/$DESTINATION_DATASTORE" \
+  --dest-pool-path="/$DESTINATION_DATACENTER/host/$DESTINATION_POOL" \
+  --dest-host-path="/$DESTINATION_DATACENTER/host/$DESTINATION_POOL/$DESTINATION_HOST" \
+  --dest-network-name="/$DESTINATION_DATACENTER/network/$DESTINATION_NETWORK" \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/${NEW_VM_NAME}" \
+  "/$DESTINATION_DATACENTER/vm/$IN_PROGRESS_FOLDER/${NEW_VM_NAME}"
+
+vsphere-images resnapshot \
+  --vsphere-url="$SOURCE_URL" \
+  --vsphere-insecure-skip-verify \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/$NEW_VM_NAME"
+
+vsphere-images resnapshot \
+  --vsphere-url="$DESTINATION_URL" \
+  --vsphere-insecure-skip-verify \
+  "/$DESTINATION_DATACENTER/vm/$IN_PROGRESS_FOLDER/$NEW_VM_NAME"
+
+vsphere-images move-image \
+  --vsphere-url="$SOURCE_URL" \
+  --vsphere-insecure-skip-verify \
+  "/$SOURCE_DATACENTER/vm/$IN_PROGRESS_FOLDER/${NEW_VM_NAME}" \
+  "/$SOURCE_DATACENTER/vm/$FINAL_FOLDER/${NEW_VM_NAME}"
+
+vsphere-images move-image \
+  --vsphere-url="$DESTINATION_URL" \
+  --vsphere-insecure-skip-verify \
+  "/$DESTINATION_DATACENTER/vm/$IN_PROGRESS_FOLDER/${NEW_VM_NAME}" \
+  "/$DESTINATION_DATACENTER/vm/$FINAL_FOLDER/${NEW_VM_NAME}"

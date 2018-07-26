@@ -33,7 +33,6 @@ PHP_MODULES = <<~EOF.split("\n")
   curl
   date
   dom
-  ereg
   exif
   filter
   ftp
