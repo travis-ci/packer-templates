@@ -7,7 +7,7 @@ main() {
     exit 1
   fi
 
-  for rel in 1204 1404 1604; do
+  for rel in 1204 1404 1604 1804; do
     local curimg
     curimg="$(__fetch_curimg "${rel}")"
     local newimg
