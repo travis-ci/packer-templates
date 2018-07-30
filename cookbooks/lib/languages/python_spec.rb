@@ -13,7 +13,7 @@ describe 'python environment' do
 
   describe pycommand('pip --version') do
     its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^pip \d+\.\d+\.\d+/) }
+    its(:stdout) { should match(/^pip \d+\.\d+(\.\d+)?/) }
   end
 
   describe pycommand('wheel version') do
