@@ -32,7 +32,7 @@ __fetch_curimg() {
 __fetch_newimg() {
   local rel="${1}"
 
-  gcloud compute images list --format=json --regexp="ubuntu-${rel}-.*" |
+  gcloud compute images list --format=json --filter="name~ubuntu-${rel}-.*" |
     jq -r '.[] | .name' | head -1
 }
 
