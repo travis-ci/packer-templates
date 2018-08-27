@@ -53,17 +53,17 @@ override['travis_build_environment']['haskell_cabal_versions'] = cabal_versions
 override['travis_build_environment']['haskell_default_ghc'] = ghc_versions.max
 override['travis_build_environment']['haskell_default_cabal'] = cabal_versions.max
 
-override['java']['jdk_version'] = '8'
-override['java']['install_flavor'] = 'oracle'
-override['java']['oracle']['accept_oracle_download_terms'] = true
-override['java']['oracle']['jce']['enabled'] = true
-
-override['travis_java']['default_version'] = 'oraclejdk8'
-override['travis_java']['alternate_versions'] = %w[openjdk8]
-
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
+else
+  override['travis_jdk']['versions'] = %w[
+    oraclejdk10
+    oraclejdk11
+    openjdk10
+    openjdk11
+  ]
+  override['travis_jdk']['default'] = 'openjdk11'
 end
 
 node_versions = %w[
