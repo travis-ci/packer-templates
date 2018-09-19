@@ -4,13 +4,16 @@ module Support
   module Postgresql
     def pgcommand(cmd, version: nil)
       return command("#{pg_path} #{cmd}") if version.nil?
+
       command("PATH=/usr/lib/postgresql/#{version}/bin:$PATH #{cmd}")
     end
 
     def pg_path
       return @pg_path if @pg_path
+
       pg_versions.each do |v|
         next if @pg_path
+
         bindir = "/usr/lib/postgresql/#{v}/bin"
         @pg_path = "PATH=#{bindir}:$PATH" if File.exist?(bindir)
       end

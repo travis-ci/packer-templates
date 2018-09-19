@@ -100,6 +100,7 @@ class TravisPackerTemplates
       attr_name = ::File.basename(f)
       attr_value = ::File.read(f).strip
       next if attr_value.empty?
+
       Chef::Log.info(
         "Setting travis_packer_templates.env.#{attr_name}"
       )

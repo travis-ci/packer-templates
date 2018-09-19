@@ -29,6 +29,7 @@ class JobBoardRegistrar
     return die('missing $IMAGE_NAME') if env['IMAGE_NAME'].empty?
 
     return 0 if make_request
+
     1
   end
 

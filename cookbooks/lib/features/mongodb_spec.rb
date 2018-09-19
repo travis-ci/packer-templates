@@ -2,6 +2,7 @@
 
 def mongodb_service_name
   return 'mongod' if %w[trusty xenial].include?(Support.distro) && os[:arch] !~ /ppc64/
+
   'mongodb'
 end
 

@@ -47,6 +47,7 @@ class ImageTagger
     return env['OS'] unless env['OS'].empty?
     return 'osx' if RUBY_PLATFORM =~ /darwin/i
     return 'linux' if RUBY_PLATFORM =~ /linux/i
+
     'unknown'
   end
 
@@ -64,18 +65,21 @@ class ImageTagger
     return env['DIST'] unless env['DIST'].empty?
     return `lsb_release -sc 2>/dev/null`.strip if os == 'linux'
     return `sw_vers -productVersion 2>/dev/null`.strip if os == 'osx'
+
     'unknown'
   end
 
   def travis_cookbooks_branch
     value = env['TRAVIS_COOKBOOKS_BRANCH']
     return value unless value.empty?
+
     travis_cookbooks_edge_branch
   end
 
   def travis_cookbooks_edge_branch
     value = env['TRAVIS_COOKBOOKS_EDGE_BRANCH']
     return value unless value.empty?
+
     'master'
   end
 

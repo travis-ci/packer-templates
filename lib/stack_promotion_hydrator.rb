@@ -33,6 +33,7 @@ class StackPromotionHydrator
     ].each do |metadata_file|
       next unless stack_promotion.cur.metadata.files.key?(metadata_file) &&
                   stack_promotion.nxt.metadata.files.key?(metadata_file)
+
       if metadata_file == 'travis_packer_templates_rspec.json'
         munge_rspec_json([
                            stack_promotion.cur.metadata.files[metadata_file],
