@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-libdir = File.expand_path('../../lib', __FILE__)
+libdir = File.expand_path('../lib', __dir__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'job_board_registrar'
@@ -9,8 +9,8 @@ require 'job_board_registrar'
 if $PROGRAM_NAME == __FILE__
   matches = Dir.glob(
     File.expand_path(
-      '../../tmp/image-metadata-*.tar.bz2', __FILE__
+      '../tmp/image-metadata-*.tar.bz2', __dir__
     )
   )
-  JobBoardRegistrar.new(matches.sort.last).register!
+  JobBoardRegistrar.new(matches.max).register!
 end

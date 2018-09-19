@@ -8,9 +8,11 @@ module Support
 
     def source_activate
       return @sa if @sa
+
       otp_releases.sort { |a, b| a.delete('R') <=> b.delete('R') }
-                  .reverse.each do |version|
+                  .reverse_each do |version|
         next if @sa
+
         activate = File.expand_path("~/otp/#{version}/activate")
         @sa = "source #{activate}" if File.exist?(activate)
       end

@@ -18,6 +18,7 @@ class Env
   def load_envdir(path)
     Dir.glob(File.join(path, '*')) do |entry|
       next unless File.file?(entry)
+
       key = File.basename(entry)
       value = File.read(entry).strip
       yield [key, value] if block_given?
