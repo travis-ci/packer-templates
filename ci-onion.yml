@@ -18,7 +18,7 @@ builders:
   image_description: Travis CI Onion
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: windows-server-2016-dc-v20170913
+  source_image: windows-server-2016-dc-v20180911
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
