@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-libdir = File.expand_path('../../lib', __FILE__)
+libdir = File.expand_path('../lib', __dir__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'fileutils'
@@ -9,10 +9,10 @@ require 'time'
 
 def main
   matches = Dir.glob(
-    File.expand_path('../../tmp/image-metadata-*.tar.bz2', __FILE__)
+    File.expand_path('../tmp/image-metadata-*.tar.bz2', __dir__)
   )
-  metadata_tarball = File.basename(matches.sort.last)
-  top = File.expand_path('../../', __FILE__)
+  metadata_tarball = File.basename(matches.max)
+  top = File.expand_path('..', __dir__)
   template_name = metadata_tarball.match(/\b(ci-[a-z]+)\b/)[1]
   latest_image_name = metadata_tarball.match(/\b(travis-ci-[^\.]+)\b/)[1]
 

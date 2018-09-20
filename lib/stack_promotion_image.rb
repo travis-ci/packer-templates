@@ -25,7 +25,7 @@ class StackPromotionImage
 
       JSON.parse(
         `#{curl_exe} -f -s '#{env['JOB_BOARD_IMAGES_URL']}?#{q}'`
-      ).fetch('data').map { |e| e['name'] }.sort.last
+      ).fetch('data').map { |e| e['name'] }.max
     end
   end
 
