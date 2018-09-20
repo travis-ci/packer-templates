@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path('../', __FILE__)
+lib = File.expand_path(__dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'fileutils'
@@ -52,7 +52,7 @@ module Support
   module_function :distro
 
   def libdir
-    @libdir ||= Pathname.new(File.expand_path('../', __FILE__))
+    @libdir ||= Pathname.new(File.expand_path(__dir__))
   end
 
   module_function :libdir

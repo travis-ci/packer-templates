@@ -142,6 +142,7 @@ describe JobBoardRegistrar do
 
         config[:env].each do |key, value|
           next unless key.to_s.upcase == key.to_s
+
           env[key.to_s] = value
         end
 

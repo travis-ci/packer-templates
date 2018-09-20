@@ -93,7 +93,7 @@ class StackPromotionReporter
   end
 
   private def top
-    @top ||= File.expand_path('../../', __FILE__)
+    @top ||= File.expand_path('..', __dir__)
   end
 
   private def stacks

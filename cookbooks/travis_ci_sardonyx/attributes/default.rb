@@ -82,6 +82,7 @@ end
 def python_aliases(full_name)
   nodash = full_name.split('-').first
   return [nodash] unless nodash.include?('.')
+
   [nodash[0, 3]]
 end
 
