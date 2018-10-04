@@ -21,6 +21,8 @@ UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
 BUILDER ?= googlecompute
 
+PACKER_VERSION ?= 1.3.1
+
 CURL ?= curl
 GIT ?= git
 JQ ?= jq
@@ -82,7 +84,7 @@ update-gce-images:
 	bin/gce-image-update $$(git grep -lE 'source_image: ubuntu' *.yml)
 
 tmp/packer.zip:
-	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_$(UNAME)_amd64.zip'
+	$(CURL) -sSLo $@ 'https://releases.hashicorp.com/packer/$(PACKER_VERSION)/packer_$(PACKER_VERSION)_$(UNAME)_amd64.zip'
 
 tmp/bats/.git:
 	$(GIT) clone https://github.com/sstephenson/bats.git tmp/bats
