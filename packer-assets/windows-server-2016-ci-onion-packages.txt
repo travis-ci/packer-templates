@@ -13,7 +13,7 @@ lein
 maven
 mysql
 phantomjs
-postgresql
+postgresql10
 python
 python2
 ruby
