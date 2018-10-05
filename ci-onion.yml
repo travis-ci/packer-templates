@@ -33,9 +33,9 @@ provisioners:
 - type: file
   source: tmp/git-meta
   destination: c:/windows/temp/
-- type: file
-  source: packer-assets/windows-server-2016-normal-purge.txt
-  destination: c:/windows/temp/purge.txt
+# - type: file
+#   source: packer-assets/windows-server-2016-normal-purge.txt
+#   destination: c:/windows/temp/purge.txt
 - type: file
   source: packer-assets/windows-server-2016-ci-onion-packages.txt
   destination: c:/windows/temp/packages.txt
