@@ -12,6 +12,7 @@ jq
 lein
 maven
 mysql
+nvs
 phantomjs
 postgresql
 python
