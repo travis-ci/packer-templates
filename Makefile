@@ -32,7 +32,12 @@ TRAVIS_PACKER_BUILD ?= travis-packer-build
 UNZIP ?= unzip
 
 %: %.yml $(META_FILES)
+	$(PACKER) --version
 	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
+
+%-debug: %.yml $(META_FILES)
+	$(PACKER) --version
+	$(PACKER) build -only=$(BUILDER) -debug <(bin/yml2json < $<)
 
 .PHONY: all
 all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
