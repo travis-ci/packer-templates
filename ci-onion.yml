@@ -58,7 +58,7 @@ provisioners:
   - PACKER_ENV_DIR=/c/.packer-env
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
-  execute_command: "{{ .Vars }} c:/windows/temp/Run-BashScript.ps1 -bashscript '{{ .Path }}'"
+  execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
 # TODO: use chef to do things (???)
 # - type: chef-solo
 #   guest_os_type: windows
@@ -82,7 +82,11 @@ provisioners:
   - PACKER_ENV_DIR=/c/.packer-env
   - SYSTEM_INFO_JSON=/c/travis_system_info.json
   - TMPDIR=/c/windows/temp
-  execute_command: "{{ .Vars }} c:/windows/temp/Run-BashScript.ps1 -bashscript '{{ .Path }}'"
+  - NODE_ATTRIBUTES_YML=/c/.node-attributes.yml
+  - RSPEC_JSON_DIR=/c/Users/travis
+  - DPKG_MANIFEST_JSON=/c/.dpkg-manifest.json
+  - BIN_LIB_CHECKSUMS=/c/.bin-lib.SHA256SUMS
+  execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
 - type: file
   source: "c:/windows/temp/image-metadata-{{ user `image_name` }}.tar.bz2"
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
