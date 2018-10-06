@@ -3,7 +3,6 @@ cmake
 curl
 git.install
 jq
-nvm
 ruby
 visualstudio2017buildtools
 wget
