@@ -2,6 +2,7 @@
 cmake
 curl
 git.install
+hashdeep
 jq
 ruby
 visualstudio2017buildtools
