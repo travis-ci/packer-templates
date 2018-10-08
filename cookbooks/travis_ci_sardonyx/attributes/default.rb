@@ -42,9 +42,6 @@ gimme_versions = %w[
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
-override['travis_java']['default_version'] = 'oraclejdk8'
-override['travis_java']['alternate_versions'] = %w[openjdk8]
-
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
