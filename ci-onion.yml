@@ -100,3 +100,5 @@ post-processors:
 -
   - type: shell-local
     script: bin/write-latest-image-name
+
+    
