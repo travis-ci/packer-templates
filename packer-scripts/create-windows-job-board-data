@@ -23,6 +23,7 @@ tags:
   language_bash: true
   language_shell: true
   language_script: true
+  language_node_js: true
   feature_dotnet: true
 tags_string: "dist:server-2016,os:windows,packer_chef_time:${nowtime},language_powershell:true,language_sh:true,language_bash:true,language_shell:true,language_script:true,feature_dotnet:true"
 EOF
