@@ -3,7 +3,9 @@ description: Travis CI onion build env template
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-onion-2016-{{ timestamp }}-<%= git_desc %>
+  gce_image_name: "windows-server-1803-dc-core-for-containers-v20180920"
+  image_name: travis-ci-onion-1803-containers-{{ timestamp }}-<%= git_desc %>
+  dist_name: 1803-containers
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -18,7 +20,7 @@ builders:
   image_description: Travis CI Onion
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: windows-server-2016-dc-v20180911
+  source_image: "{{ user `gce_image_name` }}"
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
@@ -37,7 +39,7 @@ provisioners:
 #   source: packer-assets/windows-server-2016-normal-purge.txt
 #   destination: c:/windows/temp/purge.txt
 - type: file
-  source: packer-assets/windows-server-2016-ci-onion-packages.txt
+  source: packer-assets/windows-server-ci-onion-packages.txt
   destination: c:/windows/temp/packages.txt
 - type: file
   source: packer-scripts/Run-BashScript.ps1
@@ -79,6 +81,7 @@ provisioners:
   environment_vars:
   - "IMAGE_METADATA_TARBALL=/c/windows/temp/image-metadata-{{ user `image_name` }}.tar.bz2"
   - JOB_BOARD_REGISTER_FILE=/c/travis-job-board-register.yml
+  - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
   - PACKER_ENV_DIR=/c/.packer-env
   - SYSTEM_INFO_JSON=/c/travis_system_info.json
   - TMPDIR=/c/windows/temp
