@@ -19,7 +19,7 @@ function Install-Packages {
            | Select-String -NotMatch "^(#.*|)$") {
     $package = $package.Line.Trim()
     if ($package -ne "") {
-      choco install $package
+      invoke-expression "choco install $package"
     }
   }
 }

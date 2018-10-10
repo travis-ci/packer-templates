@@ -6,7 +6,7 @@ hashdeep
 jq
 ruby
 vcredist2017
-visualstudio2017buildtools --package-parameters "--allWorkloads"
+visualstudio2017buildtools --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
 visualcpp-build-tools
 microsoft-build-tools
 wget
