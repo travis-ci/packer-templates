@@ -14,7 +14,7 @@ builders:
 - type: googlecompute
   name: googlecompute
   communicator: winrm
-  winrm_username: packer_user
+  winrm_username: travis
   winrm_use_ssl: true
   winrm_insecure: true
   image_description: Travis CI Onion
@@ -26,7 +26,7 @@ builders:
   machine_type: n1-standard-4
   disk_size: 50
   metadata:
-    windows-startup-script-cmd: "winrm quickconfig -quiet & net user /add packer_user & net localgroup administrators packer_user /add & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell -Command \"& {Set-ExecutionPolicy AllSigned -Force}\""
+    windows-startup-script-cmd: "winrm quickconfig -quiet & net user /add travis & net localgroup administrators travis /add & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell -Command \"& {Set-ExecutionPolicy AllSigned -Force}\""
   tags:
   - ci
   - onion

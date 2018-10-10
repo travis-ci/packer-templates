@@ -3,7 +3,7 @@ Set-StrictMode -Version 1.0
 function Main {
   Install-Chocolatey
   Install-Packages
-  Create-TravisUser
+  #Create-TravisUser
   Create-StubFiles
 }
 
