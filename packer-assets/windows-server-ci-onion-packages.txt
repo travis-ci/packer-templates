@@ -5,7 +5,9 @@ git.install
 hashdeep
 jq
 ruby
-vcredist140
+vcredist2017
 visualstudio2017buildtools
+visualcpp-build-tools
+microsoft-build-tools
 wget
 winscp
