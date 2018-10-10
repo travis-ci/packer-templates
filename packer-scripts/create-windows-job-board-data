@@ -24,8 +24,10 @@ tags:
   language_shell: true
   language_script: true
   language_node_js: true
+  language_go: true
+  language_rust: true
   feature_dotnet: true
-tags_string: "dist:$JOB_BOARD_IMAGE_DIST,os:windows,packer_chef_time:${nowtime},language_powershell:true,language_sh:true,language_bash:true,language_shell:true,language_script:true,language_node_js:true,feature_dotnet:true"
+tags_string: "dist:$JOB_BOARD_IMAGE_DIST,os:windows,packer_chef_time:${nowtime},language_powershell:true,language_sh:true,language_bash:true,language_shell:true,language_script:true,language_node_js:true,language_go:truelanguage_rust:true,feature_dotnet:true"
 EOF
 }
 
