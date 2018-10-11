@@ -1,3 +1,4 @@
+disabledefender-winconfig
 7zip.install
 cmake
 curl
