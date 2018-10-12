@@ -7,6 +7,7 @@ end
 def java_installer
   return 'jdk_switcher' if File.file?('/opt/jdk_switcher/jdk_switcher.sh')
   return 'install_jdk' if File.file?('/usr/local/bin/install-jdk.sh')
+
   false
 end
 
