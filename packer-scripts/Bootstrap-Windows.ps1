@@ -10,7 +10,9 @@ function Main {
 function Install-Chocolatey {
   $webClient = New-Object System.Net.WebClient
   $installScript = $webClient.DownloadString('https://chocolatey.org/install.ps1')
-  iex "$installScript"
+  
+  invoke-expression "$installScript"
+  
   choco feature enable -n allowGlobalConfirmation
 }
 
@@ -22,6 +24,10 @@ function Install-Packages {
       invoke-expression "choco install $package"
     }
   }
+  
+  choco optimize
+  
+  cat "C:\ProgramData\chocolatey\logs\chocolatey.log"
 }
 
 function Create-TravisUser {
