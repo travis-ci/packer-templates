@@ -3,6 +3,7 @@ Set-StrictMode -Version 1.0
 function Main {
   Install-Chocolatey
   Install-Packages
+  Clean-Up
   #Create-TravisUser
   Create-StubFiles
 }
@@ -24,12 +25,12 @@ function Install-Packages {
       invoke-expression "choco install $package"
     }
   }
-  
-  # we don't have a paid version so we can't call this
-  # choco optimize 
-  
-  # too much output
-  # cat "C:\ProgramData\chocolatey\logs\chocolatey.log"
+}
+
+function Clean-Up {
+  choco install choco-cleaner
+  & C:\ProgramData\chocolatey\bin\choco-cleaner.ps1
+  choco uninstall choco-cleaner
 }
 
 function Create-TravisUser {
