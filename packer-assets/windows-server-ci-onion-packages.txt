@@ -1,4 +1,3 @@
-disabledefender-winconfig
 7zip.install
 cmake
 curl
@@ -7,9 +6,12 @@ hashdeep
 jq
 rsync
 ruby
-vcredist2017
-visualstudio2017buildtools --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
-visualstudio2017-workload-vctools
-microsoft-build-tools
 wget
 winscp
+visualstudio2017buildtools --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATLMFC"
+visualstudio2017-workload-netcorebuildtools
+visualstudio2017-workload-vctools
+visualstudio2017-workload-webbuildtools
+windows-sdk-10.0
+microsoft-build-tools
+vcredist2017
