@@ -25,9 +25,11 @@ function Install-Packages {
     }
   }
   
-  choco optimize
+  # we don't have a paid version so we can't call this
+  # choco optimize 
   
-  cat "C:\ProgramData\chocolatey\logs\chocolatey.log"
+  # too much output
+  # cat "C:\ProgramData\chocolatey\logs\chocolatey.log"
 }
 
 function Create-TravisUser {

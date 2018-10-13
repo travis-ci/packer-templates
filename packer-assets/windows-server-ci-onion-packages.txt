@@ -8,7 +8,7 @@ rsync
 ruby
 wget
 winscp
-visualstudio2017buildtools --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATLMFC"
+visualstudio2017buildtools --package-parameters "--quiet --wait --norestart --locale en-US --allWorkloads --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATLMFC"
 visualstudio2017-workload-netcorebuildtools
 visualstudio2017-workload-vctools
 visualstudio2017-workload-webbuildtools
