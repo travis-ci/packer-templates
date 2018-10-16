@@ -4,6 +4,8 @@ curl
 git.install
 hashdeep
 jq
+llvm
+mingw
 rsync
 ruby
 wget
@@ -12,6 +14,6 @@ visualstudio2017buildtools --package-parameters "--quiet --wait --norestart --lo
 visualstudio2017-workload-netcorebuildtools
 visualstudio2017-workload-vctools
 visualstudio2017-workload-webbuildtools
-windows-sdk-10.0
+windows-sdk-10.1
 microsoft-build-tools
 vcredist2017
