@@ -309,7 +309,7 @@ end
 
 if os[:arch] !~ /ppc64/
   describe command('heroku version') do
-    its(:stdout) { should match(%r{^heroku}) }
+    its(:stdout) { should match(/^heroku/ }
   end
 end
 
