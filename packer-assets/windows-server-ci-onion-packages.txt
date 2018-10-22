@@ -1,5 +1,5 @@
 7zip.install
-cmake
+cmake.install --installargs 'ADD_CMAKE_TO_PATH=System'
 curl
 git.install
 hashdeep
@@ -17,3 +17,4 @@ visualstudio2017-workload-webbuildtools
 windows-sdk-10.1
 microsoft-build-tools
 vcredist2017
+wsl
