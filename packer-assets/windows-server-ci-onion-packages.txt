@@ -2,6 +2,7 @@
 cmake.install --installargs 'ADD_CMAKE_TO_PATH=System'
 curl
 git.install
+gnuwin32-make.portable
 hashdeep
 jq
 llvm
