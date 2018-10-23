@@ -42,17 +42,15 @@ gimme_versions = %w[
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
-override['java']['jdk_version'] = '8'
-override['java']['install_flavor'] = 'oracle'
-override['java']['oracle']['accept_oracle_download_terms'] = true
-override['java']['oracle']['jce']['enabled'] = true
-
-override['travis_java']['default_version'] = 'oraclejdk8'
-override['travis_java']['alternate_versions'] = %w[openjdk8]
-
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
+else
+  override['travis_jdk']['versions'] = %w[
+    openjdk10
+    openjdk11
+  ]
+  override['travis_jdk']['default'] = 'openjdk11'
 end
 
 override['leiningen']['home'] = '/home/travis'
@@ -136,7 +134,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   memcached
   mongodb
   mysql
-  neo4j
   nodejs_interpreter
   perl_interpreter
   perlbrew
