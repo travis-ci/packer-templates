@@ -96,7 +96,6 @@ $(META_FILES): .git/HEAD
 	./bin/dump-git-meta ./tmp/git-meta
 	./bin/write-envdir $(PWD)/tmp/docker-meta 'DOCKER_LOGIN_(USERNAME|PASSWORD|SERVER)'
 	./bin/write-envdir $(PWD)/tmp/job-board-env 'JOB_BOARD'
-	./bin/write-envdir $(PWD)/tmp/github-token 'GITHUB_TOKEN'
 
 packer-assets/%-system-info-commands.yml: $(wildcard packer-assets/system-info.d/*.yml)
 	chmod 0600 $@
