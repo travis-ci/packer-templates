@@ -50,4 +50,12 @@ __sed() {
   "${cmd[@]}"
 }
 
+__authenticate() {
+  [[ -z "$CI" ]] && return
+  local jsonfile
+  jsonfile="$(mktemp)"
+  echo "$GCE_ACCOUNT_FILE_B64_BZ2" | base64 --decode | bunzip2 >"$jsonfile"
+  gcloud auth activate-service-account "$GCE_ACCOUNT_FILE_ID" --key-file "$jsonfile"
+}
+
 main "$@"
