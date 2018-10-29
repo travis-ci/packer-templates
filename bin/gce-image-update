@@ -7,8 +7,6 @@ main() {
     exit 1
   fi
 
-  __authenticate
-
   for rel in 1204 1404 1604; do
     local curimg
     curimg="$(__fetch_curimg "${rel}")"
@@ -50,12 +48,6 @@ __sed() {
   cmd=("${sed}" -i "${pattern}" "$@")
   echo "---> ${cmd[*]}"
   "${cmd[@]}"
-}
-
-__authenticate() {
-  local jsonfile="$(mktemp)"
-  echo "$GCE_ACCOUNT_FILE_B64_BZ2" | base64 --decode | bunzip2 >"$jsonfile"
-  gcloud auth activate-service-account "$GCE_ACCOUNT_FILE_ID" --key-file "$jsonfile"
 }
 
 main "$@"
