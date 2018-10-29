@@ -11,7 +11,7 @@ variables:
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
-  github_token: "{{ env `GITHUB_TOKEN` }}"
+  github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
 builders:
 - type: googlecompute
   name: googlecompute
