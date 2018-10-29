@@ -64,12 +64,11 @@ else
   override['travis_jdk']['default'] = 'openjdk11'
 end
 
-node_versions = %w[
-  6.12.0
+override['travis_build_environment']['nodejs_versions'] = %w[
+  11.0.0
+  8.12.0
 ]
-
-override['travis_build_environment']['nodejs_versions'] = node_versions
-override['travis_build_environment']['nodejs_default'] = node_versions.max
+override['travis_build_environment']['nodejs_default'] = '8.12.0'
 
 override['travis_build_environment']['pythons'] = []
 
