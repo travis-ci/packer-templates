@@ -31,8 +31,8 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/stevonnie-system-info-commands.yml'
 
 rubies = %w[
-  2.2.7
-  2.4.1
+  2.4.5
+  2.5.3
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.max
