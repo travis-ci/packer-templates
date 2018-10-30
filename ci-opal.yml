@@ -11,7 +11,7 @@ variables:
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
-  github_token: "{{ env `GITHUB_TOKEN` }}"
+  github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
 builders:
 - type: googlecompute
   name: googlecompute
@@ -22,7 +22,7 @@ builders:
   image_description: Travis CI opal
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1604-xenial-v20181004
+  source_image: ubuntu-1604-xenial-v20181023
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4

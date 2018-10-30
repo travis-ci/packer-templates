@@ -56,13 +56,11 @@ end
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
-node_versions = %w[
-  6.12.0
-  8.9.1
+override['travis_build_environment']['nodejs_versions'] = %w[
+  11.0.0
+  8.12.0
 ]
-
-override['travis_build_environment']['nodejs_versions'] = node_versions
-override['travis_build_environment']['nodejs_default'] = node_versions.max
+override['travis_build_environment']['nodejs_default'] = '8.12.0'
 
 pythons = %w[
   2.7.14
