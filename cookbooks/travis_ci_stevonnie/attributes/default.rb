@@ -11,7 +11,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.8.3
+  1.11.1
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
