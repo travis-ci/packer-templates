@@ -63,8 +63,9 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '8.12.0'
 
 pythons = %w[
-  2.7.14
-  3.6.3
+  2.7.15
+  3.6.7
+  3.7.1
 ]
 
 # Reorder pythons so that default python2 and python3 come first
