@@ -143,11 +143,6 @@ describe 'clang installation' do
   end
 end
 
-describe ppa('pollinate/ppa') do
-  it { should exist }
-  it { should be_enabled }
-end
-
 describe package('pollinate') do
   it { should be_installed }
 end
