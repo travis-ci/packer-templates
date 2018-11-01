@@ -10,7 +10,7 @@ end
 
 describe 'go toolchain installation' do
   describe command('go version') do
-    its(:stdout) { should match(/^go version go1\.[45678]/) }
+    its(:stdout) { should match(/^go version go/) }
   end
 
   describe command('go env GOROOT') do
