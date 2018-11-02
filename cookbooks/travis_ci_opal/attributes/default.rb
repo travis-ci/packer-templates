@@ -81,12 +81,10 @@ override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ 
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
-  19.0
-  18.3
+  21.1
 ]
 elixirs = %w[
-  1.3.2
-  1.2.6
+  1.7.4
 ]
 
 override['travis_build_environment']['php_versions'] = []
@@ -97,12 +95,6 @@ override['travis_build_environment']['hhvm_enabled'] = false
 
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
-
-# TODO: Remove once travis-erlang-builder supports Xenial:
-# https://github.com/travis-ci/travis-erlang-builder/pull/6
-override['travis_build_environment']['otp_releases'] = []
-override['travis_build_environment']['elixir_versions'] = []
-override['travis_build_environment']['default_elixir_version'] = ''
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
@@ -143,7 +135,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
-# TODO: erlang (travis-ci/travis-erlang-builder#6)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __opal__
   crystal
@@ -151,6 +142,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   d
   dart
   elixir
+  erlang
   haskell
   haxe
   julia

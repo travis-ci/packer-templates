@@ -63,8 +63,9 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '8.12.0'
 
 pythons = %w[
-  2.7.14
-  3.6.3
+  2.7.15
+  3.6.7
+  3.7.1
 ]
 
 # Reorder pythons so that default python2 and python3 come first
@@ -97,8 +98,6 @@ rubies = %w[
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
-# TODO: Remove once travis-erlang-builder supports Xenial:
-# https://github.com/travis-ci/travis-erlang-builder/pull/6
 override['travis_build_environment']['otp_releases'] = []
 override['travis_build_environment']['elixir_versions'] = []
 override['travis_build_environment']['default_elixir_version'] = ''
@@ -142,7 +141,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
-# TODO: php (travis-ci/travis-ci#8737)
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __sardonyx__
   c
