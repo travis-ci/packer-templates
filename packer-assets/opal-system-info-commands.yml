@@ -121,6 +121,9 @@ commands:
   - command: redis-server --version
     name: Redis version
     pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
+  - command: kerl list installations
+  - command: kiex list
+  - command: rebar --version
   - command: ls -l /usr/local/ghc
     name: ghc installations
   - command: perlbrew list
