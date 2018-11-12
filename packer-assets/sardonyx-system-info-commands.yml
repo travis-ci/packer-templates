@@ -69,7 +69,7 @@ commands:
     pipe: awk '/^svn, version/{print $0, exit}'
   - command: sudo -V
     name: sudo version
-    pipe: awk '/^Sudo version/{print $NF;exit}'
+    pipe: awk '/^Sudo version/{print $NF; exit}'
   - command: gzip --version
     name: gzip version
     pipe: head -n 1
