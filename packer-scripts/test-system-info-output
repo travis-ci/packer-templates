@@ -1,35 +1,50 @@
-#!/usr/bin/awk -f
-BEGIN {
-  esc = "\x1B"
-  start_bold = sprintf("%s\\[34m%s\\[1m", esc, esc)
-  end_bold = sprintf("%s\\[0m", esc)
-  program_re = sprintf("^%s.*%s$", start_bold, end_bold)
-  exceptions["Operating System Details"]
-  exceptions["docker version"]
-  exceptions["Pre-installed PostgreSQL versions"]
-  exceptions["Pre-installed Node.js versions"]
-  exceptions["phpenv versions"]
-  exceptions["Pre-installed Ruby versions"]
-  exceptions["perlbrew list"]
-}
-function process() {
-  if ((lines == 0 || lines > 1) && ! (program in exceptions) && length(program)>0) {
-    printf "program %s has %s lines output\n", program, lines
-    exitcode=1
+#!/bin/sh
+
+if [ -n "$1" ]; then
+  systeminfo="$1"
+elif [ -f /usr/share/travis/system_info ]; then
+  systeminfo=/usr/share/travis/system_info
+elif [ -f /usr/local/travis/system_info ]; then
+  systeminfo=/usr/local/travis/system_info
+else
+  echo No system info file found, exiting.
+  exit 1
+fi
+
+exec awk '
+  BEGIN {
+    esc = "\x1B"
+    start_bold = sprintf("%s\\[34m%s\\[1m", esc, esc)
+    end_bold = sprintf("%s\\[0m", esc)
+    program_re = sprintf("^%s.*%s$", start_bold, end_bold)
+    exceptions["Operating System Details"]
+    exceptions["docker version"]
+    exceptions["Pre-installed PostgreSQL versions"]
+    exceptions["Pre-installed Node.js versions"]
+    exceptions["phpenv versions"]
+    exceptions["Pre-installed Ruby versions"]
+    exceptions["perlbrew list"]
   }
-  gsub(start_bold"|"end_bold, "")
-  program = $0
-  lines = 0
-}
 
-$0 ~ program_re {
-  process()
-  next
-}
-
-{ ++lines }
-
-END {
-  process()
-  exit exitcode
-}
+  function process() {
+    if ((lines == 0 || lines > 1) && ! (program in exceptions) && length(program)>0) {
+      printf "program %s has %s lines output\n", program, lines
+      exitcode=1
+    }
+    gsub(start_bold"|"end_bold, "")
+    program = $0
+    lines = 0
+  }
+  
+  $0 ~ program_re {
+    process()
+    next
+  }
+  
+  { ++lines }
+  
+  END {
+    process()
+    exit exitcode
+  }
+' "$systeminfo"
