@@ -6,9 +6,13 @@ BEGIN {
   program_re = sprintf("^%s.*%s$", start_bold, end_bold)
   exceptions["Operating System Details"]
   exceptions["docker version"]
+  exceptions["Pre-installed PostgreSQL versions"]
+  exceptions["Pre-installed Node.js versions"]
+  exceptions["phpenv versions"]
+  exceptions["Pre-installed Ruby versions"]
+  exceptions["perlbrew list"]
 }
-
-$0 ~ program_re {
+function process() {
   if ((lines == 0 || lines > 1) && ! (program in exceptions) && length(program)>0) {
     printf "program %s has %s lines output\n", program, lines
     exitcode=1
@@ -16,11 +20,16 @@ $0 ~ program_re {
   gsub(start_bold"|"end_bold, "")
   program = $0
   lines = 0
+}
+
+$0 ~ program_re {
+  process()
   next
 }
 
 { ++lines }
 
 END {
+  process()
   exit exitcode
 }
