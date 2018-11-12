@@ -1,0 +1,26 @@
+#!/usr/bin/awk -f
+BEGIN {
+  esc = "\x1B"
+  start_bold = sprintf("%s\\[34m%s\\[1m", esc, esc)
+  end_bold = sprintf("%s\\[0m", esc)
+  program_re = sprintf("^%s.*%s$", start_bold, end_bold)
+  exceptions["Operating System Details"]
+  exceptions["docker version"]
+}
+
+$0 ~ program_re {
+  if ((lines == 0 || lines > 1) && ! (program in exceptions) && length(program)>0) {
+    printf "program %s has %s lines output\n", program, lines
+    exitcode=1
+  }
+  gsub(start_bold"|"end_bold, "")
+  program = $0
+  lines = 0
+  next
+}
+
+{ ++lines }
+
+END {
+  exit exitcode
+}
