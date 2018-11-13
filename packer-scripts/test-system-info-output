@@ -27,13 +27,15 @@ exec awk '
   }
 
   function process() {
-    if (lines != 1 && program && !(program in exceptions)) {
-      printf "program %s has %s lines output\n", program, lines
+    if (count != 1 && program && !(program in exceptions)) {
+      printf("program %s has %s lines output\n", program, count)
+      print lines
       exitcode=1
     }
     gsub(start_bold"|"end_bold, "")
     program = $0
-    lines = 0
+    count = 0
+    lines=""
   }
   
   $0 ~ program_re {
@@ -41,7 +43,10 @@ exec awk '
     next
   }
   
-  { ++lines }
+  {
+    count++
+    lines=sprintf("%s%s\t%s", lines, lines ? "\n" : "", $0)
+  }
   
   END {
     process()
