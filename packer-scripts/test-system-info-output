@@ -27,7 +27,7 @@ exec awk '
   }
 
   function process() {
-    if ((lines == 0 || lines > 1) && ! (program in exceptions) && length(program)>0) {
+    if (lines != 1 && program && !(program in exceptions)) {
       printf "program %s has %s lines output\n", program, lines
       exitcode=1
     }

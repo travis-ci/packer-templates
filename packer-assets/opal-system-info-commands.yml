@@ -135,7 +135,7 @@ commands:
   - command: kerl list installations
   - command: kiex list
     name: elixirs
-    pipe: awk '/^(=>|=\*| \*)/{print; exit}'
+    pipe: awk '/^(=>|=\*| \*)/'
   - command: rebar --version
   - command: ls -l /usr/local/ghc
     name: ghc installations
