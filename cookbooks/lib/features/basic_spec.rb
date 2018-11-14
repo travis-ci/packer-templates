@@ -143,11 +143,6 @@ describe 'clang installation' do
   end
 end
 
-describe ppa('pollinate/ppa') do
-  it { should exist }
-  it { should be_enabled }
-end
-
 describe package('pollinate') do
   it { should be_installed }
 end
@@ -309,7 +304,7 @@ end
 
 if os[:arch] !~ /ppc64/
   describe command('heroku version') do
-    its(:stdout) { should match(%r{^heroku\/\d}) }
+    its(:stdout) { should match(/^heroku/) }
   end
 end
 

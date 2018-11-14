@@ -115,18 +115,15 @@ commands:
   - command: mongod --version
     name: MongoDB version
     pipe: perl -n -e '/version v(.*)$/ && { print "MongoDB $1\n" }'
-  - pre: service neo4j restart
-    name: Neo4j version
-    port: 7474
-    command: curl http://localhost:7474/db/data 2>/dev/null
-    pipe: perl -ne '/neo4j_version.*?([0-9\.]+)/ && print $1'
-    post: service neo4j stop
   - command: dpkg -l
     name: Pre-installed PostgreSQL versions
     pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'
   - command: redis-server --version
     name: Redis version
     pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
+  - command: kerl list installations
+  - command: kiex list
+  - command: rebar --version
   - command: ls -l /usr/local/ghc
     name: ghc installations
   - command: perlbrew list

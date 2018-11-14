@@ -4,23 +4,27 @@ def hello_java
   Support.tmpdir.join('Hello.java')
 end
 
+def java_installer
+  return 'jdk_switcher' if File.file?('/opt/jdk_switcher/jdk_switcher.sh')
+  return 'install_jdk' if File.file?('/usr/local/bin/install-jdk.sh')
+
+  false
+end
+
 describe 'jdk installation' do
   describe command('java -version') do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should match(/^(java|openjdk)/) }
   end
 
-  describe file('/opt/jdk_switcher/jdk_switcher.sh') do
-    it { should exist }
-    it { should be_readable }
-  end
-
-  describe command(%(
-    . /opt/jdk_switcher/jdk_switcher.sh;
-    jdk_switcher home default
-  )) do
-    its(:stdout) { should match(%r{/usr/lib/jvm}) }
-    its(:exit_status) { should eq 0 }
+  if java_installer == 'jdk_switcher'
+    describe command(%(
+      . /opt/jdk_switcher/jdk_switcher.sh;
+      jdk_switcher home default
+    )) do
+      its(:stdout) { should match(%r{/usr/lib/jvm}) }
+      its(:exit_status) { should eq 0 }
+    end
   end
 
   it 'should have JAVA_HOME defined' do
@@ -30,14 +34,12 @@ describe 'jdk installation' do
 
   describe 'java command' do
     before do
-      hello_java.write(<<-EOF.gsub(/\s+> /, ''))
-        > class Hello
-        > {
-        >   public static void main ( String[] args )
-        >   {
-        >     System.out.println("Hello World!");
-        >   }
-        > }
+      hello_java.write(<<~EOF)
+        class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello World!");
+          }
+        }
       EOF
       Dir.chdir(Support.tmpdir) { sh('javac Hello.java') }
     end

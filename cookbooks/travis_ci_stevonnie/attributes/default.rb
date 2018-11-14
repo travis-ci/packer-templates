@@ -11,7 +11,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.8.3
+  1.11.1
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -31,8 +31,8 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/stevonnie-system-info-commands.yml'
 
 rubies = %w[
-  2.2.7
-  2.4.1
+  2.4.5
+  2.5.3
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.max
@@ -47,7 +47,7 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '4.2.2~xenial1'
+override['travis_build_environment']['mercurial_version'] = '4.8'
 
 override['travis_packer_templates']['job_board']['stack'] = 'stevonnie'
 override['travis_packer_templates']['job_board']['features'] = %w[

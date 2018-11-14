@@ -11,6 +11,7 @@ variables:
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
+  github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
 builders:
 - type: googlecompute
   name: googlecompute
@@ -21,7 +22,7 @@ builders:
   image_description: Travis CI opal
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1604-xenial-v20180724
+  source_image: ubuntu-1604-xenial-v20181023
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
@@ -134,7 +135,9 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   <% end %>
-  json: {}
+  json:
+    travis_packer_build:
+      github_token: "{{ user `github_token` }}"
   run_list:
   - recipe[travis_ci_opal]
   <% if ENV['CHEF_PROFILING'] %>

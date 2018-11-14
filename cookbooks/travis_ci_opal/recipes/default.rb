@@ -41,11 +41,14 @@ end
 
 include_recipe 'travis_docker::compose'
 include_recipe 'openssl'
-include_recipe 'travis_java'
+if node['kernel']['machine'] == 'ppc64le'
+  include_recipe 'travis_java'
+else
+  include_recipe 'travis_jdk'
+end
 include_recipe 'travis_postgresql'
 include_recipe 'travis_build_environment::mysql'
 include_recipe 'travis_perlbrew::multi'
-include_recipe 'travis_build_environment::neo4j'
 include_recipe 'travis_build_environment::redis'
 include_recipe 'travis_build_environment::mongodb'
 include_recipe 'memcached'
