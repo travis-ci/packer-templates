@@ -51,9 +51,6 @@ builders:
   - "{{ .Image }}"
   - /sbin/init
   commit: true
-# Openstack builds disabled for failing with an error that's not possible to debug
-# until a fix for the Packer error reporting is released:
-# https://github.com/travis-ci/packer-templates/issues/555
 - type: openstack
   name: openstack
   flavor: m1.large
