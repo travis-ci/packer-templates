@@ -1,5 +1,5 @@
 commands:
   common:
     - command: kerl list installations
-    - command: kiex list
+    - { command: kiex list, name: elixirs, pipe: "awk '/^(=>|=\\*| \\*)/'" }
     - command: rebar --version
