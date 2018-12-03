@@ -2,6 +2,7 @@ commands:
   linux:
     - { command: date -u, name: Build image provisioning date and time }
     - { command: lsb_release -a, name: Operating System Details }
+    - { command: systemctl --version, name: Systemd Version, pipe: "head -n 1" }
   osx:
     - { command: date, name: Build image provisioning date and time }
     - { command: sw_vers, name: Operating System Details }
