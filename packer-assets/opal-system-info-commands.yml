@@ -114,12 +114,12 @@ commands:
   - command: couchdb -V
     name: CouchDB version
     pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
-  - pre: sudo service elasticsearch restart
+  - pre: sudo systemctl restart elasticsearch; sleep 10
     name: ElasticSearch version
     port: 9200
     command: curl localhost:9200 2>/dev/null
     pipe: awk -F\" '/number/ { print $4 }'
-    post: sudo service elasticsearch stop >/dev/null
+    post: sudo systemctl stop elasticsearch >/dev/null
   - command: ls -d /usr/local/firefox-*
     name: Installed Firefox version
     pipe: awk -F- '{print "firefox", $2}'
