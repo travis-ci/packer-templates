@@ -139,7 +139,7 @@ export RUBYOPT=${RUBYOPT}
 unset GEM_PATH
 
 cd ${cookbook_dir}
-sudo sh -e systemctl start xvfb || echo \"ignoring exit \$? from xvfb\"
+sudo systemctl start xvfb.service
 
 set -o errexit
 rspec ${SPEC_ARGS} \\

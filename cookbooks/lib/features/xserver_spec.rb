@@ -7,6 +7,7 @@ describe 'xserver installation' do
 
   describe command('DISPLAY=:99.0 xset -q') do
     its(:stdout) { should match(/^Keyboard Control:/) }
+    its(:stderr) { should be_empty }
     its(:exit_status) { should eq 0 }
   end
 
