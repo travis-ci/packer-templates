@@ -1,6 +1,6 @@
 language: __sardonyx__
 dist: xenial
-group: edge
+group: dev
 sudo: required
 services:
 - postgresql
