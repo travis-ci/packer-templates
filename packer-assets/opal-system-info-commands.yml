@@ -117,7 +117,7 @@ commands:
   - command: couchdb -V
     name: CouchDB version
     pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
-  - pre: sudo systemctl restart elasticsearch; sleep 10
+  - pre: sudo systemctl restart elasticsearch; sleep 30
     name: ElasticSearch version
     port: 9200
     command: curl localhost:9200 2>/dev/null
