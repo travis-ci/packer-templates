@@ -1,7 +1,6 @@
 language: __sardonyx__
 dist: xenial
-group: dev
-sudo: required
+group: edge
 services:
 - postgresql
 filter_secrets: false
