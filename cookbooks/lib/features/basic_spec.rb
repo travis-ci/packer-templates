@@ -616,7 +616,11 @@ end
 
 describe 'travis_build_environment packages' do
   Support.base_packages.each do |package_name|
-    describe(package(package_name)) { it { should be_installed } }
+    if os[:arch] =~ /ppc64/ && package_name == 'chromium-browser'
+      describe(package(package_name)) { it { should_not be_installed } }
+    else
+      describe(package(package_name)) { it { should be_installed } }
+    end
   end
 end
 
