@@ -58,7 +58,7 @@ commands:
     name: mysql version
   - command: openssl version
     name: openssl version
-  - command: packer version
+  - command: packer --version
     name: packer version
   - command: psql --version
     name: postgresql client version
