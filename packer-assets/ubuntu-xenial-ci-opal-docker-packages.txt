@@ -2,4 +2,5 @@ chromium-browser
 emacs-nox
 libtidy-dev
 postgresql-client
+tmate
 uuid-dev

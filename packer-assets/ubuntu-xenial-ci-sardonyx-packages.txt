@@ -453,6 +453,7 @@ tcpdump
 telnet
 thin-provisioning-tools
 time
+tmate
 tmux
 tzdata
 ubuntu-keyring

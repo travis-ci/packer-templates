@@ -7,4 +7,5 @@ libtidy-dev
 locales
 mysql-client
 postgresql-client
+tmate
 uuid-dev
