@@ -24,7 +24,7 @@ commands:
     - { command: hg version, name: mercurial version, pipe: "awk -F'[)(]' '$2~/version/{print $2; exit}'" }
     - { command: mysql --version, name: mysql version }
     - { command: openssl version, name: openssl version }
-    - { command: packer version, name: packer version }
+    - { command: packer --version, name: packer version }
     - { command: psql --version, name: postgresql client version }
     - { command: ragel -v, name: ragel version, pipe: "head -n 1" }
     - { command: ssh -V, name: ssh client version }
