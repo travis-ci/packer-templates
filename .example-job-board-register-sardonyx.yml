@@ -11,8 +11,7 @@ languages:
 - groovy
 - java
 - node_js
-# FIXME: why no work?
-# - php
+- php
 - pure_java
 - python
 - ruby
@@ -21,7 +20,6 @@ features:
 - basic
 # FIXME: uncomment once working on xenial
 # - cassandra
-- chromium
 # FIXME: uncomment once working on xenial
 # - couchdb
 - disabled-ipv6
@@ -39,8 +37,7 @@ features:
 - nodejs_interpreter
 - perl_interpreter
 - perlbrew
-# FIXME: uncomment once working on xenial
-# - phantomjs
+- phantomjs
 - postgresql
 - python_interpreter
 - redis

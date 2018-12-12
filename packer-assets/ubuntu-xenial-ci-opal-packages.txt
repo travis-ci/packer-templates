@@ -31,7 +31,6 @@ bzip2
 bzr
 ca-certificates
 ccache
-chromium-browser
 command-not-found
 command-not-found-data
 console-setup
