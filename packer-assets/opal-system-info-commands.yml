@@ -129,6 +129,8 @@ commands:
   - command: mongod --version
     name: MongoDB version
     pipe: perl -n -e '/version v(.*)$/ && { print "MongoDB $1\n" }'
+  - command: "/usr/local/phantomjs/bin/phantomjs --version"
+    name: PhantomJS version
   - command: dpkg -l
     name: Pre-installed PostgreSQL versions
     pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'
