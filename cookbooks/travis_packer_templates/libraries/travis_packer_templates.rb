@@ -117,8 +117,8 @@ class TravisPackerTemplates
     packages_lines = ::File.readlines(packages_file)
     packages = packages_lines.map(&:strip).reject { |l| l =~ /^#/ }.uniq
     if RUBY_PLATFORM == 'powerpc64le-linux'
-      chromium_browser_index = packages.index("chromium-browser")
-      if chromium_browser_index != nil
+      chromium_browser_index = packages.index('chromium-browser')
+      if !chromium_browser_index.nil
         packages.delete_at(chromium_browser_index)
       end
     end
