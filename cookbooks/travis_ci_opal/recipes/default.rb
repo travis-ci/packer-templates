@@ -58,9 +58,7 @@ include_recipe 'memcached'
 include_recipe 'travis_build_environment::couchdb'
 include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
-if node['kernel']['machine'] != 'ppc64le'
-  include_recipe 'travis_build_environment::google_chrome'
-end
+include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
 
