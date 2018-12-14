@@ -66,3 +66,4 @@ include_recipe 'travis_phantomjs::2'
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
 include_recipe 'travis_system_info'
+include_recipe 'travis_packer_templates::job_board'

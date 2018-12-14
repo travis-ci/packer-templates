@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# Cookbook Name:: travis_ci_stevonnie
-# Recipe:: default
+# Cookbook Name:: travis_packer_templates
+# Recipe:: job_board
 #
-# Copyright 2017, Travis CI GmbH
+# Copyright 2018, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,35 +24,37 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_packer_templates'
-include_recipe 'travis_build_environment'
+template '/etc/profile.d/Z90-travis-packer-templates.sh' do
+  source 'etc-profile-d-travis-packer-templates.sh.erb'
+  cookbook 'travis_packer_templates'
+  owner 'root'
+  group 'root'
+  mode 0o755
+  variables(
+    lazy do
+      {
+        features: node['travis_packer_templates']['job_board']['features'],
+        languages: node['travis_packer_templates']['job_board']['languages'],
+        stack: node['travis_packer_templates']['job_board']['stack'],
+        timestamp: ENV['travis_packer_templates_init_time']
+      }
+    end
+  )
+end
 
-if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
-  if node['kernel']['machine'] == 'ppc64le'
-    include_recipe 'travis_docker::package'
-  else
-    include_recipe 'travis_docker::binary'
+ruby_block 'write node attributes' do
+  block(lazy) do
+    travis_packer_templates.write_node_attributes_yml
   end
-else
-  include_recipe 'travis_docker'
-  include_recipe 'travis_build_environment::ramfs'
+  action :nothing
 end
 
-include_recipe 'travis_docker::compose'
-if node['kernel']['machine'] == 'ppc64le'
-  include_recipe 'travis_java'
-else
-  include_recipe 'travis_jdk'
+log 'trigger writing node attributes' do
+  notifies :run, 'ruby_block[write node attributes]'
 end
-include_recipe 'travis_perlbrew::multi'
-include_recipe 'travis_postgresql::pgdg'
 
-# HACK: stevonnie-specific shims!
-execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
-include_recipe 'travis_packer_templates::job_board'
-include_recipe 'travis_system_info'
-
-# HACK: force removal of ~/.pearrc until a decision is reached on if they are
-# good or bad
-execute 'rm -f /home/travis/.pearrc'
+ruby_block 'write job-board registration bits' do
+  block(lazy) do
+    travis_packer_templates.write_job_board_register_yml
+  end
+end

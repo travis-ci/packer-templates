@@ -68,6 +68,7 @@ include_recipe 'travis_phantomjs::2'
 # HACK: sardonyx-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
+include_recipe 'travis_packer_templates::job_board'
 include_recipe 'travis_system_info'
 
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are

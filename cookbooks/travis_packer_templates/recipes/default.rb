@@ -3,7 +3,7 @@
 # Cookbook Name:: travis_packer_templates
 # Recipe:: default
 #
-# Copyright 2017, Travis CI GmbH
+# Copyright 2018, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,33 +29,6 @@ travis_packer_templates = nil
 travis_packer_templates = TravisPackerTemplates.new(node) if
   defined?(TravisPackerTemplates)
 travis_packer_templates&.init!(init_time)
-
-template '/etc/profile.d/Z90-travis-packer-templates.sh' do
-  source 'etc-profile-d-travis-packer-templates.sh.erb'
-  cookbook 'travis_packer_templates'
-  owner 'root'
-  group 'root'
-  mode 0o755
-  variables(
-    features: node['travis_packer_templates']['job_board']['features'],
-    languages: node['travis_packer_templates']['job_board']['languages'],
-    stack: node['travis_packer_templates']['job_board']['stack'],
-    timestamp: init_time
-  )
-end
-
-ruby_block 'write node attributes' do
-  block { travis_packer_templates.write_node_attributes_yml }
-  action :nothing
-end
-
-log 'trigger writing node attributes' do
-  notifies :run, 'ruby_block[write node attributes]'
-end
-
-ruby_block 'write job-board registration bits' do
-  block { travis_packer_templates.write_job_board_register_yml }
-end
 
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
   apt_package slice do
