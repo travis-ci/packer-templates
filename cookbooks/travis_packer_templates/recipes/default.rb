@@ -58,6 +58,6 @@ Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
   apt_package slice do
     retries 2
     options '--no-install-recommends --no-install-suggests'
-    action %i[install upgrade]
+    action :install
   end
 end
