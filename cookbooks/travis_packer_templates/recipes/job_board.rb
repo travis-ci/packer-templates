@@ -43,9 +43,7 @@ template '/etc/profile.d/Z90-travis-packer-templates.sh' do
 end
 
 ruby_block 'write node attributes' do
-  block(lazy) do
-    travis_packer_templates.write_node_attributes_yml
-  end
+  block { travis_packer_templates.write_node_attributes_yml }
   action :nothing
 end
 
@@ -54,7 +52,5 @@ log 'trigger writing node attributes' do
 end
 
 ruby_block 'write job-board registration bits' do
-  block(lazy) do
-    travis_packer_templates.write_job_board_register_yml
-  end
+  block { travis_packer_templates.write_job_board_register_yml }
 end
