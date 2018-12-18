@@ -25,7 +25,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
@@ -51,6 +50,7 @@ include_recipe 'travis_postgresql::pgdg'
 # HACK: stevonnie-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
+include_recipe 'travis_packer_templates'
 include_recipe 'travis_system_info'
 
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are

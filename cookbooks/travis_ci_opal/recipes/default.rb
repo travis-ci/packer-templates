@@ -25,7 +25,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
 include_recipe 'travis_build_environment::haskell' if node['kernel']['machine'] != 'ppc64le'
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
@@ -65,4 +64,5 @@ include_recipe 'travis_phantomjs::2'
 # HACK: sardonyx-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
+include_recipe 'travis_packer_templates'
 include_recipe 'travis_system_info'
