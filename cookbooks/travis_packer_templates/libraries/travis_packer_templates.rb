@@ -11,11 +11,11 @@ class TravisPackerTemplates
 
   def initialize(node)
     @node = node
-    @init_time = Time.now.utc
   end
 
   def init!(init_time)
     @init_time = init_time
+    node.override['__timestamp'] = init_time
     import_packer_env_vars
     assign_travis_system_info_cookbooks_sha(
       node['travis_packer_templates']['env']['TRAVIS_COOKBOOKS_SHA'].to_s
@@ -34,7 +34,7 @@ class TravisPackerTemplates
 
     write_yml(
       node['travis_packer_templates']['node_attributes_yml'],
-      node_attributes_hash.merge('__timestamp' => init_time.to_s)
+      node_attributes_hash
     )
   end
 

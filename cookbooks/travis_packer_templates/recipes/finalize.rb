@@ -24,11 +24,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-init_time = Time.now.utc
 travis_packer_templates = nil
 travis_packer_templates = TravisPackerTemplates.new(node) if
   defined?(TravisPackerTemplates)
-travis_packer_templates&.init!(init_time)
 
 template '/etc/profile.d/Z90-travis-packer-templates.sh' do
   source 'etc-profile-d-travis-packer-templates.sh.erb'
@@ -40,7 +38,7 @@ template '/etc/profile.d/Z90-travis-packer-templates.sh' do
     features: node['travis_packer_templates']['job_board']['features'],
     languages: node['travis_packer_templates']['job_board']['languages'],
     stack: node['travis_packer_templates']['job_board']['stack'],
-    timestamp: init_time
+    timestamp: node['__timestamp']
   )
 end
 
@@ -55,12 +53,4 @@ end
 
 ruby_block 'write job-board registration bits' do
   block { travis_packer_templates.write_job_board_register_yml }
-end
-
-Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
-  apt_package slice do
-    retries 2
-    options '--no-install-recommends --no-install-suggests'
-    action %i[install upgrade]
-  end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Cookbook Name:: travis_ci_stevonnie
+# Cookbook Name:: travis_packer_templates
 # Recipe:: default
 #
 # Copyright 2017, Travis CI GmbH
@@ -24,36 +24,16 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_packer_templates::bootstrap'
-include_recipe 'travis_build_environment'
+init_time = Time.now.utc
+travis_packer_templates = nil
+travis_packer_templates = TravisPackerTemplates.new(node) if
+  defined?(TravisPackerTemplates)
+travis_packer_templates&.init!(init_time)
 
-if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
-  if node['kernel']['machine'] == 'ppc64le'
-    include_recipe 'travis_docker::package'
-  else
-    include_recipe 'travis_docker::binary'
+Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
+  apt_package slice do
+    retries 2
+    options '--no-install-recommends --no-install-suggests'
+    action %i[install upgrade]
   end
-else
-  include_recipe 'travis_docker'
-  include_recipe 'travis_build_environment::ramfs'
 end
-
-include_recipe 'travis_docker::compose'
-if node['kernel']['machine'] == 'ppc64le'
-  include_recipe 'travis_java'
-else
-  include_recipe 'travis_jdk'
-end
-include_recipe 'travis_perlbrew::multi'
-include_recipe 'travis_postgresql::pgdg'
-
-# HACK: stevonnie-specific shims!
-execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
-
-include_recipe 'travis_packer_templates::finalize'
-include_recipe 'travis_system_info'
-
-# HACK: force removal of ~/.pearrc until a decision is reached on if they are
-# good or bad
-execute 'rm -f /home/travis/.pearrc'
