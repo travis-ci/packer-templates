@@ -1,8 +1,6 @@
 commands:
   common:
-    - pre: "sudo systemctl restart elasticsearch; sleep 30"
-      name: ElasticSearch version
+    - name: ElasticSearch version
       port: 9200
-      command: 'curl localhost:9200 2>/dev/null'
+      command: curl localhost:9200
       pipe: "awk -F\\\" '/number/ { print $4 }'"
-      post: sudo systemctl stop elasticsearch >/dev/null
