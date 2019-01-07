@@ -7,14 +7,13 @@ require 'fileutils'
 require 'chef'
 
 class TravisPackerTemplates
-  attr_reader :node, :init_time
+  attr_reader :node
 
   def initialize(node)
     @node = node
   end
 
   def init!(init_time)
-    @init_time = init_time
     node.override['__timestamp'] = init_time
     import_packer_env_vars
     assign_travis_system_info_cookbooks_sha(
@@ -61,7 +60,7 @@ class TravisPackerTemplates
     tags = {
       'dist' => node['lsb']['codename'].to_s,
       'os' => node['os'].to_s,
-      'packer_chef_time' => init_time.strftime('%Y%m%dT%H%M%SZ')
+      'packer_chef_time' => packer_chef_time
     }
 
     %w[language feature].each do |prefix|
@@ -71,6 +70,10 @@ class TravisPackerTemplates
     end
 
     tags
+  end
+
+  def packer_chef_time
+    node['__init_time'].strftime('%Y%m%dT%H%M%SZ')
   end
 
   def lil_hash(hash)
