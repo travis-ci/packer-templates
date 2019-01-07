@@ -65,4 +65,12 @@ include_recipe 'travis_phantomjs::2'
 # HACK: sardonyx-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
+log 'trigger writing node attributes' do
+  notifies :run, 'ruby_block[write node attributes]'
+end
+
+log 'trigger job-board registration' do
+  notifies :run, 'ruby_block[write job-board registration bits]'
+end
+
 include_recipe 'travis_system_info'
