@@ -42,7 +42,6 @@ override['travis_build_environment']['php_aliases'] = {}
 override['travis_build_environment']['otp_releases'] = []
 override['travis_build_environment']['elixir_versions'] = []
 override['travis_build_environment']['default_elixir_version'] = ''
-override['travis_build_environment']['hhvm_enabled'] = false
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false

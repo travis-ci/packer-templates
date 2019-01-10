@@ -91,8 +91,6 @@ override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_default_version'] = []
 override['travis_build_environment']['php_aliases'] = {}
 
-override['travis_build_environment']['hhvm_enabled'] = false
-
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
