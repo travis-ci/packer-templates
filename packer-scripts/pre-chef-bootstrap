@@ -15,7 +15,6 @@ main() {
     __enable_i386
   fi
   __install_packages
-  __upgrade_apt
   __setup_sshd
   __setup_travis_user
   __write_pre_chef_env
@@ -54,29 +53,6 @@ __install_packages() {
     wget \
     python \
     ${APT_GET_INSTALL_PRE_CHEF}
-}
-
-__upgrade_apt() {
-  local arch_type
-  arch_type="$(uname -m)"
-  local dist_name
-  dist_name="$(lsb_release -sc)"
-
-  if [[ "${SKIP_APT_UPGRADE}" || "${dist_name}" =~ xenial ]]; then
-    return
-  fi
-
-  if [[ "${arch_type}" =~ ppc64 ]]; then
-    apt-get install -yqq apt=1.2.10
-  else
-    curl -sSL https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh |
-      bash
-    apt-get update -yqq
-  fi
-
-  apt-get clean -yqq
-  rm -rf /var/lib/apt/lists
-  apt-get update -yqq
 }
 
 __setup_sshd() {
