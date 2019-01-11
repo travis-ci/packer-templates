@@ -67,9 +67,9 @@ ftp
 fuse
 gawk
 gcc
-gcc-4.8-base
-gcc-4.9-base
 gcc-6-base
+gcc-7-base
+gcc-8-base
 gdisk
 geoip-database
 gettext
