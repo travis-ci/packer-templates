@@ -54,7 +54,7 @@ ruby_block 'write job-board registration bits' do
   action :nothing
 end
 
-Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
+Array(node['travis_packer_templates']['packages']).each_slice(1000) do |slice|
   apt_package slice do
     retries 2
     options '--no-install-recommends --no-install-suggests'
