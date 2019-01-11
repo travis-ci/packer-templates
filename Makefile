@@ -10,7 +10,8 @@ META_FILES := \
 SYSTEM_INFO_COMMANDS_FILES := \
 	packer-assets/opal-system-info-commands.yml \
 	packer-assets/sardonyx-system-info-commands.yml \
-	packer-assets/stevonnie-system-info-commands.yml
+	packer-assets/stevonnie-system-info-commands.yml \
+	packer-assets/peridot-system-info-commands.yml
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
 CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
@@ -39,10 +40,10 @@ all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
 .PHONY: stacks-short
 stacks-short:
-	@$(MAKE) -s stacks | sed 's/-trusty//;s/-xenial//'
+	@$(MAKE) -s stacks | sed 's/-trusty//;s/-xenial//;s/-bionic//;'
 
 .PHONY: stacks
-stacks: stacks-trusty stacks-xenial
+stacks: stacks-trusty stacks-xenial stacks-bionic
 
 .PHONY: stacks-trusty
 stacks-trusty:
@@ -51,6 +52,10 @@ stacks-trusty:
 .PHONY: stacks-xenial
 stacks-xenial:
 	@bin/list-stacks xenial
+
+.PHONY: stacks-bionic
+stacks-bionic:
+	@bin/list-stacks bionic
 
 .PHONY: test
 test:
