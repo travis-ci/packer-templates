@@ -1,6 +1,6 @@
 ---
 NOTE: this is a generated file
-stack: stevonnie
+stack: peridot
 commands:
   linux:
   - command: date -u
