@@ -20,10 +20,12 @@ if os[:arch] !~ /ppc64/
       it { should_not exist }
     end
 
-    Dir.glob('/home/travis/.phpenv/versions/[0-9]+.[0-9]+.[0-9]+').each do |version|
-      version_alias = version.sub(/\.[^.]+$/, '')
-      describe file(version_alias) do
-        it { should be_symlink }
+    describe 'aliases' do
+      Dir.glob('/home/travis/.phpenv/versions/[0-9]+.[0-9]+.[0-9]+').each do |version|
+        version_alias = version.sub(/\.[^.]+$/, '')
+        describe file(version_alias) do
+          it { should be_symlink }
+        end
       end
     end
   end
