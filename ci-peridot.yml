@@ -139,8 +139,6 @@ provisioners:
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
   - packer-scripts/cleanup
-  - "find /etc/systemd -type f -o -type l"
-  - "rm /etc/systemd/system/network-online.target.wants/networking.service"
   # - packer-scripts/minimize
   environment_vars:
   - DISPLAY=:99.0
@@ -148,6 +146,14 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  environment_vars:
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  inline:
+  - "find /etc/systemd -type f -o -type l"
+  - "rm /etc/systemd/system/network-online.target.wants/networking.service"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball
