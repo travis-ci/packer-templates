@@ -171,10 +171,11 @@ post-processors:
     - docker
 -
   - type: shell-local
-    # XXX: remove :point_down: hack
-    script: DIST=the_future bin/job-board-register
+    script: bin/job-board-register
     environment_vars:
     - IMAGE_NAME={{ user `image_name` }}
+    # XXX: remove :point_down: hack
+    - DIST=the_future
     only:
     - googlecompute
   - type: shell-local
