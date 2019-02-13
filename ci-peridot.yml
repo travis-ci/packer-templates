@@ -139,6 +139,8 @@ provisioners:
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
   - packer-scripts/cleanup
+  - "find /etc/systemd -type f -o -type l"
+  - "rm /etc/systemd/system/network-online.target.wants/networking.service"
   # - packer-scripts/minimize
   environment_vars:
   - DISPLAY=:99.0
