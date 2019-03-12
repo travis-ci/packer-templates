@@ -146,6 +146,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   haxe
   julia
   perl
+  perl6
   r
   rust
 ]
