@@ -14,9 +14,9 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
 php_aliases = {
-  '5.6' => '5.6.36',
-  '7.1' => '7.1.19',
-  '7.2' => '7.2.7'
+  '5.6' => '5.6.40',
+  '7.1' => '7.1.27',
+  '7.2' => '7.2.15'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
