@@ -1,5 +1,5 @@
 ---
-description: Travis CI sardonyx build env template!
+description: Travis CI sardonyx build env template
 variables:
   docker_repository: travisci/ci-sardonyx
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>
@@ -7,7 +7,7 @@ variables:
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   image_name: travis-ci-sardonyx-xenial-{{ timestamp }}-<%= git_desc %>
   openstack_source_image_name: "{{ env `OS_SOURCE_IMAGE_XENIAL` }}"
-  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_branch: "jvd-docker-registry"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
