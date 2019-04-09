@@ -60,7 +60,7 @@ provisioners:
   only:
   - googlecompute
 - type: shell
-  inline: mkdir -p /var/tmp
+  inline: mkdir -p /var/tmp/git-meta
 - type: file
   source: tmp/git-meta
   destination: /var/tmp/git-meta
