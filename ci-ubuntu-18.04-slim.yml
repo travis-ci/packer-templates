@@ -50,10 +50,10 @@ builders:
   availability_zone: "{{ user `openstack_zone` }}"
   ssh_keypair_name:  "{{ user `openstack_key_name` }}"
   ssh_private_key_file: "{{ user `openstack_key_path`  }}"
-- type: "lxd"
-  name: "lxd"
-  image: "ubuntu/18.04"
-  output_image: "ubuntu-18.04-slim"
+- type: lxd
+  name: lxd
+  image: ubuntu/18.04
+  output_image: ubuntu-18.04-slim
 provisioners:
 - type: shell
   inline: sleep 10
@@ -63,7 +63,7 @@ provisioners:
   source: tmp/git-meta
   destination: /var/tmp/git-meta
 - type: file
-  source: packer-assets/ubuntu-18.04-normal-purge.txt
+  source: packer-assets/ubuntu-18.04-slim-purge.txt
   destination: /var/tmp/purge.txt
 - type: file
   source: packer-assets/ubuntu-18.04-slim-packages.txt
@@ -77,8 +77,8 @@ provisioners:
   - packer-scripts/remove-default-users
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
   only:
-  - docker
   - googlecompute
+  - lxd
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap
@@ -90,10 +90,10 @@ provisioners:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
-  source: packer-assets/sardonyx-system-info-commands.yml
-  destination: /var/tmp/sardonyx-system-info-commands.yml
+  source: packer-assets/ubuntu-18.04-system-info-commands.yml
+  destination: /var/tmp/ubuntu-18.04-system-info-commands.yml
 - type: shell
-  inline: chmod 0644 /var/tmp/sardonyx-system-info-commands.yml
+  inline: chmod 0644 /var/tmp/ubuntu-18.04-system-info-commands.yml
 - type: chef-solo
   version: 13.8.5
   config_template: chef-solo.rb.tmpl
@@ -114,7 +114,7 @@ provisioners:
     travis_packer_build:
       github_token: "{{ user `github_token` }}"
   run_list:
-  - recipe[travis_ci_sardonyx]
+  - recipe[travis_ci_ubuntu_18.04_slim]
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>
@@ -147,30 +147,12 @@ provisioners:
   direction: download
 post-processors:
 -
-  - type: docker-tag
-    repository: "{{ user `docker_repository` }}"
-    tag: "{{ user `docker_tag` }}"
-    only:
-    - docker
-  - type: shell-local
-    scripts: bin/docker-push
-    environment_vars:
-    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
-    only:
-    - docker
--
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - googlecompute
-  - type: shell-local
-    script: bin/job-board-register
-    environment_vars:
-    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
-    only:
-    - docker
 -
   - type: shell-local
     script: bin/write-latest-image-name

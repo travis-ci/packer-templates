@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-name 'travis_ci_ubuntu-18.04-slim'
+name 'travis_ci_ubuntu_18.04_slim'
 maintainer 'Travis CI GmbH'
 maintainer_email 'contact+packer-templates@travis-ci.com'
 license 'MIT'
