@@ -250,14 +250,14 @@ libpng-dev
 libpod-latex-perl
 libpopt0
 libpq-dev
-libprocps4
+libprocps6
 libpython-stdlib
 libpython2.7
 libpython2.7-minimal
 libpython2.7-stdlib
 libpython3-stdlib
-libpython3.5-minimal
-libpython3.5-stdlib
+libpython3.7-minimal
+libpython3.7-stdlib
 libqt4-dev
 libreadline-dev
 libreadline6s
