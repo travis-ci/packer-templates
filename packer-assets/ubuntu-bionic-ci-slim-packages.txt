@@ -135,8 +135,6 @@ libc6
 libcap-ng0
 libcap2
 libcap2-bin
-libcgmanager0
-libck-connector0
 libclass-accessor-perl
 libcomerr2
 libcryptsetup4
