@@ -137,7 +137,7 @@ libcap2
 libcap2-bin
 libclass-accessor-perl
 libcomerr2
-libcryptsetup4
+libcryptsetup12
 libcurl3
 libcurl3-gnutls
 libcurl4-gnutls-dev
