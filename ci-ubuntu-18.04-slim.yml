@@ -1,0 +1,176 @@
+---
+description: Travis CI Ubuntu 18.04 Slim build env template!
+variables:
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+  openstack_source_image_name: "{{ env `OS_SOURCE_IMAGE_BIONIC` }}"
+  openstack_zone: "{{ env `OS_ZONE` }}"
+  openstack_key_path: "{{ env `OS_SSH_KEY_PATH`}}"
+  openstack_key_name: "{{ env `OS_SSH_KEY` }}"
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_edge_branch: master
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
+  github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
+  image_name: travis-ci-ubuntu-18.04-slim-{{ timestamp }}-<%= git_desc %>
+builders:
+- type: googlecompute
+  name: googlecompute
+  communicator: ssh
+  ssh_timeout: 10m
+  ssh_port: 22
+  ssh_username: packer
+  image_description: Travis CI Ubuntu 18.04 Slim
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image: ubuntu-1804-bionic-v20190307
+  zone: us-central1-a
+  image_name: "{{ user `image_name` }}"
+  machine_type: n1-standard-4
+  disk_size: 15
+  tags:
+  - ci
+  - ubuntu-18.04
+  - slim
+  - travis-ci-packer-templates
+# Openstack builds disabled for failing with an error that's not possible to debug
+# until a fix for the Packer error reporting is released:
+# https://github.com/travis-ci/packer-templates/issues/555
+- type: openstack
+  name: openstack
+  flavor: m1.large
+  insecure: true
+  image_name: "{{ user `image_name` }}"
+  ssh_username: ubuntu
+  networks:
+  <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
+  - <%= network %>
+  <% end %>
+  source_image_name: "{{ user `openstack_source_image_name` }}"
+  availability_zone: "{{ user `openstack_zone` }}"
+  ssh_keypair_name:  "{{ user `openstack_key_name` }}"
+  ssh_private_key_file: "{{ user `openstack_key_path`  }}"
+- type: "lxd"
+  name: "lxd"
+  image: "ubuntu/18.04"
+  output_image: "ubuntu-18.04-slim"
+provisioners:
+- type: shell
+  inline: sleep 10
+  only:
+  - googlecompute
+- type: file
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
+- type: file
+  source: packer-assets/ubuntu-18.04-normal-purge.txt
+  destination: /var/tmp/purge.txt
+- type: file
+  source: packer-assets/ubuntu-18.04-slim-packages.txt
+  destination: /var/tmp/packages.txt
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-dump
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/remove-default-users
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  only:
+  - docker
+  - googlecompute
+- type: shell
+  scripts:
+  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - SKIP_APT_UPGRADE=1
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: packer-assets/sardonyx-system-info-commands.yml
+  destination: /var/tmp/sardonyx-system-info-commands.yml
+- type: shell
+  inline: chmod 0644 /var/tmp/sardonyx-system-info-commands.yml
+- type: chef-solo
+  version: 13.8.5
+  config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  cookbook_paths:
+  - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
+  <% else %>
+  remote_cookbook_paths:
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
+  <% end %>
+  json:
+    travis_packer_build:
+      github_token: "{{ user `github_token` }}"
+  run_list:
+  - recipe[travis_ci_sardonyx]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
+- type: shell
+  scripts:
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/purge
+  - packer-scripts/disable-apparmor
+  - packer-scripts/run-serverspecs
+  - packer-scripts/test-system-info-output
+  - packer-scripts/dump-dpkg-manifest
+  - packer-scripts/create-bin-lib-checksums
+  - packer-scripts/cleanup
+  # - packer-scripts/minimize
+  environment_vars:
+  - DISPLAY=:99.0
+  - SPEC_SUITES=travis_packer_templates
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/create-image-metadata-tarball
+  environment_vars:
+  - IMAGE_METADATA_TARBALL=/var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+post-processors:
+-
+  - type: docker-tag
+    repository: "{{ user `docker_repository` }}"
+    tag: "{{ user `docker_tag` }}"
+    only:
+    - docker
+  - type: shell-local
+    scripts: bin/docker-push
+    environment_vars:
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - googlecompute
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: shell-local
+    script: bin/write-latest-image-name
