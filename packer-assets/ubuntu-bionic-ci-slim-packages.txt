@@ -333,7 +333,6 @@ mingw-w64
 mlocate
 module-init-tools
 mount
-mountall
 mtr-tiny
 multiarch-support
 mysql-client
