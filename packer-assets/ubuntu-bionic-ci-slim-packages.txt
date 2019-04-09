@@ -209,7 +209,7 @@ liblockfile-bin
 liblockfile1
 liblog-message-simple-perl
 libltdl-dev
-liblwres141
+liblwres160
 liblzma5
 libmagic1
 libmagickwand-dev
