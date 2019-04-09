@@ -63,10 +63,10 @@ provisioners:
   source: tmp/git-meta
   destination: /var/tmp/git-meta
 - type: file
-  source: packer-assets/ubuntu-18.04-slim-purge.txt
+  source: packer-assets/ubuntu-bionic-ci-slim-purge.txt
   destination: /var/tmp/purge.txt
 - type: file
-  source: packer-assets/ubuntu-18.04-slim-packages.txt
+  source: packer-assets/ubuntu-bionic-ci-slim-packages.txt
   destination: /var/tmp/packages.txt
 - type: shell
   scripts:
