@@ -246,7 +246,7 @@ libpcre3
 libpipeline1
 libplymouth4
 libpng16-16
-libpng16-dev
+libpng-dev
 libpod-latex-perl
 libpopt0
 libpq-dev
