@@ -147,7 +147,7 @@ libdbus-1-3
 libdbus-glib-1-2
 libdebconfclient0
 libdevmapper1.02.1
-libdns162
+libdns1100
 libdrm2
 libdumbnet1
 libedit2
