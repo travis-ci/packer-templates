@@ -386,10 +386,9 @@ ssh-import-id
 strace
 subversion
 sudo
-sysv-rc
 sysvinit-utils
 tar
-tasksels
+tasksel
 tasksel-data
 tcpd
 tcpdump
