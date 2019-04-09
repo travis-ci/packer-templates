@@ -301,7 +301,7 @@ libwind0-heimdal
 libwrap0
 libx11-6
 libx11-data
-libxapian22v5
+libxapian30
 libxau6
 libxcb1
 libxdmcp6
