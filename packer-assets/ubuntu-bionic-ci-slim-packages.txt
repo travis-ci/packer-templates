@@ -154,8 +154,7 @@ libedit2
 libelf1
 libept1.5.0
 libestr0
-libevent-2.0-5
-libevent-2.0-5
+libevent-2.1.6
 libexpat1
 libexpat1-dev
 libffi-dev
