@@ -94,8 +94,6 @@ info
 init-system-helpers
 initramfs-tools
 initramfs-tools-bin
-initscripts
-insserv
 install-info
 iproute2
 iptables
