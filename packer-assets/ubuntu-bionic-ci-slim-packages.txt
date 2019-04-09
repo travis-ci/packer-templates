@@ -185,7 +185,7 @@ libheimbase1-heimdal
 libheimntlm0-heimdal
 libhx509-5-heimdal
 libicu-dev
-libicu55
+libicu60
 libidn11
 libio-string-perl
 libisc160
