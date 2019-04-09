@@ -406,7 +406,6 @@ ufw
 unzip
 update-manager-core
 update-notifier-common
-upstart
 usbutils
 util-linux
 uuid-dev
