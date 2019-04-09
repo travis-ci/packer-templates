@@ -59,6 +59,8 @@ provisioners:
   inline: sleep 10
   only:
   - googlecompute
+- type: shell
+  inline: mkdir -p /var/tmp
 - type: file
   source: tmp/git-meta
   destination: /var/tmp/git-meta
