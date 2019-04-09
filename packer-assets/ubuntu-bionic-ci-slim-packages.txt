@@ -167,7 +167,7 @@ libgc1c2
 libgcc1
 libgcrypt20
 libgdbm-dev
-libgdbm3
+libgdbm5
 libgeoip1
 libgirepository-1.0-1
 libgl1-mesa-glx
