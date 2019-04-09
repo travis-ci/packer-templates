@@ -125,7 +125,7 @@ libaudit-common
 libaudit1
 libbind9-160
 libblkid1
-libboost-iostreams1.67.0
+libboost-iostreams1.65.1
 libbsd0
 libbz2-1.0
 libbz2-dev
