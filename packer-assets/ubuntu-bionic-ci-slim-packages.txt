@@ -245,8 +245,8 @@ libpci3
 libpcre3
 libpipeline1
 libplymouth4
-libpng12-0
-libpng12-dev
+libpng16-16
+libpng16-dev
 libpod-latex-perl
 libpopt0
 libpq-dev
