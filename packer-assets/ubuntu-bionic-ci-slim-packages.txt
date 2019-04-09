@@ -310,7 +310,7 @@ libxml2
 libxml2-dev
 libxmuu1
 libxslt1-dev
-libxtables11
+libxtables12
 libyaml-0-2
 libyaml-dev
 linux-firmware
@@ -359,7 +359,7 @@ patch
 pciutils
 perl
 perl-base
-perl-modules-5.22
+perl-modules-5.26
 pkg-config
 plymouth
 plymouth-theme-ubuntu-text
