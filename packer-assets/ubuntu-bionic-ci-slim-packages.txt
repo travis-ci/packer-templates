@@ -123,9 +123,9 @@ libasprintf0v5
 libattr1
 libaudit-common
 libaudit1
-libbind9-140
+libbind9-160
 libblkid1
-libboost-iostreams1.58.0
+libboost-iostreams1.67.0
 libbsd0
 libbz2-1.0
 libbz2-dev
