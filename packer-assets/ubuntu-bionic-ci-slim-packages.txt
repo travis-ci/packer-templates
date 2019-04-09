@@ -260,7 +260,7 @@ libpython3.7-minimal
 libpython3.7-stdlib
 libqt4-dev
 libreadline-dev
-libreadline6s
+libreadline7
 libroken18-heimdal
 librtmp1
 libsasl2-2
