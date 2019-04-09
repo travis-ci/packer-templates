@@ -188,12 +188,11 @@ libicu-dev
 libicu60
 libidn11
 libio-string-perl
-libisc160
-libisccc140
-libisccfg140
+libisc169
+libisccc160
+libisccfg160
 libjpeg8-dev
-libjson-c2
-libjson0
+libjson-c3
 libk5crypto3
 libkeyutils1
 libklibc
