@@ -54,12 +54,8 @@ override['travis_build_environment']['nodejs_versions'] = []
 override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
-rubies = %w[
-  2.5.5
-]
-
-override['travis_build_environment']['default_ruby'] = rubies.max
-override['travis_build_environment']['rubies'] = rubies
+override['travis_build_environment']['default_ruby'] = ''
+override['travis_build_environment']['rubies'] = []
 
 override['travis_build_environment']['otp_releases'] = []
 override['travis_build_environment']['elixir_versions'] = []
