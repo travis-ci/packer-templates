@@ -278,6 +278,7 @@ libsqlite3-0
 libsqlite3-dev
 libss2
 libssl-dev
+libssl1.0-dev
 libssl1.1
 libstdc++6
 libsub-name-perl
