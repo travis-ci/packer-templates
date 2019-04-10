@@ -83,8 +83,9 @@ include_recipe 'travis_build_environment::locale'
 include_recipe 'travis_build_environment::hostname'
 include_recipe 'travis_build_environment::sysctl'
 
-include_recipe 'travis_docker'
-include_recipe 'travis_docker::compose'
+# xenial is hardcoded in the recipe, commenting this out for now
+# include_recipe 'travis_docker'
+# include_recipe 'travis_docker::compose'
 
 include_recipe 'travis_build_environment::xserver'
 
