@@ -92,10 +92,10 @@ provisioners:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
-  source: packer-assets/ubuntu-18.04-system-info-commands.yml
-  destination: /var/tmp/ubuntu-18.04-system-info-commands.yml
+  source: packer-assets/ubuntu-18.04-slim-system-info-commands.yml
+  destination: /var/tmp/ubuntu-18.04-slim-system-info-commands.yml
 - type: shell
-  inline: chmod 0644 /var/tmp/ubuntu-18.04-system-info-commands.yml
+  inline: chmod 0644 /var/tmp/ubuntu-18.04-slim-system-info-commands.yml
 - type: chef-solo
   version: 13.8.5
   config_template: chef-solo.rb.tmpl
