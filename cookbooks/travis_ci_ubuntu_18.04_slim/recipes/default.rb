@@ -86,13 +86,6 @@ include_recipe 'travis_build_environment::sysctl'
 include_recipe 'travis_docker'
 include_recipe 'travis_docker::compose'
 
-include_recipe 'openssl'
-
-if node['kernel']['machine'] == 'ppc64le'
-  include_recipe 'travis_java'
-else
-  include_recipe 'travis_jdk'
-end
 include_recipe 'travis_build_environment::xserver'
 
 # HACK: sardonyx-specific shims!
