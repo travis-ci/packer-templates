@@ -26,24 +26,71 @@
 
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
-include_recipe 'travis_build_environment'
+
+# a straight copy from travis_build_environment::basic for now
+# (cookbooks/travis_build_environment/recipes/basic.rb)
+package %w[
+  bsdmainutils
+  bzip2
+  bzr
+  ccache
+  curl
+  gcc
+  gzip
+  imagemagick
+  iptables
+  libbz2-dev
+  libmagickwand-dev
+  libsqlite3-dev
+  lsof
+  md5deep
+  netcat-openbsd
+  openssl
+  ragel
+  rsync
+  sqlite3
+  sqlite3-doc
+  subversion
+  sudo
+  unzip
+  vim
+  wamerican
+  wget
+  zip
+] do
+  action %i[install upgrade]
+end
+
+execute 'rm -rf /etc/update-motd.d/*'
+
+include_recipe 'travis_build_environment::git'
+include_recipe 'travis_build_environment::timezone'
+include_recipe 'travis_build_environment::apt'
+include_recipe 'travis_build_environment::bats'
+include_recipe 'travis_build_environment::jq'
+include_recipe 'travis_build_environment::cmake'
+include_recipe 'travis_build_environment::clang'
+include_recipe 'travis_build_environment::ntp'
+include_recipe 'travis_build_environment::packer'
+include_recipe 'travis_build_environment::yarn'
+include_recipe 'travis_build_environment::shellcheck'
+include_recipe 'travis_build_environment::shfmt'
+include_recipe 'travis_build_environment::mercurial'
+include_recipe 'travis_build_environment::locale'
+include_recipe 'travis_build_environment::hostname'
+include_recipe 'travis_build_environment::sysctl'
 
 include_recipe 'travis_docker'
 include_recipe 'travis_docker::compose'
+
 include_recipe 'openssl'
+
 if node['kernel']['machine'] == 'ppc64le'
   include_recipe 'travis_java'
 else
   include_recipe 'travis_jdk'
 end
-include_recipe 'travis_build_environment::maven'
-include_recipe 'travis_build_environment::lein'
-include_recipe 'travis_sbt_extras'
-include_recipe 'travis_build_environment::gradle'
-include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::xserver'
-include_recipe 'travis_build_environment::google_chrome'
-include_recipe 'travis_build_environment::firefox'
 
 # HACK: sardonyx-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
