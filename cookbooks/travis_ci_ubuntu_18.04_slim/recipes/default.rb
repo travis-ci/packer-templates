@@ -63,7 +63,9 @@ end
 
 execute 'rm -rf /etc/update-motd.d/*'
 
-include_recipe 'travis_build_environment::git'
+# remove the git recipe for now, issues with :
+# ["git", "git-core"] is a virtual package provided by multiple packages, you must explicitly select one
+# include_recipe 'travis_build_environment::git'
 include_recipe 'travis_build_environment::timezone'
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_build_environment::bats'
