@@ -129,7 +129,7 @@ provisioners:
   scripts:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
-  - packer-scripts/disable-apparmor
+  # - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
