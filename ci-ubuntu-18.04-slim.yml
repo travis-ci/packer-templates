@@ -120,6 +120,11 @@ provisioners:
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>
+# for some reason systemd-resloved is not running, hack fix for now
+- type: shell
+  inline: "systemctl enable systemd-resolved" 
+  only:
+  - lxd
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
