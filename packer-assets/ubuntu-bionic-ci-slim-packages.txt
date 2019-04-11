@@ -371,7 +371,6 @@ qt4-qmake
 ragel
 re2c
 readline-common
-resolvconf
 rsync
 rsyslog
 run-one
