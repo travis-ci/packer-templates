@@ -1,6 +1,5 @@
 acpid
 adduser
-apparmor
 apport
 apport-symptoms
 apt
@@ -113,8 +112,6 @@ laptop-detect
 lemon
 less
 libacl1
-libapparmor-perl
-libapparmor1
 libapt-inst2.0
 libapt-pkg5.0
 libarchive-extract-perl
