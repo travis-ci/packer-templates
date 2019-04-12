@@ -6,8 +6,6 @@ apt
 apt-transport-https
 apt-utils
 apt-xapian-index
-aptitude
-aptitude-common
 at
 autoconf
 automake
@@ -66,9 +64,6 @@ ftp
 fuse
 gawk
 gcc
-gcc-4.8-base
-gcc-5-base
-gcc-6-base
 gdisk
 geoip-database
 gettext
@@ -86,7 +81,6 @@ gzip
 hashdeep
 haveged
 hdparm
-hostname
 ifupdown
 imagemagick
 info
@@ -124,7 +118,6 @@ libbind9-160
 libblkid1
 libboost-iostreams1.65.1
 libbsd0
-libbz2-1.0
 libbz2-dev
 libc-bin
 libc-client2007e-dev
@@ -152,11 +145,9 @@ libelf1
 libept1.5.0
 libestr0
 libevent-2.1.6
-libexpat1
 libexpat1-dev
 libffi-dev
 libffi6
-libfreetype6
 libfreetype6-dev
 libfribidi0
 libfuse2
@@ -199,7 +190,6 @@ libkrb5-3
 libkrb5-dev
 libkrb5support0
 libldap-2.4-2
-libldap-2.4-2
 libldap2-dev
 liblocale-gettext-perl
 liblockfile-bin
@@ -216,9 +206,7 @@ libmodule-pluggable-perl
 libmount1
 libmpdec2
 libmysqlclient-dev
-libncurses5
 libncurses5-dev
-libncursesw5
 libncursesw5-dev
 libnewt0.52
 libnfnetlink0
@@ -248,19 +236,10 @@ libpod-latex-perl
 libpopt0
 libpq-dev
 libprocps6
-libpython-stdlib
-libpython2.7
-libpython2.7-minimal
-libpython2.7-stdlib
-libpython3-stdlib
-libpython3.7-minimal
-libpython3.7-stdlib
 libqt4-dev
 libreadline-dev
-libreadline7
 libroken18-heimdal
 librtmp1
-libsasl2-2
 libsasl2-dev
 libsasl2-modules
 libsasl2-modules-db
@@ -303,14 +282,11 @@ libxau6
 libxcb1
 libxdmcp6
 libxext6
-libxml2
 libxml2-dev
 libxmuu1
 libxslt1-dev
 libxtables12
-libyaml-0-2
 libyaml-dev
-linux-firmware
 locales
 lockfile-progs
 login
@@ -394,7 +370,6 @@ time
 tmux
 tzdata
 ubuntu-keyring
-ubuntu-minimal
 ubuntu-release-upgrader-core
 ucf
 udev
@@ -423,5 +398,4 @@ xml-core
 xz-utils
 zerofree
 zip
-zlib1g
 zlib1g-dev
