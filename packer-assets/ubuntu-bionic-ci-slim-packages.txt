@@ -329,9 +329,6 @@ parted
 passwd
 patch
 pciutils
-perl
-perl-base
-perl-modules-5.26
 pkg-config
 plymouth
 plymouth-theme-ubuntu-text
