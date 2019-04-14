@@ -121,14 +121,14 @@ provisioners:
   - recipe[poise-profiler]
   <% end %>
 # for some reason systemd-resloved is not running, hack fix for now
-- type: shell
-  inline: "systemctl enable systemd-resolved" 
-  only:
-  - lxd
-- type: shell
-  inline: "systemctl enable snapd.service"
-  only:
-  - lxd
+# - type: shell
+#   inline: "systemctl enable systemd-resolved.service && systemctl start systemd-resolved.service" 
+#   only:
+#   - lxd
+# - type: shell
+#   inline: "systemctl enable snapd.service && systemctl start snapd.service"
+#   only:
+#   - lxd
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
