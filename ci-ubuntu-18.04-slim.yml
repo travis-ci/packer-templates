@@ -142,6 +142,10 @@ provisioners:
   only:
   - lxd
 - type: shell
+  inline: "snap install docker"
+  only:
+  - lxd
+- type: shell
   inline: "apt-get remove --purge cloud-init --yes"
   only:
   - lxd
