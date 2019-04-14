@@ -146,6 +146,10 @@ provisioners:
   only:
   - lxd
 - type: shell
+  inline: "sed -i 's/aufs/vfs/' /var/snap/docker/current/config/daemon.json"
+  only:
+  - lxd
+- type: shell
   inline: "apt-get remove --purge cloud-init --yes"
   only:
   - lxd
