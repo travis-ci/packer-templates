@@ -61,7 +61,8 @@ package %w[
   action %i[install upgrade]
 end
 
-execute 'rm -rf /etc/update-motd.d/*'
+# remove for now
+# execute 'rm -rf /etc/update-motd.d/*'
 
 # remove the git recipe for now, issues with :
 # ["git", "git-core"] is a virtual package provided by multiple packages, you must explicitly select one

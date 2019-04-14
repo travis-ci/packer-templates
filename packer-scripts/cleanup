@@ -4,12 +4,11 @@ set -o errexit
 set -o xtrace
 shopt -s nullglob
 
+# removed /etc/apparmor* and /lib/recovery-mode for now
 rm -rf \
-  /etc/apparmor* \
   /etc/profile.d/jdk.csh \
   /etc/profile.d/jdk.sh \
   /etc/ssh/ssh_host_* \
-  /lib/recovery-mode \
   /opt/chef* \
   /tmp/* \
   /usr/lib/jvm/.java-8-oracle-amd64.jinfo \
@@ -21,9 +20,10 @@ rm -rf \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.?
 
-if ! [[ "$(lsb_release -sc)" =~ xenial ]]; then
-  rm -rf /etc/systemd
-fi
+# removing for now
+# if ! [[ "$(lsb_release -sc)" =~ xenial ]]; then
+#   rm -rf /etc/systemd
+# fi
 
 if [[ $CLEANUP_APT_LISTS ]]; then
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
