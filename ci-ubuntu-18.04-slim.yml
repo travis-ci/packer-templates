@@ -130,6 +130,18 @@ provisioners:
 #   only:
 #   - lxd
 - type: shell
+  inline: "systemctl mask sys-kernel-config.mount"
+  only:
+  - lxd
+- type: shell
+  inline: "systemctl mask systemd-modules-load.service"
+  only:
+  - lxd
+- type: shell
+  inline: "snap install core"
+  only:
+  - lxd
+- type: shell
   scripts:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
