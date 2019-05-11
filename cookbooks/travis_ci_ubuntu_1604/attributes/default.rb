@@ -53,14 +53,12 @@ override['travis_perlbrew']['modules'] = %w[
 ]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-
 gimme_versions = %w[
   1.11.1
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
-
 
 ghc_versions = %w[
   7.10.3
@@ -75,7 +73,6 @@ override['travis_build_environment']['haskell_ghc_versions'] = ghc_versions
 override['travis_build_environment']['haskell_cabal_versions'] = cabal_versions
 override['travis_build_environment']['haskell_default_ghc'] = ghc_versions.max
 override['travis_build_environment']['haskell_default_cabal'] = cabal_versions.max
-
 
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
@@ -133,9 +130,9 @@ rubies = %w[
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
-override['travis_build_environment']['otp_releases'] = ["21.3"]
-override['travis_build_environment']['elixir_versions'] = ["1.8.1"]
-override['travis_build_environment']['default_elixir_version'] = "1.8.1"
+override['travis_build_environment']['otp_releases'] = ['21.3']
+override['travis_build_environment']['elixir_versions'] = ['1.8.1']
+override['travis_build_environment']['default_elixir_version'] = '1.8.1'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'
