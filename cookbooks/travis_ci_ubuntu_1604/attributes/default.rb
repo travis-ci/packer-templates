@@ -133,9 +133,9 @@ rubies = %w[
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
-override['travis_build_environment']['otp_releases'] = ["21.1"]
-override['travis_build_environment']['elixir_versions'] = ["1.7.4"]
-override['travis_build_environment']['default_elixir_version'] = "1.7.4"
+override['travis_build_environment']['otp_releases'] = ["21.3"]
+override['travis_build_environment']['elixir_versions'] = ["1.8.1"]
+override['travis_build_environment']['default_elixir_version'] = "1.8.1"
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'
