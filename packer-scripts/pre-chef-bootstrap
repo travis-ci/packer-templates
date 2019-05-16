@@ -129,6 +129,7 @@ Defaults !mail_badpass
 EOF
   fi
   chmod 440 /etc/sudoers.d/travis
+  newgrp travis
 }
 
 __setup_travis_ssh() {
