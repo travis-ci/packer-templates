@@ -22,7 +22,7 @@ UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
 BUILDER ?= googlecompute
 
-PACKER_VERSION ?= 1.3.3
+PACKER_VERSION ?= 1.4.1
 
 CURL ?= curl
 GIT ?= git
@@ -40,10 +40,10 @@ all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)
 
 .PHONY: stacks-short
 stacks-short:
-	@$(MAKE) -s stacks | sed 's/-trusty//;s/-xenial//'
+	@$(MAKE) -s stacks | sed 's/-trusty//;s/-xenial//;s/-bionic//;'
 
 .PHONY: stacks
-stacks: stacks-trusty stacks-xenial
+stacks: stacks-trusty stacks-xenial stacks-bionic
 
 .PHONY: stacks-trusty
 stacks-trusty:
@@ -52,6 +52,10 @@ stacks-trusty:
 .PHONY: stacks-xenial
 stacks-xenial:
 	@bin/list-stacks xenial
+
+.PHONY: stacks-bionic
+stacks-bionic:
+	@bin/list-stacks bionic
 
 .PHONY: test
 test:
