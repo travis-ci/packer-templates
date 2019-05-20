@@ -31,9 +31,11 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/peridot-system-info-commands.yml'
 
 rubies = %w[
+  2.4.6
+  2.5.1
 ]
-
-override['travis_build_environment']['default_ruby'] = ''
+# override['travis_build_environment']['rubies'] = %w[2.4.6 2.5.5 2.6.3]
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_aliases'] = {}
@@ -46,7 +48,6 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.8'
-
 override['travis_packer_templates']['job_board']['stack'] = 'peridot'
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
