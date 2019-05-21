@@ -32,7 +32,8 @@ override['travis_system_info']['commands_file'] = \
 
 rubies = %w[
   2.4.6
-  2.5.1
+  2.5.3
+  2.6.3
 ]
 # override['travis_build_environment']['rubies'] = %w[2.4.6 2.5.5 2.6.3]
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
