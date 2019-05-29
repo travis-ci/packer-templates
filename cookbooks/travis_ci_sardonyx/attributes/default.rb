@@ -14,9 +14,9 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
 php_aliases = {
-  '5.6' => '5.6.36',
-  '7.1' => '7.1.19',
-  '7.2' => '7.2.7'
+  '5.6' => '5.6.40',
+  '7.1' => '7.1.27',
+  '7.2' => '7.2.15'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
@@ -115,10 +115,8 @@ override['travis_postgresql']['default_version'] = '9.6'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 10]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
-# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
-  chromium
   couchdb
   disabled-ipv6
   docker
@@ -134,6 +132,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
+  phantomjs
   postgresql
   python_interpreter
   redis
@@ -149,6 +148,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cplusplus
   cpp
   default
+  generic
   go
   groovy
   java

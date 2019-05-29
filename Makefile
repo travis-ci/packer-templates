@@ -21,7 +21,7 @@ UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
 BUILDER ?= googlecompute
 
-PACKER_VERSION ?= 1.3.1
+PACKER_VERSION ?= 1.3.3
 
 CURL ?= curl
 GIT ?= git

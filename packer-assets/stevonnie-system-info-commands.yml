@@ -7,6 +7,9 @@ commands:
     name: Build image provisioning date and time
   - command: lsb_release -a
     name: Operating System Details
+  - command: systemctl --version
+    name: Systemd Version
+    pipe: head -n 1
   osx:
   - command: date
     name: Build image provisioning date and time
@@ -20,10 +23,12 @@ commands:
     name: bash version
   - command: gcc --version
     name: gcc version
+    pipe: head -n 1
   - command: docker version
     name: docker version
   - command: clang --version
     name: clang version
+    pipe: head -n 1
   - command: jq --version
     name: jq version
   - command: bats --version
@@ -35,8 +40,10 @@ commands:
     name: shfmt version
   - command: ccache -V
     name: ccache version
+    pipe: awk '/^ccache version/{print $NF; exit}'
   - command: cmake --version
     name: cmake version
+    pipe: head -n 1
   - command: heroku version
     name: heroku version
   - command: convert --version
@@ -46,32 +53,39 @@ commands:
     name: md5deep version
   - command: hg version
     name: mercurial version
+    pipe: awk -F'[)(]' '$2~/version/{print $2; exit}'
   - command: mysql --version
     name: mysql version
   - command: openssl version
     name: openssl version
-  - command: packer version
+  - command: packer --version
     name: packer version
   - command: psql --version
     name: postgresql client version
   - command: ragel -v
     name: ragel version
+    pipe: head -n 1
   - command: ssh -V
     name: ssh client version
   - command: svn --version
     name: subversion version
+    pipe: awk '/^svn, version/{print $0, exit}'
   - command: sudo -V
     name: sudo version
+    pipe: awk '/^Sudo version/{print $NF; exit}'
   - command: gzip --version
     name: gzip version
+    pipe: head -n 1
   - command: bzip2 --version
     name: bzip2 version
   - command: zip --version
     name: zip version
+    pipe: awk '/^This is Zip/{print $3, $4; exit}'
   - command: unzip --version
     name: unzip version
   - command: vim --version
     name: vim version
+    pipe: head -n 1
   - command: lsof -v
     name: lsof version
     pipe: awk '/^ +revision:/ { print $2 }'

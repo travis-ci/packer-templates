@@ -2,38 +2,39 @@ commands:
   linux:
     - { command: date -u, name: Build image provisioning date and time }
     - { command: lsb_release -a, name: Operating System Details }
+    - { command: systemctl --version, name: Systemd Version, pipe: "head -n 1" }
   osx:
     - { command: date, name: Build image provisioning date and time }
     - { command: sw_vers, name: Operating System Details }
   common:
     - { command: git --version, name: git version }
     - { command: bash --version, pipe: head -1, name: bash version }
-    - { command: gcc --version, name: gcc version }
+    - { command: gcc --version, name: gcc version, pipe: "head -n 1" }
     - { command: docker version, name: docker version }
-    - { command: clang --version, name: clang version }
+    - { command: clang --version, name: clang version, pipe: "head -n 1" }
     - { command: jq --version, name: jq version }
     - { command: bats --version, name: bats version }
     - { command: shellcheck --version, name: shellcheck version, pipe: "awk '/^version:/ { print $2 }'" }
     - { command: shfmt -version, name: shfmt version }
-    - { command: ccache -V, name: ccache version }
-    - { command: cmake --version, name: cmake version }
+    - { command: ccache -V, name: ccache version, pipe: "awk '/^ccache version/{print $NF; exit}'" }
+    - { command: cmake --version, name: cmake version, pipe: "head -n 1" }
     - { command: heroku version, name: heroku version }
     - { command: convert --version, pipe: head -1, name: imagemagick version }
     - { command: md5deep -v, name: md5deep version }
-    - { command: hg version, name: mercurial version }
+    - { command: hg version, name: mercurial version, pipe: "awk -F'[)(]' '$2~/version/{print $2; exit}'" }
     - { command: mysql --version, name: mysql version }
     - { command: openssl version, name: openssl version }
-    - { command: packer version, name: packer version }
+    - { command: packer --version, name: packer version }
     - { command: psql --version, name: postgresql client version }
-    - { command: ragel -v, name: ragel version }
+    - { command: ragel -v, name: ragel version, pipe: "head -n 1" }
     - { command: ssh -V, name: ssh client version }
-    - { command: svn --version, name: subversion version }
-    - { command: sudo -V, name: sudo version }
-    - { command: gzip --version, name: gzip version }
+    - { command: svn --version, name: subversion version, pipe: "awk '/^svn, version/{print $0, exit}'" }
+    - { command: sudo -V, name: sudo version, pipe: "awk '/^Sudo version/{print $NF; exit}'" }
+    - { command: gzip --version, name: gzip version, pipe: "head -n 1" }
     - { command: bzip2 --version, name: bzip2 version }
-    - { command: zip --version, name: zip version }
+    - { command: zip --version, name: zip version, pipe: "awk '/^This is Zip/{print $3, $4; exit}'" }
     - { command: unzip --version, name: unzip version }
-    - { command: vim --version, name: vim version }
+    - { command: vim --version, name: vim version, pipe: "head -n 1" }
     - { command: lsof -v, name: lsof version, pipe: "awk '/^ +revision:/ { print $2 }'" }
     - { command: iptables --version, name: iptables version }
     - { command: curl --version, pipe: head -1, name: curl version }

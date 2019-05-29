@@ -12,6 +12,9 @@ variables:
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
   github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
+  openstack_zone: "{{ env `OS_ZONE` }}"
+  openstack_key_path: "{{ env `OS_SSH_KEY_PATH`}}"
+  openstack_key_name: "{{ env `OS_SSH_KEY` }}"
 builders:
 - type: googlecompute
   name: googlecompute
@@ -51,16 +54,20 @@ builders:
 # Openstack builds disabled for failing with an error that's not possible to debug
 # until a fix for the Packer error reporting is released:
 # https://github.com/travis-ci/packer-templates/issues/555
-# - type: openstack
-#   name: openstack
-#   flavor: m1.medium-travis-ci
-#   image_name: "{{ user `image_name` }}"
-#   ssh_username: ubuntu
-#   networks:
-#   <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
-#   - <%= network %>
-#   <% end %>
-#   source_image_name: "{{ user `openstack_source_image_name` }}"
+- type: openstack
+  name: openstack
+  flavor: m1.large
+  insecure: true
+  image_name: "{{ user `image_name` }}"
+  ssh_username: ubuntu
+  networks:
+  <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
+  - <%= network %>
+  <% end %>
+  source_image_name: "{{ user `openstack_source_image_name` }}"
+  availability_zone: "{{ user `openstack_zone` }}"
+  ssh_keypair_name:  "{{ user `openstack_key_name` }}"
+  ssh_private_key_file: "{{ user `openstack_key_path`  }}"
 provisioners:
 - type: shell
   inline: sleep 10
@@ -87,7 +94,7 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
-  # - openstack
+  - openstack
 - type: file
   source: packer-assets/ubuntu-xenial-ci-opal-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -149,6 +156,7 @@ provisioners:
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
+  - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
   - packer-scripts/cleanup
