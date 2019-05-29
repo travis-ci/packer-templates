@@ -1,9 +1,9 @@
 ---
-description: Travis CI onion build env template
+description: Travis CI Windows 1803 Core (for containers) build env template
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  gce_image_name: "windows-server-1803-dc-core-for-containers-v20180920"
+  gce_image_family: "windows-1803-core-for-containers"
   image_name: travis-ci-onion-1803-containers-{{ timestamp }}-<%= git_desc %>
   dist_name: 1803-containers
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
@@ -20,7 +20,7 @@ builders:
   image_description: Travis CI Onion
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: "{{ user `gce_image_name` }}"
+  source_image: "{{ user `gce_image_family` }}"
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
@@ -36,9 +36,6 @@ provisioners:
 - type: file
   source: tmp/git-meta
   destination: c:/windows/temp/
-# - type: file
-#   source: packer-assets/windows-server-2016-normal-purge.txt
-#   destination: c:/windows/temp/purge.txt
 - type: file
   source: packer-assets/windows-server-ci-onion-packages.txt
   destination: c:/windows/temp/packages.txt
@@ -62,18 +59,6 @@ provisioners:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
-# TODO: use chef to do things (???)
-# - type: chef-solo
-#   guest_os_type: windows
-#   config_template: chef-solo.rb.tmpl
-#   cookbook_paths:
-#   - cookbooks
-#   remote_cookbook_paths:
-#   - c:/windows/temp/chef-stuff/travis-cookbooks/cookbooks
-#   - c:/windows/temp/chef-stuff/travis-cookbooks/community-cookbooks
-#   json: {}
-#   run_list:
-#   - recipe[travis_ci_onion]
 - type: powershell
   scripts:
   # TODO: write job board data via chef
