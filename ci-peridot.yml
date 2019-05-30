@@ -23,7 +23,8 @@ builders:
   image_description: Travis CI peridot
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-1804-bionic-v20181222	
+  source_image_family: ubuntu-1804-lts
+  image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
