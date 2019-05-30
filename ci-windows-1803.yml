@@ -4,7 +4,7 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   gce_image_family: "windows-1803-core-for-containers"
-  image_name: travis-ci-onion-1803-containers-{{ timestamp }}-<%= git_desc %>
+  image_name: travis-ci-windows-1803-containers-{{ timestamp }}-<%= git_desc %>
   dist_name: 1803-containers
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
@@ -17,7 +17,7 @@ builders:
   winrm_username: travis
   winrm_use_ssl: true
   winrm_insecure: true
-  image_description: Travis CI Onion
+  image_description: Travis CI Windows 1803 Core (for containers)
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
   source_image: "{{ user `gce_image_family` }}"
@@ -29,7 +29,8 @@ builders:
     windows-startup-script-cmd: "winrm quickconfig -quiet & net user /add travis & net localgroup administrators travis /add & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell -Command \"& {Set-ExecutionPolicy AllSigned -Force}\""
   tags:
   - ci
-  - onion
+  - windows
+  - windows-1803
   - travis-ci-packer-templates
   state_timeout: 10m
 provisioners:
@@ -37,7 +38,7 @@ provisioners:
   source: tmp/git-meta
   destination: c:/windows/temp/
 - type: file
-  source: packer-assets/windows-server-ci-onion-packages.txt
+  source: packer-assets/windows-server-1803-packages.txt
   destination: c:/windows/temp/packages.txt
 - type: file
   source: packer-scripts/Run-BashScript.ps1
