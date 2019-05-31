@@ -88,7 +88,6 @@ hashdeep
 haveged
 hdparm
 hostname
-ifupdown
 imagemagick
 info
 init-system-helpers
