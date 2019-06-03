@@ -15,7 +15,6 @@ visualstudio2017buildtools --package-parameters "--quiet --wait --norestart --lo
 visualstudio2017-workload-netcorebuildtools
 visualstudio2017-workload-vctools
 visualstudio2017-workload-webbuildtools
-windows-sdk-10.1
-microsoft-build-tools
+windows-sdk-10-version-1903-all
 vcredist2017
 wsl
