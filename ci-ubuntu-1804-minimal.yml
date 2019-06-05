@@ -69,15 +69,15 @@ provisioners:
   source: tmp/git-meta
   destination: /var/tmp/git-meta
 - type: file
-  source: packer-assets/ubuntu-bionic-normal-purge.txt
+  source: packer-assets/ubuntu-1804-normal-purge.txt
   destination: /var/tmp/purge.txt
 - type: file
-  source: packer-assets/ubuntu-bionic-ci-ubuntu-1804-packages.txt
+  source: packer-assets/ci-ubuntu-1804-packages.txt
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
 - type: file
-  source: packer-assets/ubuntu-bionic-ci-ubuntu-1804-docker-packages.txt
+  source: packer-assets/ci-ubuntu-1804-docker-packages.txt
   destination: /var/tmp/packages.txt
   only:
   - docker
