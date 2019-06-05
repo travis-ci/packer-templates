@@ -12,7 +12,7 @@ SYSTEM_INFO_COMMANDS_FILES := \
 	packer-assets/sardonyx-system-info-commands.yml \
 	packer-assets/stevonnie-system-info-commands.yml \
 	packer-assets/ubuntu-1804-minimal-system-info-commands.yml \
-	packer-assets/ubuntu-1804-full-system-info-commands.yml
+	packer-assets/ubuntu-1804-system-info-commands.yml
 TRAVIS_COOKBOOKS_GIT := https://github.com/travis-ci/travis-cookbooks.git
 TRAVIS_COMMIT_RANGE := $(shell echo $${TRAVIS_COMMIT_RANGE:-@...@})
 CHEF_COOKBOOK_PATH := $(PWD)/.git::cookbooks \
