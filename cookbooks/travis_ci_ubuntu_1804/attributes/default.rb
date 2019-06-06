@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 override['maven']['install_java'] = false
-
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-1804-system-info-commands.yml'
 
@@ -23,26 +22,8 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = [
-  { name: '5.26', version: 'perl-5.26.2' },
-  { name: '5.26-extras', version: 'perl-5.26.2',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.26-shrplib' },
-  { name: '5.24', version: 'perl-5.24.0' },
-  { name: '5.24-extras', version: 'perl-5.24.0',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.24-shrplib' }
-]
-override['travis_perlbrew']['modules'] = %w[
-  Dist::Zilla
-  Dist::Zilla::Plugin::Bootstrap::lib
-  ExtUtils::MakeMaker
-  LWP
-  Module::Install
-  Moose
-  Test::Exception
-  Test::Most
-  Test::Pod
-  Test::Pod::Coverage
-]
+override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
@@ -51,20 +32,6 @@ gimme_versions = %w[
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
-
-ghc_versions = %w[
-  7.10.3
-  8.0.2
-]
-cabal_versions = %w[
-  1.22
-  1.24
-]
-
-override['travis_build_environment']['haskell_ghc_versions'] = ghc_versions
-override['travis_build_environment']['haskell_cabal_versions'] = cabal_versions
-override['travis_build_environment']['haskell_default_ghc'] = ghc_versions.max
-override['travis_build_environment']['haskell_default_cabal'] = cabal_versions.max
 
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
@@ -99,7 +66,6 @@ pythons = %w[
     pythons.unshift(pythons.delete(py))
   end
 end
-
 def python_aliases(full_name)
   nodash = full_name.split('-').first
   return [nodash] unless nodash.include?('.')
@@ -117,14 +83,15 @@ rubies = %w[
   2.3.8
   2.4.5
   2.5.3
+  2.6.3
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
-override['travis_build_environment']['otp_releases'] = ['21.3']
-override['travis_build_environment']['elixir_versions'] = ['1.8.1']
-override['travis_build_environment']['default_elixir_version'] = '1.8.1'
+override['travis_build_environment']['otp_releases'] = []
+override['travis_build_environment']['elixir_versions'] = []
+override['travis_build_environment']['default_elixir_version'] = ''
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'
@@ -133,9 +100,9 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.8'
 
-override['travis_packer_templates']['job_board']['stack'] = 'ubuntu-1804'
+override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 
-override['travis_postgresql']['default_version'] = '10+190'
+override['travis_postgresql']['default_version'] = '9.6'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 10]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
@@ -165,34 +132,21 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   xserver
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __sardonyx__
+  __ubuntu_1804__
   c
   c++
   clojure
   cplusplus
   cpp
-  crystal
-  csharp
-  d
-  dart
   default
-  elixir
-  erlang
   generic
   go
   groovy
-  haskell
-  haxe
   java
-  julia
   node_js
-  perl
-  perl6
   php
   pure_java
   python
-  r
   ruby
-  rust
   scala
 ]

@@ -27,7 +27,6 @@
 include_recipe 'travis_build_environment::apt'
 include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
-include_recipe 'travis_build_environment::haskell' if node['kernel']['machine'] != 'ppc64le'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
   if node['kernel']['machine'] == 'ppc64le'
@@ -66,7 +65,7 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
 
-# HACK: sardonyx-specific shims!
+# HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
 log 'trigger writing node attributes' do
