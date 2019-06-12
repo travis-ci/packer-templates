@@ -61,34 +61,34 @@ provisioners:
   - "JOB_BOARD_REGISTER_FILE=c:/travis-job-board-register.yml"
   - "SYSTEM_INFO_JSON=c:/travis_system_info.json"
 
-# - type: powershell
-#   scripts:
-#   - packer-scripts/packer-env-dump
-#   - packer-scripts/clone-travis-cookbooks
-#   environment_vars:
-#   - CHEF_TMP=/c/windows/temp/chef-stuff
-#   - GIT_META_DIR=/c/windows/temp/git-meta
-#   - PACKER_ENV_DIR=/c/.packer-env
-#   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
-#   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
-#   execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
-# - type: powershell
-#   scripts:
-#   # TODO: write job board data via chef
-#   - packer-scripts/create-windows-job-board-data
-#   - packer-scripts/create-image-metadata-tarball
-#   environment_vars:
-#   - "IMAGE_METADATA_TARBALL=/c/windows/temp/image-metadata-{{ user `image_name` }}.tar.bz2"
-#   - JOB_BOARD_REGISTER_FILE=/c/travis-job-board-register.yml
-#   - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
-#   - PACKER_ENV_DIR=/c/.packer-env
-#   - SYSTEM_INFO_JSON=/c/travis_system_info.json
-#   - TMPDIR=/c/windows/temp
-#   - NODE_ATTRIBUTES_YML=/c/.node-attributes.yml
-#   - RSPEC_JSON_DIR=/c/Users/travis
-#   - DPKG_MANIFEST_JSON=/c/.dpkg-manifest.json
-#   - BIN_LIB_CHECKSUMS=/c/.bin-lib.SHA256SUMS
-#   execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
+- type: powershell
+  scripts:
+  - packer-scripts/packer-env-dump
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - CHEF_TMP=/c/windows/temp/chef-stuff
+  - GIT_META_DIR=/c/windows/temp/git-meta
+  - PACKER_ENV_DIR=/c/.packer-env
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
+- type: powershell
+  scripts:
+  # TODO: write job board data via chef
+  - packer-scripts/create-windows-job-board-data
+  - packer-scripts/create-image-metadata-tarball
+  environment_vars:
+  - "IMAGE_METADATA_TARBALL=/c/windows/temp/image-metadata-{{ user `image_name` }}.tar.bz2"
+  - JOB_BOARD_REGISTER_FILE=/c/travis-job-board-register.yml
+  - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
+  - PACKER_ENV_DIR=/c/.packer-env
+  - SYSTEM_INFO_JSON=/c/travis_system_info.json
+  - TMPDIR=/c/windows/temp
+  - NODE_ATTRIBUTES_YML=/c/.node-attributes.yml
+  - RSPEC_JSON_DIR=/c/Users/travis
+  - DPKG_MANIFEST_JSON=/c/.dpkg-manifest.json
+  - BIN_LIB_CHECKSUMS=/c/.bin-lib.SHA256SUMS
+  execute_command: powershell -executionpolicy bypass "& { if (Test-Path variable:global:ProgressPreference){$ProgressPreference='SilentlyContinue'};. {{.Vars}}; & c:/windows/temp/Run-BashScript.ps1 -bashscript '{{.Path}}'; exit $LastExitCode }"
 
 - type: powershell
   scripts:
