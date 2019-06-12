@@ -11,10 +11,13 @@ rsync
 ruby
 wget
 winscp
-visualstudio2017buildtools --package-parameters "--quiet --wait --norestart --locale en-US --allWorkloads --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATLMFC"
-visualstudio2017-workload-netcorebuildtools
-visualstudio2017-workload-vctools
-visualstudio2017-workload-webbuildtools
+visualstudio2019-workload-netcorebuildtools
+visualstudio2019-workload-vctools
+visualstudio2019-workload-webbuildtools
+visualstudio2019buildtools --execution-timeout 3500 --package-parameters "--quiet --wait --norestart --locale en-US --allWorkloads --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATLMFC"
 windows-sdk-10-version-1903-all
-vcredist2017
 wsl
+dotnet4.7.2
+dotnetcore-sdk
+sysinternals
+nodejs.install
