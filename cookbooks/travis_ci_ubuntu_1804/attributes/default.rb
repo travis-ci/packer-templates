@@ -54,10 +54,10 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  11.0.0
-  8.12.0
+  12.7.0
+  10.16.0
 ]
-override['travis_build_environment']['nodejs_default'] = '8.12.0'
+override['travis_build_environment']['nodejs_default'] = '10.16.0'
 
 pythons = %w[
   2.7.15
@@ -111,6 +111,12 @@ override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 override['travis_postgresql']['default_version'] = '9.3'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
+override['travis_docker']['version'] = ''
+override['travis_docker']['binary']['binaries'] = %w[
+  docker-ce
+  docker-ce-cli
+  containerd.io
+]
 
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
