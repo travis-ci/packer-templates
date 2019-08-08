@@ -72,7 +72,6 @@ provisioners:
   scripts:
   - packer-scripts/packer-env-dump
   - packer-scripts/tfw-bootstrap
-  - packer-scripts/ensure-travis-user
   - packer-scripts/purge
   - packer-scripts/install-ubuntu-mainline-kernel
   - packer-scripts/cleanup
