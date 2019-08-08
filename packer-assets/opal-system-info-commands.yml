@@ -7,6 +7,9 @@ commands:
     name: Build image provisioning date and time
   - command: lsb_release -a
     name: Operating System Details
+  - command: systemctl --version
+    name: Systemd Version
+    pipe: head -n 1
   osx:
   - command: date
     name: Build image provisioning date and time
@@ -55,7 +58,7 @@ commands:
     name: mysql version
   - command: openssl version
     name: openssl version
-  - command: packer version
+  - command: packer --version
     name: packer version
   - command: psql --version
     name: postgresql client version
@@ -114,18 +117,18 @@ commands:
   - command: couchdb -V
     name: CouchDB version
     pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
-  - pre: sudo service elasticsearch restart
-    name: ElasticSearch version
+  - name: ElasticSearch version
     port: 9200
-    command: curl localhost:9200 2>/dev/null
+    command: curl localhost:9200
     pipe: awk -F\" '/number/ { print $4 }'
-    post: sudo service elasticsearch stop >/dev/null
   - command: ls -d /usr/local/firefox-*
     name: Installed Firefox version
     pipe: awk -F- '{print "firefox", $2}'
   - command: mongod --version
     name: MongoDB version
     pipe: perl -n -e '/version v(.*)$/ && { print "MongoDB $1\n" }'
+  - command: "/usr/local/phantomjs/bin/phantomjs --version"
+    name: PhantomJS version
   - command: dpkg -l
     name: Pre-installed PostgreSQL versions
     pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'

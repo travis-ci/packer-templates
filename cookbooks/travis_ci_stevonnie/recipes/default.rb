@@ -51,6 +51,14 @@ include_recipe 'travis_postgresql::pgdg'
 # HACK: stevonnie-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
+log 'trigger writing node attributes' do
+  notifies :run, 'ruby_block[write node attributes]'
+end
+
+log 'trigger job-board registration' do
+  notifies :run, 'ruby_block[write job-board registration bits]'
+end
+
 include_recipe 'travis_system_info'
 
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are

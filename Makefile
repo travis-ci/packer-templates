@@ -21,7 +21,7 @@ UNAME := $(shell uname | tr '[:upper:]' '[:lower:]')
 
 BUILDER ?= googlecompute
 
-PACKER_VERSION ?= 1.3.1
+PACKER_VERSION ?= 1.3.3
 
 CURL ?= curl
 GIT ?= git
@@ -32,7 +32,12 @@ TRAVIS_PACKER_BUILD ?= travis-packer-build
 UNZIP ?= unzip
 
 %: %.yml $(META_FILES)
+	$(PACKER) --version
 	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
+
+%-debug: %.yml $(META_FILES)
+	$(PACKER) --version
+	$(PACKER) build -only=$(BUILDER) -debug <(bin/yml2json < $<)
 
 .PHONY: all
 all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)

@@ -109,10 +109,8 @@ override['travis_postgresql']['default_version'] = '9.6'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 10]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
-# TODO: phantomjs (either make tests use phantomjs 2 or re-enable phantomjs 1)
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
-  chromium
   couchdb
   disabled-ipv6
   docker
@@ -128,6 +126,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   nodejs_interpreter
   perl_interpreter
   perlbrew
+  phantomjs
   postgresql
   python_interpreter
   redis
@@ -147,6 +146,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   haxe
   julia
   perl
+  perl6
   r
   rust
 ]

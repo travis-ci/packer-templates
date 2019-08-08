@@ -49,12 +49,9 @@ ruby_block 'write node attributes' do
   action :nothing
 end
 
-log 'trigger writing node attributes' do
-  notifies :run, 'ruby_block[write node attributes]'
-end
-
 ruby_block 'write job-board registration bits' do
   block { travis_packer_templates.write_job_board_register_yml }
+  action :nothing
 end
 
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
@@ -63,14 +60,4 @@ Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
     options '--no-install-recommends --no-install-suggests'
     action %i[install upgrade]
   end
-end
-
-%w[
-  apt-daily-upgrade.service
-  apt-daily-upgrade.timer
-  apt-daily.service
-  apt-daily.timer
-].each do |unit|
-  execute "systemctl disable #{unit}"
-  execute "systemctl stop #{unit}"
 end
