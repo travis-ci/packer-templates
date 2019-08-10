@@ -111,11 +111,16 @@ override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 override['travis_postgresql']['default_version'] = '9.3'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
-override['travis_docker']['version'] = ''
+override['travis_docker']['version'] = '19.03.1'
 override['travis_docker']['binary']['binaries'] = %w[
-  docker-ce
-  docker-ce-cli
-  containerd.io
+  containerd
+  containerd-shim
+  ctr
+  docker
+  docker-init
+  docker-proxy
+  dockerd
+  runc
 ]
 
 override['travis_packer_templates']['job_board']['features'] = %w[
