@@ -19,7 +19,7 @@ override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
-override['travis_build_environment']['elasticsearch']['version'] = '7.3.0'
+override['travis_build_environment']['elasticsearch']['version'] = '5.5.0'
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
