@@ -58,47 +58,47 @@ provisioners:
   #  destination: /var/tmp/sardonyx-system-info-commands.yml
   #- type: shell
   #  inline: chmod 0644 /var/tmp/sardonyx-system-info-commands.yml
-  - type: chef-solo
-    version: 13.8.5
-    config_template: chef-solo.rb.tmpl
-    <% if ENV['CHEF_PROFILING'] %>
-    execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
-    <% end %>
-    cookbook_paths:
-    - cookbooks
-    <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
-    - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
-    - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
-    <% else %>
-    remote_cookbook_paths:
-    - /tmp/chef-stuff/travis-cookbooks/cookbooks
-    - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
-    <% end %>
-    json:
-      travis_packer_build:
-        github_token: "{{ user `github_token` }}"
-    run_list:
-    - recipe[travis_ci_freebsd_12]
-    <% if ENV['CHEF_PROFILING'] %>
-    - recipe[poise-profiler]
-    <% end %>
-  #- type: shell
-  #  scripts:
-  #  - packer-scripts/ensure-travis-user
-  #  - packer-scripts/purge
-  #  - packer-scripts/disable-apparmor
-  #  - packer-scripts/run-serverspecs
-  #  - packer-scripts/test-system-info-output
-  #  - packer-scripts/dump-dpkg-manifest
-  #  - packer-scripts/create-bin-lib-checksums
-  #  - packer-scripts/cleanup
-  #  # - packer-scripts/minimize
-  #  environment_vars:
-  #  - DISPLAY=:99.0
-  #  - SPEC_SUITES=travis_packer_templates
-  #  - TRAVIS_OBFUSCATE_PASSWORD=1
-  #  - TRAVIS_UID={{ user `travis_uid` }}
-  #  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: chef-solo
+  version: 13.8.5
+  config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  cookbook_paths:
+  - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
+  <% else %>
+  remote_cookbook_paths:
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
+  <% end %>
+  json:
+    travis_packer_build:
+      github_token: "{{ user `github_token` }}"
+  run_list:
+  - recipe[travis_ci_freebsd_12]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
+#- type: shell
+#  scripts:
+#  - packer-scripts/ensure-travis-user
+#  - packer-scripts/purge
+#  - packer-scripts/disable-apparmor
+#  - packer-scripts/run-serverspecs
+#  - packer-scripts/test-system-info-output
+#  - packer-scripts/dump-dpkg-manifest
+#  - packer-scripts/create-bin-lib-checksums
+#  - packer-scripts/cleanup
+#  # - packer-scripts/minimize
+#  environment_vars:
+#  - DISPLAY=:99.0
+#  - SPEC_SUITES=travis_packer_templates
+#  - TRAVIS_OBFUSCATE_PASSWORD=1
+#  - TRAVIS_UID={{ user `travis_uid` }}
+#  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball-bsd
