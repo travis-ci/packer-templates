@@ -1,0 +1,38 @@
+#!/bin/sh 
+
+set -o errexit
+set -o xtrace
+
+main() {
+  : "${CHEF_TMP:=/tmp/chef-stuff}"
+  : "${PACKER_ENV_DIR:=/.packer-env}"
+
+  mkdir -p "${CHEF_TMP}"
+  mkdir -p "${PACKER_ENV_DIR}"
+  cd "${CHEF_TMP}"
+
+  rm -rf ./travis-cookbooks
+
+  : "${TRAVIS_COOKBOOKS_BRANCH:=${TRAVIS_COOKBOOKS_EDGE_BRANCH}}"
+  : "${TRAVIS_COOKBOOKS_BRANCH:=master}"
+  : "${TRAVIS_COOKBOOKS_URL:=https://github.com/travis-ci/travis-cookbooks.git}"
+
+  git clone \
+    --depth=10 \
+    --branch="${TRAVIS_COOKBOOKS_BRANCH}" "${TRAVIS_COOKBOOKS_URL}"
+
+  if [[ ${TRAVIS_COOKBOOKS_SHA} ]]; then
+    oldpath=`pwd`
+    cd travis-cookbooks
+    git checkout -qf "${TRAVIS_COOKBOOKS_SHA}"
+    cd $oldpth
+  fi
+  
+  oldpath=`pwd`
+  cd travis-cookbooks
+  pwd >"${PACKER_ENV_DIR}/TRAVIS_COOKBOOKS_DIR"
+  git log -1 --format=%h >"${PACKER_ENV_DIR}/TRAVIS_COOKBOOKS_SHA"
+  cd $oldpath
+}
+
+main "$@"

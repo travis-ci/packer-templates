@@ -1,0 +1,97 @@
+#!/bin/sh
+
+set -o errexit
+
+main() {
+  set -o xtrace
+
+  __install_packages
+  __setup_sshd
+  __setup_travis_user
+  __write_pre_chef_env
+}
+
+
+
+__install_packages() {
+
+    pkg install -y git wget bash
+}
+
+
+__setup_sshd() {
+
+  if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
+    echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
+  fi
+}
+
+__setup_travis_user() {
+#  if ! getent passwd travis &>/dev/null; then
+#    if [[ -z "${TRAVIS_UID}" ]]; then
+#       pw useradd -p travis -s /usr/local/bin/bash -m travis
+#    else
+#      useradd -p travis -s /bin/bash -m travis -u "${TRAVIS_UID}"
+#      groupmod -g "${TRAVIS_UID}" travis
+#      usermod -u "${TRAVIS_UID}" travis
+#
+#    fi
+#  fi
+    /usr/sbin/pw groupadd travis
+   /usr/sbin/pw useradd travis -g travis -s /usr/local/bin/bash -m /home/travis
+   echo travis | /usr/sbin/pw usermod travis -h 0
+
+  __setup_sudoers
+  __setup_travis_ssh
+
+  # Save users having to create this directory at runtime (it's already on PATH)
+  mkdir -p /home/travis/bin
+
+  mkdir -p /opt
+  chmod 0755 /opt
+  chown -R travis:travis /home/travis /opt
+}
+
+__setup_sudoers() {
+#  sed -i '/^%/d;/^# /d;/^$/d;/^#$/d;/^#includedir/d' /etc/sudoers
+#  echo '#includedir /etc/sudoers.d' >>/etc/sudoers
+
+#  mkdir -p /etc/sudoers.d
+
+    cat >/usr/local/etc/sudoers.d/travis <<EOF
+travis ALL=(ALL) NOPASSWD:ALL
+Defaults !authenticate
+Defaults !env_reset
+Defaults !mail_badpass
+EOF
+  chmod 440 /usr/local/etc/sudoers.d/travis
+}
+
+__setup_travis_ssh() {
+  mkdir -p /home/travis/.ssh
+  chmod 0700 /home/travis/.ssh
+
+  touch /home/travis/.ssh/authorized_keys
+  for f in /var/tmp/*_rsa.pub; do
+    cat "${f}" >>/home/travis/.ssh/authorized_keys
+  done
+  chmod 0600 /home/travis/.ssh/authorized_keys
+}
+
+__write_pre_chef_env() {
+    dest="/etc/profile.d/Z99-travis-pre-chef-bootstrap.sh"
+  if [ ! -d /etc/profile.d ]; then
+       mkdir -p /etc/profile.d 
+   fi
+  cat > ${dest} <<EOF
+#!/bin/sh
+# Managed by Packer :heart:
+
+export TRAVIS_PRE_CHEF_BOOTSTRAP_TIME=$(date -u +%Y-%m-%dT%H:%M:%S)
+export TRAVIS_UID=${TRAVIS_UID:-2000}
+EOF
+  chown root:wheel ${dest}
+  chmod 0755 ${dest}
+}
+
+main "$@"
