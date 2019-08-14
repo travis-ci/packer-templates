@@ -7,7 +7,7 @@ main() {
   local nowtime
   nowtime=$(date -u +%Y%m%dT%H%M%SZ)
 
-  cat >"/.job-board-register.yml" <<EOF
+  cat > /.job-board-register.yml <<EOF
 ---
 stack: freebsd
 languages:

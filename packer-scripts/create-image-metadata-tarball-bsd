@@ -28,22 +28,22 @@ main() {
     done
 
   cp -vR "${PACKER_ENV_DIR}/"* "${dest}/env/"
-  if [[ -f "${JOB_BOARD_REGISTER_FILE}" ]]; then
-      cp -v "${JOB_BOARD_REGISTER_FILE}" "${dest}/job-board-register.yml"
+  if [ -f /.job-board-register.yml ]; then
+      cp -v /.job-board-register.yml "${dest}/job-board-register.yml"
   fi
-  if [[ -f "${SYSTEM_INFO_JSON}" ]]; then
+  if [ -f "${SYSTEM_INFO_JSON}" ]; then
       cp -v "${SYSTEM_INFO_JSON}" "${dest}/system_info.json"
   fi
 
-  if [[ -f "${NODE_ATTRIBUTES_YML}" ]]; then
+  if [ -f "${NODE_ATTRIBUTES_YML}" ]; then
     cp -v "${NODE_ATTRIBUTES_YML}" "${dest}/node-attributes.yml"
   fi
 
-  if [[ -f "${DPKG_MANIFEST_JSON}" ]]; then
+  if [ -f "${DPKG_MANIFEST_JSON}" ]; then
     cp -v "${DPKG_MANIFEST_JSON}" "${dest}/dpkg-manifest.json"
   fi
 
-  if [[ -f "${BIN_LIB_CHECKSUMS}" ]]; then
+  if [ -f "${BIN_LIB_CHECKSUMS}" ]; then
     cp -v "${BIN_LIB_CHECKSUMS}" "${dest}/bin-lib.SHA256SUMS"
   fi
 
