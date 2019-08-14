@@ -1,0 +1,60 @@
+#!/bin/sh
+set -o errexit
+
+main() {
+  : "${JOB_BOARD_REGISTER_FILE:=/.job-board-register.yml}"
+
+  local nowtime
+  nowtime=$(date -u +%Y%m%dT%H%M%SZ)
+
+  cat >"/.job-board-register.yml" <<EOF
+---
+stack: freebsd
+languages:
+- sh
+features:
+- bsd
+tags:
+  dist: freebsd
+  os: freebsd
+  packer_chef_time: "${nowtime}"
+  language_default: true
+  language_none: true
+  language_powershell: true
+  language_sh: true
+  language_bash: true
+  language_shell: true
+  language_script: true
+  language_node_js: true
+  language_javascript: true
+  language_go: true
+  language_rust: true
+  language_ruby: true
+  language_python: true
+  language_php: true
+  language_d: true
+  language_r: true
+  language_dart: true
+  language_haxe: true
+  language_perl: true
+  language_julia: true
+  language_elixir: true
+  language_erlang: true
+  language_crystal: true
+  language_haskell: true
+  language_java: true
+  language_pure_java: true
+  language_clojurescript: true
+  language_groovy: true
+  language_kotlin: true
+  language_scala: true
+  language_java: true
+  language_c: true
+  language_cplusplus: true
+  language_c++: true
+  language_cpp: true
+tags_string: "dist:$JOB_BOARD_IMAGE_DIST,os:freebsd,packer_chef_time:${nowtime},language_default:true,language_none:true,language_powershell:true,language_sh:true,language_bash:true,language_shell:true,language_script:true,language_node_js:true,language_javascript:true,language_go:true,language_rust:true,language_ruby:true,language_python:true,language_php:true,language_d:true,language_r:true,language_dart:true,language_haxe:true,language_perl:true,language_julia:true,language_elixir:true,language_erlang:true,language_crystal:true,language_haskell:true,language_java:true,language_pure_java:true,language_clojurescript:true,language_groovy:true,language_kotlin:true,language_scala:true,language_java:true,language_c:true,language_cplusplus:true,language_c++:true,language_cpp:true"
+EOF
+}
+
+main "$@"

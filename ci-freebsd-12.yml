@@ -48,7 +48,6 @@ provisioners:
   - packer-scripts/pre-chef-bootstrap-bsd
   - packer-scripts/clone-travis-cookbooks-bsd
   environment_vars:
-  - SKIP_APT_UPGRADE=1
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   - TRAVIS_UID={{ user `travis_uid` }}
@@ -101,8 +100,17 @@ provisioners:
 #  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
+  - packer-scripts/create-freebsd-job-board-data
   - packer-scripts/create-image-metadata-tarball-bsd
   environment_vars:
+  - JOB_BOARD_REGISTER_FILE=/.job_board_register.yml
+  - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
+  - PACKER_ENV_DIR=/.packer-env
+  - SYSTEM_INFO_JSON=/c/travis_system_info.json
+  - NODE_ATTRIBUTES_YML=/.node-attributes.yml
+  - RSPEC_JSON_DIR=/home/travis
+  - DPKG_MANIFEST_JSON=/.dpkg-manifest.json
+  - BIN_LIB_CHECKSUMS=/.bin-lib.SHA256SUMS 
   - IMAGE_METADATA_TARBALL=/var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   execute_command: "{{ .Vars }} exec sudo -E -S sh '{{ .Path }}'"
 - type: file

@@ -1,4 +1,4 @@
-travis_ci_windows_1803 Cookbook
+travis_ci_freebsd_12 Cookbook
 ========================
 
-A wrapper cookbook for the Windows 1803 CI image.
+A wrapper cookbook for the FreeBSD 12 CI image.
