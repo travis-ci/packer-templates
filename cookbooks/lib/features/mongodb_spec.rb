@@ -22,7 +22,7 @@ describe 'mongodb installation' do
 
   describe 'mongo commands' do
     before :all do
-      sh("sudo service #{mongodb_service_name} start")
+      sh("sudo service #{mongodb_service_name} restart")
       procwait(/\bmongod\b/)
       sleep 3 # HACK: thanks a bunch, Mongo
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
