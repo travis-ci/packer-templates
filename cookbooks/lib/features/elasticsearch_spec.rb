@@ -5,7 +5,6 @@ def db_url
 end
 
 describe 'elasticsearch installation', sudo: true do
-
   describe package('elasticsearch') do
     it { should be_installed }
   end
@@ -13,7 +12,7 @@ describe 'elasticsearch installation', sudo: true do
   before :all do
     sh('sudo service elasticsearch restart')
     sleep 5
-#    tcpwait('localhost', 9200, 30)
+    tcpwait('localhost', 9200, 30)
     sh(%(curl -H "Content-Type: application/json" -X PUT "#{db_url}/user/koopa93" -d "{
         \"name\": \"Shy Bowser\"
       }"
@@ -39,7 +38,7 @@ describe 'elasticsearch installation', sudo: true do
 #    its(:stdout) { should match(/"total"\s*:\s*1/) }
 #    its(:stdout) { should match(/"user"\s*:\s*"koopa93"/) }
 #    its(:stdout) { should match(/"message"\s*:\s*"Frying up Elastosearch"/) }
-#  end
+# end
   after :all do
     sh(%(curl -H "Content-Type: application/json" -X DELETE "#{db_url}"))
   end
