@@ -8,7 +8,7 @@ describe 'couchdb installation' do
 # Disable this for now
 #  describe command('/opt/couchdb/bin/couchdb -V') do
 #    its(:exit_status) { should eq 0 }
-# end
+#  end
 
   describe 'couchdb commands', sudo: true do
     before :all do
