@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Cookbook Name:: travis_ci_onion
+# Cookbook Name:: travis_ci_2019
 # Recipe:: default
 #
 # Copyright 2017, Travis CI GmbH
