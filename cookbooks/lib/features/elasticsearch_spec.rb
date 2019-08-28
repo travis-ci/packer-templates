@@ -31,7 +31,7 @@ describe 'elasticsearch installation', sudo: true do
 #  ) do
 #    its(:stdout) { should include('Frying up Elastosearch') }
 #  end
-#
+
 #  describe command(
 #    %(curl '#{db_url}/toot/_search?q=message:Frying&pretty=true')
 #  ) do
