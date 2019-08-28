@@ -13,6 +13,7 @@ main() {
   : "${DPKG_MANIFEST_JSON:=/.dpkg-manifest.json}"
   : "${BIN_LIB_CHECKSUMS:=/.bin-lib.SHA256SUMS}"
 
+  local olddir
   olddir=`pwd`
   cd "${TMPDIR:-/var/tmp}"
   local dest
