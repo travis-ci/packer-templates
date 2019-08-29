@@ -45,6 +45,7 @@ provisioners:
   destination: /var/tmp/travis_rsa.pub
 - type: shell
   scripts:
+  - packer-scripts/freebsd-update-bsd
   - packer-scripts/pre-chef-bootstrap-bsd
   - packer-scripts/clone-travis-cookbooks-bsd
   environment_vars:
