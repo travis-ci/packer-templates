@@ -27,9 +27,6 @@ override['travis_build_environment']['nodejs_versions'] = []
 override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
-#override['travis_system_info']['commands_file'] = \
-#  '/var/tmp/onion-system-info-commands.yml'
-
 rubies = %w[
   2.2.7
   2.4.1
