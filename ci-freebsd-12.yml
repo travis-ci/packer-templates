@@ -17,6 +17,7 @@ builders:
   name: googlecompute
   communicator: ssh
   ssh_timeout: 20m
+  state_timeout: 10m
   ssh_port: 22
   ssh_username: packer
   image_description: Travis CI freebsd
