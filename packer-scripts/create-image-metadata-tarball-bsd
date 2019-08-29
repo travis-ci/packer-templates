@@ -28,10 +28,10 @@ main() {
 
   cp -vR "${PACKER_ENV_DIR}/"* "${dest}/env/"
   if [ -f /.job-board-register.yml ]; then
-      cp -v /.job-board-register.yml "${dest}/job-board-register.yml"
+    cp -v /.job-board-register.yml "${dest}/job-board-register.yml"
   fi
   if [ -f "${SYSTEM_INFO_JSON}" ]; then
-      cp -v "${SYSTEM_INFO_JSON}" "${dest}/system_info.json"
+    cp -v "${SYSTEM_INFO_JSON}" "${dest}/system_info.json"
   fi
 
   if [ -f "${NODE_ATTRIBUTES_YML}" ]; then
