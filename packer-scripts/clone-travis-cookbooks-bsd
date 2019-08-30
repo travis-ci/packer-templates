@@ -21,13 +21,13 @@ main() {
     --depth=10 \
     --branch="${TRAVIS_COOKBOOKS_BRANCH}" "${TRAVIS_COOKBOOKS_URL}"
 
-  if [[ ${TRAVIS_COOKBOOKS_SHA} ]]; then
+  if [ ${TRAVIS_COOKBOOKS_SHA} ]; then
     oldpath=`pwd`
     cd travis-cookbooks
     git checkout -qf "${TRAVIS_COOKBOOKS_SHA}"
     cd $oldpth
   fi
-  
+
   oldpath=`pwd`
   cd travis-cookbooks
   pwd >"${PACKER_ENV_DIR}/TRAVIS_COOKBOOKS_DIR"
