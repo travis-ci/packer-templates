@@ -28,8 +28,8 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 rubies = %w[
-  2.2.7
-  2.4.1
+  2.6.4
+  2.5.6
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.max
@@ -55,4 +55,5 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   minimal
   sh
   shell
+  ruby
 ]
