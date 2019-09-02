@@ -49,6 +49,7 @@ provisioners:
   - packer-scripts/freebsd-update
   - packer-scripts/pre-chef-bootstrap-bsd
   - packer-scripts/clone-travis-cookbooks-bsd
+  - packer-scripts/freebsd-cleanup
   environment_vars:
   - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
   - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
