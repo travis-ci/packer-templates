@@ -25,3 +25,4 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 freebsd_package 'coreutils'
+include_recipe 'travis_build_environment::rvm'
