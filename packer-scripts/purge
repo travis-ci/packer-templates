@@ -29,6 +29,7 @@ main() {
   fi
 
   __run_retry __purge_from_manifest
+  __run_retry __mark_manual
   __run_retry apt-get -y autoremove
   __run_retry apt-get -y clean
 }
@@ -36,6 +37,12 @@ main() {
 __purge_from_manifest() {
   if [[ -f /var/tmp/purge.txt ]]; then
     grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
+  fi
+}
+
+__mark_manual() {
+  if [[ -f /var/tmp/packages.txt ]]; then
+    grep -v '^#' /var/tmp/packages.txt | xargs apt-mark manual
   fi
 }
 

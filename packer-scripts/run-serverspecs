@@ -62,6 +62,7 @@ __install_chefdk() {
 
   __run_retry 2 30 apt-get update -y
   __run_retry 2 30 apt-get install -y chefdk=3.10.1-1
+  __run_retry 2 30 apt-get install libc-client2007e-dev mysql-client
 }
 
 __run_retry() {
