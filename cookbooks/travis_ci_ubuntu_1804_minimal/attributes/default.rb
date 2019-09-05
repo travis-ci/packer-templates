@@ -11,7 +11,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.7.4
+  1.11.1
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -27,12 +27,16 @@ override['travis_build_environment']['nodejs_versions'] = []
 override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
-rubies = %w[
-  2.6.4
-  2.5.6
-]
+override['travis_system_info']['commands_file'] = \
+  '/var/tmp/ubuntu-1804-minimal-system-info-commands.yml'
 
-override['travis_build_environment']['default_ruby'] = rubies.max
+rubies = %w[
+  2.4.6
+  2.5.3
+  2.6.3
+]
+# override['travis_build_environment']['rubies'] = %w[2.4.6 2.5.5 2.6.3]
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_aliases'] = {}
@@ -44,16 +48,23 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '4.2.2~trusty1'
-
-override['travis_packer_templates']['job_board']['stack'] = 'onion'
+override['travis_build_environment']['mercurial_version'] = '4.8'
+override['travis_packer_templates']['job_board']['stack'] = 'ubuntu-1804-minimal'
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
+  disabled-ipv6
+  docker
+  docker-compose
+  go-toolchain
+  perl_interpreter
+  perlbrew
+  python_interpreter
+  ruby_interpreter
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __freebsd_12__
+  __ubuntu_1804_minimal__
   minimal
-  sh
+  bash
   shell
-  ruby
+  sh
 ]

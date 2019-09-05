@@ -3,24 +3,23 @@ message: "%{source_commit_message}\n:tada: :bomb: commit-range=%{commit_range_st
 branch: "%{template_name}"
 config:
   language: minimal
-  dist: trusty
-  group: edge
+  dist: bionic
+  group: dev
   sudo: true
   before_install:
   - if [[ "${BUILDER}" = "docker" ]] ; then
       sudo apt-get update -yqq ;
+      sudo apt-get install apt-transport-https gnupg-agent software-properties-common ;
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - ;
       sudo apt-get purge -o Dpkg::Options::="--force-confnew" -yqq docker-ce ;
-      sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq docker-ce lvm2 xfsprogs ;
-      echo 'DOCKER_OPTS="$DOCKER_OPTS --storage-driver devicemapper"' | sudo tee -a /etc/default/docker ;
+      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" ;
+      sudo apt-get install -o Dpkg::Options::="--force-confnew" -yqq docker-ce docker-ce-cli containerd.io lvm2 xfsprogs ;
       sudo service docker restart ;
     fi
   install:
-  - git clone --depth=50 "https://github.com/travis-ci/packer-templates.git"
-  - pushd packer-templates &&
-      git fetch origin +refs/pull/%{pull_request}/merge &&
-      git checkout -qf FETCH_HEAD ;
-    popd
-  - "./packer-templates/bin/packer-build-install"
+  - git clone --branch="%{branch}" "https://github.com/travis-ci/packer-templates.git"
+  - pushd packer-templates && git checkout -qf %{commit_range_last} ; popd
+  - ./packer-templates/bin/packer-build-install
   script:
   - export PACKER_TEMPLATES_BRANCH="+refs/pull/%{pull_request}/merge"
   - "./packer-templates/bin/packer-build-script %{template_name}"
