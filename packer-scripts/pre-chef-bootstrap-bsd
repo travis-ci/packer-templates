@@ -4,6 +4,7 @@ main() {
   __install_packages
   __setup_sshd
   __setup_travis_user
+  __allow_su
   __write_pre_chef_env
 }
 
@@ -41,6 +42,10 @@ Defaults !env_reset
 Defaults !mail_badpass
 EOF
   chmod 440 /usr/local/etc/sudoers.d/travis
+}
+
+__allow_su() {
+  sed -i.bak '/^auth.*pam_group.so.*no_warn group=wheel root_only fail_safe ruser/d' /etc/pam.d/su
 }
 
 __setup_travis_ssh() {
