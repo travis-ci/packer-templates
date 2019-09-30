@@ -1,5 +1,5 @@
 ---
-description: Travis CI Windows 1803 Core (for containers) build env template
+description: Travis CI Windows 1803 Core (for containers) build env
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
