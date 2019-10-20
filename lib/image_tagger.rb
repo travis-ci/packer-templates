@@ -24,7 +24,8 @@ class ImageTagger
     @infra ||= {
       'googlecompute' => 'gce',
       'docker' => 'docker',
-      'vmware' => 'jupiterbrain'
+      'vmware' => 'jupiterbrain',
+      'lxd' => "lxd-#{ENV['ARCH']}"
     }.fetch(env['PACKER_BUILDER_TYPE'], 'local')
   end
 

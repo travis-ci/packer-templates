@@ -1,0 +1,11 @@
+#!/bin/sh -eu
+TARGET=$(pwd)
+TEMP=$(mktemp -d)
+cp ${1} ${TEMP}/in
+cd ${TEMP}
+tar xf in
+rm in
+mksquashfs rootfs/ ${TARGET}/image.rootfs.squashfs -noappend -comp xz -b 1M -no-progress -no-recovery
+rm -rf rootfs
+tar -Jcf ${TARGET}/image.tar.xz *
+rm -Rf "${TEMP}"

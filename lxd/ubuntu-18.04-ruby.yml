@@ -1,0 +1,124 @@
+description: Travis CI Ubuntu 18.04 ruby build env template!
+variables:
+  apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
+  docker_registry: "https://registry.docker.io"
+  image_name: ubuntu-18.04-ruby-{{ timestamp }}
+  dist_name: "bionic"
+  languages: "ruby"
+builders:
+- type: lxd
+  name: lxd
+  image: images:ubuntu/18.04
+  output_image: ubuntu-18.04-ruby-{{ timestamp }}
+  publish_properties:
+   - description: Travis CI Ubuntu 18.04 ruby build env template!
+provisioners:
+  # Setup repositories
+- type: file
+  source: files/sources.list
+  destination: /etc/apt/sources.list
+
+- type: shell
+  scripts:
+  - scripts/base.sh
+  - scripts/install-docker.sh
+  environment_vars:
+  - MIRROR={{user `apt_mirror`}}
+
+- type: file
+  source: files/docker.daemon.json.lxd
+  destination: /etc/docker/daemon.json
+
+- type: shell
+  inline:
+   - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
+
+  # Travis user
+- type: file
+  source: files/sudoers.travis
+  destination: /etc/sudoers.d/travis
+
+  # Install ruby as travis
+- type: shell
+  scripts:
+  - scripts/ruby.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
+  # Use static DNS servers
+- type: shell
+  inline:
+   - systemctl mask systemd-resolved
+   - rm -f /etc/resolv.conf
+   - touch /etc/resolv.conf
+
+- type: file
+  source: files/resolv.conf
+  destination: /etc/resolv.conf
+
+  # Cleanup systemd units
+- type: shell
+  inline:
+   - systemctl mask systemd-udevd.service
+   - systemctl mask fstrim.service
+   - systemctl mask sys-kernel-config.mount
+   - systemctl mask systemd-journal-flush.service
+   - systemctl mask console-setup.service
+   - systemctl mask systemd-networkd-wait-online.service
+   - systemctl mask systemd-update-utmp.service
+   - systemctl mask apt-daily-upgrade.service
+   - systemctl mask apt-daily.service
+
+  # Cleanup network configuration
+- type: shell
+  inline:
+   - rm -f /etc/netplan/10-lxc.yaml
+
+  # Cleanup package list
+- type: shell
+  inline:
+   - apt-get remove --purge cron krb5-locales logrotate networkd-dispatcher rsyslog ucf -y
+
+  # Cleanup APT
+- type: shell
+  inline:
+   - apt-get autoremove --purge -y
+   - apt-get clean
+
+  # Fix permissions
+- type: shell
+  inline:
+   - chmod 600 /etc/sudoers.d/travis
+   - chmod 644 /etc/apt/sources.list
+   - chmod 644 /etc/docker/daemon.json
+   - chmod 644 /etc/resolv.conf
+
+  # Creare image metadata tarball
+- type: shell
+  scripts:
+  - scripts/create-job-board-data-lxd.sh
+  - scripts/create-image-metadata-tarball-lxd.sh
+  environment_vars:
+  - LANGUAGES="minimal"
+  - IMAGE_METADATA_TARBALL=/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  - JOB_BOARD_REGISTER_FILE=/tmp/.job_board_register.yml
+  - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
+  - IMAGE_NAME={{ user `image_name` }}
+  - LANGUAGES={{ user `languages` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+
+post-processors:
+-
+  - type: shell-local
+    scripts:
+    - scripts/lxc-export.sh
+    - scripts/lxc-aws-s3-upload.sh
+    - scripts/job-board-register.rb
+    #- scripts/cleanup.sh
+    environment_vars:
+    - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
+    - IMAGE_NAME={{ user `image_name` }}
+    - LANGUAGES={{ user `languages` }}

@@ -1,0 +1,5 @@
+{
+	"storage-driver": "overlay2",
+  "registry-mirrors": ["REGISTRY"],
+	"mtu": 1460
+}

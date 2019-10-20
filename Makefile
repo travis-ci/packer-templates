@@ -33,13 +33,25 @@ SED ?= sed
 TRAVIS_PACKER_BUILD ?= travis-packer-build
 UNZIP ?= unzip
 
+ifeq ($(BUILDER),lxd)
+%: lxd/%.yml $(META_FILES)
+	$(PACKER) --version
+	@bin/build-lxd-image.sh $@
+
+else
 %: %.yml $(META_FILES)
 	$(PACKER) --version
 	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
 
+endif
+
 %-debug: %.yml $(META_FILES)
 	$(PACKER) --version
-	$(PACKER) build -only=$(BUILDER) -debug <(bin/yml2json < $<)
+	ifeq ($(BUILDER),lxd)
+		cd lxd && $(PACKER) build -debug <(bin/yml2json < $<)
+	else
+		$(PACKER) build -only=$(BUILDER) -debug <(bin/yml2json < $<)
+	endif
 
 .PHONY: all
 all: $(META_FILES) $(PHP_PACKAGES_FILE) $(SYSTEM_INFO_COMMANDS_FILES)

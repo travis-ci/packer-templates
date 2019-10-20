@@ -1,0 +1,4 @@
+travis ALL=(ALL) NOPASSWD:ALL
+Defaults !authenticate
+Defaults !env_reset
+Defaults !mail_badpass
