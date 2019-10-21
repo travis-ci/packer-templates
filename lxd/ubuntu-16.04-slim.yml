@@ -38,10 +38,6 @@ provisioners:
   source: files/sudoers.travis
   destination: /etc/sudoers.d/travis
 
-- type: shell
-  scripts:
-  - scripts/install-travis-user.sh
-
   # Use static DNS servers
 - type: shell
   inline:
