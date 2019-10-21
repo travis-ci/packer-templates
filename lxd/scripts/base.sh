@@ -13,6 +13,13 @@ apt-get update
 apt-get install curl gnupg wget git software-properties-common python-jsonpatch -y --no-install-recommends
 apt-get dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
+tee /etc/apt/apt.conf.d/10-force-yes <<EOF
+APT::Get::Assume-Yes "true";
+EOF
+
+# package for travis caching
+apt-get install hashdeep -y --no-install-recommends
+
 # install snaps
 apt-get install snapd fuse -y
 
