@@ -16,4 +16,4 @@ apt-get install curl wget openssl rsync -y --no-install-recommends
 
 # python for minimal image
 # https://docs.travis-ci.com/user/languages/minimal-and-generic/#minimal
-apt-get install python -y --no-install-recommends
+apt-get install python python-pip -y --no-install-recommends
