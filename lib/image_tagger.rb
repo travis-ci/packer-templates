@@ -59,7 +59,8 @@ class ImageTagger
       env['PACKER_TEMPLATES_BRANCH'] == 'master' &&
       env['PACKER_TEMPLATES_SHA'] !~ /dirty/
 
-    'dev'
+    #'dev'
+    'stable'
   end
 
   def dist
