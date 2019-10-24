@@ -1,18 +1,18 @@
-description: Travis CI Ubuntu 18.04 Minimal build env template!
+description: Travis CI Ubuntu 16.04 go build env template!
 variables:
   apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
   docker_registry: "https://registry.docker.io"
   image_time: "{{ timestamp }}"
-  image_name: ubuntu-18.04-minimal-{{user `image_time`}}
-  dist_name: "bionic"
-  languages: "minimal,bash,sh,shell"
+  image_name: ubuntu-16.04-go-{{user `image_time`}}
+  dist_name: "xenial"
+  languages: "go"
 builders:
 - type: lxd
   name: lxd
-  image: images:ubuntu/18.04
-  output_image: ubuntu-18.04-minimal-{{user `image_time`}}
+  image: images:ubuntu/xenial
+  output_image: ubuntu-16.04-go-{{user `image_time`}}
   publish_properties:
-   - description: Travis CI Ubuntu 18.04 Minimal build env template!
+   - description: Travis CI Ubuntu 16.04 go build env template!
 provisioners:
   # Setup repositories
 - type: file
@@ -22,7 +22,7 @@ provisioners:
 - type: shell
   scripts:
   - scripts/base.sh
-  - scripts/minimal.sh
+  - scripts/go.sh
   - scripts/install-docker.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
@@ -40,11 +40,11 @@ provisioners:
   source: files/sudoers.travis
   destination: /etc/sudoers.d/travis
 
-  # Install ruby and python travis
+  # Install ruby and as travis
 - type: shell
   scripts:
   - scripts/ruby.sh
-  - scripts/python.sh
+  - scripts/go.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
@@ -79,7 +79,7 @@ provisioners:
   # Cleanup package list
 - type: shell
   inline:
-   - apt-get remove --purge cron krb5-locales logrotate networkd-dispatcher rsyslog ucf -y
+   - apt-get remove --purge cron krb5-locales logrotate rsyslog ucf -y
 
   # Cleanup APT
 - type: shell
@@ -101,7 +101,6 @@ provisioners:
   - scripts/create-job-board-data-lxd.sh
   - scripts/create-image-metadata-tarball-lxd.sh
   environment_vars:
-  - LANGUAGES="minimal"
   - IMAGE_METADATA_TARBALL=/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - JOB_BOARD_REGISTER_FILE=/tmp/.job_board_register.yml
   - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}

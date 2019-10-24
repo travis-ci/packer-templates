@@ -2,14 +2,15 @@ description: Travis CI Ubuntu 18.04 c, cpp lang build env template!
 variables:
   apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
   docker_registry: "https://registry.docker.io"
-  image_name: ubuntu-18.04-c-{{ timestamp }}
+  image_time: "{{ timestamp }}"
+  image_name: ubuntu-18.04-c-{{user `image_time`}}
   dist_name: "bionic"
   languages: "c, cpp, cplusplus, c++"
 builders:
 - type: lxd
   name: lxd
   image: images:ubuntu/18.04
-  output_image: ubuntu-18.04-c-{{ timestamp }}
+  output_image: ubuntu-18.04-c-{{user `image_time`}}
   publish_properties:
    - description: Travis CI Ubuntu 18.04 c, cpp lang build env template!
 provisioners:
@@ -38,6 +39,12 @@ provisioners:
 - type: file
   source: files/sudoers.travis
   destination: /etc/sudoers.d/travis
+
+  # Install ruby as travis
+- type: shell
+  scripts:
+  - scripts/ruby.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
 - type: shell

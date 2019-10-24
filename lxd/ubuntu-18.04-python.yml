@@ -1,18 +1,18 @@
-description: Travis CI Ubuntu 18.04 Minimal build env template!
+description: Travis CI Ubuntu 18.04 python build env template!
 variables:
   apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
   docker_registry: "https://registry.docker.io"
   image_time: "{{ timestamp }}"
-  image_name: ubuntu-18.04-minimal-{{user `image_time`}}
+  image_name: ubuntu-18.04-python-{{user `image_time`}}
   dist_name: "bionic"
-  languages: "minimal,bash,sh,shell"
+  languages: "python"
 builders:
 - type: lxd
   name: lxd
   image: images:ubuntu/18.04
-  output_image: ubuntu-18.04-minimal-{{user `image_time`}}
+  output_image: ubuntu-18.04-python-{{user `image_time`}}
   publish_properties:
-   - description: Travis CI Ubuntu 18.04 Minimal build env template!
+   - description: Travis CI Ubuntu 18.04 python build env template!
 provisioners:
   # Setup repositories
 - type: file
@@ -22,7 +22,6 @@ provisioners:
 - type: shell
   scripts:
   - scripts/base.sh
-  - scripts/minimal.sh
   - scripts/install-docker.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
@@ -40,10 +39,9 @@ provisioners:
   source: files/sudoers.travis
   destination: /etc/sudoers.d/travis
 
-  # Install ruby and python travis
+  # Install python as travis
 - type: shell
   scripts:
-  - scripts/ruby.sh
   - scripts/python.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
