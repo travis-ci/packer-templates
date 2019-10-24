@@ -10,7 +10,7 @@ sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list
 sed -i "s#DISTRIB_CODENAME#${DISTRIB_CODENAME}#g" /etc/apt/sources.list
 dpkg --remove-architecture i386
 apt-get update
-apt-get install curl gnupg wget git software-properties-common python-jsonpatch -y --no-install-recommends
+apt-get install ruby curl gnupg wget git software-properties-common python-jsonpatch md5deep openssl -y --no-install-recommends
 apt-get dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
 tee /etc/apt/apt.conf.d/10-force-yes <<EOF
@@ -37,7 +37,6 @@ mkdir -p /home/travis/bin
 mkdir -p /opt
 chmod 0755 /opt
 chown -R travis:travis /home/travis /opt
-
 
 # __setup_travis_user() {
 #   if ! getent passwd travis &>/dev/null; then
