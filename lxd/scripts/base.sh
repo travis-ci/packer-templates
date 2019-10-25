@@ -38,6 +38,23 @@ mkdir -p /opt
 chmod 0755 /opt
 chown -R travis:travis /home/travis /opt
 
+#bash_profile, bash_profile.d
+mkdir /home/travis/.bash_profile.d
+echo '[[ -s "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc"
+
+if [[ -d "${HOME}/.bash_profile.d" ]]; then
+  for f in "${HOME}/.bash_profile.d/"*.bash; do
+    if [[ -s "${f}" ]]; then
+      source "${f}"
+    fi
+  done
+fi
+' >> /home/travis/.bash_profile
+
+chown -R travis.travis /home/travis/.bash_profile.d
+chmod 640 /home/travis/.bash_profile
+
+
 # Travis sudoers
 echo "travis ALL=(ALL) NOPASSWD:ALL
 Defaults !authenticate
