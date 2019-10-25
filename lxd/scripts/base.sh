@@ -38,6 +38,13 @@ mkdir -p /opt
 chmod 0755 /opt
 chown -R travis:travis /home/travis /opt
 
+# Travis sudoers
+echo "travis ALL=(ALL) NOPASSWD:ALL
+Defaults !authenticate
+Defaults !env_reset
+Defaults !mail_badpass" > /etc/sudoers.d/travis
+chmod 440 /etc/sudoers.d/travis
+
 # __setup_travis_user() {
 #   if ! getent passwd travis &>/dev/null; then
 #     if [[ -z "${TRAVIS_UID}" ]]; then
