@@ -51,7 +51,8 @@ if [[ -d "${HOME}/.bash_profile.d" ]]; then
 fi
 ' >> /home/travis/.bash_profile
 
-chown -R travis.travis /home/travis/.bash_profile.d
+chown -R travis:travis /home/travis/.bash_profile.d
+chown -R travis:travis /home/travis/.bash_profile
 chmod 640 /home/travis/.bash_profile
 
 
