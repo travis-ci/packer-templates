@@ -9,15 +9,13 @@ main() {
   __install_packages
 }
 
-__install_packages() {
-  sudo add-apt-repository ppa:mercurial-ppa/releases -y
-  sudo apt-get update -yqq
-  sudo apt-get install -yqq \
+__install_packages() {  
+  apt-get update -yqq
+  apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
     git \
     mercurial \
     subversion;
 }
-
 main "$@"

@@ -49,22 +49,34 @@ provisioners:
   destination: /tmp/__postgresql__9.5__initd-postgresql
 
 
-- type: shell
-  scripts:
-  - scripts/ruby.sh
-  - scripts/python.sh
-  execute_command: "exec su - travis '{{ .Path }}'"
+# - type: shell
+#   scripts:
+#   - scripts/go.sh
+#   - scripts/ruby.sh
+#   - scripts/python.sh
+#   execute_command: "exec su - travis '{{ .Path }}'"
+
+# - type: shell
+#   scripts:
+#   - scripts/compilers_build_tool_chains.sh
+#   - scripts/net-tools.sh
+#   - scripts/vcs.sh
+#   - scripts/databases.sh
+#   - scripts/database-postgresql.sh
+#   environment_vars:
+#   - PGSQL_VERSION="9.5"
+
 
 - type: shell
   scripts:
-  - scripts/compilers_build_tool_chains.sh
-  - scripts/net-tools.sh
-#  - scripts/vcs.sh
-  - scripts/databases.sh
-  - scripts/database-postgresql.sh
+  - scripts/jvm.sh
   environment_vars:
-  - PGSQL_VERSION="9.5"
+  - JAVA_VERSION="11"
 
+
+- type: shell
+  scripts:
+  - scripts/nodejs.sh
 
   # Use static DNS servers
 - type: shell

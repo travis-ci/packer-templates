@@ -6,6 +6,7 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
+  __redis_setup
   __mysql_setup
   __turn_off_all
 }
@@ -16,16 +17,18 @@ __install_packages() {
   #sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net --recv-keys A278B781FE4B2BDA
   #wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
   #echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
-  sudo apt-get update -yqq
-  sudo apt-get install -yqq \
+  apt-get update -yqq
+  apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
     couchdb \
-    mongodb-server;
+    mongodb-server \
+    redis-server redis-tools \
+    sqlite;
 
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password'
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password'
-    sudo apt-get -y install mysql-server
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password password'
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password'
+    apt-get -y install mysql-server
 }
 
 __mysql_setup(){
@@ -57,9 +60,13 @@ default-character-set = utf8" > /home/travis/.my.cnf
 
 }
 
+__redis_setup(){
+  sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
+}
+
 __turn_off_all() {
-  systemctl stop couchdb mysql
-  systemctl disable couchdb mysql
+  systemctl stop couchdb redis-server mysql mongodb
+  systemctl disable couchdb redis-server mysql mongodb
 }
 
 main "$@"
