@@ -1,10 +1,10 @@
 ---
-description: Travis CI Windows 1803 Core (for containers) build env template
+description: Travis CI Windows 2019 (for containers) build env template
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-windows-1803-containers-{{ timestamp }}-<%= git_desc %>
-  dist_name: 1803-containers
+  image_name: travis-ci-windows-2019-containers-{{ timestamp }}-<%= git_desc %>
+  dist_name: 2019-containers
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -16,10 +16,10 @@ builders:
   winrm_username: travis
   winrm_use_ssl: true
   winrm_insecure: true
-  image_description: Travis CI Windows 1803 Core (for containers)
+  image_description: Travis CI Windows 2019 (for containers)
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image_family: windows-1803-core-for-containers
+  source_image_family: windows-2019-for-containers
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
@@ -29,7 +29,7 @@ builders:
   tags:
   - ci
   - windows
-  - windows-1803
+  - windows-2019
   - travis-ci-packer-templates
   state_timeout: 10m
 provisioners:
@@ -37,7 +37,7 @@ provisioners:
   source: tmp/git-meta
   destination: c:/windows/temp/
 - type: file
-  source: packer-assets/windows-server-1803-packages.txt
+  source: packer-assets/windows-server-2019-packages.txt
   destination: c:/windows/temp/packages.txt
 - type: file
   source: packer-scripts/Run-BashScript.ps1
