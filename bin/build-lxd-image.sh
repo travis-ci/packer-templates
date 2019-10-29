@@ -21,7 +21,7 @@ main() {
   SSH="${BUILDER_USER}@${BUILDER_HOST}"
   rsync -aR --delete --exclude .vagrant --exclude ./lxd/.vagrant --exclude tmp ${DIR} ${SSH}:~/packer-templates/
 
-  tee .load_env <<EOF
+  tee .load_env >/dev/null <<EOF
 export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 export ARCH=$ARCH
