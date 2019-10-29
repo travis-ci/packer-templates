@@ -8,7 +8,7 @@ variables:
   languages: "go"
 builders:
 - type: lxd
-  name: lxd
+  name: lxd-{{ uuid }}
   image: images:ubuntu/18.04
   output_image: ubuntu-18.04-go-{{user `image_time`}}
   publish_properties:

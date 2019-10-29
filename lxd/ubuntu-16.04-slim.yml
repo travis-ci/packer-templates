@@ -8,7 +8,7 @@ variables:
   languages: "slim"
 builders:
 - type: lxd
-  name: lxd
+  name: lxd-{{ uuid }}
   image: images:ubuntu/xenial
   output_image: ubuntu-16.04-slim-{{user `image_time`}}
   publish_properties:
