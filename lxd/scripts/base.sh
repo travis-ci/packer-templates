@@ -55,32 +55,25 @@ chown -R travis:travis /home/travis/.bash_profile.d
 chown -R travis:travis /home/travis/.bash_profile
 chmod 640 /home/travis/.bash_profile
 
-
 # Travis sudoers
-echo "travis ALL=(ALL) NOPASSWD:ALL
+tee /etc/sudoers.d/travis <<EOF
+travis ALL=(ALL) NOPASSWD:ALL
 Defaults !authenticate
 Defaults !env_reset
-Defaults !mail_badpass" > /etc/sudoers.d/travis
+Defaults !mail_badpass
+EOF
 chmod 440 /etc/sudoers.d/travis
 
-# __setup_travis_user() {
-#   if ! getent passwd travis &>/dev/null; then
-#     if [[ -z "${TRAVIS_UID}" ]]; then
-#       useradd -p travis -s /bin/bash -m travis -u 1000
-#     else
-#       useradd -p travis -s /bin/bash -m travis -u "${TRAVIS_UID}"
-#       groupmod -g "${TRAVIS_UID}" travis
-#       usermod -u "${TRAVIS_UID}" travis
-#
-#     fi
-#   fi
-#
-#   echo travis:travis | chpasswd
-#
-#   # Save users having to create this directory at runtime (it's already on PATH)
-#   mkdir -p /home/travis/bin
-#
-#   mkdir -p /opt
-#   chmod 0755 /opt
-#   chown -R travis:travis /home/travis /opt
-# }
+# artifacts
+arch=$(uname -m)
+if [[ $arch = "aarch64" ]]; then
+  arch="arm64"
+fi
+curl -sL -o /home/travis/bin/artifacts https://s3.amazonaws.com/travis-ci-gmbh/artifacts/351/351.2/build/linux/${arch}/artifacts
+chmod +x /home/travis/bin/artifacts
+chown travis: /home/travis/bin/artifacts
+
+# system info gem
+curl -sSL -o ./system-info-2.0.3.gem https://s3.amazonaws.com/travis-system-info/system-info-2.0.3.gem
+gem install -b system-info-2.0.3.gem
+rm -f ./system-info-2.0.3.gem
