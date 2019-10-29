@@ -28,8 +28,9 @@ export ARCH=$ARCH
 export JOB_BOARD_IMAGES_URL=$JOB_BOARD_IMAGES_URL
 export ARCH=$ARCH
 EOF
+  chmod 600 .load_env
   __scp ".load_env"
-  __ssh ". ~/.load_env && cd ~/packer-templates/lxd && packer build <(bin/yml2json < $1.yml)"
+  __ssh "chmod 600 .load_env && . ~/.load_env && cd ~/packer-templates/lxd && packer build <(bin/yml2json < $1.yml)"
   __ssh "rm -f ~/.load_env"
   rm -f .load_env
 }
