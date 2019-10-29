@@ -34,11 +34,6 @@ provisioners:
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
-  # Travis user
-- type: file
-  source: files/sudoers.travis
-  destination: /etc/sudoers.d/travis
-
   # Install ruby as travis
 - type: shell
   scripts:

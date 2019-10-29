@@ -34,15 +34,11 @@ provisioners:
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
-  # Travis user
-- type: file
-  source: files/sudoers.travis
-  destination: /etc/sudoers.d/travis
-
   # Install python as travis
 - type: shell
   scripts:
   - scripts/python.sh
+  - scripts/ruby.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
