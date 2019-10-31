@@ -1,18 +1,18 @@
-description: Travis CI Ubuntu 18.04 python build env template!
+description: Travis CI Ubuntu 18.04 Full build env template!
 variables:
   apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
   docker_registry: "https://registry.docker.io"
   image_time: "{{ timestamp }}"
-  image_name: ubuntu-18.04-python-{{user `image_time`}}
+  image_name: ubuntu-18.04-full-{{user `image_time`}}
   dist_name: "bionic"
-  languages: "python"
+  languages: "elixir,erlang"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
   image: images:ubuntu/18.04
-  output_image: ubuntu-18.04-python-{{user `image_time`}}
+  output_image: ubuntu-18.04-full-{{user `image_time`}}
   publish_properties:
-   - description: Travis CI Ubuntu 18.04 python build env template!
+   - description: Travis CI Ubuntu 18.04 Full build env template!
 provisioners:
   # Setup repositories
 - type: file
@@ -22,6 +22,8 @@ provisioners:
 - type: shell
   scripts:
   - scripts/base.sh
+  - scripts/minimal.sh
+  - scripts/full.sh
   - scripts/install-docker.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
@@ -34,11 +36,13 @@ provisioners:
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
-  # Install python as travis
+  # Install ruby and python travis
 - type: shell
   scripts:
-  - scripts/python.sh
   - scripts/ruby.sh
+  - scripts/python.sh
+  - scripts/elixir.sh
+  - scripts/erlang.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
@@ -95,7 +99,7 @@ provisioners:
   - scripts/create-job-board-data-lxd.sh
   - scripts/create-image-metadata-tarball-lxd.sh
   environment_vars:
-  - LANGUAGES="minimal"
+  - LANGUAGES="full"
   - IMAGE_METADATA_TARBALL=/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   - JOB_BOARD_REGISTER_FILE=/tmp/.job_board_register.yml
   - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}

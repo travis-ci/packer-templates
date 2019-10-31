@@ -8,7 +8,7 @@ variables:
   languages: "ruby"
 builders:
 - type: lxd
-  name: lxd
+  name: lxd-{{ uuid }}
   image: images:ubuntu/xenial
   output_image: ubuntu-16.04-ruby-{{user `image_time`}}
   publish_properties:
@@ -33,11 +33,6 @@ provisioners:
 - type: shell
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
-
-  # Travis user
-- type: file
-  source: files/sudoers.travis
-  destination: /etc/sudoers.d/travis
 
   # Install ruby as travis
 - type: shell

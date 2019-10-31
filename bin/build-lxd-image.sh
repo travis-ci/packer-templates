@@ -21,15 +21,16 @@ main() {
   SSH="${BUILDER_USER}@${BUILDER_HOST}"
   rsync -aR --delete --exclude .vagrant --exclude ./lxd/.vagrant --exclude tmp ${DIR} ${SSH}:~/packer-templates/
 
-  tee .load_env <<EOF
+  tee .load_env >/dev/null <<EOF
 export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 export ARCH=$ARCH
 export JOB_BOARD_IMAGES_URL=$JOB_BOARD_IMAGES_URL
 export ARCH=$ARCH
 EOF
+  chmod 600 .load_env
   __scp ".load_env"
-  __ssh ". ~/.load_env && cd ~/packer-templates/lxd && packer build <(bin/yml2json < $1.yml)"
+  __ssh "chmod 600 .load_env && . ~/.load_env && cd ~/packer-templates/lxd && packer build <(bin/yml2json < $1.yml)"
   __ssh "rm -f ~/.load_env"
   rm -f .load_env
 }

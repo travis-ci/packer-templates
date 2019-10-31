@@ -8,7 +8,7 @@ variables:
   languages: "minimal,bash,sh,shell"
 builders:
 - type: lxd
-  name: lxd
+  name: lxd-{{ uuid }}
   image: images:ubuntu/18.04
   output_image: ubuntu-18.04-minimal-{{user `image_time`}}
   publish_properties:
@@ -34,11 +34,6 @@ provisioners:
 - type: shell
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
-
-  # Travis user
-- type: file
-  source: files/sudoers.travis
-  destination: /etc/sudoers.d/travis
 
   # Install ruby and python travis
 - type: shell

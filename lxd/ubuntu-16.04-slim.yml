@@ -8,7 +8,7 @@ variables:
   languages: "slim"
 builders:
 - type: lxd
-  name: lxd
+  name: lxd-{{ uuid }}
   image: images:ubuntu/xenial
   output_image: ubuntu-16.04-slim-{{user `image_time`}}
   publish_properties:
@@ -34,10 +34,11 @@ provisioners:
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
-  # Travis user
-- type: file
-  source: files/sudoers.travis
-  destination: /etc/sudoers.d/travis
+  # Install ruby as travis
+- type: shell
+  scripts:
+  - scripts/ruby.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
 - type: shell
