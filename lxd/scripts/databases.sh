@@ -7,6 +7,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
   __redis_setup
+  __mongodb_setup
   __mysql_setup
   __turn_off_all
 }
@@ -29,6 +30,20 @@ __install_packages() {
     debconf-set-selections <<< 'mysql-server mysql-server/root_password password'
     debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password'
     apt-get -y install mysql-server
+}
+
+__mongodb_setup{
+  echo '[Unit]
+Description=Alias to mongodb
+Documentation=man:mongod(1)
+
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongod --config /etc/mongodb.conf
+
+[Install]
+WantedBy=multi-user.target
+' > /etc/systemd/system/mongod.service
 }
 
 __mysql_setup(){
@@ -69,8 +84,8 @@ __redis_setup(){
 }
 
 __turn_off_all() {
-  systemctl stop couchdb redis-server mysql mongodb
-  systemctl disable couchdb redis-server mysql mongodb
+  systemctl stop couchdb redis-server mysql mongodb mongod
+  systemctl disable couchdb redis-server mysql mongodb mongod
 }
 
 main "$@"
