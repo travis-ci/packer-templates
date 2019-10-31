@@ -32,7 +32,7 @@ __install_packages() {
     apt-get -y install mysql-server
 }
 
-__mongodb_setup{
+__mongodb_setup(){
   echo '[Unit]
 Description=Alias to mongodb
 Documentation=man:mongod(1)
