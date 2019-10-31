@@ -113,10 +113,6 @@ provisioners:
   inline:
    - rm -f /etc/netplan/10-lxc.yaml
 
-- type: shell
-  inline:
-  - sleep 4h
-
   # Cleanup package list
 - type: shell
   inline:
