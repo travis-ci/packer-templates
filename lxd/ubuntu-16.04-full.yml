@@ -5,7 +5,7 @@ variables:
   image_time: "{{ timestamp }}"
   image_name: ubuntu-16.04-full-{{user `image_time`}}
   dist_name: "xenial"
-  languages: "elixir,erlang"
+  languages: "elixir,erlang,php"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
@@ -25,6 +25,7 @@ provisioners:
   - scripts/minimal.sh
   - scripts/full.sh
   - scripts/install-docker.sh
+  - scripts/databases.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 
@@ -43,6 +44,7 @@ provisioners:
   - scripts/python.sh
   - scripts/elixir.sh
   - scripts/erlang.sh
+  - scripts/php.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
