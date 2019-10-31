@@ -19,7 +19,7 @@ main() {
 
   # Sync templates
   SSH="${BUILDER_USER}@${BUILDER_HOST}"
-  rsync -aR --delete --exclude .vagrant --exclude ./lxd/.vagrant --exclude tmp ${DIR} ${SSH}:~/packer-templates/
+  rsync -aR --delete --exclude .git --exclude .vagrant --exclude ./lxd/.vagrant --exclude tmp ${DIR} ${SSH}:~/packer-templates/
 
   tee .load_env >/dev/null <<EOF
 export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
