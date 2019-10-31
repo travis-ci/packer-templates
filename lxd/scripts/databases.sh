@@ -34,6 +34,10 @@ __install_packages() {
 __mysql_setup(){
   mysql -h localhost -NBe "CREATE USER 'travis'@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%'; CREATE USER 'travis'@'localhost' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost'; CREATE USER 'travis'@'127.0.0.1' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'127.0.0.1'"
 
+
+  ## fix for cant-login-as-mysql-user-root-from-normal-user-account-in-ubuntu-16-04
+  mysql -h localhost -NBe "DROP USER 'root'@'localhost'; CREATE USER 'root'@'localhost' IDENTIFIED BY ''; GRANT ALL ON *.* TO 'root'@'localhost'; FLUSH PRIVILEGES;"
+
   echo "[mysqld]
 innodb_flush_log_at_trx_commit=0" > /etc/mysql/conf.d/innodb_flush_log_at_trx_commit.cnf
   chmod 644 /etc/mysql/conf.d/innodb_flush_log_at_trx_commit.cnf

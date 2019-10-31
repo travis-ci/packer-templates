@@ -40,5 +40,3 @@ fi
   chown travis:travis /home/travis/.bash_profile.d/travis-java.bash
 }
 main "$@"
-sleep 8h
-exit 1

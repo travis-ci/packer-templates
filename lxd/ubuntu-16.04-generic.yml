@@ -48,24 +48,26 @@ provisioners:
   source: files/postgresql/initd-postgresql
   destination: /tmp/__postgresql__9.5__initd-postgresql
 
+- type: shell
+  scripts:
+  - scripts/go.sh
+  - scripts/ruby.sh
+  - scripts/python.sh
+  - scripts/php.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
 
-# - type: shell
-#   scripts:
-#   - scripts/go.sh
-#   - scripts/ruby.sh
-#   - scripts/python.sh
-#   execute_command: "exec su - travis '{{ .Path }}'"
+- type: shell
+  scripts:
+  - scripts/compilers_build_tool_chains.sh
+  - scripts/net-tools.sh
+  - scripts/vcs.sh
 
-# - type: shell
-#   scripts:
-#   - scripts/compilers_build_tool_chains.sh
-#   - scripts/net-tools.sh
-#   - scripts/vcs.sh
-#   - scripts/databases.sh
-#   - scripts/database-postgresql.sh
-#   environment_vars:
-#   - PGSQL_VERSION="9.5"
-
+- type: shell
+  scripts:
+  - scripts/databases.sh
+  - scripts/database-postgresql.sh
+  environment_vars:
+  - PGSQL_VERSION="9.5"
 
 - type: shell
   scripts:
@@ -73,10 +75,10 @@ provisioners:
   environment_vars:
   - JAVA_VERSION="11"
 
-
 - type: shell
   scripts:
   - scripts/nodejs.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
 - type: shell
@@ -88,6 +90,10 @@ provisioners:
 - type: file
   source: files/resolv.conf
   destination: /etc/resolv.conf
+
+- type: shell
+  inline:
+   - chmod 644 /etc/resolv.conf
 
   # Cleanup systemd units
 - type: shell
@@ -107,10 +113,14 @@ provisioners:
   inline:
    - rm -f /etc/netplan/10-lxc.yaml
 
+- type: shell
+  inline:
+  - sleep 4h
+
   # Cleanup package list
 - type: shell
   inline:
-   - apt-get remove --purge cron krb5-locales logrotate rsyslog ucf -y
+   - apt-get remove --purge cron krb5-locales logrotate rsyslog -y
 
   # Cleanup APT
 - type: shell
@@ -124,7 +134,7 @@ provisioners:
    - chmod 600 /etc/sudoers.d/travis
    - chmod 644 /etc/apt/sources.list
    - chmod 644 /etc/docker/daemon.json
-   - chmod 644 /etc/resolv.conf
+
 
   # Creare image metadata tarball
 - type: shell
