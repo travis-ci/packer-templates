@@ -8,6 +8,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
   __install_phpenv
+  __install_default_php
 }
 
 __install_packages() {
@@ -20,7 +21,25 @@ __install_packages() {
     build-essential \
     libbison-dev \
     libfreetype6-dev \
-    libreadline6-dev;
+    libreadline6-dev \
+    libtidy-dev \
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libxpm-dev \
+    libmysqlclient-dev \
+    libpq-dev \
+    libicu-dev \
+    libldap2-dev \
+    libxslt-dev \
+    libssl-dev \
+    libldb-dev \
+    libc-client-dev \
+    libkrb5-dev \
+    libsasl2-dev \
+    libmcrypt-dev \
+    expect;
 }
 
 
@@ -49,6 +68,16 @@ fi
       exit 1
     fi
   fi
+}
+
+__install_default_php(){
+  local PHP_VERSION=7.3
+  
+  . /etc/os-release
+  archive_url="https://storage.googleapis.com/travis-ci-language-archives/php/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
+  curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
+  phpenv global ${PHP_VERSION}
+
 }
 
 main "$@"
