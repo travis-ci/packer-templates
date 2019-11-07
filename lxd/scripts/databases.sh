@@ -7,8 +7,8 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
   __mongodb_install
-  __redis_setup
   __redis_install
+  __redis_setup
   __mysql_setup
   __turn_off_all
 }
@@ -79,6 +79,7 @@ default-character-set = utf8" > /home/travis/.my.cnf
 __redis_install() {
 
   add-apt-repository ppa:chris-lea/redis-server -y
+  apt-get update -yqq
   apt install -y redis
 }
 
