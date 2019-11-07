@@ -88,9 +88,8 @@ __redis_setup() {
 }
 
 __turn_off_all() {
-
-  systemctl stop couchdb redis-server mysql mongodb
-  systemctl disable couchdb redis-server mysql mongodb
+  systemctl stop couchdb redis-server mysql mongodb mongod
+  systemctl disable couchdb redis-server mysql mongodb mongod
 }
 
 main "$@"
