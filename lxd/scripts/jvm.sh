@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-JAVA_11_URL=https://travis-java-archives.s3.amazonaws.com/linux-aarch64-java-11-2018-09-25.tar.bz2
+source /etc/os-release
+JAVA_11_URL="https://travis-java-archives.s3.amazonaws.com/binaries/${ID}/${VERSION_ID}/$(uname -m)/linux-openjdk11.tar.bz2"
 
 set -o errexit
 

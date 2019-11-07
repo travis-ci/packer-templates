@@ -35,8 +35,8 @@ __install_packages() {
 __mongodb_install() {
 
   . /etc/os-release
-  curl -sL https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -
-  echo "deb [ arch=$(uname -m) ] https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+  curl -sL https://www.mongodb.org/static/pgp/server-4.0.asc | apt-key add -
+  echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \

@@ -149,6 +149,11 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+## tmp stop
+# - type: shell
+#   inline:
+#    - sleep 4h; echo "all ok, but manual halted" && exit 1
+
 post-processors:
 -
   - type: shell-local
@@ -156,7 +161,7 @@ post-processors:
     - scripts/lxc-export.sh
     - scripts/lxc-aws-s3-upload.sh
     - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
-    - scripts/job-board-register.rb # register lxc image in job board staging
+    - scripts/job-board-register.rb
     #- scripts/cleanup.sh
     environment_vars:
     - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
