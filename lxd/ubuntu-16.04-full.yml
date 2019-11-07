@@ -25,7 +25,7 @@ provisioners:
   - scripts/minimal.sh
   - scripts/full.sh
   - scripts/install-docker.sh
-  - scripts/databases.sh
+  #- scripts/databases.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 
@@ -118,7 +118,8 @@ post-processors:
     scripts:
     - scripts/lxc-export.sh
     - scripts/lxc-aws-s3-upload.sh
-    - scripts/job-board-register.rb
+    - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
+    - scripts/job-board-register.rb # register lxc image in job board staging
     #- scripts/cleanup.sh
     environment_vars:
     - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
