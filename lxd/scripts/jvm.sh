@@ -4,12 +4,16 @@ JAVA_11_URL="https://travis-java-archives.s3.amazonaws.com/binaries/${ID}/${VERS
 
 set -o errexit
 
+source /tmp/__common-lib.sh
+
 main() {
   set -o xtrace
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
-  __install_java
-  __setup_jvm
+
+  call_build_function func_name="__install_java"
+  call_build_function func_name="__setup_jvm"
+
 }
 
 __install_packages() {
@@ -40,4 +44,14 @@ fi
   chmod 644 /home/travis/.bash_profile.d/travis-java.bash
   chown travis:travis /home/travis/.bash_profile.d/travis-java.bash
 }
+
+#bionic
+__install_java_bionic(){
+  echo "No installing java"
+}
+
+__setup_jvm_bionic(){
+  echo "No configuring java"
+}
+
 main "$@"

@@ -2,10 +2,12 @@
 
 set -o errexit
 
+source /tmp/__common-lib.sh
+
 main() {
 
   export DEBIAN_FRONTEND='noninteractive'
-  __install_packages
+  call_build_function func_name="__install_packages"
   __setup_pgsql
   __turn_off_all
 }
@@ -21,6 +23,14 @@ __install_packages() {
     --no-install-suggests \
     --no-install-recommends \
     postgresql postgresql-contrib postgresql-${PGSQL_VERSION}-postgis postgresql-${PGSQL_VERSION}-postgis-scripts postgresql-client libpq-dev libgeos++-dev;
+}
+
+__install_packages_bionic() {
+  apt-get update -yqq
+  apt-get install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    postgresql postgresql-contrib postgresql-${PGSQL_VERSION}-postgis-2.4 postgresql-${PGSQL_VERSION}-postgis-2.4-scripts postgresql-client libpq-dev libgeos++-dev;
 }
 
 
