@@ -8,8 +8,7 @@ main() {
   __install_packages
   call_build_function func_name="__couchdb_install"
   call_build_function func_name="__mongodb_install"
-  __redis_install
-  __redis_setup
+  call_build_function func_name="__redis"
   __mysql_setup
   __turn_off_all
 }
@@ -67,6 +66,18 @@ __mongodb_install_bionic(){
     mongodb-org;
 }
 
+__mongodb_install_bionic_ppc64le(){
+  echo "mongodb - no instaling on bionic ppc64le"
+}
+
+__mongodb_install_xenial_ppc64le(){
+  echo "mongodb - no instaling on xenial ppc64le"
+}
+
+__mongodb_install_xenial_s390x(){
+  echo "mongodb - no instaling on xenial s390x"
+}
+
 __mysql_setup() {
 
   mysql -h localhost -NBe "CREATE USER 'travis'@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%'; CREATE USER 'travis'@'localhost' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost'; CREATE USER 'travis'@'127.0.0.1' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'127.0.0.1'"
@@ -98,6 +109,29 @@ default-character-set = utf8" > /home/travis/.my.cnf
   chown travis: /home/travis/.bash_profile.d/travis-mysql.bash
 }
 
+__redis() {
+  __redis_install
+  __redis_setup
+  systemctl stop redis-server
+  systemctl disable redis-server
+}
+
+__redis_bionic_ppc64le(){
+  echo "redis - no instaling on bionic ppc64le"
+}
+
+__redis_bionic_s390x(){
+  echo "redis - no instaling on bionic s390x"
+}
+
+__redis_xenial_ppc64le(){
+  echo "redis - no instaling on xenial ppc64le"
+}
+
+__redis_xenial_s390x(){
+  echo "redis - no instaling on xenial s390x"
+}
+
 __redis_install() {
   add-apt-repository ppa:chris-lea/redis-server -y
   apt-get update -yqq
@@ -109,8 +143,13 @@ __redis_setup() {
 }
 
 __turn_off_all() {
-  systemctl stop redis-server mysql mongod
-  systemctl disable redis-server mysql mongod
+  systemctl stop mysql
+  systemctl disable mysql
+  if systemctl is-enabled mongod &>/dev/null;then
+    systemctl stop mongod
+    systemctl disable mongod
+  fi
+
   if systemctl is-enabled couchd &>/dev/null;then
     systemctl stop couchd
     systemctl disable couchdb

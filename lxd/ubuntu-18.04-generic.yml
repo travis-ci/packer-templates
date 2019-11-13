@@ -74,11 +74,11 @@ provisioners:
   environment_vars:
   - PGSQL_VERSION="10"
 
-# - type: shell
-#   scripts:
-#   - scripts/jvm.sh
-#   environment_vars:
-#   - JAVA_VERSION="11"
+- type: shell
+  scripts:
+  - scripts/jvm.sh
+  environment_vars:
+  - JAVA_VERSION="11"
 
 - type: shell
   scripts:
@@ -154,15 +154,17 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+#tmp stop
+# - type: shell
+#   inline:
+#    - echo "all ok, manual stopped"; sleep 8h; echo "all ok, but manual halted" && exit 1
+
+
 # cleanup
 - type: shell
   scripts:
   - scripts/cleanup.sh
 
-# tmp stop
-# - type: shell
-#   inline:
-#    - sleep 4h; echo "all ok, but manual halted" && exit 1
 
 post-processors:
 -

@@ -14,6 +14,11 @@ builders:
   publish_properties:
    - description: Travis CI Ubuntu 16.04 generic build env template!
 provisioners:
+
+- type: file
+  source: files/common-lib.sh
+  destination: /tmp/__common-lib.sh
+
   # Setup repositories
 - type: file
   source: files/sources.list
@@ -153,6 +158,11 @@ provisioners:
 # - type: shell
 #   inline:
 #    - sleep 4h; echo "all ok, but manual halted" && exit 1
+
+# cleanup
+- type: shell
+  scripts:
+  - scripts/cleanup.sh
 
 post-processors:
 -

@@ -2,13 +2,15 @@
 
 set -o errexit
 
+source <(sudo cat  "/tmp/__common-lib.sh")
+
 main() {
   set -o xtrace
 
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
   __install_phpenv
-  __install_default_php
+  call_build_function func_name="__install_default_php"
 }
 
 __install_packages() {
@@ -72,12 +74,16 @@ fi
 
 __install_default_php(){
   local PHP_VERSION=7.3
-  
+
   . /etc/os-release
   archive_url="https://storage.googleapis.com/travis-ci-language-archives/php/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
   curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
   phpenv global ${PHP_VERSION}
 
+}
+
+__install_default_php_bionic_ppc64le(){
+  echo "php - no instaling on bionic ppc64el"
 }
 
 main "$@"

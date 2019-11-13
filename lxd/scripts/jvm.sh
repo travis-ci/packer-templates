@@ -10,10 +10,7 @@ main() {
   set -o xtrace
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
-
-  call_build_function func_name="__install_java"
-  call_build_function func_name="__setup_jvm"
-
+  call_build_function func_name="__java"
 }
 
 __install_packages() {
@@ -35,6 +32,12 @@ __install_java(){
   curl -s ${!JAVA_URL} | tar xjf - -C /usr/local/lib/java${JAVA_VERSION} --strip-components 1
 }
 
+
+__java(){
+  __install_java
+  __setup_jvm
+}
+
 __setup_jvm(){
   echo "if [[ -d /usr/local/lib/java${JAVA_VERSION} ]]; then
   export JAVA_HOME=/usr/local/lib/java${JAVA_VERSION}
@@ -46,12 +49,14 @@ fi
 }
 
 #bionic
-__install_java_bionic(){
-  echo "No installing java"
+__java_bionic(){
+  echo "No installing java on bionic"
 }
 
-__setup_jvm_bionic(){
-  echo "No configuring java"
+
+__java_xenial_ppc64le(){
+  echo "No installing java on xenial ppc64le"
 }
+
 
 main "$@"
