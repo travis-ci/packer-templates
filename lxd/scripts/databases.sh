@@ -67,15 +67,15 @@ __mongodb_install_bionic(){
 }
 
 __mongodb_install_bionic_ppc64le(){
-  echo "mongodb - no instaling on bionic ppc64le"
+  echo "mongodb - no installing on bionic ppc64le"
 }
 
 __mongodb_install_xenial_ppc64le(){
-  echo "mongodb - no instaling on xenial ppc64le"
+  echo "mongodb - no installing on xenial ppc64le"
 }
 
 __mongodb_install_xenial_s390x(){
-  echo "mongodb - no instaling on xenial s390x"
+  echo "mongodb - no installing on xenial s390x"
 }
 
 __mysql_setup() {
@@ -117,19 +117,19 @@ __redis() {
 }
 
 __redis_bionic_ppc64le(){
-  echo "redis - no instaling on bionic ppc64le"
+  echo "redis - no installing on bionic ppc64le"
 }
 
 __redis_bionic_s390x(){
-  echo "redis - no instaling on bionic s390x"
+  echo "redis - no installing on bionic s390x"
 }
 
 __redis_xenial_ppc64le(){
-  echo "redis - no instaling on xenial ppc64le"
+  echo "redis - no installing on xenial ppc64le"
 }
 
 __redis_xenial_s390x(){
-  echo "redis - no instaling on xenial s390x"
+  echo "redis - no installing on xenial s390x"
 }
 
 __redis_install() {
@@ -166,7 +166,7 @@ __couchdb_install(){
 }
 
 __couchdb_install_bionic(){
-  echo "couchdb - no instaling on bionic"
+  echo "couchdb - no installing on bionic"
 }
 
 main "$@"

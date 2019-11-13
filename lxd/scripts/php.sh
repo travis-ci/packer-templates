@@ -83,7 +83,7 @@ __install_default_php(){
 }
 
 __install_default_php_bionic_ppc64le(){
-  echo "php - no instaling on bionic ppc64el"
+  echo "php - no installing on bionic ppc64el"
 }
 
 main "$@"

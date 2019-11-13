@@ -50,12 +50,12 @@ fi
 
 #bionic
 __java_bionic(){
-  echo "No installing java on bionic"
+  echo "java - no installing on bionic"
 }
 
 
 __java_xenial_ppc64le(){
-  echo "No installing java on xenial ppc64le"
+  echo "java - no installing on xenial ppc64le"
 }
 
 
