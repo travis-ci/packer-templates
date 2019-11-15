@@ -116,20 +116,8 @@ __redis() {
   systemctl disable redis-server
 }
 
-__redis_bionic_ppc64le(){
-  echo "redis - no installing on bionic ppc64le"
-}
-
-__redis_bionic_s390x(){
+__redis_bionic(){
   echo "redis - no installing on bionic s390x"
-}
-
-__redis_xenial_ppc64le(){
-  echo "redis - no installing on xenial ppc64le"
-}
-
-__redis_xenial_s390x(){
-  echo "redis - no installing on xenial s390x"
 }
 
 __redis_install() {
@@ -141,6 +129,34 @@ __redis_install() {
 __redis_setup() {
   sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
 }
+
+__redis_xenial(){
+  echo "Package: redis-server
+Pin: release o=travis-ci-deb.s3.us-east-2.amazonaws.com
+Pin-Priority: 900" > /etc/apt/preferences.d/redis
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  apt-get install -y redis-server
+  __redis_setup
+  systemctl stop redis-server
+  systemctl disable redis-server
+}
+
+
+__redis_bionic(){
+  echo "Package: redis-server
+Pin: release o=travis-ci-deb.s3.us-east-2.amazonaws.com
+Pin-Priority: 900" > /etc/apt/preferences.d/redis
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com bionic main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  apt-get install -y redis-server
+  __redis_setup
+  systemctl stop redis-server
+  systemctl disable redis-server
+}
+
 
 __turn_off_all() {
   systemctl stop mysql
