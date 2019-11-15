@@ -83,7 +83,12 @@ __install_default_php(){
 }
 
 __install_default_php_bionic_ppc64le(){
-  echo "php - no installing on bionic ppc64el"
+  local PHP_VERSION=7.2
+
+  . /etc/os-release
+  archive_url="https://travis-php-archives.s3.amazonaws.com/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
+  curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
+  phpenv global ${PHP_VERSION}
 }
 
 main "$@"
