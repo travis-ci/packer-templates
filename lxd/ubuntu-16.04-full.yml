@@ -5,7 +5,7 @@ variables:
   image_time: "{{ timestamp }}"
   image_name: ubuntu-16.04-full-{{user `image_time`}}
   dist_name: "xenial"
-  languages: "elixir,erlang,php"
+  languages: "ruby,c,python,go,elixir,erlang,php,java,perl"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
@@ -14,6 +14,11 @@ builders:
   publish_properties:
    - description: Travis CI Ubuntu 16.04 Full build env template!
 provisioners:
+
+- type: file
+  source: files/common-lib.sh
+  destination: /tmp/__common-lib.sh
+
   # Setup repositories
 - type: file
   source: files/sources.list
@@ -23,9 +28,9 @@ provisioners:
   scripts:
   - scripts/base.sh
   - scripts/minimal.sh
+  - scripts/install-c-lang.sh
   - scripts/full.sh
   - scripts/install-docker.sh
-  #- scripts/databases.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 
@@ -37,14 +42,48 @@ provisioners:
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
-  # Install ruby and python travis
+- type: file
+  source: files/postgresql/postgresql.conf
+  destination: /tmp/__postgresql__9.5__main__postgresql.conf
+
+- type: file
+  source: files/postgresql/pg_hba.conf
+  destination: /tmp/__postgresql__9.5__main__pg_hba.conf
+
+- type: file
+  source: files/postgresql/initd-postgresql
+  destination: /tmp/__postgresql__9.5__initd-postgresql
+
 - type: shell
   scripts:
-  - scripts/ruby.sh
-  - scripts/python.sh
+  - scripts/compilers_build_tool_chains.sh
+  - scripts/net-tools.sh
+  - scripts/vcs.sh
+
+- type: shell
+  scripts:
+  - scripts/databases.sh
+  - scripts/database-postgresql.sh
+  environment_vars:
+  - PGSQL_VERSION="9.5"
+
+- type: shell
+  scripts:
+  - scripts/jvm.sh
+  environment_vars:
+  - JAVA_VERSION="11"
+
+  # Install languages as travis
+- type: shell
+  scripts:
   - scripts/elixir.sh
   - scripts/erlang.sh
+  - scripts/ruby.sh
+  - scripts/go.sh
+  - scripts/python.sh
   - scripts/php.sh
+  - scripts/nodejs.sh
+  - scripts/perl.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
