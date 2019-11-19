@@ -5,7 +5,7 @@ variables:
   image_time: "{{ timestamp }}"
   image_name: ubuntu-16.04-generic-{{user `image_time`}}
   dist_name: "xenial"
-  languages: "generic"
+  languages: "generic,minimal,bash,sh,shell"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
@@ -40,7 +40,6 @@ provisioners:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
   # Install
-
 - type: file
   source: files/postgresql/postgresql.conf
   destination: /tmp/__postgresql__9.5__main__postgresql.conf
