@@ -53,9 +53,11 @@ __setup_travis_ssh() {
   chmod 0700 /home/travis/.ssh
 
   touch /home/travis/.ssh/authorized_keys
-  for f in /var/tmp/*_rsa.pub; do
-    cat "${f}" >>/home/travis/.ssh/authorized_keys
-  done
+  if [ -e /var/tmp/*_rsa.pub ]; then
+    for f in /var/tmp/*_rsa.pub; do
+      cat "${f}" >>/home/travis/.ssh/authorized_keys
+    done
+  fi
   chmod 0600 /home/travis/.ssh/authorized_keys
 }
 
