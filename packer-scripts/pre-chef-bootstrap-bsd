@@ -19,8 +19,8 @@ __setup_sshd() {
 }
 
 __setup_travis_user() {
-  /usr/sbin/pw groupadd travis
-  /usr/sbin/pw useradd travis -g travis -s /usr/local/bin/bash -m /home/travis
+  /usr/sbin/pw groupadd travis || true
+  /usr/sbin/pw useradd travis -g travis -s /usr/local/bin/bash -m /home/travis || true
   echo travis | /usr/sbin/pw usermod travis -h 0
 
   __setup_sudoers
