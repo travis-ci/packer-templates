@@ -57,3 +57,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   shell
   ruby
 ]
+
+override['travis_build_environment']['root_user'] = 'root'
+override['travis_build_environment']['root_group'] = 'wheel'
