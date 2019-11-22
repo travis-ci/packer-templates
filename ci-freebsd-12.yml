@@ -11,7 +11,6 @@ variables:
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
-  github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
 builders:
 - type: googlecompute
   name: googlecompute
@@ -71,9 +70,6 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   <% end %>
-  json:
-    travis_packer_build:
-      github_token: "{{ user `github_token` }}"
   run_list:
   - recipe[travis_ci_freebsd_12]
   <% if ENV['CHEF_PROFILING'] %>
