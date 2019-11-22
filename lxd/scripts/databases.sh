@@ -71,11 +71,17 @@ __mongodb_install_bionic_ppc64le(){
 }
 
 __mongodb_install_xenial_ppc64le(){
-  echo "mongodb - no installing on xenial ppc64le"
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  apt-get install -y mongodb-server
 }
 
 __mongodb_install_xenial_s390x(){
-  echo "mongodb - no installing on xenial s390x"
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  apt-get install -y mongodb-server
 }
 
 __mysql_setup() {

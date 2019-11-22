@@ -80,6 +80,17 @@ provisioners:
   environment_vars:
   - JAVA_VERSION="11"
 
+## elassticsearch
+- type: file
+  source: files/elasticsearch/etc/init.d/elasticsearch
+  destination: /etc/init.d/elasticsearch
+
+- type: shell
+  scripts:
+  - scripts/elasticsearch.sh
+  environment_vars:
+  - ELASTICSEARCH_VERSION="7.4.2"
+
 - type: shell
   scripts:
   - scripts/nodejs.sh
@@ -87,18 +98,8 @@ provisioners:
 
   # Use static DNS servers
 - type: shell
-  inline:
-   - systemctl mask systemd-resolved
-   - rm -f /etc/resolv.conf
-   - touch /etc/resolv.conf
-
-- type: file
-  source: files/resolv.conf
-  destination: /etc/resolv.conf
-
-- type: shell
-  inline:
-   - chmod 644 /etc/resolv.conf
+  scripts:
+  - scripts/resolv-conf.sh
 
   # Cleanup systemd units
 - type: shell
@@ -157,7 +158,7 @@ provisioners:
 ## tmp stop
 # - type: shell
 #   inline:
-#    - sleep 4h; echo "all ok, but manual halted" && exit 1
+#    - echo "manual stop"; sleep 4h; echo "all ok, but manual halted" && exit 1
 
 # cleanup
 - type: shell

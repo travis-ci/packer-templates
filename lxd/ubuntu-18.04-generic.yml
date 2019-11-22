@@ -87,18 +87,8 @@ provisioners:
 
   # Use static DNS servers
 - type: shell
-  inline:
-   - systemctl mask systemd-resolved
-   - rm -f /etc/resolv.conf
-   - touch /etc/resolv.conf
-
-- type: file
-  source: files/resolv.conf
-  destination: /etc/resolv.conf
-
-- type: shell
-  inline:
-   - chmod 644 /etc/resolv.conf
+  scripts:
+  - scripts/resolv-conf.sh
 
   # Cleanup systemd units
 - type: shell
