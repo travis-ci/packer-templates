@@ -11,7 +11,6 @@ variables:
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
-  github_token: "{{ env `GITHUB_NOSCOPE_TOKEN` }}"
   openstack_zone: "{{ env `OS_ZONE` }}"
   openstack_key_path: "{{ env `OS_SSH_KEY_PATH`}}"
   openstack_key_name: "{{ env `OS_SSH_KEY` }}"
@@ -139,9 +138,6 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   <% end %>
-  json:
-    travis_packer_build:
-      github_token: "{{ user `github_token` }}"
   run_list:
   - recipe[travis_ci_stevonnie]
   <% if ENV['CHEF_PROFILING'] %>
