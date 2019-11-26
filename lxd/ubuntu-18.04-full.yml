@@ -144,6 +144,11 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+# cleanup
+- type: shell
+  scripts:
+  - scripts/cleanup.sh
+
 post-processors:
 -
   - type: shell-local
@@ -152,7 +157,7 @@ post-processors:
     - scripts/lxc-aws-s3-upload.sh
     - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
     - scripts/job-board-register.rb # register lxc image in job board staging
-    #- scripts/cleanup.sh
+
     environment_vars:
     - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
     - IMAGE_NAME={{ user `image_name` }}
