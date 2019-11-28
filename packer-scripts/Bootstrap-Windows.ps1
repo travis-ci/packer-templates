@@ -3,6 +3,7 @@ Set-StrictMode -Version 1.0
 function Main {
   Install-Chocolatey
   Install-Packages
+  Install-Bundler
   Clean-Up
   #Create-TravisUser
   Create-StubFiles
@@ -25,6 +26,11 @@ function Install-Packages {
       invoke-expression "choco install $package"
     }
   }
+}
+
+function Install-Bundler {
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    gem install bundler
 }
 
 function Clean-Up {

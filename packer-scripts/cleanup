@@ -21,10 +21,6 @@ rm -rf \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.?
 
-if ! [[ "$(lsb_release -sc)" =~ xenial ]]; then
-  rm -rf /etc/systemd
-fi
-
 if [[ $CLEANUP_APT_LISTS ]]; then
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
 fi

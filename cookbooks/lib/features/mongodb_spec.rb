@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def mongodb_service_name
-  return 'mongod' if %w[trusty xenial].include?(Support.distro) && os[:arch] !~ /ppc64/
+  return 'mongod' if %w[trusty xenial bionic].include?(Support.distro) && os[:arch] !~ /ppc64/
 
   'mongodb'
 end
@@ -22,19 +22,19 @@ describe 'mongodb installation' do
 
   describe 'mongo commands' do
     before :all do
-      sh("sudo service #{mongodb_service_name} start")
+      sh("sudo service #{mongodb_service_name} restart")
       procwait(/\bmongod\b/)
       sleep 3 # HACK: thanks a bunch, Mongo
       sh('mongo --eval "db.testData.insert( { x : 6 } );"')
       sleep 3 # HACK: thanks a bunch more, Mongo
     end
 
-    after :all do
-      sh("sudo service #{mongodb_service_name} stop || true")
-    end
-
     describe command('mongo --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
       its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
+    end
+
+    after :all do
+      sh("sudo service #{mongodb_service_name} stop || true")
     end
   end
 end
