@@ -48,7 +48,7 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump
-  - packer-scripts/gce-lxd-host
+  - packer-scripts/lxd-host-gce
   - packer-scripts/purge
   - packer-scripts/install-ubuntu-mainline-kernel
   - packer-scripts/cleanup
