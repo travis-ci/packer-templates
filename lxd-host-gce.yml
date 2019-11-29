@@ -56,7 +56,3 @@ provisioners:
   environment_vars:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-post-processors:
--
-  - type: shell-local
-    script: bin/write-latest-image-name
