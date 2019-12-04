@@ -23,16 +23,16 @@ call_build_function(){
   func_dist_arch_name="${func_name}_${dist_codename}_${ARCH}"
 
   if [ `declare -F $func_dist_arch_name` ];then
-    echo "Calling build function: ${func_dist_arch_name}"
+    #echo "Calling build function: ${func_dist_arch_name}"
     $func_dist_arch_name
   elif [ `declare -F $func_dist_codename` ];then
-    echo "Calling build function: ${func_dist_codename}"
+    #echo "Calling build function: ${func_dist_codename}"
     $func_dist_codename
   elif [ `declare -F $func_arch_name` ];then
-    echo "Calling build function: ${func_arch_name}"
+    #echo "Calling build function: ${func_arch_name}"
     $func_arch_name
   else
-    echo "Calling build function: ${func_name}"
+    #echo "Calling build function: ${func_name}"
     $func_name
   fi
 }

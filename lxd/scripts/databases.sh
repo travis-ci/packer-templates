@@ -55,6 +55,20 @@ __mongodb_install() {
     mongodb-org;
 }
 
+__mongodb_install_xenial_ppc64le(){
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  #apt-get install -y mongodb-server
+}
+
+__mongodb_install_xenial_s390x(){
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  #apt-get install -y mongodb-server
+}
+
 __mongodb_install_bionic(){
   . /etc/os-release
   curl -sL https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -
@@ -67,15 +81,10 @@ __mongodb_install_bionic(){
 }
 
 __mongodb_install_bionic_ppc64le(){
-  echo "mongodb - no installing on bionic ppc64le"
-}
-
-__mongodb_install_xenial_ppc64le(){
-  echo "mongodb - no installing on xenial ppc64le"
-}
-
-__mongodb_install_xenial_s390x(){
-  echo "mongodb - no installing on xenial s390x"
+  echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com bionic main' > /etc/apt/sources.list.d/travis-packages.list
+  wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -
+  apt-get update
+  #apt-get install -y mongodb-server
 }
 
 __mysql_setup() {
@@ -116,10 +125,6 @@ __redis() {
   systemctl disable redis-server
 }
 
-__redis_bionic(){
-  echo "redis - no installing on bionic s390x"
-}
-
 __redis_install() {
   add-apt-repository ppa:chris-lea/redis-server -y
   apt-get update -yqq
@@ -143,7 +148,6 @@ Pin-Priority: 900" > /etc/apt/preferences.d/redis
   systemctl disable redis-server
 }
 
-
 __redis_bionic(){
   echo "Package: redis-server
 Pin: release o=travis-ci-deb.s3.us-east-2.amazonaws.com
@@ -156,7 +160,6 @@ Pin-Priority: 900" > /etc/apt/preferences.d/redis
   systemctl stop redis-server
   systemctl disable redis-server
 }
-
 
 __turn_off_all() {
   systemctl stop mysql

@@ -1,18 +1,18 @@
-description: Travis CI Ubuntu 16.04 generic build env template!
+description: Travis CI Ubuntu 18.04 Minimal build env template!
 variables:
   apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
   docker_registry: "https://registry.docker.io"
   image_time: "{{ timestamp }}"
-  image_name: ubuntu-16.04-generic-{{user `image_time`}}
-  dist_name: "xenial"
-  languages: "generic"
+  image_name: ubuntu-18.04-minimal-{{user `image_time`}}
+  dist_name: "bionic"
+  languages: "minimal,bash,sh,shell"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
-  image: images:ubuntu/xenial
-  output_image: ubuntu-16.04-generic-{{user `image_time`}}
+  image: images:ubuntu/18.04
+  output_image: ubuntu-18.04-minimal-{{user `image_time`}}
   publish_properties:
-   - description: Travis CI Ubuntu 16.04 generic build env template!
+   - description: Travis CI Ubuntu 18.04 Minimal build env template!
 provisioners:
 
 - type: file
@@ -27,6 +27,7 @@ provisioners:
 - type: shell
   scripts:
   - scripts/base.sh
+  - scripts/minimal.sh
   - scripts/install-docker.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
@@ -39,60 +40,11 @@ provisioners:
   inline:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
-  # Install
-- type: file
-  source: files/postgresql/postgresql.conf
-  destination: /tmp/__postgresql__9.5__main__postgresql.conf
-
-- type: file
-  source: files/postgresql/pg_hba.conf
-  destination: /tmp/__postgresql__9.5__main__pg_hba.conf
-
-- type: file
-  source: files/postgresql/initd-postgresql
-  destination: /tmp/__postgresql__9.5__initd-postgresql
-
+  # Install ruby and python travis
 - type: shell
   scripts:
-  - scripts/go.sh
   - scripts/ruby.sh
   - scripts/python.sh
-  - scripts/php.sh
-  execute_command: "exec su - travis '{{ .Path }}'"
-
-- type: shell
-  scripts:
-  - scripts/compilers_build_tool_chains.sh
-  - scripts/net-tools.sh
-  - scripts/vcs.sh
-
-- type: shell
-  scripts:
-  - scripts/databases.sh
-  - scripts/database-postgresql.sh
-  environment_vars:
-  - PGSQL_VERSION="9.5"
-
-- type: shell
-  scripts:
-  - scripts/jvm.sh
-  environment_vars:
-  - JAVA_VERSION="11"
-
-## elassticsearch
-- type: file
-  source: files/elasticsearch/etc/init.d/elasticsearch
-  destination: /etc/init.d/elasticsearch
-
-- type: shell
-  scripts:
-  - scripts/elasticsearch.sh
-  environment_vars:
-  - ELASTICSEARCH_VERSION="7.4.2"
-
-- type: shell
-  scripts:
-  - scripts/nodejs.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers
@@ -120,7 +72,7 @@ provisioners:
   # Cleanup package list
 - type: shell
   inline:
-   - apt-get remove --purge cron krb5-locales logrotate rsyslog -y
+   - apt-get remove --purge cron krb5-locales logrotate networkd-dispatcher rsyslog ucf -y
 
   # Cleanup APT
 - type: shell
@@ -134,7 +86,6 @@ provisioners:
    - chmod 600 /etc/sudoers.d/travis
    - chmod 644 /etc/apt/sources.list
    - chmod 644 /etc/docker/daemon.json
-
 
   # Creare image metadata tarball
 - type: shell
@@ -165,7 +116,7 @@ post-processors:
     - scripts/lxc-export.sh
     - scripts/lxc-aws-s3-upload.sh
     - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
-    - scripts/job-board-register.rb
+    - scripts/job-board-register.rb # register lxc image in job board staging
     environment_vars:
     - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
     - IMAGE_NAME={{ user `image_name` }}
