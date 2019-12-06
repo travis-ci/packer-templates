@@ -43,7 +43,7 @@ provisioners:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
 - type: file
-  source: files/postgresql/postgresql.conf
+  source: files/postgresql/postgresql-10.conf
   destination: /tmp/__postgresql__10__main__postgresql.conf
 
 - type: file
