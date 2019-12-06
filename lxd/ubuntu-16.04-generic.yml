@@ -40,7 +40,6 @@ provisioners:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
   # Install
-
 - type: file
   source: files/postgresql/postgresql-9.5.conf
   destination: /tmp/__postgresql__9.5__main__postgresql.conf
@@ -108,7 +107,6 @@ provisioners:
   # Cleanup systemd units
 - type: shell
   inline:
-   - systemctl mask systemd-udevd.service
    - systemctl mask fstrim.service
    - systemctl mask sys-kernel-config.mount
    - systemctl mask systemd-journal-flush.service
@@ -159,11 +157,6 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
-## tmp stop
-# - type: shell
-#   inline:
-#    - echo "manual stop"; sleep 4h; echo "all ok, but manual halted" && exit 1
-
 # cleanup
 - type: shell
   scripts:
@@ -177,7 +170,6 @@ post-processors:
     - scripts/lxc-aws-s3-upload.sh
     - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
     - scripts/job-board-register.rb
-    #- scripts/cleanup.sh
     environment_vars:
     - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
     - IMAGE_NAME={{ user `image_name` }}

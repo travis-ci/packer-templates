@@ -54,7 +54,6 @@ provisioners:
   # Cleanup systemd units
 - type: shell
   inline:
-   - systemctl mask systemd-udevd.service
    - systemctl mask fstrim.service
    - systemctl mask sys-kernel-config.mount
    - systemctl mask systemd-journal-flush.service
