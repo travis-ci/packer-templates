@@ -9,6 +9,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   call_build_function func_name="__install_packages"
   call_build_function func_name="__setup_pgsql"
+  __clear_cfg_files
 }
 
 __install_packages() {
@@ -63,11 +64,6 @@ EOF")
   #rm /lib/systemd/system/postgresql.service
   #systemctl daemon-reload
 
-  rm /tmp/__postgresql__9.6__main__postgresql.conf
-  rm /tmp/__postgresql__${PGSQL_VERSION}__main__postgresql.conf
-  rm /tmp/__postgresql__${PGSQL_VERSION}__main__pg_hba.conf
-  rm /tmp/__postgresql__${PGSQL_VERSION}__initd-postgresql
-
 }
 
 __setup_pgsql(){
@@ -96,9 +92,6 @@ EOF")
   rm /lib/systemd/system/postgresql.service
   systemctl daemon-reload
 
-  rm /tmp/__postgresql__${PGSQL_VERSION}__main__postgresql.conf
-  rm /tmp/__postgresql__${PGSQL_VERSION}__main__pg_hba.conf
-  rm /tmp/__postgresql__${PGSQL_VERSION}__initd-postgresql
 }
 
 __turn_off_postgres_xenial_ppc64le(){
@@ -109,6 +102,12 @@ __turn_off_postgres_xenial_ppc64le(){
 __turn_off_postgres(){
   systemctl stop postgresql@${PGSQL_VERSION}-main
   systemctl disable postgresql@${PGSQL_VERSION}-main
+}
+
+__clear_cfg_files(){
+  rm /tmp/__postgresql__${PGSQL_VERSION}__main__postgresql.conf
+  rm /tmp/__postgresql__${PGSQL_VERSION}__main__pg_hba.conf
+  rm /tmp/__postgresql__${PGSQL_VERSION}__initd-postgresql
 }
 
 
