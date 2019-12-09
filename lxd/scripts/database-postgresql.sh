@@ -107,8 +107,8 @@ __turn_off_postgres_xenial_ppc64le(){
 }
 
 __turn_off_postgres(){
-  systemctl stop postgresqll@${PGSQL_VERSION}-main
-  systemctl disable postgresqll@${PGSQL_VERSION}-main
+  systemctl stop postgresql@${PGSQL_VERSION}-main
+  systemctl disable postgresql@${PGSQL_VERSION}-main
 }
 
 
