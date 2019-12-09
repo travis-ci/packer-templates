@@ -115,7 +115,7 @@ provisioners:
   # Cleanup package list
 - type: shell
   inline:
-   - apt-get remove --purge cron krb5-locales logrotate rsyslog ucf -y
+   - apt-get remove --purge cron krb5-locales logrotate rsyslog -y
 
   # Cleanup APT
 - type: shell
