@@ -29,7 +29,6 @@ builders:
     windows-startup-script-cmd: "winrm quickconfig -quiet & net user /add travis & net localgroup administrators travis /add & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell -Command \"& {Set-ExecutionPolicy AllSigned -Force}\""
   tags:
   - ci
-  - windows
   - windows-1809
   - travis-ci-packer-templates
   state_timeout: 10m
