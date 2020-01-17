@@ -62,7 +62,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   ruby_interpreter
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __windows_1803__
+  __windows_1809__
   bash
   minimal
   sh
