@@ -16,7 +16,7 @@ features:
 - dotnet
 tags:
   dist: $JOB_BOARD_IMAGE_DIST
-  os: windows1809
+  os: windows-1809
   packer_chef_time: "${nowtime}"
   language_default: true
   language_none: true
