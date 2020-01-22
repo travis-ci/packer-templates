@@ -84,6 +84,7 @@ provisioners:
   - scripts/php.sh
   - scripts/nodejs.sh
   - scripts/perl.sh
+  - scripts/install-docker-compose.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
   # Use static DNS servers

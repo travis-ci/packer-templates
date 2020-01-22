@@ -21,6 +21,8 @@ __install_packages() {
     --no-install-recommends \
     build-essential \
     python \
+    python3 \
+    python3-dev \
     curl \
     libbz2-dev \
     liblzma-dev \
@@ -40,7 +42,11 @@ __install_pip() {
 
   wget https://bootstrap.pypa.io/get-pip.py
   sudo python get-pip.py
-  pip install --user --upgrade pip setuptools wheel
+  pip install --user --upgrade setuptools wheel
+
+  # Install pip3
+  sudo python3 get-pip.py
+
   rm -f get-pip.py
 }
 

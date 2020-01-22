@@ -59,6 +59,7 @@ provisioners:
   - scripts/ruby.sh
   - scripts/python.sh
   - scripts/php.sh
+  - scripts/install-docker-compose.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
 - type: shell
