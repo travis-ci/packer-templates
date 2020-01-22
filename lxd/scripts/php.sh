@@ -11,6 +11,7 @@ main() {
   __install_packages
   __install_phpenv
   call_build_function func_name="__install_default_php"
+  call_build_function func_name="__install_php"
 }
 
 __install_packages() {
@@ -89,6 +90,17 @@ __install_default_php_bionic_ppc64le(){
   archive_url="https://travis-php-archives.s3.amazonaws.com/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
   curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
   phpenv global ${PHP_VERSION}
+}
+
+__install_php(){
+
+  . /etc/os-release
+  for PHP_VERSION in 7.2 7.4
+  do
+    archive_url="https://storage.googleapis.com/travis-ci-language-archives/php/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
+    curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
+  done
+
 }
 
 main "$@"
