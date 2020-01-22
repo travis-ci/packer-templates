@@ -5,7 +5,7 @@ variables:
   image_time: "{{ timestamp }}"
   image_name: ubuntu-18.04-full-{{user `image_time`}}
   dist_name: "bionic"
-  languages: "ruby,c,python,go,elixir,erlang,php,java,perl"
+  languages: "ruby,c,python,go,elixir,erlang,php,java,perl,cpp,cplusplus,c++"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
