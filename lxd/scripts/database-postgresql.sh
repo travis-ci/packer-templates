@@ -10,6 +10,7 @@ main() {
   call_build_function func_name="__install_packages"
   call_build_function func_name="__setup_pgsql"
   __clear_cfg_files
+  __link_ramfs
 }
 
 __install_packages() {
@@ -108,6 +109,10 @@ __clear_cfg_files(){
   rm /tmp/__postgresql__${PGSQL_VERSION}__main__postgresql.conf
   rm /tmp/__postgresql__${PGSQL_VERSION}__main__pg_hba.conf
   rm /tmp/__postgresql__${PGSQL_VERSION}__initd-postgresql
+}
+
+__link_ramfs(){
+  ln -sf /dev/shm /var/ramfs
 }
 
 
