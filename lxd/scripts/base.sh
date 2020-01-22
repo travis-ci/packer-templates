@@ -9,7 +9,7 @@ sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list
 sed -i "s#DISTRIB_CODENAME#${DISTRIB_CODENAME}#g" /etc/apt/sources.list
 dpkg --remove-architecture i386
 apt update -qyy
-apt install ruby curl gnupg wget git software-properties-common python-jsonpatch md5deep openssl fuse hashdeep snapd -y --no-install-recommends
+apt install ruby curl gnupg wget git software-properties-common python-jsonpatch md5deep openssl fuse hashdeep snapd dnsutils -y --no-install-recommends
 apt dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
 tee /etc/apt/apt.conf.d/10-force-yes <<EOF
