@@ -28,11 +28,12 @@ sudo apt install -yqq \
   zlib1g-dev \
   libgmp-dev \
   libreadline-dev \
-  gnupg \
+  gnupg2 \
+  dirmngr \
   libssl-dev
 
-gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-
+\curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+\curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
 \curl -sSL https://get.rvm.io | bash -s stable
 
 # progress bar when downloading RVM / Rubies:
@@ -58,6 +59,8 @@ rvm_autolibs_flag='read-fail'
 EOF
 
 source "$HOME/.rvm/scripts/rvm"
+rvm install ruby-2.7.0 --autolibs=enable --fuzzy
+rvm install ruby-2.6.3 --autolibs=enable --fuzzy
 rvm install ruby-2.6.5 --autolibs=enable --fuzzy
 rvm use default
 gem i bundler
