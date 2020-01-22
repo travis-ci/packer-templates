@@ -65,8 +65,3 @@ fi
 curl -sL -o /home/travis/bin/artifacts https://s3.amazonaws.com/travis-ci-gmbh/artifacts/351/351.2/build/linux/${arch}/artifacts
 chmod +x /home/travis/bin/artifacts
 chown travis: /home/travis/bin/artifacts
-
-# system info gem
-curl -sSL -o ./system-info-2.0.3.gem https://s3.amazonaws.com/travis-system-info/system-info-2.0.3.gem
-gem install -b system-info-2.0.3.gem
-rm -f ./system-info-2.0.3.gem
