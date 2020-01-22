@@ -28,18 +28,22 @@ nameserver 1.0.0.1
 "
 }
 
-__resolvconf_get_content_for_ibm(){
+__resolvconf_get_content_optional(){
   echo "options timeout:10
 nameserver 192.168.0.1
 "
 }
 
 __resolvconf_get_content_ppc64le(){
-  __resolvconf_get_content_for_ibm
+  __resolvconf_get_content_optional
 }
 
 __resolvconf_get_content_s390x(){
-  __resolvconf_get_content_for_ibm
+  __resolvconf_get_content_optional
+}
+
+__resolvconf_get_content_aarch64(){
+  __resolvconf_get_content_optional
 }
 
 main "$@"
