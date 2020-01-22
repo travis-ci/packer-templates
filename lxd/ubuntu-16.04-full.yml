@@ -152,6 +152,12 @@ provisioners:
   scripts:
   - scripts/cleanup.sh
 
+# system-info
+- type: shell
+  scripts:
+  - scripts/system_info.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
 post-processors:
 -
   - type: shell-local

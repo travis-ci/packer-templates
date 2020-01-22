@@ -105,6 +105,12 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+# system-info
+- type: shell
+  scripts:
+  - scripts/system_info.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
 post-processors:
 -
   - type: shell-local
