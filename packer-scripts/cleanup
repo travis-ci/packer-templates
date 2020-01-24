@@ -4,6 +4,9 @@ set -o errexit
 set -o xtrace
 shopt -s nullglob
 
+# clear the APT cache and delete everything from /var/cache/apt/archives/
+apt clean
+
 rm -rf \
   /etc/apparmor* \
   /etc/profile.d/jdk.csh \

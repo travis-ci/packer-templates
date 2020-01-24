@@ -23,6 +23,7 @@ class ImageTagger
   def infra
     @infra ||= {
       'googlecompute' => 'gce',
+      'lxd' => 'lxd-amd64',
       'docker' => 'docker',
       'vmware' => 'jupiterbrain'
     }.fetch(env['PACKER_BUILDER_TYPE'], 'local')

@@ -30,6 +30,8 @@ travis_packer_templates = TravisPackerTemplates.new(node) if
   defined?(TravisPackerTemplates)
 travis_packer_templates&.init!(init_time)
 
+Chef::Log.info("node PACKER_BUILDER_TYPE #{node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE']}")
+
 template '/etc/profile.d/Z90-travis-packer-templates.sh' do
   source 'etc-profile-d-travis-packer-templates.sh.erb'
   cookbook 'travis_packer_templates'
