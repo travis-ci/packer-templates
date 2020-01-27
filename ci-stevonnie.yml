@@ -33,6 +33,12 @@ builders:
   - ci
   - stevonnie
   - travis-ci-packer-templates
+- type: lxd
+  name: lxd
+  image: images:ubuntu/xenial
+  output_image: "{{ user `image_name` }}"
+  publish_properties:
+   - description: Travis CI stevonnie build env template!
 - type: docker
   name: docker
   ssh_pty: true
@@ -91,6 +97,7 @@ provisioners:
   only:
   - googlecompute
   - openstack
+  - lxd
 - type: file
   source: packer-assets/ubuntu-xenial-ci-stevonnie-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -107,6 +114,25 @@ provisioners:
   only:
   - docker
   - googlecompute
+  - lxd
+  # Recommendations for lxd images
+- type: shell
+  inline: "systemctl mask sys-kernel-config.mount"
+  only:
+  - lxd
+- type: shell
+  inline: "systemctl mask systemd-modules-load.service"
+  only:
+  - lxd
+- type: shell
+  inline: "apt install snapd -y && snap install core"
+  only:
+  - lxd
+- type: shell
+  inline: "apt-get remove --purge cloud-init --yes"
+  only:
+  - lxd
+  # end Recommendations
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap
@@ -127,6 +153,11 @@ provisioners:
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  <% if ENV['BUILDER'] == "lxd" %>
+  # packer lxd builder copy cookbooks to wrong directory
+  execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
+  {{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   cookbook_paths:
   - cookbooks
@@ -190,6 +221,7 @@ post-processors:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - googlecompute
+    - lxd
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -199,3 +231,14 @@ post-processors:
 -
   - type: shell-local
     script: bin/write-latest-image-name
+  - type: shell-local
+    script: bin/lxc-export.sh
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - lxd
+  - type: shell-local
+    inline:
+    - echo {{ user `image_name` }} > /tmp/packer-build-image-name
+    only:
+    - lxd
