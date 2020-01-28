@@ -19,4 +19,4 @@ tee ~/.aws/credentials <<EOF
 aws_access_key_id = ${LXC_AWS_ACCESS_KEY_ID}
 aws_secret_access_key = ${LXC_AWS_SECRET_ACCESS_KEY}
 EOF
-aws s3 cp /home/travis/${IMAGE_NAME}.tar.gz s3://${LXC_AWS_BUCKET}/amd64/ --profile travis
+aws s3 cp /home/travis/${IMAGE_NAME}.tar.gz s3://${LXC_AWS_BUCKET}/amd64/
