@@ -25,7 +25,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_wpacker_templates'
+include_recipe 'travis_packer_templates'
 include_recipe 'travis_build_environment'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
