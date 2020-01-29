@@ -25,7 +25,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 include_recipe 'travis_build_environment::apt'
-include_recipe 'travis_packer_templates'
+include_recipe 'travis_wpacker_templates'
 include_recipe 'travis_build_environment'
 
 if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
@@ -35,7 +35,9 @@ if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
     include_recipe 'travis_docker::binary'
   end
 else
-  node.override['travis_docker']['update_grub'] = false if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'lxd'
+  if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'lxd'
+    node.override['travis_docker']['update_grub'] = false
+  end
   include_recipe 'travis_docker'
   include_recipe 'travis_build_environment::ramfs'
 end
