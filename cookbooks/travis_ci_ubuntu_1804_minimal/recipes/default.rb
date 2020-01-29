@@ -35,6 +35,7 @@ if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'docker'
     include_recipe 'travis_docker::binary'
   end
 else
+  node.override['travis_docker']['update_grub'] = false if node['travis_packer_templates']['env']['PACKER_BUILDER_TYPE'] == 'lxd'
   include_recipe 'travis_docker'
   include_recipe 'travis_build_environment::ramfs'
 end
