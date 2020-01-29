@@ -9,3 +9,5 @@ export PATH=/snap/bin/:$PATH
 while ! $(lxc image ls | grep -q "${IMAGE_NAME}") ; do sleep 5; echo -e . ; done
 
 lxc image export ${IMAGE_NAME} /home/travis/${IMAGE_NAME}
+
+aws s3 cp /home/travis/${IMAGE_NAME}.tar.gz s3://${LXC_AWS_BUCKET}/amd64/
