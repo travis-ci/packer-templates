@@ -29,6 +29,7 @@ install:
   fi
 - export GIT_DESC="$(git describe --always --dirty --tags)"
 - rvm use 2.5.3 --install --binary --fuzzy
+- gem install bundler:1.17.1
 - gem update --system
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - ./bin/packer-build-install
