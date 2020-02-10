@@ -1,0 +1,15 @@
+#!/bin/csh -xe
+
+pkg install -y bash
+pkg install -y gcc10-devel cmake gmake gnulib autoconf automake ccache
+
+ln -s /usr/local/bin/gcc10 /usr/local/bin/gcc
+ln -s /usr/local/bin/g++10 /usr/local/bin/g++
+
+pkg install -y openjdk8
+pkg install -y openjdk11
+pkg install -y openjdk12
+pkg install -y openjdk13
+pkg install -y maven
+pkg install -y gradle
+pkg install -y apache-ant
