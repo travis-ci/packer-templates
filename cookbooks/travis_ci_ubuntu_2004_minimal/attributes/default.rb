@@ -28,7 +28,7 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/ubuntu-1910-minimal-system-info-commands.yml'
+  '/var/tmp/ubuntu-2004-minimal-system-info-commands.yml'
 
 rubies = %w[
   2.7.0
@@ -47,7 +47,7 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.8'
-override['travis_packer_templates']['job_board']['stack'] = 'ubuntu-1910-minimal'
+override['travis_packer_templates']['job_board']['stack'] = 'ubuntu-2004-minimal'
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   disabled-ipv6
@@ -60,7 +60,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   ruby_interpreter
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __ubuntu_1910_minimal__
+  __ubuntu_2004_minimal__
   minimal
   bash
   shell

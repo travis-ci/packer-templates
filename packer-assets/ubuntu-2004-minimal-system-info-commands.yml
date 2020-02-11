@@ -1,6 +1,6 @@
 ---
 NOTE: this is a generated file
-stack: ubuntu_1910_minimal
+stack: ubuntu_2004_minimal
 commands:
   linux:
   - command: date -u

@@ -1,6 +1,6 @@
 ---
 NOTE: this is a generated file
-stack: ubuntu_1910
+stack: ubuntu_2004
 commands:
   linux:
   - command: date -u

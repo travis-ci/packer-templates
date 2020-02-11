@@ -2,7 +2,7 @@
 
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/ubuntu-1910-system-info-commands.yml'
+  '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.7]
 override['travis_build_environment']['python_aliases'] = {
   '3.7.7' => %w[3.7],
@@ -104,7 +104,7 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '4.8'
 
-override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1910'
+override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
 override['travis_postgresql']['default_version'] = '10'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10]
@@ -136,7 +136,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   xserver
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __ubuntu_1910__
+  __ubuntu_2004__
   c
   c++
   clojure
