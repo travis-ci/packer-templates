@@ -31,7 +31,6 @@ bzr
 ca-certificates
 ccache
 command-not-found
-command-not-found-data
 console-setup
 coreutils
 cpio
