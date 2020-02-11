@@ -65,7 +65,6 @@ ftp
 fuse
 gawk
 gcc
-gcc-6-base
 gcc-7-base
 gcc-8-base
 gdisk
@@ -157,10 +156,8 @@ mawk
 mime-support
 mingw-w64
 mlocate
-module-init-tools
 mount
 mtr-tiny
-multiarch-support
 mysql-client
 nano
 ncurses-base
@@ -184,7 +181,6 @@ patch
 pciutils
 perl
 perl-base
-perl-modules-5.26
 pkg-config
 plymouth
 plymouth-theme-ubuntu-text
