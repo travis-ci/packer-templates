@@ -102,7 +102,7 @@ override['travis_build_environment']['update_hostname'] = true if node['kernel']
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '4.8'
+override['travis_build_environment']['mercurial_version'] = '5.3'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
