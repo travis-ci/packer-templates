@@ -5,9 +5,10 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.8]
 override['travis_build_environment']['python_aliases'] = {
-  '3.7.7' => %w[3.7],
-  'pypy2.7-5.8.0' => %w[pypy],
-  'pypy3.5-5.8.0' => %w[pypy3]
+  '3.8.1' => %w[3.8],
+  '3.7.6' => %w[3.7]
+  #'pypy2.7-5.8.0' => %w[pypy],
+  #'pypy3.5-5.8.0' => %w[pypy3]
 }
 php_aliases = {
   '7.2' => '7.2.26',
@@ -18,7 +19,7 @@ override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
-override['travis_build_environment']['elasticsearch']['version'] = '5.5.0'
+override['travis_build_environment']['elasticsearch']['version'] = '7.6.0'
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
@@ -60,29 +61,10 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '10.16.0'
 
 pythons = %w[
-  3.6.7
-  3.7.1
+  3.7.6
+  3.8.1
 ]
-
-# Reorder pythons so that default python2 and python3 come first
-# as this affects the ordering in $PATH.
-%w[3 2].each do |pyver|
-  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
-    pythons.unshift(pythons.delete(py))
-  end
-end
-def python_aliases(full_name)
-  nodash = full_name.split('-').first
-  return [nodash] unless nodash.include?('.')
-
-  [nodash[0, 3]]
-end
-
 override['travis_build_environment']['pythons'] = pythons
-pythons.each do |full_name|
-  override['travis_build_environment']['python_aliases'][full_name] = \
-    python_aliases(full_name)
-end
 
 rubies = %w[
   2.5.7
