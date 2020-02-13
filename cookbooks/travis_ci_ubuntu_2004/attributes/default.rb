@@ -3,21 +3,30 @@
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
-override['travis_build_environment']['system_python']['pythons'] = %w[3.8]
-override['travis_build_environment']['python_aliases'] = {
-  '3.8.1' => %w[3.8],
-  '3.7.6' => %w[3.7]
-  #'pypy2.7-5.8.0' => %w[pypy],
-  #'pypy3.5-5.8.0' => %w[pypy3]
-}
-php_aliases = {
-  '7.2' => '7.2.26',
-  '7.3' => '7.3.13',
-  '7.4' => '7.4.1'
-}
-override['travis_build_environment']['php_versions'] = php_aliases.values
-override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
-override['travis_build_environment']['php_aliases'] = php_aliases
+# override['travis_build_environment']['system_python']['pythons'] = %w[3.7]
+# override['travis_build_environment']['python_aliases'] = {
+#   #'3.8.1' => %w[3.8],
+#   '3.7.6' => %w[3.7]
+#   #'pypy2.7-5.8.0' => %w[pypy],
+#   #'pypy3.5-5.8.0' => %w[pypy3]
+# }
+
+# override['travis_build_environment']['pythons'] = []
+# override['travis_build_environment']['python_aliases'] = {}
+# override['travis_build_environment']['pip']['packages'] = {}
+override['travis_build_environment']['system_python']['pythons'] = []
+
+# php_aliases = {
+#   # '7.2' => '7.2.26',
+#   # '7.3' => '7.3.13',
+#   # '7.4' => '7.4.1'
+# }
+# override['travis_build_environment']['php_versions'] = php_aliases.values
+# override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
+# override['travis_build_environment']['php_aliases'] = php_aliases
+
+override['travis_build_environment']['php_versions'] = []
+override['travis_build_environment']['php_aliases'] = {}
 
 override['travis_build_environment']['elasticsearch']['version'] = '7.6.0'
 if node['kernel']['machine'] == 'ppc64le'
