@@ -97,8 +97,8 @@ override['travis_build_environment']['mercurial_version'] = '5.3'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
-override['travis_postgresql']['default_version'] = '10'
-override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10]
+override['travis_postgresql']['default_version'] = '11'
+override['travis_postgresql']['alternate_versions'] = %w[11]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
 override['travis_packer_templates']['job_board']['features'] = %w[
