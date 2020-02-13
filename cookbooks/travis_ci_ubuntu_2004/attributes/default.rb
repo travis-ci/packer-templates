@@ -11,9 +11,9 @@ override['travis_system_info']['commands_file'] = \
 #   #'pypy3.5-5.8.0' => %w[pypy3]
 # }
 
-# override['travis_build_environment']['pythons'] = []
-# override['travis_build_environment']['python_aliases'] = {}
-# override['travis_build_environment']['pip']['packages'] = {}
+override['travis_build_environment']['pythons'] = []
+override['travis_build_environment']['python_aliases'] = {}
+override['travis_build_environment']['pip']['packages'] = {}
 override['travis_build_environment']['system_python']['pythons'] = []
 
 # php_aliases = {
