@@ -28,7 +28,15 @@ override['travis_build_environment']['system_python']['pythons'] = []
 override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_aliases'] = {}
 
-override['travis_build_environment']['elasticsearch']['version'] = '7.6.0'
+if node['kernel']['machine'] =~ /x86_64/
+  arch = 'amd64'
+else
+  arch = node['kernel']['machine']
+end
+
+version = '7.6.0'
+override['travis_build_environment']['elasticsearch']['version'] = version
+override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
   override['travis_build_environment']['php_default_version'] = []
