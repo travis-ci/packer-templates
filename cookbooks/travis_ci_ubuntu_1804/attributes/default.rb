@@ -19,7 +19,7 @@ php_aliases = {
   '7.4' => '7.4.2'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
-override['travis_build_environment']['php_default_version'] = php_aliases['7.3']
+override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
 override['travis_build_environment']['elasticsearch']['version'] = '5.5.0'
