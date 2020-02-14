@@ -32,8 +32,26 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = []
-override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['perls'] = [
+  { name: '5.26', version: 'perl-5.26.2' },
+  { name: '5.26-extras', version: 'perl-5.26.2',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.26-shrplib' },
+  { name: '5.24', version: 'perl-5.24.0' },
+  { name: '5.24-extras', version: 'perl-5.24.0',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.24-shrplib' }
+]
+override['travis_perlbrew']['modules'] = %w[
+  Dist::Zilla
+  Dist::Zilla::Plugin::Bootstrap::lib
+  ExtUtils::MakeMaker
+  LWP
+  Module::Install
+  Moose
+  Test::Exception
+  Test::Most
+  Test::Pod
+  Test::Pod::Coverage
+]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
@@ -166,4 +184,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   ruby
   scala
   julia
+  perl
+  perl6
 ]
