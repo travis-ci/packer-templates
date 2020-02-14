@@ -6,9 +6,9 @@ override['travis_system_info']['commands_file'] = \
 override['travis_build_environment']['system_python']['pythons'] = %w[3.6]
 override['travis_build_environment']['python_aliases'] = {
   '2.7.17' => %w[2.7],
-  '3.6.9' => %w[3.6],
-  '3.7.5' => %w[3.7],
-  '3.8.0' => %w[3.8],
+  '3.6.10' => %w[3.6],
+  '3.7.6' => %w[3.7],
+  '3.8.1' => %w[3.8],
   'pypy2.7-5.8.0' => %w[pypy],
   'pypy3.5-5.8.0' => %w[pypy3]
 }
@@ -68,9 +68,9 @@ override['travis_build_environment']['nodejs_default'] = '13.3.0'
 
 pythons = %w[
   2.7.17
-  3.6.9
-  3.7.5
-  3.8.0
+  3.6.10
+  3.7.6
+  3.8.1
 ]
 
 # Reorder pythons so that default python2 and python3 come first
