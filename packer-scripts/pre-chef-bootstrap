@@ -52,6 +52,7 @@ __install_packages() {
     sudo \
     wget \
     python \
+    rsync \
     ${APT_GET_INSTALL_PRE_CHEF}
 }
 

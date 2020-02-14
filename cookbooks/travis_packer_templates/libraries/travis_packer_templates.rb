@@ -102,7 +102,7 @@ class TravisPackerTemplates
       next if attr_value.empty?
 
       Chef::Log.info(
-        "Setting travis_packer_templates.env.#{attr_name}"
+        "Setting travis_packer_templates.env.#{attr_name} = #{attr_value}"
       )
       node.override['travis_packer_templates']['env'][attr_name] = attr_value
     end
