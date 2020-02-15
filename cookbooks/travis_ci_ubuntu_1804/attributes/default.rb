@@ -11,9 +11,10 @@ override['travis_build_environment']['python_aliases'] = {
   'pypy3.5-5.8.0' => %w[pypy3]
 }
 php_aliases = {
-  '7.1' => '7.1.30',
-  '7.2' => '7.2.19',
-  '7.3' => '7.3.6'
+  '7.1' => '7.1.33',
+  '7.2' => '7.2.27',
+  '7.3' => '7.3.14',
+  '7.4' => '7.4.2'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
