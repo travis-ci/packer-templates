@@ -5,15 +5,18 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-1804-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[2.7 3.6]
 override['travis_build_environment']['python_aliases'] = {
-  '2.7.15' => %w[2.7],
-  '3.6.7' => %w[3.6],
+  '2.7.17' => %w[2.7],
+  '3.6.10' => %w[3.6],
+  '3.7.6' => %w[3.7],
+  '3.8.1' => %w[3.8],
   'pypy2.7-5.8.0' => %w[pypy],
   'pypy3.5-5.8.0' => %w[pypy3]
 }
 php_aliases = {
-  '7.1' => '7.1.30',
-  '7.2' => '7.2.19',
-  '7.3' => '7.3.6'
+  '7.1' => '7.1.33',
+  '7.2' => '7.2.27',
+  '7.3' => '7.3.14',
+  '7.4' => '7.4.2'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
@@ -29,8 +32,26 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = []
-override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['perls'] = [
+  { name: '5.26', version: 'perl-5.26.2' },
+  { name: '5.26-extras', version: 'perl-5.26.2',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.26-shrplib' },
+  { name: '5.24', version: 'perl-5.24.0' },
+  { name: '5.24-extras', version: 'perl-5.24.0',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.24-shrplib' }
+]
+override['travis_perlbrew']['modules'] = %w[
+  Dist::Zilla
+  Dist::Zilla::Plugin::Bootstrap::lib
+  ExtUtils::MakeMaker
+  LWP
+  Module::Install
+  Moose
+  Test::Exception
+  Test::Most
+  Test::Pod
+  Test::Pod::Coverage
+]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
@@ -55,15 +76,19 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  12.7.0
   10.16.0
+  13.3.0
+  12.13.1
+  11.15.0
+  8.16.2
 ]
 override['travis_build_environment']['nodejs_default'] = '10.16.0'
 
 pythons = %w[
-  2.7.15
-  3.6.7
-  3.7.1
+  2.7.17
+  3.6.10
+  3.7.6
+  3.8.1
 ]
 
 # Reorder pythons so that default python2 and python3 come first
@@ -87,13 +112,14 @@ pythons.each do |full_name|
 end
 
 rubies = %w[
-  2.4.5
+  2.4.9
   2.5.3
-  2.6.3
+  2.5.7
   2.7.0
+  2.6.5
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.last
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = []
@@ -110,7 +136,7 @@ override['travis_build_environment']['mercurial_version'] = '4.8'
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 
 override['travis_postgresql']['default_version'] = '9.3'
-override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10]
+override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10 11]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
 override['travis_packer_templates']['job_board']['features'] = %w[
@@ -157,4 +183,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   ruby
   scala
   julia
+  perl
+  perl6
 ]

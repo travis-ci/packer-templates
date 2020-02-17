@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def db_url
-  'http://localhost:9200/travis'
+  'http://0.0.0.0:9200/travis'
 end
 
 describe 'elasticsearch installation', sudo: true do
@@ -12,7 +12,7 @@ describe 'elasticsearch installation', sudo: true do
   before :all do
     sh('sudo service elasticsearch restart')
     sleep 5
-    tcpwait('localhost', 9200, 30)
+    tcpwait('0.0.0.0', 9200, 30)
     sh(%(curl -H "Content-Type: application/json" -X PUT "#{db_url}/user/koopa93" -d "{
         \"name\": \"Shy Bowser\"
       }"
