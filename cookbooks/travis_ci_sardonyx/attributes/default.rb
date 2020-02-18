@@ -15,8 +15,10 @@ override['travis_system_info']['commands_file'] = \
 
 php_aliases = {
   '5.6' => '5.6.40',
-  '7.1' => '7.1.27',
-  '7.2' => '7.2.15'
+  '7.1' => '7.1.33',
+  '7.2' => '7.2.27',
+  '7.3' => '7.3.14',
+  '7.4' => '7.4.2'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
@@ -57,15 +59,18 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  11.0.0
-  8.12.0
+  13.3.0
+  12.13.1
+  11.15.0
+  8.16.0
 ]
-override['travis_build_environment']['nodejs_default'] = '8.12.0'
+override['travis_build_environment']['nodejs_default'] = '8.16.0'
 
 pythons = %w[
-  2.7.15
-  3.6.7
-  3.7.1
+  2.7.17
+  3.6.10
+  3.7.6
+  3.8.1
 ]
 
 # Reorder pythons so that default python2 and python3 come first
@@ -92,10 +97,14 @@ end
 rubies = %w[
   2.3.8
   2.4.5
+  2.4.9
+  2.5.7
+  2.7.0
+  2.6.5
   2.5.3
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.last
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = []

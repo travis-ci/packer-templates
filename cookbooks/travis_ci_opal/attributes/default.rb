@@ -66,18 +66,23 @@ end
 
 override['travis_build_environment']['nodejs_versions'] = %w[
   11.0.0
-  8.12.0
+  8.16.0
 ]
-override['travis_build_environment']['nodejs_default'] = '8.12.0'
+override['travis_build_environment']['nodejs_default'] = '8.16.0'
 
 override['travis_build_environment']['pythons'] = []
 
 rubies = %w[
+  2.3.8
   2.4.5
+  2.4.9
+  2.5.7
+  2.7.0
+  2.6.5
   2.5.3
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.last
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
