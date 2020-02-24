@@ -9,7 +9,7 @@ variables:
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
-  image: images:ubuntu/xenial
+  image: images:ubuntu:xenial
   output_image: ubuntu-16.04-generic-{{user `image_time`}}
   publish_properties:
    - description: Travis CI Ubuntu 16.04 generic build env template!
