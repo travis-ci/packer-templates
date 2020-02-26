@@ -9,7 +9,7 @@ variables:
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
-  image: images:ubuntu:18.04
+  image: ubuntu:18.04
   output_image: ubuntu-18.04-minimal-{{user `image_time`}}
   publish_properties:
    - description: Travis CI Ubuntu 18.04 Minimal build env template!

@@ -9,7 +9,7 @@ variables:
 builders:
 - type: lxd
   name: lxd-{{ uuid }}
-  image: images:ubuntu:xenial
+  image: ubuntu:xenial
   output_image: ubuntu-16.04-slim-{{user `image_time`}}
   publish_properties:
    - description: Travis CI Ubuntu 16.04 Slim build env template!
