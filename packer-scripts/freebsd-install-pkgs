@@ -1,6 +1,6 @@
 #!/bin/csh -xe
 
-pkg install -y bash
+pkg install -y bash base64
 pkg install -y gcc10-devel cmake gmake gnulib autoconf automake ccache
 
 ln -s /usr/local/bin/gcc10 /usr/local/bin/gcc
