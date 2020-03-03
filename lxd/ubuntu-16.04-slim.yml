@@ -23,6 +23,7 @@ provisioners:
   scripts:
   - scripts/base.sh
   - scripts/install-docker.sh
+  - scripts/gitconfig.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 

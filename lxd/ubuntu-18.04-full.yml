@@ -31,6 +31,7 @@ provisioners:
   - scripts/install-c-lang.sh
   - scripts/full.sh
   - scripts/install-docker.sh
+  - scripts/gitconfig.sh
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 
