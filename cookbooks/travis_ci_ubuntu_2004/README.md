@@ -1,4 +1,4 @@
-travis_ci_ubuntu_1804 Cookbook
+travis_ci_ubuntu_2004 Cookbook
 =========================
 
-A wrapper cookbook for the "ubuntu_1804" CI image.
+A wrapper cookbook for the "ubuntu_2004" CI image.
