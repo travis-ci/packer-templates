@@ -14,5 +14,5 @@ done
 lxc image export "${IMAGE_NAME}" /home/travis/"${IMAGE_NAME}"
 aws s3 cp /home/travis/"${IMAGE_NAME}".tar.gz s3://"${LXC_AWS_BUCKET}"/amd64/
 
-sha256 /home/travis/"${IMAGE_NAME}".tar.gz > /home/travis/"${IMAGE_NAME}"_checksum.txt
+sha256sum /home/travis/"${IMAGE_NAME}".tar.gz > /home/travis/"${IMAGE_NAME}"_checksum.txt
 aws s3 cp /home/travis/"${IMAGE_NAME}"_checksum.txt s3://"${LXC_AWS_BUCKET}"/amd64/
