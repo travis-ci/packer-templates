@@ -39,9 +39,10 @@ describe 'python environment' do
   end
 
   {
-    'python2.7' => '2.7.15',
-    'python3.6' => '3.6.7',
-    'python3.7' => '3.7.1'
+    'python2.7' => '2.7.17',
+    'python3.6' => '3.6.10',
+    'python3.7' => '3.7.6',
+    'python3.8' => '3.8.1'
   }.each do |python_alias, python_version|
     describe pycommand('python -m this', version: python_alias), dev: true do
       its(:stderr) { should be_empty }
