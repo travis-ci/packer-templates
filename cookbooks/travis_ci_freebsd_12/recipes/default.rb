@@ -35,8 +35,19 @@ freebsd_package 'autoconf'
 freebsd_package 'automake'
 freebsd_package 'ccache'
 
-# ln -s /usr/local/bin/gcc10 /usr/local/bin/gcc
-# ln -s /usr/local/bin/g++10 /usr/local/bin/g++
+link '/usr/local/bin/gcc' do
+  to '/usr/local/bin/gcc10'
+  owner node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
+  mode 0o755
+end
+
+link '/usr/local/bin/g++' do
+  to '/usr/local/bin/g++10'
+  owner node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
+  mode 0o755
+end
 
 include_recipe '::create_bash_profile'
 
