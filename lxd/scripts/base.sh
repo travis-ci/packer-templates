@@ -3,6 +3,8 @@
 set -o errexit
 
 export DEBIAN_FRONTEND=noninteractive
+# Force use of ipv4
+echo 'Acquire::ForceIPv4 "true";' | tee /etc/apt/apt.conf.d/99force-ipv4
 
 . /etc/lsb-release
 sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list
