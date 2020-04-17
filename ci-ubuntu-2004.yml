@@ -34,10 +34,10 @@ builders:
   - travis-ci-packer-templates
 - type: lxd
   name: lxd
-  image: ubuntu:bionic #identifier of image taken from https://us.images.linuxcontainers.org/
+  image: ubuntu:focal #identifier of image taken from https://us.images.linuxcontainers.org/
   output_image: "{{ user `image_name` }}"
   publish_properties:
-   - description: Travis CI bionic build env template!
+   - description: Travis CI focal build env template!
 - type: docker
   name: docker
   ssh_pty: true
