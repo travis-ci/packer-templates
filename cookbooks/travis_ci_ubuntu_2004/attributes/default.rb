@@ -44,14 +44,14 @@ version = '7.6.0'
 override['travis_build_environment']['elasticsearch']['version'] = version
 override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
 
-#if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
+# if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
 #  override['travis_build_environment']['php_versions'] = []
 #  override['travis_build_environment']['php_default_version'] = []
 #  override['travis_build_environment']['php_aliases'] = {}
 
-  # TODO: remove if/when an HHVM version is available on ppc64
+# TODO: remove if/when an HHVM version is available on ppc64
 #  override['travis_build_environment']['hhvm_enabled'] = false
-#end
+# end
 
 override['travis_perlbrew']['perls'] = [] #compare with bionic and possibly fill in with proper versions pre-installed
 override['travis_perlbrew']['modules'] = []
