@@ -17,10 +17,10 @@ override['travis_system_info']['commands_file'] = \
 # ]
 # override['travis_build_environment']['pythons'] = pythons
 
-override['travis_build_environment']['pythons'] = [] #need to fill in
-override['travis_build_environment']['python_aliases'] = {} #need to fill in
-override['travis_build_environment']['pip']['packages'] = {} #need to fill in
-override['travis_build_environment']['system_python']['pythons'] = [] #need to fill in
+override['travis_build_environment']['pythons'] = [] # need to fill in
+override['travis_build_environment']['python_aliases'] = {} # need to fill in
+override['travis_build_environment']['pip']['packages'] = {} # need to fill in
+override['travis_build_environment']['system_python']['pythons'] = [] # need to fill in
 
 # php_aliases = { #our php builder
 #   # '7.2' => '7.2.26',
@@ -31,8 +31,8 @@ override['travis_build_environment']['system_python']['pythons'] = [] #need to f
 # override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 # override['travis_build_environment']['php_aliases'] = php_aliases
 
-override['travis_build_environment']['php_versions'] = [] #need to fill in
-override['travis_build_environment']['php_aliases'] = {} #need to fill in
+override['travis_build_environment']['php_versions'] = [] # need to fill in
+override['travis_build_environment']['php_aliases'] = {} # need to fill in
 
 if node['kernel']['machine'] =~ /x86_64/
   arch = 'amd64'
@@ -51,9 +51,9 @@ override['travis_build_environment']['elasticsearch']['package_name'] = "elastic
 
   # TODO: remove if/when an HHVM version is available on ppc64
 #  override['travis_build_environment']['hhvm_enabled'] = false
-#end
+# end
 
-override['travis_perlbrew']['perls'] = [] #compare with bionic and possibly fill in with proper versions pre-installed
+override['travis_perlbrew']['perls'] = [] # compare with bionic and possibly fill in with proper versions pre-installed
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
