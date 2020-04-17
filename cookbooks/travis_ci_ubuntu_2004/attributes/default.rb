@@ -10,7 +10,6 @@ override['travis_system_info']['commands_file'] = \
 #   #'pypy2.7-5.8.0' => %w[pypy],
 #   #'pypy3.5-5.8.0' => %w[pypy3]
 # }
-# 
 # pythons = %w[ #packages build by Cpython + our repo
 #   3.7.6
 #   3.8.1
@@ -53,7 +52,7 @@ override['travis_build_environment']['elasticsearch']['package_name'] = "elastic
 #  override['travis_build_environment']['hhvm_enabled'] = false
 # end
 
-override['travis_perlbrew']['perls'] = [] # compare with bionic and possibly fill in with proper versions pre-installed
+override['travis_perlbrew']['perls'] = [] # compare with bionic and possibly fill in with proper ver pre-install
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
@@ -83,7 +82,6 @@ override['travis_build_environment']['nodejs_versions'] = %w[
   10.16.0
 ]
 override['travis_build_environment']['nodejs_default'] = '10.16.0'
-
 
 rubies = %w[
   2.5.7
