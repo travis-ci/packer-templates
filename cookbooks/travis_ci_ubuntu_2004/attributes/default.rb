@@ -33,9 +33,7 @@ override['travis_build_environment']['system_python']['pythons'] = [] # need to 
 override['travis_build_environment']['php_versions'] = [] # need to fill in
 override['travis_build_environment']['php_aliases'] = {} # need to fill in
 
-
-# Is it required ? 
-# if node['kernel']['machine'] == "x86_64"
+# if node['kernel']['machine'] == "x86_64" # Is it required ? 
 #  arch = 'amd64'
 # else
 #  arch = node['kernel']['machine']
