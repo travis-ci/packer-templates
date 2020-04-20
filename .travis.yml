@@ -1,5 +1,5 @@
 language: __sardonyx__
-dist: xenial
+dist: focal
 group: edge
 services:
 - postgresql
