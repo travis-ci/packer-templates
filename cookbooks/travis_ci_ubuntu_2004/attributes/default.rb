@@ -158,28 +158,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
 
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
-  couchdb
-  disabled-ipv6
-  docker
-  docker-compose
-  elasticsearch
-  firefox
-  go-toolchain
-  google-chrome
-  jdk
-  memcached
-  mongodb
-  mysql
-  nodejs_interpreter
-  perl_interpreter
-  perlbrew
-  phantomjs
-  postgresql
-  python_interpreter
-  redis
   ruby_interpreter
-  sqlite
-  xserver
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __ubuntu_2004__
