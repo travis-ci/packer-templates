@@ -39,9 +39,9 @@ override['travis_build_environment']['php_aliases'] = {} # need to fill in
 # arch = node['kernel']['machine']
 # end
 
-version = '7.6.0'
-override['travis_build_environment']['elasticsearch']['version'] = version
-override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
+# version = '7.6.0'
+# override['travis_build_environment']['elasticsearch']['version'] = version
+# override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
 
 # if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
 #  override['travis_build_environment']['php_versions'] = []
