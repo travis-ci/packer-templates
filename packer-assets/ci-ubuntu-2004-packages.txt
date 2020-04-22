@@ -129,7 +129,6 @@ libncursesw5-dev
 libossp-uuid-dev
 libpng-dev
 libpq-dev
-libqt4-dev
 libreadline-dev
 libsasl2-dev
 libsqlite3-dev
