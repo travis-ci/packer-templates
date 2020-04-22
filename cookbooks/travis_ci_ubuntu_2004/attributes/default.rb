@@ -157,8 +157,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
 ]
 
 override['travis_packer_templates']['job_board']['features'] = %w[
-  generic
-  basic
   ruby_interpreter
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
