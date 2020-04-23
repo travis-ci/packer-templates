@@ -109,10 +109,10 @@ provisioners:
   inline: "systemctl mask systemd-modules-load.service"
   only:
   - lxd
-- type: shell
-  inline: "apt remove snapd --purge -y && apt install snapd -y && snap install core"
-  only:
-  - lxd
+    # - type: shell
+    #  inline: "apt install snapd -y && snap install core"
+    #  only:
+    #  - lxd
 - type: shell
   inline: "apt-get remove --purge cloud-init --yes"
   only:
