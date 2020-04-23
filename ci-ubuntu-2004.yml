@@ -110,7 +110,7 @@ provisioners:
   only:
   - lxd
 - type: shell
-  inline: "apt install snapd -y && snap install core"
+  inline: "apt remove snapd --purge && apt install snapd -y && snap install core"
   only:
   - lxd
 - type: shell
