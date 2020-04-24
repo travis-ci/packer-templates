@@ -159,6 +159,8 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
 
 # Override values in array : minimal set of options 
 override['travis_packer_templates']['job_board']['features'] = %w[
+  generic
+  basic
   ruby_interpreter
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
