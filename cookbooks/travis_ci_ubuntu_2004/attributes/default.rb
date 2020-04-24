@@ -10,17 +10,16 @@ override['travis_system_info']['commands_file'] = \
 #   #'pypy2.7-5.8.0' => %w[pypy],
 #   #'pypy3.5-5.8.0' => %w[pypy3]
 # }
-# 
 # pythons = %w[ #packages build by Cpython + our repo
 #   3.7.6
 #   3.8.1
 # ]
 # override['travis_build_environment']['pythons'] = pythons
 
-override['travis_build_environment']['pythons'] = [] #need to fill in
-override['travis_build_environment']['python_aliases'] = {} #need to fill in
-override['travis_build_environment']['pip']['packages'] = {} #need to fill in
-override['travis_build_environment']['system_python']['pythons'] = [] #need to fill in
+override['travis_build_environment']['pythons'] = [] # need to fill in
+override['travis_build_environment']['python_aliases'] = {} # need to fill in
+override['travis_build_environment']['pip']['packages'] = {} # need to fill in
+override['travis_build_environment']['system_python']['pythons'] = [] # need to fill in
 
 # php_aliases = { #our php builder
 #   # '7.2' => '7.2.26',
@@ -31,29 +30,29 @@ override['travis_build_environment']['system_python']['pythons'] = [] #need to f
 # override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 # override['travis_build_environment']['php_aliases'] = php_aliases
 
-override['travis_build_environment']['php_versions'] = [] #need to fill in
-override['travis_build_environment']['php_aliases'] = {} #need to fill in
+override['travis_build_environment']['php_versions'] = [] # need to fill in
+override['travis_build_environment']['php_aliases'] = {} # need to fill in
 
-if node['kernel']['machine'] =~ /x86_64/
-  arch = 'amd64'
-else
-  arch = node['kernel']['machine']
-end
+# if node['kernel']['machine'] == "x86_64" # Is it required
+# arch = 'amd64'
+# else
+# arch = node['kernel']['machine']
+# end
 
-version = '7.6.0'
-override['travis_build_environment']['elasticsearch']['version'] = version
-override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
+# version = '7.6.0'
+# override['travis_build_environment']['elasticsearch']['version'] = version
+# override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
 
-#if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
+# if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
 #  override['travis_build_environment']['php_versions'] = []
 #  override['travis_build_environment']['php_default_version'] = []
 #  override['travis_build_environment']['php_aliases'] = {}
 
-  # TODO: remove if/when an HHVM version is available on ppc64
+# TODO: remove if/when an HHVM version is available on ppc64
 #  override['travis_build_environment']['hhvm_enabled'] = false
-#end
+# end
 
-override['travis_perlbrew']['perls'] = [] #compare with bionic and possibly fill in with proper versions pre-installed
+override['travis_perlbrew']['perls'] = [] # compare with bionic and possibly fill in with proper ver pre-install
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
@@ -83,7 +82,6 @@ override['travis_build_environment']['nodejs_versions'] = %w[
   10.16.0
 ]
 override['travis_build_environment']['nodejs_default'] = '10.16.0'
-
 
 rubies = %w[
   2.5.7
@@ -156,4 +154,17 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   ruby
   scala
   julia
+]
+# Set minimal options - override an array 
+override['travis_packer_templates']['job_board']['features'] = %w[
+  ruby_interpreter
+]
+override['travis_packer_templates']['job_board']['languages'] = %w[
+  __ubuntu_2004__
+  ruby
+  default
+  cpp
+  cplusplus
+  c
+  c++
 ]
