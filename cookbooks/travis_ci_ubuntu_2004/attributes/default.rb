@@ -155,7 +155,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   scala
   julia
 ]
-
+# Set minimal options - override an array 
 override['travis_packer_templates']['job_board']['features'] = %w[
   ruby_interpreter
 ]
