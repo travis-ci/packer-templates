@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Cookbook Name:: travis_ci_ubuntu_1804
+# Cookbook Name:: travis_ci_ubuntu_2004
 # Recipe:: default
 #
 # Copyright 2017, Travis CI GmbH
