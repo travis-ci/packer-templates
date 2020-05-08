@@ -70,7 +70,7 @@ end
 
 describe 'bazaar installation' do
   describe command('bzr version') do
-    its(:stdout) { should match(/Bazaar \(bzr\)/) }
+    its(:stdout) { should match(/Bazaar \(bzr\)|Breezy \(brz\)/) }
     its(:exit_status) { should eq 0 }
   end
 
