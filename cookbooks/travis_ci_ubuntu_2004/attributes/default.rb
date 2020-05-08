@@ -85,8 +85,11 @@ override['travis_build_environment']['nodejs_default'] = '10.16.0'
 
 rubies = %w[
   2.5.7
+  2.5.8
   2.6.5
+  2.6.6
   2.7.0
+  2.7.1
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
@@ -156,13 +159,13 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   julia
 ]
 
-
 # Override values in array : minimal set of options
 override['travis_packer_templates']['job_board']['features'] = %w[
   generic
   basic
   ruby_interpreter
 ]
+# Set minimal languages
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __ubuntu_2004__
   ruby
