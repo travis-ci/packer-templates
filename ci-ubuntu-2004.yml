@@ -109,6 +109,11 @@ provisioners:
   only:
   - lxd
 - type: shell
+  inline: sleep 25
+  # Delay command 'snap install' execution. Problem with snap install core. Workaround : error: too early for operation, device not yet seeded..."
+  only:
+  - lxd
+- type: shell
   inline: "apt install snapd -y && snap install core"
   only:
   - lxd

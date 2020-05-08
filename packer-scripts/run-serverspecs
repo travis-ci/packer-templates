@@ -48,10 +48,10 @@ __install_serverspec() {
 __install_chefdk() {
   
   if [[ "$(lsb_release -cs)" == "focal" ]]; then
-      CHEFDK_VERSION_FOCAL="3.10.1-1"
-      wget "https://packages.chef.io/repos/apt/stable/ubuntu/18.04/chefdk_${CHEFDK_VERSION_FOCAL}_amd64.deb"
-      dpkg -i ./chefdk_${CHEFDK_VERSION_FOCAL}_amd64.deb 
-      return
+    CHEFDK_VERSION_FOCAL="3.10.1-1"
+    wget "https://packages.chef.io/repos/apt/stable/ubuntu/18.04/chefdk_${CHEFDK_VERSION_FOCAL}_amd64.deb"
+    dpkg -i ./chefdk_${CHEFDK_VERSION_FOCAL}_amd64.deb 
+    return
   fi
 
   if [[ -f /opt/chefdk/embedded/bin/rspec ]]; then
