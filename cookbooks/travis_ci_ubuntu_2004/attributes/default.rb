@@ -157,7 +157,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
 ]
 
 
-# Override values in array : minimal set of options 
+# Override values in array : minimal set of options
 override['travis_packer_templates']['job_board']['features'] = %w[
   generic
   basic
@@ -166,9 +166,4 @@ override['travis_packer_templates']['job_board']['features'] = %w[
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __ubuntu_2004__
   ruby
-  default
-  cpp
-  cplusplus
-  c
-  c++
 ]
