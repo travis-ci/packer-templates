@@ -504,7 +504,7 @@ describe 'rvm installation' do
   describe 'rvm commands' do
     describe command('rvm list') do
       its(:stdout) { should include('current') }
-      its(:stdout) { should match(/ruby-2\.[234]\.\d/) }
+      its(:stdout) { should match(/ruby-2\.[234567]\.\d/) }
       its(:stderr) { should be_empty }
     end
 
