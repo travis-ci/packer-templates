@@ -779,26 +779,26 @@ describe command('ldconfig -p | grep libldap') do
   its(:exit_status) { should eq 0 }
 end
 
-context 'with something listening on 19494' do
-  around :each do |example|
-    pid = spawn(
-      'python', '-m', 'SimpleHTTPServer', '19494',
-      %i[out err] => '/dev/null'
-    )
-    tcpwait('127.0.0.1', 19_494)
-    example.run
-    Process.kill(:TERM, pid)
-  end
+# context 'with something listening on 19494' do
+#   around :each do |example|
+#     pid = spawn(
+#       'python', '-m', 'SimpleHTTPServer', '19494',
+#       %i[out err] => '/dev/null'
+#     )
+#     tcpwait('127.0.0.1', 19_494)
+#     example.run
+#     Process.kill(:TERM, pid)
+#   end
 
-  describe command('nc -zv 127.0.0.1 19494') do
-    stream = if RbConfig::CONFIG['build_os'] =~ /darwin/
-               :stdout
-             else
-               :stderr
-             end
-    its(stream) { should include 'succeeded' }
-  end
-end
+#   describe command('nc -zv 127.0.0.1 19494') do
+#     stream = if RbConfig::CONFIG['build_os'] =~ /darwin/
+#                :stdout
+#              else
+#                :stderr
+#              end
+#     its(stream) { should include 'succeeded' }
+#   end
+# end
 
 describe file('/opt') do
   it { should be_directory }
