@@ -7,7 +7,7 @@
   describe "#{py} interpreter" do
     describe command("#{py} --version") do
       stream = py.end_with?('3') ? :stdout : :stderr
-      if stream.emtpy?
+      if stream.empty?
         stream = :stderr
       end
       its(stream) { should match(/^Python \d+\.\d+\.\d+/) }
