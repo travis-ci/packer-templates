@@ -16,6 +16,7 @@ pythons = %w[
   3.8.3
 ]
 override['travis_build_environment']['pythons'] = pythons
+override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
 
 override['travis_build_environment']['pip']['packages'] = {} # need to fill in
 
