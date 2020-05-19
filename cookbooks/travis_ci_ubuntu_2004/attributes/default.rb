@@ -3,35 +3,30 @@
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
-# override['travis_build_environment']['system_python']['pythons'] = %w[3.7] #apt packages
-# override['travis_build_environment']['python_aliases'] = {
-#   #'3.8.1' => %w[3.8],
+override['travis_build_environment']['system_python']['pythons'] = %w[3.8] #apt packages
+override['travis_build_environment']['python_aliases'] = {
+  '3.8.3' => %w[3.8]
 #   '3.7.6' => %w[3.7]
-#   #'pypy2.7-5.8.0' => %w[pypy],
-#   #'pypy3.5-5.8.0' => %w[pypy3]
-# }
-# pythons = %w[ #packages build by Cpython + our repo
-#   3.7.6
-#   3.8.1
-# ]
-# override['travis_build_environment']['pythons'] = pythons
+  #'pypy2.7-5.8.0' => %w[pypy],
+  #'pypy3.5-5.8.0' => %w[pypy3]
+}
+# packages build by Cpython + our repo
+pythons = %w[
+  3.7.7
+  3.8.3
+]
+override['travis_build_environment']['pythons'] = pythons
 
-override['travis_build_environment']['pythons'] = [] # need to fill in
-override['travis_build_environment']['python_aliases'] = {} # need to fill in
 override['travis_build_environment']['pip']['packages'] = {} # need to fill in
-override['travis_build_environment']['system_python']['pythons'] = [] # need to fill in
 
-# php_aliases = { #our php builder
-#   # '7.2' => '7.2.26',
-#   # '7.3' => '7.3.13',
-#   # '7.4' => '7.4.1'
-# }
-# override['travis_build_environment']['php_versions'] = php_aliases.values
-# override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
-# override['travis_build_environment']['php_aliases'] = php_aliases
+# our php builder
+php_aliases = {
+  '7.4' => '7.4.6'
+}
+override['travis_build_environment']['php_versions'] = php_aliases.values
+override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
+override['travis_build_environment']['php_aliases'] = php_aliases
 
-override['travis_build_environment']['php_versions'] = [] # need to fill in
-override['travis_build_environment']['php_aliases'] = {} # need to fill in
 
 # if node['kernel']['machine'] == "x86_64" # Is it required
 # arch = 'amd64'
@@ -169,4 +164,8 @@ override['travis_packer_templates']['job_board']['features'] = %w[
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __ubuntu_2004__
   ruby
+  python
+  go
+  java
+  php
 ]
