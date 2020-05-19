@@ -39,7 +39,7 @@ describe 'python environment' do
   end
 
   {
-    'python3.8' => '3.8'3
+    'python3.8' => '3.8.3'
   }.each do |python_alias, python_version|
     describe pycommand('python -m this', version: python_alias), dev: true do
       its(:stderr) { should be_empty }
