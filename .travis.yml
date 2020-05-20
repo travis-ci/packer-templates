@@ -1,6 +1,5 @@
 language: __sardonyx__
-dist: focal
-group: edge
+dist: xenial
 services:
 - postgresql
 filter_secrets: false
