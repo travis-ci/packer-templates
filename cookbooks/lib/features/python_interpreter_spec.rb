@@ -6,7 +6,8 @@
 ].each do |py|
   describe "#{py} interpreter" do
     describe command("#{py} --version") do
-      its(:stdout) { should match(/^Python \d+\.\d+\.\d+/) }
+      stream = :stderr.empty? ? :stdout : :stderr
+      its(stream) { should match(/^Python \d+\.\d+\.\d+/) }
     end
 
     describe command("#{py} -m this") do
