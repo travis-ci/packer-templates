@@ -25,5 +25,43 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 freebsd_package 'coreutils'
+freebsd_package 'libunwind'
+
+freebsd_package 'gcc10-devel'
+freebsd_package 'cmake'
+freebsd_package 'gmake'
+freebsd_package 'gnulib'
+freebsd_package 'autoconf'
+freebsd_package 'automake'
+freebsd_package 'ccache'
+
+link '/usr/local/bin/gcc' do
+  to '/usr/local/bin/gcc10'
+  owner node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
+  mode 0o755
+end
+
+link '/usr/local/bin/g++' do
+  to '/usr/local/bin/g++10'
+  owner node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
+  mode 0o755
+end
+
+include_recipe '::create_bash_profile'
+
+include_recipe '::pyenv'
+
 include_recipe 'travis_build_environment::rvm'
 include_recipe 'travis_build_environment::gimme'
+
+freebsd_package 'openjdk8'
+freebsd_package 'openjdk11'
+freebsd_package 'openjdk12'
+freebsd_package 'openjdk13'
+freebsd_package 'maven'
+freebsd_package 'gradle'
+freebsd_package 'apache-ant'
+
+include_recipe '::jdk_switcher'

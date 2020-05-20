@@ -1,0 +1,4 @@
+#!/bin/csh
+
+pkg install -y bash base64
+curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
