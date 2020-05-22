@@ -92,6 +92,16 @@ __install_default_php_bionic_ppc64le(){
   phpenv global ${PHP_VERSION}
 }
 
+__install_default_php_focal(){
+  local PHP_VERSION=7.4
+
+  . /etc/os-release
+  archive_url="https://storage.googleapis.com/travis-ci-language-archives/php/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
+  curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
+  phpenv global ${PHP_VERSION}
+
+}
+
 __install_php(){
 
   . /etc/os-release
@@ -101,6 +111,10 @@ __install_php(){
     curl -s -o archive.tar.bz2 $archive_url && tar xjf archive.tar.bz2 --directory /
   done
 
+}
+
+__install_php_focal(){
+  echo "PHP - only 7.4 is supported"
 }
 
 main "$@"
