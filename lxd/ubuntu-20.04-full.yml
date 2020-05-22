@@ -44,16 +44,16 @@ provisioners:
    - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
 - type: file
-  source: files/postgresql/postgresql-10.conf
-  destination: /tmp/__postgresql__10__main__postgresql.conf
+  source: files/postgresql/postgresql-12.conf
+  destination: /tmp/__postgresql__12__main__postgresql.conf
 
 - type: file
   source: files/postgresql/pg_hba.conf
-  destination: /tmp/__postgresql__10__main__pg_hba.conf
+  destination: /tmp/__postgresql__12__main__pg_hba.conf
 
 - type: file
   source: files/postgresql/initd-postgresql
-  destination: /tmp/__postgresql__10__initd-postgresql
+  destination: /tmp/__postgresql__12__initd-postgresql
 
 - type: shell
   scripts:
