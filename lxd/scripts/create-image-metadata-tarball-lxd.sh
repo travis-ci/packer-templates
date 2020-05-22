@@ -19,8 +19,13 @@ main() {
   dest="${dest%%.tar.bz2}"
   mkdir -p "${dest}/env"
 
+  arch=$(uname -m)
+  if [[ $arch = "aarch64" ]]; then
+    arch="arm64"
+  fi
+
   echo "lxd" > "${dest}/env/PACKER_BUILDER_TYPE"
-  echo ${ARCH} > "${dest}/env/ARCH"
+  echo ${arch} > "${dest}/env/ARCH"
 
   # find "${RSPEC_JSON_DIR}" \
   #   -maxdepth 1 \
