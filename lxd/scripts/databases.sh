@@ -87,6 +87,10 @@ __mongodb_install_bionic_ppc64le(){
   #apt-get install -y mongodb-server
 }
 
+__mongodb_install_focal(){
+  echo "mongodb - not supported"
+}
+
 __mysql_setup() {
 
   mysql -h localhost -NBe "CREATE USER 'travis'@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%'; CREATE USER 'travis'@'localhost' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost'; CREATE USER 'travis'@'127.0.0.1' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'127.0.0.1'"
@@ -161,6 +165,14 @@ Pin-Priority: 900" > /etc/apt/preferences.d/redis
   systemctl disable redis-server
 }
 
+__redis_focal(){
+  apt-get update
+  apt-get install -y redis-server
+  __redis_setup
+  systemctl stop redis-server
+  systemctl disable redis-server
+}
+
 __turn_off_all() {
   systemctl stop mysql
   systemctl disable mysql
@@ -185,7 +197,11 @@ __couchdb_install(){
 }
 
 __couchdb_install_bionic(){
-  echo "couchdb - no installing on bionic"
+  echo "couchdb - has no installation candidate"
+}
+
+__couchdb_install_focal(){
+  echo "couchdb - has no installation candidate"
 }
 
 main "$@"

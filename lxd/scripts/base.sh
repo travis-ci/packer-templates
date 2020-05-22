@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
 set -o errexit
+source /tmp/__common-lib.sh
+
+__install_packages() {
+
+  apt install python-jsonpatch -y --no-install-recommends
+}
+
+__install_packages_focal() {
+
+  apt install python3-jsonpatch -y --no-install-recommends
+}
 
 export DEBIAN_FRONTEND=noninteractive
 # Force use of ipv4
@@ -11,8 +22,10 @@ sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list
 sed -i "s#DISTRIB_CODENAME#${DISTRIB_CODENAME}#g" /etc/apt/sources.list
 dpkg --remove-architecture i386
 apt update -qyy
-apt install ruby curl gnupg wget git software-properties-common python-jsonpatch md5deep openssl fuse hashdeep snapd dnsutils -y --no-install-recommends
+apt install ruby curl gnupg wget git software-properties-common md5deep openssl fuse hashdeep snapd dnsutils -y --no-install-recommends
 apt dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+
+call_build_function func_name="__install_packages"
 
 tee /etc/apt/apt.conf.d/10-force-yes <<EOF
 APT::Get::Assume-Yes "true";

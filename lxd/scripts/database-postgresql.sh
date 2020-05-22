@@ -29,6 +29,14 @@ __install_packages_bionic() {
     postgresql postgresql-contrib postgresql-${PGSQL_VERSION}-postgis-2.4 postgresql-${PGSQL_VERSION}-postgis-2.4-scripts postgresql-client libpq-dev libgeos++-dev;
 }
 
+__install_packages_focal() {
+  apt-get update -yqq
+  apt-get install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    postgresql postgresql-contrib postgresql-${PGSQL_VERSION}-postgis-3 postgresql-${PGSQL_VERSION}-postgis-3-scripts postgresql-client libpq-dev libgeos++-dev;
+}
+
 __install_packages_xenial_ppc64le(){
   echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
