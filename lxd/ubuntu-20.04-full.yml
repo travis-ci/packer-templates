@@ -110,7 +110,6 @@ provisioners:
   inline:
    - rm -f /etc/netplan/10-lxc.yaml
    - rm -f /etc/netplan/50-cloud-init.yaml
-   - echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
 
   # Cleanup package list
 - type: shell

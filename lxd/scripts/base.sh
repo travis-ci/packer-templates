@@ -80,3 +80,6 @@ fi
 curl -sL -o /home/travis/bin/artifacts https://s3.amazonaws.com/travis-ci-gmbh/artifacts/351/351.2/build/linux/${arch}/artifacts
 chmod +x /home/travis/bin/artifacts
 chown travis: /home/travis/bin/artifacts
+
+# disable cloud network init
+echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
