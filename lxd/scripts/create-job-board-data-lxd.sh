@@ -12,6 +12,11 @@ __languages() {
 main() {
   : "${JOB_BOARD_REGISTER_FILE:=/tmp/.job-board-register.yml}"
 
+  arch=$(uname -m)
+  if [[ $arch = "aarch64" ]]; then
+    arch="arm64"
+  fi
+
   local nowtime
   local languages
   nowtime=$(date -u +%Y%m%dT%H%M%SZ)
@@ -20,7 +25,7 @@ main() {
 
   cat > ${JOB_BOARD_REGISTER_FILE} <<EOF
 ---
-stack: lxd-${ARCH}
+stack: lxd-${arch}
 languages:
 - ${LANGUAGES}
 features:
