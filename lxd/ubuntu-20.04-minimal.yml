@@ -70,6 +70,7 @@ provisioners:
 - type: shell
   inline:
    - rm -f /etc/netplan/10-lxc.yaml
+   - rm -f /etc/netplan/50-cloud-init.yaml
 
   # Cleanup package list
 - type: shell
