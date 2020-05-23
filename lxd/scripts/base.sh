@@ -83,3 +83,9 @@ chown travis: /home/travis/bin/artifacts
 
 # disable cloud network init
 echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+
+# enable manage_etc_hosts: true
+grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
+
+# sudo: setrlimit(RLIMIT_CORE): Operation not permitted
+echo "Set disable_coredump false" >> /etc/sudo.conf
