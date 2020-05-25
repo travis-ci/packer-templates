@@ -13,6 +13,18 @@ __install_packages_focal() {
   apt install python3-jsonpatch -y --no-install-recommends
 }
 
+__network_setup() {
+  # disable cloud network init
+  echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+
+  # enable manage_etc_hosts: true
+  grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
+}
+
+__network_setup_xenial() {
+  echo "Xenial: don't override network config"
+}
+
 export DEBIAN_FRONTEND=noninteractive
 # Force use of ipv4
 echo 'Acquire::ForceIPv4 "true";' | tee /etc/apt/apt.conf.d/99force-ipv4
@@ -81,11 +93,7 @@ curl -sL -o /home/travis/bin/artifacts https://s3.amazonaws.com/travis-ci-gmbh/a
 chmod +x /home/travis/bin/artifacts
 chown travis: /home/travis/bin/artifacts
 
-# disable cloud network init
-echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
-
-# enable manage_etc_hosts: true
-grep -q manage_etc_hosts /etc/cloud/cloud.cfg || ( echo manage_etc_hosts: true | cat - /etc/cloud/cloud.cfg | tee /etc/cloud/cloud.cfg ) >/dev/null 2>&1
+call_build_function func_name="__network_setup"
 
 # sudo: setrlimit(RLIMIT_CORE): Operation not permitted
 echo "Set disable_coredump false" >> /etc/sudo.conf
