@@ -50,8 +50,6 @@ builders:
   - -v
   - <%= Dir.pwd %>/tmp/packer-builder-tmp:/tmp
   - --privileged=true
-  - -s overlay2
-  - --storage-opt overlay2.size=11G
   - "{{ .Image }}"
   - /sbin/init
   commit: true
