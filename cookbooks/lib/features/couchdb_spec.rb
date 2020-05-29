@@ -1,8 +1,9 @@
-  # frozen_string_literal: true
+# frozen_string_literal: true
 
 def couchdb_url
   return 'http://127.0.0.1:5984' if %w[trusty xenial].include?(Support.distro)
   return 'http://admin:travis@127.0.0.1:5984' if 'bionic'.include?(Support.distro)
+
   'http://127.0.0.1:5984'
 end
 
