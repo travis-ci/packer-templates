@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 
 def couchdb_url
   return 'http://127.0.0.1:5984' if %w[trusty xenial].include?(Support.distro)
@@ -21,8 +21,8 @@ describe 'couchdb installation' do
         raise e
       end
       sh("curl -X PUT #{couchdb_url}/bicycle")
-      sh("curl -X PUT #{couchdb_url}/bicycle/bell " \
-         "-H \"Content-Type: application/json\" -d \"{"Name":"Testname"}\"")
+      sh(%(curl -X PUT "#{couchdb_url}/bicycle/bell" \
+         -H "Content-Type: application/json" -d "{\"Name\":\"Testname\"}))
     end
 
     describe command("curl #{couchdb_url}/") do
