@@ -16,20 +16,20 @@ describe 'couchdb installation' do
         retry unless tries.zero?
         raise e
       end
-      sh('curl -X PUT http://127.0.0.1:5984/bicycle')
-      sh('curl -X PUT http://127.0.0.1:5984/bicycle/bell ' \
+      sh('curl -X PUT http://admin:travis@127.0.0.1:5984/bicycle')
+      sh('curl -X PUT http://admin:travis@127.0.0.1:5984/bicycle/bell ' \
          '-H \'Content-Type: application/json\' -d \'{"Name":"Testname"}\'')
     end
 
-    describe command('curl http://127.0.0.1:5984/') do
+    describe command('curl http://admin:travis@127.0.0.1:5984/') do
       its(:stdout) { should match '"couchdb":"Welcome"' }
     end
 
-    describe command('curl -X GET http://127.0.0.1:5984/_all_dbs') do
+    describe command('curl -X GET http://admin:travis@127.0.0.1:5984/_all_dbs') do
       its(:stdout) { should match 'bicycle' }
     end
 
-    describe command('curl -X GET http://127.0.0.1:5984/bicycle/bell') do
+    describe command('curl -X GET http://admin:travis@127.0.0.1:5984/bicycle/bell') do
       its(:stdout) { should include('_id', 'bell', 'Name', 'Testname') }
     end
   end
