@@ -24,8 +24,8 @@ describe 'couchdb installation' do
         raise e
       end
       sh("curl -X PUT #{couchdb_url}/bicycle")
-      sh(%(curl -X PUT "#{couchdb_url}/bicycle/bell" \
-         -H "Content-Type: application/json" -d "{\"Name\":\"Testname\"}))
+      sh("curl -H Content-Type: 'application/json' -X PUT #{couchdb_url}/bicycle/bell -d '{
+      \"Name\": \"Testname\"}'")
     end
 
     describe command("curl #{couchdb_url}/") do
