@@ -2,6 +2,7 @@
 
 def couchdb_url
   return 'http://127.0.0.1:5984' if %w[trusty xenial].include?(Support.distro)
+  
   'http://admin:travis@127.0.0.1:5984'
 end
 
