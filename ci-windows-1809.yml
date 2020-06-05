@@ -48,12 +48,6 @@ provisioners:
 - type: file
   source: packer-assets/usertrust.crt
   destination: c:/windows/temp/usertrust.crt  
-- type: powershell
-  scripts:
-  - packer-scripts/Bootstrap-Windows.ps1
-  environment_vars:
-  - "JOB_BOARD_REGISTER_FILE=c:/travis-job-board-register.yml"
-  - "SYSTEM_INFO_JSON=c:/travis_system_info.json"
 - type: shell
   inline:
   - certutil -addstore “Root" "c:/windows/temp/comodo.crt"
@@ -64,7 +58,13 @@ provisioners:
   - certutil -addstore “AuthRoot" "c:/windows/temp/usertrust.crt"  
 - type: shell
   inline:
-  - curl https://comodorsa.test.certificatetest.com/  
+  - curl https://comodorsa.test.certificatetest.com/   
+- type: powershell
+  scripts:
+  - packer-scripts/Bootstrap-Windows.ps1
+  environment_vars:
+  - "JOB_BOARD_REGISTER_FILE=c:/travis-job-board-register.yml"
+  - "SYSTEM_INFO_JSON=c:/travis_system_info.json" 
 - type: powershell
   scripts:
   - packer-scripts/packer-env-dump
