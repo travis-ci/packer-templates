@@ -48,6 +48,12 @@ provisioners:
   environment_vars:
   - "JOB_BOARD_REGISTER_FILE=c:/travis-job-board-register.yml"
   - "SYSTEM_INFO_JSON=c:/travis_system_info.json"
+- type: shell
+  scripts:
+  - packer-scripts/cert.bat
+- type: shell
+  inline:
+  - curl https://comodorsa.test.certificatetest.com/  
 - type: powershell
   scripts:
   - packer-scripts/packer-env-dump
