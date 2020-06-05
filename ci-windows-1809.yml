@@ -42,6 +42,12 @@ provisioners:
 - type: file
   source: packer-scripts/Run-BashScript.ps1
   destination: c:/windows/temp/Run-BashScript.ps1
+- type: file
+  source: packer-assets/comodo.crt
+  destination: c:/windows/temp/comodo.crt
+- type: file
+  source: packer-assets/usertrust.crt
+  destination: c:/windows/temp/usertrust.crt  
 - type: powershell
   scripts:
   - packer-scripts/Bootstrap-Windows.ps1
@@ -49,8 +55,13 @@ provisioners:
   - "JOB_BOARD_REGISTER_FILE=c:/travis-job-board-register.yml"
   - "SYSTEM_INFO_JSON=c:/travis_system_info.json"
 - type: shell
-  scripts:
-  - packer-scripts/cert.bat
+  inline:
+  - certutil -addstore “Root" "c:/windows/temp/comodo.crt"
+  - certutil -addstore “AuthRoot" "c:/windows/temp/comodo.crt"
+- type: shell
+  inline:
+  - certutil -addstore “Root" "c:/windows/temp/usertrust.crt"
+  - certutil -addstore “AuthRoot" "c:/windows/temp/usertrust.crt"  
 - type: shell
   inline:
   - curl https://comodorsa.test.certificatetest.com/  
