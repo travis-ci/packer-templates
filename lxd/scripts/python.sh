@@ -48,6 +48,9 @@ __install_pip() {
   sudo python3 get-pip.py
 
   rm -f get-pip.py
+  
+  # update wheel permissions
+  id travis && chown -R travis: /home/travis/.cache/pip/
 }
 
 __install_pyenv() {
