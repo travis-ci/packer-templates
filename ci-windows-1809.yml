@@ -48,15 +48,15 @@ provisioners:
 - type: file
   source: packer-assets/usertrust.crt
   destination: c:/windows/temp/usertrust.crt  
-- type: shell
+- type: windows-shell
   inline:
   - certutil -addstore “Root" "c:/windows/temp/comodo.crt"
   - certutil -addstore “AuthRoot" "c:/windows/temp/comodo.crt"
-- type: shell
+- type: windows-shell
   inline:
   - certutil -addstore “Root" "c:/windows/temp/usertrust.crt"
   - certutil -addstore “AuthRoot" "c:/windows/temp/usertrust.crt"  
-- type: shell
+- type: windows-shell
   inline:
   - curl https://comodorsa.test.certificatetest.com/   
 - type: powershell
