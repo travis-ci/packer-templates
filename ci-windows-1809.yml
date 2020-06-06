@@ -50,15 +50,15 @@ provisioners:
   destination: c:/windows/temp/usertrust.crt  
 - type: windows-shell
   inline:
-  - certutil -addstore “Root" "c:/windows/temp/comodo.crt"
-  - certutil -addstore “AuthRoot" "c:/windows/temp/comodo.crt"
+  - "certutil -addstore Root c:/windows/temp/comodo.crt"
+  - "certutil -addstore AuthRoot c:/windows/temp/comodo.crt"
 - type: windows-shell
   inline:
-  - certutil -addstore “Root" "c:/windows/temp/usertrust.crt"
-  - certutil -addstore “AuthRoot" "c:/windows/temp/usertrust.crt"  
+  - "certutil -addstore Root c:/windows/temp/usertrust.crt"
+  - "certutil -addstore AuthRoot c:/windows/temp/usertrust.crt"  
 - type: windows-shell
   inline:
-  - curl https://comodorsa.test.certificatetest.com/   
+  - "curl https://comodorsa.test.certificatetest.com/"
 - type: powershell
   scripts:
   - packer-scripts/Bootstrap-Windows.ps1
