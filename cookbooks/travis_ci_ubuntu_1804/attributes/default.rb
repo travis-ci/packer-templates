@@ -177,6 +177,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   clojure
   cplusplus
   cpp
+  crystal
   default
   generic
   go
