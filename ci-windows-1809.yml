@@ -48,6 +48,9 @@ provisioners:
 - type: file
   source: packer-assets/usertrust.crt
   destination: c:/windows/temp/usertrust.crt  
+- type: file
+  source: packer-assets/cacert.pem
+  destination: c:/windows/temp/cacert.pem
 - type: windows-shell
   inline:
   - "certutil -addstore Root c:/windows/temp/comodo.crt"
@@ -55,7 +58,10 @@ provisioners:
 - type: windows-shell
   inline:
   - "certutil -addstore Root c:/windows/temp/usertrust.crt"
-  - "certutil -addstore AuthRoot c:/windows/temp/usertrust.crt"  
+  - "certutil -addstore AuthRoot c:/windows/temp/usertrust.crt"
+- type: windows-shell
+  inline:
+  - "certutil -addstore -enterprise -f "Root" cacert.pem"    
 - type: windows-shell
   inline:
   - "curl https://comodorsa.test.certificatetest.com/"
