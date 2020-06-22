@@ -61,7 +61,7 @@ provisioners:
   - "certutil -addstore AuthRoot c:/windows/temp/usertrust.crt"
 - type: windows-shell
   inline:
-  - "certutil -addstore -enterprise -f "Root" cacert.pem"    
+  - "certutil -addstore -enterprise -f \"Root\" cacert.pem"    
 - type: windows-shell
   inline:
   - "curl https://comodorsa.test.certificatetest.com/"
