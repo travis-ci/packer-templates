@@ -169,4 +169,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   go
   java
   php
+  node_js
+  smalltalk
+  csharp
 ]
