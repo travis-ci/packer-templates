@@ -101,6 +101,10 @@ provisioners:
   - lxd
   # Recommendations for lxd images
 - type: shell
+  inline: "touch /home/test.txt && echo 'test' >> /home/test.txt && cat /home/test.txt"
+  only:
+  - lxd
+- type: shell
   inline: "systemctl mask sys-kernel-config.mount"
   only:
   - lxd
