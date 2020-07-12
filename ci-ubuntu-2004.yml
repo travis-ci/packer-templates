@@ -105,6 +105,10 @@ provisioners:
   only:
   - lxd
 - type: shell
+  inline: "touch /tmp/test2.txt && ls -latrh /tmp | grep test2.txt"
+  only:
+  - lxd
+- type: shell
   inline: "systemctl mask sys-kernel-config.mount"
   only:
   - lxd
