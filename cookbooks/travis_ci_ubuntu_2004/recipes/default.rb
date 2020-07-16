@@ -84,3 +84,19 @@ include_recipe 'travis_system_info'
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are
 # good or bad
 execute 'rm -f /home/travis/.pearrc'
+
+# install erlang
+# add erlan gpgp key
+execute 'add_erlang_gpg_key' do
+  command 'wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key add -'
+end
+# add erlang repo
+execute 'add_erlang_repository' do
+  command 'echo "deb https://packages.erlang-solutions.com/ubuntu focal contrib" | sudo tee /etc/apt/sources.list.d/rabbitmq.list'
+end
+# update apt for erlang repo
+apt_update
+# install erlang
+package 'erlang' do
+  action :install
+end
