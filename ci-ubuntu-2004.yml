@@ -11,6 +11,8 @@ variables:
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
+  travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
+  travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
 builders:
 - type: amazon-ebs
   access_key: "{{ user `aws_access_key` }}"
