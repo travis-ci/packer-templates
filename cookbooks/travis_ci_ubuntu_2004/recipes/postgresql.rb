@@ -17,8 +17,8 @@ package 'postgresql-contrib' do
 end
 
 execute 'change_pg_hba_conf' do
-  command 'line_numb=$(grep -n \'local\' pg_hba.conf | grep \'postgres\' | grep \'trust\' | cut -d\')'
-  command 'sed -i \'\'$line_numb\'s/peer/trust/\''
+  command 'line_numb=$(grep -n \'local\' /etc/postgresql/12/main/pg_hba.conf | grep \'postgres\' | grep \'peer\' | cut -d\')' 
+  command 'sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
 end
 
 service 'postgresql' do
