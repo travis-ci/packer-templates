@@ -119,3 +119,5 @@ end
 service 'elasticsearch' do
   :enable 
 end
+
+include_recipe '::postgresql'
