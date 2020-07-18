@@ -117,7 +117,7 @@ package 'elasticsearch' do
 end
 # enable elasticsearch service
 service 'elasticsearch' do
-  :enable 
+  action [:enable, :restart] 
 end
 
 include_recipe '::postgresql'
