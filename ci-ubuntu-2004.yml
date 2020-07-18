@@ -57,6 +57,10 @@ builders:
   commit: true
 provisioners:
 - type: shell
+  inline: "lxd init"
+  only:
+  - lxd
+- type: shell
   inline: sleep 10
   only:
   - googlecompute
@@ -130,10 +134,6 @@ provisioners:
   only:
   - lxd
   # end Recommendations
-- type: shell
-  inline: "lxd init"
-  only:
-  - lxd
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap
