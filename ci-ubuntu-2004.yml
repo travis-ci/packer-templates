@@ -57,10 +57,6 @@ builders:
   commit: true
 provisioners:
 - type: shell
-  inline: "echo "test 19""
-  only:
-  - lxd
-- type: shell
   inline: sleep 10
   only:
   - googlecompute
