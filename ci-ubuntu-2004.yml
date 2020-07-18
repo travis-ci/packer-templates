@@ -105,6 +105,10 @@ provisioners:
   only:
   - lxd
 - type: shell
+  inline: "ls -latrh /home/test.txt"
+  only:
+  - lxd
+- type: shell
   inline: "touch /tmp/test2.txt && ls -latrh /tmp | grep test2.txt"
   only:
   - lxd
