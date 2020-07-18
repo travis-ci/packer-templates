@@ -18,5 +18,5 @@ execute 'edit_local_ini' do
 end
 
 service 'couchdb' do
-  action [:enable, :restart]
+  action :enable
 end
