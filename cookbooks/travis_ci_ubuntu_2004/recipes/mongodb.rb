@@ -19,6 +19,6 @@ package 'mongodb' do
 end
 
 service 'mongod' do
-  :enable 
+  action :enable 
 end
 
