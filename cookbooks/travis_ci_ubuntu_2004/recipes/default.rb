@@ -121,4 +121,4 @@ service 'elasticsearch' do
 end
 
 #include_recipe '::postgresql'
-#include_recipe '::couchdb'
+include_recipe '::couchdb'
