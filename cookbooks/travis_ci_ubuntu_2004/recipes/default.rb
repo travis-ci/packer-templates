@@ -100,3 +100,22 @@ apt_update
 package 'erlang' do
   action :install
 end
+
+# add elasticsearch gpg key
+execute 'add_elasticsearch_gpg_key' do
+  command 'wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -'
+end
+# add elasticsearch repo
+execute 'add_elasticsearch_repository' do
+  command 'echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list'
+end
+# update apt
+apt_update
+# install elasticsearch
+package 'elasticsearch' do
+  action :install 
+end
+# enable elasticsearch service
+service 'elasticsearch' do
+  :enable 
+end
