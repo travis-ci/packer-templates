@@ -131,6 +131,10 @@ provisioners:
   - lxd
   # end Recommendations
 - type: shell
+  inline: "lxd init"
+  only:
+  - lxd
+- type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap
   - packer-scripts/clone-travis-cookbooks
