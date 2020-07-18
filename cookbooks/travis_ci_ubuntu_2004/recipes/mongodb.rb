@@ -18,7 +18,7 @@ package 'mongodb' do
   action :install 
 end
 
-service 'mongod' do
+service 'mongodb' do
   action :enable 
 end
 
