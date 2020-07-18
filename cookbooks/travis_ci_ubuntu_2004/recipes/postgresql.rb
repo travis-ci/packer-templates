@@ -22,5 +22,5 @@ execute 'change_pg_hba_conf' do
 end
 
 service 'postgresql' do
-  [:enable, :restart] 
+  action [:enable, :restart] 
 end
