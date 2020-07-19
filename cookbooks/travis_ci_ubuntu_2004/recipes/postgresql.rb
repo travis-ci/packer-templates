@@ -5,6 +5,8 @@ apt_repository 'postgresql' do
   key 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
 end
 
+apt_update
+
 apt_package 'postgresql'
 
 service 'postgresql' do
