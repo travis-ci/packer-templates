@@ -18,6 +18,10 @@ execute 'change_pg_hba_conf' do
   command 'sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
 end
 
+execute 'var_log_permissions' do
+  command 'sudo chown travis:travis -R /var/log/postgresql/'
+end
+
 service 'postgresql' do
   action :enable
 end
