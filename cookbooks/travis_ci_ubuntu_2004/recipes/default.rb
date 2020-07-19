@@ -120,5 +120,5 @@ service 'elasticsearch' do
   action [:enable, :restart] 
 end
 
-#include_recipe '::postgresql'
-include_recipe '::couchdb'
+include_recipe '::postgresql'
+#include_recipe '::couchdb'
