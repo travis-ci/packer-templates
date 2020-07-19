@@ -23,7 +23,7 @@ execute 'var_log_permissions' do
 end
 
 service 'postgresql' do
-  action :enable
+  action [:enable, :start]
 end
 
 apt_repository 'postgresql' do
