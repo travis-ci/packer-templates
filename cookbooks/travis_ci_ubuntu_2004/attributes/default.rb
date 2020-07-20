@@ -3,12 +3,12 @@
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
-override['travis_build_environment']['system_python']['pythons'] = %w[3.8] #apt packages
+override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
-  '3.8.3' => %w[3.8]
-#   '3.7.6' => %w[3.7]
-  #'pypy2.7-5.8.0' => %w[pypy],
-  #'pypy3.5-5.8.0' => %w[pypy3]
+  '3.8.3' => %w[3.8],
+  '3.7.7' => %w[3.7],
+  'pypy2.7-7.3.1' => %w[pypy],
+  'pypy3.6-7.3.1' => %w[pypy3]
 }
 # packages build by Cpython + our repo
 pythons = %w[
@@ -27,7 +27,6 @@ php_aliases = {
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
-
 
 # if node['kernel']['machine'] == "x86_64" # Is it required
 # arch = 'amd64'
