@@ -22,8 +22,8 @@ execute 'var_log_permissions' do
   command 'sudo chown travis:travis -R /var/log/postgresql/'
 end
 
-service 'postgresql' do
-  action [:enable, :start]
+execute 'enable postgresql' do
+  command 'sudo systemctl enable postgresql@.service'
 end
 
 apt_repository 'postgresql' do
