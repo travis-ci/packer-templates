@@ -164,7 +164,7 @@ provisioners:
   version: 16.2.73
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
-  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --chef-license accept --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   <% if ENV['BUILDER'] == "lxd" %>
   # packer lxd builder copy cookbooks to wrong directory
