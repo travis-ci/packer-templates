@@ -1,3 +1,3 @@
-execute 'edit_local_ini' do
+execute 'install_mysql' do
   command 'sudo apt-get install mysql-server'
 end
