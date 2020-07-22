@@ -161,7 +161,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/ubuntu-2004-system-info-commands.yml
 - type: chef-solo
-  version: 16.2.73
+  version: 14.15.6
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
