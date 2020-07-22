@@ -164,12 +164,12 @@ provisioners:
   version: 16.2.73
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
-  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --chef-license accept --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   <% if ENV['BUILDER'] == "lxd" %>
   # packer lxd builder copy cookbooks to wrong directory
   execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
-  {{if .Sudo}}sudo {{end}}chef-solo --chef-license=accept --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  {{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   cookbook_paths:
   - cookbooks
