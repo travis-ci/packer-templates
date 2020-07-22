@@ -169,7 +169,7 @@ provisioners:
   <% if ENV['BUILDER'] == "lxd" %>
   # packer lxd builder copy cookbooks to wrong directory
   execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
-  {{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  {{if .Sudo}}sudo {{end}}chef-solo --chef-license=accept --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   cookbook_paths:
   - cookbooks
