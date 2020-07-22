@@ -8,8 +8,8 @@ end
 package 'postgresql'
 
 execute 'change_pg_hba_conf' do
-  command 'line_numb=$(grep -n \'local\' /etc/postgresql/12/main/pg_hba.conf | grep \'postgres\' | grep \'peer\' | cut -d\')'
-  command 'sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
+  command 'sudo line_numb=$(grep -n \'local\' /etc/postgresql/12/main/pg_hba.conf | grep \'postgres\' | grep \'peer\' | cut -d\')'
+  command 'sudo sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
 end
 
 apt_repository 'postgresql' do
