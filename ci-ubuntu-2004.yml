@@ -117,15 +117,12 @@ provisioners:
   - docker
   - googlecompute
   - lxd
+- type: shell
+  inline: "uname -a"
+  only:
+  - amazon-ebs
+  - lxd
   # Recommendations for lxd images
-- type: shell
-  inline: "touch /home/test.txt && echo 'test' >> /home/test.txt && cat /home/test.txt"
-  only:
-  - lxd
-- type: shell
-  inline: "touch /tmp/test2.txt && ls -latrh /tmp | grep test2.txt"
-  only:
-  - lxd
 - type: shell
   inline: "systemctl mask sys-kernel-config.mount"
   only:
