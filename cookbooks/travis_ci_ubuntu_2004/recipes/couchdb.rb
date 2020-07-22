@@ -8,5 +8,5 @@ end
 package 'couchdb'
 
 execute 'edit_local_ini' do
-  command 'echo "admin = password" >> /opt/couchdb/etc/local.ini'
+  command 'echo "travis = travis" >> /opt/couchdb/etc/local.ini'
 end
