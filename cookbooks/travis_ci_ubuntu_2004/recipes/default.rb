@@ -73,6 +73,7 @@ include_recipe '::couchdb'
 include_recipe '::mongodb'
 include_recipe '::mysql'
 include_recipe '::mariadb'
+include_recipe '::postgresql'
 
 # HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
