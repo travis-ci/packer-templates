@@ -176,5 +176,4 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   node_js
   smalltalk
   csharp
-  perl
 ]
