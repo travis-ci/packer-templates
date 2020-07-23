@@ -47,8 +47,7 @@ override['travis_build_environment']['php_aliases'] = php_aliases
 #  override['travis_build_environment']['hhvm_enabled'] = false
 # end
 
-override['travis_perlbrew']['perls'] = [ { name: '5.29', version: 'perl-5.29.0' }, { name: '5.30', version: 'perl-5.30.0' } ] # compare with bionic and possibly fill in with proper ver pre-install
-override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['perls'] = [ { name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' } ]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
