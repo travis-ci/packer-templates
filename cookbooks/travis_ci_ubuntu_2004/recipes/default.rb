@@ -70,6 +70,7 @@ include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
 
 include_recipe '::couchdb'
+include_recipe '::mongodb'
 
 # HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
