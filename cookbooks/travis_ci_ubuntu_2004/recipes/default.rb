@@ -71,7 +71,7 @@ include_recipe 'travis_phantomjs::2'
 
 include_recipe '::couchdb'
 include_recipe '::mongodb'
-include_recipe '::mysql'
+#include_recipe '::mysql'
 include_recipe '::mariadb'
 include_recipe '::postgresql'
 
