@@ -69,9 +69,11 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
 
+package 'mysql-client
+
 include_recipe '::couchdb'
 include_recipe '::mongodb'
-# include_recipe '::mysql'
+include_recipe '::mysql'
 include_recipe '::mariadb'
 include_recipe '::postgresql'
 
