@@ -1,13 +1,14 @@
-execute 'add_mariadb_gpg_key' do
-  command 'sudo apt-key adv --fetch-keys \'https://mariadb.org/mariadb_release_signing_key.asc\''
+apt_repository 'mariadb' do
+  uri 'http://mariadb.mirror.globo.tech/repo/10.5/ubuntu'
+  distribution 'focal'
+  components ['main']
+  key 'https://mariadb.org/mariadb_release_signing_key.asc'
 end
 
-execute 'add_mariadb_repository' do
-  command 'sudo add-apt-repository \'deb [arch=amd64,arm64,ppc64el] http://ftp.icm.edu.pl/pub/unix/database/mariadb/repo/10.5/ubuntu focal main\''
-end
+package 'mariadb-client'
 
-apt_update
+package 'mariadb-server'
 
-package 'mariadb-server' do
-  action :install 
+apt_repository 'mariadb' do
+  action :remove
 end
