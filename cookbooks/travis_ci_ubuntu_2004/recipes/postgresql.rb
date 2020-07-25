@@ -7,9 +7,15 @@ end
 
 package 'postgresql'
 
-execute 'change_pg_hba_conf' do
-  command 'sudo line_numb=$(grep -n \'local\' /etc/postgresql/12/main/pg_hba.conf | grep \'postgres\' | grep \'peer\' | cut -d\')'
+execute 'find_line_number' do
+  command 'line_numb=$(sudo grep -n local /etc/postgresql/12/main/pg_hba.conf | sudo grep postgres | sudo grep peer | sudo cut -d: -f1) && echo $line_numb > ~/test.txt'
+end
+
+execute 'sed_peer_to_trust' do
   command 'sudo sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
+end
+
+execute 'change_log_dir_permissions' do
   command 'sudo chmod -R 777 /var/log/postgresql'
 end
 
