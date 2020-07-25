@@ -1,5 +1,5 @@
 package 'mysql-server'
 
-service 'postgresql' do
+service 'mysql' do
   [:disable, :stop]
 end
