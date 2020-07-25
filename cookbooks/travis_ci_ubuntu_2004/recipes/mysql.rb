@@ -1,5 +1,7 @@
 package 'mysql-server'
 
+package 'mysql-client'
+
 service 'mysql' do
   [:disable, :stop]
 end
