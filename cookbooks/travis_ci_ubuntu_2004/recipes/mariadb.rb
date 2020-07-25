@@ -5,9 +5,9 @@ apt_repository 'mariadb' do
   key 'https://mariadb.org/mariadb_release_signing_key.asc'
 end
 
-package 'mariadb-client'
-
 package 'mariadb-server'
+
+package 'mariadb-client'
 
 apt_repository 'mariadb' do
   action :remove
