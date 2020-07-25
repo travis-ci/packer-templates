@@ -61,9 +61,9 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
 elsif node['kernel']['machine'] == 'aarch64'
-  override['travis_build_environment']['arch'] = 'aarch64'
-  override['travis_build_environment']['packer']['aarch64']['version'] = '1.3.3'
-  override['travis_build_environment']['packer']['aarch64']['checksum'] = \
+  override['travis_build_environment']['arch'] = 'arm64'
+  override['travis_build_environment']['packer']['arm64']['version'] = '1.3.3'
+  override['travis_build_environment']['packer']['arm64']['checksum'] = \
     'e08c9542ff6cb231dd03d6f8096f6749e79056734bf69d5399205451b94c9d03'
 else
   override['travis_jdk']['versions'] = %w[
