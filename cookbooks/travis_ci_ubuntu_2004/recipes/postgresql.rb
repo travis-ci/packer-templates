@@ -7,6 +7,10 @@ end
 
 package 'postgresql'
 
+service 'postgresql' do
+  action [:stop, :disable]
+end
+
 execute 'find_line_number' do
   command 'line_numb=$(sudo grep -n local /etc/postgresql/12/main/pg_hba.conf | sudo grep postgres | sudo grep peer | sudo cut -d: -f1) && echo $line_numb > ~/test.txt'
 end
