@@ -7,8 +7,6 @@ end
 
 package 'mariadb-server'
 
-package 'mariadb-client'
-
 service 'mariadb' do
   action [:stop, :disable]
 end
