@@ -9,6 +9,10 @@ package 'mariadb-server'
 
 package 'mariadb-client'
 
+service 'mariadb' do
+  action [:stop, :disable]
+end
+
 apt_repository 'mariadb' do
   action :remove
 end
