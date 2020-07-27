@@ -9,3 +9,7 @@ end
 execute 'mariadb_install' do
   command 'sudo apt install mariadb-server mariadb-client -y'
 end
+
+service 'mariadb' do
+  action [:stop, :disable]
+end
