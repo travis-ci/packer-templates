@@ -255,6 +255,7 @@ sed
 sensible-utils
 sgml-base
 shared-mime-info
+snapcraft
 software-properties-common
 sqlite3
 ssh-import-id
