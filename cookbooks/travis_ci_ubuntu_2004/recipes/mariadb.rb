@@ -7,6 +7,10 @@ end
 
 package 'mariadb-server'
 
+service 'mariadb' do
+  action :start
+end
+
 execute 'root_pass' do
   command 'mysql -e "UPDATE mysql.user SET Password = PASSWORD(\'Pass123\') WHERE User = \'root\'"'
 end
