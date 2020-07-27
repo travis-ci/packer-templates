@@ -21,7 +21,7 @@ main() {
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __install_serverspec
   else
     __install_chefdk "${PACKER_CHEF_PREFIX}"
@@ -35,7 +35,7 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __remove_serverspec_chef
   elif [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
     __remove_chefdk
