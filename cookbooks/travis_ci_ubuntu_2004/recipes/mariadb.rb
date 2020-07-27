@@ -1,28 +1,11 @@
-apt_repository 'mariadb' do
-  uri 'http://mariadb.mirror.globo.tech/repo/10.5/ubuntu'
-  distribution 'focal'
-  components ['main']
-  key 'https://mariadb.org/mariadb_release_signing_key.asc'
+execute 'mariadb_key' do
+  command 'sudo apt-key adv --fetch-keys \'https://mariadb.org/mariadb_release_signing_key.asc\''
 end
 
-mariadb_pkgs =  %w[
-  libmariadbd19
-  mariadb-client-10.3
-  mariadb-client-core-10.3
-  mariadb-common
-  mariadb-server-10.3
-  mariadb-server-core-10.3
-]
-
-package mariadb_pkgs do
-  action %i[install upgrade]
+execute 'mariadb_repo' do
+  command 'sudo add-apt-repository \'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal main\''
 end
 
-service 'mariadb' do
-  action [:stop, :disable]
+execute 'mariadb_install' do
+  command 'sudo apt install mariadb-server mariadb-client -y'
 end
-
-apt_repository 'mariadb' do
-  action :remove
-end
-
