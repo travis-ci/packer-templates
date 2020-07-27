@@ -69,11 +69,13 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
 
-include_recipe '::mariadb'
-include_recipe '::couchdb'
-include_recipe '::mongodb'
-include_recipe '::mysql'
-include_recipe '::postgresql'
+if node['kernel']['machine'] != 'aarch64'
+  include_recipe '::mariadb'
+  include_recipe '::couchdb'
+  include_recipe '::mongodb'
+  include_recipe '::mysql'
+  include_recipe '::postgresql'
+end
 
 # HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
