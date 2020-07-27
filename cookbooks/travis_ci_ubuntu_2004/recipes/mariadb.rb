@@ -8,30 +8,6 @@ end
 package 'mariadb-server'
 
 service 'mariadb' do
-  action :start
-end
-
-execute 'root_pass' do
-  command 'mysql -e "UPDATE mysql.user SET Password = PASSWORD(\'Pass123\') WHERE User = \'root\'"'
-end
-
-execute 'drop_def_user' do
-  command 'mysql -e "DROP USER \'\'@\'localhost\'"'
-end
-
-execute 'drop_def_hostname' do
-  command 'mysql -e "DROP USER \'\'@\'$(hostname)\'"'
-end
-
-execute 'drop_test_database' do
-  command 'mysql -e "DROP DATABASE test"'
-end
-
-execute 'flush_priviliges' do
-  command 'mysql -e "FLUSH PRIVILEGES"'
-end
-
-service 'mariadb' do
   action [:stop, :disable]
 end
 
