@@ -73,7 +73,7 @@ if node['kernel']['machine'] != 'aarch64'
   include_recipe '::mariadb'
   include_recipe '::couchdb'
   include_recipe '::mongodb'
-  #include_recipe '::mysql'
+  include_recipe '::mysql'
   include_recipe '::postgresql'
 end
 
