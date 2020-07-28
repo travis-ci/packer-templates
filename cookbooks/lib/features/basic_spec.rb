@@ -38,6 +38,14 @@ describe 'apt installation' do
       describe command('dpkg --print-foreign-architectures') do
         its(:stdout) { should be_empty }
       end
+    elif os[:arch] =~ /aarch64/
+      describe command('dpkg --print-architecture') do
+        its(:stdout) { should match(/arm64/) }
+      end
+
+      describe command('dpkg --print-foreign-architectures') do
+        its(:stdout) { should be_empty }
+      end
     else
       describe command('dpkg --print-architecture') do
         its(:stdout) { should match(/amd64/) }
@@ -451,9 +459,11 @@ describe command('packer version') do
   its(:exit_status) { should eq 0 }
 end
 
-describe command('psql --version') do
-  its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2})/) }
-  its(:exit_status) { should eq 0 }
+if os[:arch] !~ /aarch64/
+  describe command('psql --version') do
+    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2})/) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe 'ragel installation' do
