@@ -302,7 +302,7 @@ describe 'git installation' do
   end
 end
 
-if os[:arch] !~ /ppc64/
+if os[:arch] !~ /ppc64|aarch64/
   describe command('heroku version') do
     its(:stdout) { should match(/^heroku/) }
   end
