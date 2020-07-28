@@ -415,9 +415,11 @@ describe 'mercurial installation' do
   end
 end
 
-describe command('mysql --version') do
-  its(:stdout) { should match(/^mysql /) }
-  its(:exit_status) { should eq 0 }
+if os[:arch] !~ /aarch64/
+  describe command('mysql --version') do
+    its(:stdout) { should match(/^mysql /) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe 'openssl installation' do
