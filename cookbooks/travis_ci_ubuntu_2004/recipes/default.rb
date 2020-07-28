@@ -70,11 +70,11 @@ include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
 
 if node['kernel']['machine'] != 'aarch64'
-  # include_recipe '::mariadb'
   include_recipe '::couchdb'
   include_recipe '::mongodb'
   include_recipe '::mysql'
   include_recipe '::postgresql'
+  include_recipe '::mariadb'
 end
 
 # HACK: ubuntu_1804-specific shims!
