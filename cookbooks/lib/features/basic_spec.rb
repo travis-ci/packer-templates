@@ -38,7 +38,7 @@ describe 'apt installation' do
       describe command('dpkg --print-foreign-architectures') do
         its(:stdout) { should be_empty }
       end
-    elif os[:arch] =~ /aarch64/
+    elif os[:arch] =~ /aarch64|arm64/
       describe command('dpkg --print-architecture') do
         its(:stdout) { should match(/arm64/) }
       end
