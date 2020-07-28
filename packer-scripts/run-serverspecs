@@ -43,6 +43,7 @@ main() {
 }
 
 __install_serverspec() {
+  apt-get install rubygems
   gem install -v 2.39.1 serverspec
 }
 __install_chefdk() {
@@ -112,6 +113,7 @@ __remove_chefdk() {
 
 __remove_serverspec_chef() {
   __run_retry 2 30 gem uninstall serverspec --version 2.39.1
+  __run_retry 2 30 apt-get purge -y rubygems
   __run_retry 2 30 apt-get purge -y chef
   __run_retry 2 30 apt-get update -y
 }
