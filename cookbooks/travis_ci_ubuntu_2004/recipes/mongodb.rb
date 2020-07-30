@@ -12,6 +12,6 @@ package 'mongodb' do
   action :install 
 end
 
-package 'mongodb' do
-  action [:stop, :disable]
+service 'mysql' do
+  action [:disable, :stop]
 end
