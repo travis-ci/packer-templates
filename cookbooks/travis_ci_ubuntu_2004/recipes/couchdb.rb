@@ -10,3 +10,7 @@ package 'couchdb'
 execute 'edit_local_ini' do
   command 'echo "travis = travis" >> /opt/couchdb/etc/local.ini'
 end
+
+execute 'edit_local_ini' do
+  command 'echo "admin = travis" >> /opt/couchdb/etc/local.ini'
+end
