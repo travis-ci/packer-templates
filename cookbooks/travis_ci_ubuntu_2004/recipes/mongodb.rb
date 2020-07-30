@@ -11,3 +11,7 @@ apt_update
 package 'mongodb' do
   action :install 
 end
+
+package 'mongodb' do
+  action [:stop, :disable]
+end
