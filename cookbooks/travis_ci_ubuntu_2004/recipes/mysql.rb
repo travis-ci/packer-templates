@@ -18,6 +18,7 @@ bash 'config_mysql' do
     mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost'"
     mysql -u root -e "CREATE USER 'travis'@'127.0.0.1' IDENTIFIED BY ''"
     mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'127.0.0.1'"
+    mysql -u root -e "UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User = 'root'; FLUSH PRIVILEGES;"
   EOH
 end
 
