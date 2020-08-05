@@ -29,22 +29,24 @@ describe 'apt installation' do
     end
   end
 
-  describe 'apt architecture' do
-    if os[:arch] =~ /ppc64/
-      describe command('dpkg --print-architecture') do
-        its(:stdout) { should match(/ppc/) }
-      end
+  if os[:arch] !~ /aarch64|arm64/
+    describe 'apt architecture' do
+      if os[:arch] =~ /ppc64/
+        describe command('dpkg --print-architecture') do
+          its(:stdout) { should match(/ppc/) }
+        end
 
-      describe command('dpkg --print-foreign-architectures') do
-        its(:stdout) { should be_empty }
-      end
-    else
-      describe command('dpkg --print-architecture') do
-        its(:stdout) { should match(/amd64/) }
-      end
+        describe command('dpkg --print-foreign-architectures') do
+          its(:stdout) { should be_empty }
+        end
+      else
+        describe command('dpkg --print-architecture') do
+          its(:stdout) { should match(/amd64/) }
+        end
 
-      describe command('dpkg --print-foreign-architectures') do
-        its(:stdout) { should match(/i386/) }
+        describe command('dpkg --print-foreign-architectures') do
+          its(:stdout) { should match(/i386/) }
+        end
       end
     end
   end
@@ -54,11 +56,13 @@ describe command('bats --version') do
   its(:stdout) { should match(/^Bats \d/) }
 end
 
-describe command('shellcheck --version') do
-  its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
+if os[:arch] !~ /aarch64|arm64/
+  describe command('shellcheck --version') do
+    its(:stdout) { should match(/^version: \d+\.\d+\.\d+/) }
+  end
 end
 
-if os[:arch] !~ /ppc64/
+if os[:arch] !~ /ppc64|aarch64|arm64/
   describe command('shfmt -version') do
     its(:stdout) { should match(/^v\d+\.\d+\.\d+/) }
   end
@@ -126,25 +130,29 @@ describe 'ccache installation' do
   end
 end
 
-describe 'clang installation' do
-  describe command('clang -v') do
-    its(:exit_status) { should eq 0 }
-  end
+if os[:arch] !~ /aarch64|arm64/
+  describe 'clang installation' do
+    describe command('clang -v') do
+      its(:exit_status) { should eq 0 }
+    end
 
-  describe 'clang command' do
-    describe command('clang -help') do
-      its(:stdout) do
-        should include(
-          'OVERVIEW: clang LLVM compiler',
-          'OPTIONS:'
-        )
+    describe 'clang command' do
+      describe command('clang -help') do
+        its(:stdout) do
+          should include(
+            'OVERVIEW: clang LLVM compiler',
+            'OPTIONS:'
+          )
+        end
       end
     end
   end
 end
 
-describe package('pollinate') do
-  it { should be_installed }
+if os[:arch] !~ /aarch64|arm64/
+  describe package('pollinate') do
+    it { should be_installed }
+  end
 end
 
 describe file('/etc/cloud/templates') do
@@ -179,9 +187,11 @@ end
   end
 end
 
-describe command('cmake --version') do
-  its(:exit_status) { should eq 0 }
-  its(:stdout) { should match(/^cmake version [23]/) }
+if os[:arch] !~ /aarch64|arm64/
+  describe command('cmake --version') do
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/^cmake version [23]/) }
+  end
 end
 
 describe 'dictionaries installation' do
@@ -302,7 +312,7 @@ describe 'git installation' do
   end
 end
 
-if os[:arch] !~ /ppc64/
+if os[:arch] !~ /ppc64|aarch64/
   describe command('heroku version') do
     its(:stdout) { should match(/^heroku/) }
   end
@@ -332,33 +342,35 @@ def test_json
   Support.tmpdir.join('test.json')
 end
 
-describe 'jq installation' do
-  before do
-    test_json.write(<<-EOF.gsub(/^\s+> /, ''))
-      > {
-      >   "stuff": [
-      >     {
-      >       "@type": "smarm",
-      >       "msg": [
-      >         "Konstantin broke all the things"
-      >       ]
-      >     },
-      >     {
-      >       "@type": "empty"
-      >     }
-      >   ]
-      > }
-    EOF
-  end
+if os[:arch] !~ /aarch64|arm64/
+  describe 'jq installation' do
+    before do
+      test_json.write(<<-EOF.gsub(/^\s+> /, ''))
+        > {
+        >   "stuff": [
+        >     {
+        >       "@type": "smarm",
+        >       "msg": [
+        >         "Konstantin broke all the things"
+        >       ]
+        >     },
+        >     {
+        >       "@type": "empty"
+        >     }
+        >   ]
+        > }
+      EOF
+    end
 
-  describe command('jq -V') do
-    its(:exit_status) { should eq 0 }
-  end
+    describe command('jq -V') do
+      its(:exit_status) { should eq 0 }
+    end
 
-  describe command(
-    %(jq -r '.stuff|.[]|select(."@type"=="smarm")|.msg[0]' <#{test_json})
-  ) do
-    its(:stdout) { should match(/^Konstantin broke all the things/) }
+    describe command(
+      %(jq -r '.stuff|.[]|select(."@type"=="smarm")|.msg[0]' <#{test_json})
+    ) do
+      its(:stdout) { should match(/^Konstantin broke all the things/) }
+    end
   end
 end
 
@@ -415,9 +427,11 @@ describe 'mercurial installation' do
   end
 end
 
-describe command('mysql --version') do
-  its(:stdout) { should match(/^mysql /) }
-  its(:exit_status) { should eq 0 }
+if os[:arch] !~ /aarch64/
+  describe command('mysql --version') do
+    its(:stdout) { should match(/^mysql /) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe 'openssl installation' do
@@ -449,9 +463,11 @@ describe command('packer version') do
   its(:exit_status) { should eq 0 }
 end
 
-describe command('psql --version') do
-  its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2})/) }
-  its(:exit_status) { should eq 0 }
+if os[:arch] !~ /aarch64/
+  describe command('psql --version') do
+    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2})/) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe 'ragel installation' do
@@ -494,37 +510,39 @@ describe 'ruby interpreter' do
   end
 end
 
-describe 'rvm installation' do
-  describe command('rvm version') do
-    its(:stdout) { should match(/^rvm /) }
-    its(:stderr) { should be_empty }
-    its(:exit_status) { should eq 0 }
-  end
-
-  describe 'rvm commands' do
-    describe command('rvm list') do
-      its(:stdout) { should include('current') }
-      its(:stdout) { should match(/ruby-2\.[234567]\.\d/) }
+if os[:arch] !~ /aarch64|arm64/
+  describe 'rvm installation' do
+    describe command('rvm version') do
+      its(:stdout) { should match(/^rvm /) }
       its(:stderr) { should be_empty }
+      its(:exit_status) { should eq 0 }
     end
 
-    describe command('rvm default do echo whatever') do
-      its(:stderr) { should_not include('Warning!') }
-      its(:stdout) { should_not include('Warning!') }
-      its(:stdout) { should include('whatever') }
-    end
-  end
+    describe 'rvm commands' do
+      describe command('rvm list') do
+        its(:stdout) { should include('current') }
+        its(:stdout) { should match(/ruby-2\.[234567]\.\d/) }
+        its(:stderr) { should be_empty }
+      end
 
-  %w[
-    /home/travis/.rvmrc
-    /home/travis/.rvm/user/db
-  ].each do |filename|
-    describe file(filename) do
-      it { should exist }
-      it { should be_writable }
-      it { should be_readable }
+      describe command('rvm default do echo whatever') do
+        its(:stderr) { should_not include('Warning!') }
+        its(:stdout) { should_not include('Warning!') }
+        its(:stdout) { should include('whatever') }
+      end
     end
-  end
+
+    %w[
+      /home/travis/.rvmrc
+      /home/travis/.rvm/user/db
+    ].each do |filename|
+      describe file(filename) do
+        it { should exist }
+        it { should be_writable }
+        it { should be_readable }
+      end
+    end
+  end 
 end
 
 describe command('ssh -V') do
@@ -706,19 +724,21 @@ describe 'unarchivers installation' do
   end
 end
 
-describe 'emacs installation' do
-  describe command('emacs --version') do
-    its(:exit_status) { should eq 0 }
-  end
-
-  describe 'editing' do
-    before do
-      test_txt.write("daisy\n")
-      sh(%(emacs -batch #{test_txt} --eval '(insert \"poof\")' -f save-buffer))
+if os[:arch] !~ /aarch64|arm64/
+  describe 'emacs installation' do
+    describe command('emacs --version') do
+      its(:exit_status) { should eq 0 }
     end
 
-    describe file(test_txt) do
-      its(:content) { should match 'poof' }
+    describe 'editing' do
+      before do
+        test_txt.write("daisy\n")
+        sh(%(emacs -batch #{test_txt} --eval '(insert \"poof\")' -f save-buffer))
+      end
+
+      describe file(test_txt) do
+        its(:content) { should match 'poof' }
+      end
     end
   end
 end

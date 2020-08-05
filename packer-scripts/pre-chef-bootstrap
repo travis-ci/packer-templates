@@ -38,6 +38,10 @@ __install_packages() {
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
   fi
+  
+  if [[ "${PACKER_BUILDER_TYPE}" =~ amazon-ebs ]]; then
+    dpkg --remove-architecture i386
+  fi
 
   apt-get update -yqq
   apt-get install -yqq \

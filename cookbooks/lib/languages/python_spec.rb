@@ -23,7 +23,7 @@ describe 'python environment' do
 
   describe pycommand('py.test --version') do
     its(:stdout) { should be_empty }
-    its(:stderr) { should match(/pytest version \d+\.\d+\.\d+/) }
+    its(:stderr) { should match(/pytest (version )?\d+\.\d+\.\d+/) }
   end
 
   describe pycommand('nosetests --version') do

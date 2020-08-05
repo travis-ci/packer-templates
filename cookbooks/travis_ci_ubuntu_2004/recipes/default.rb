@@ -61,12 +61,22 @@ include_recipe 'memcached'
 # TODO: Uncomment when cassandra works on Java 8 again
 # https://github.com/travis-ci/packer-templates/issues/589
 # include_recipe 'travis_build_environment::cassandra'
-# include_recipe 'travis_build_environment::couchdb'
+#include_recipe '::couchdb'
 include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
 include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_phantomjs::2'
+
+if node['kernel']['machine'] != 'aarch64'
+  include_recipe '::erlang'
+  # include_recipe '::couchdb'
+  include_recipe '::mongodb'
+  include_recipe '::mysql'
+  include_recipe '::postgresql'
+  include_recipe 'travis_build_environment::couchdb'
+  # include_recipe '::mariadb'
+end
 
 # HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'

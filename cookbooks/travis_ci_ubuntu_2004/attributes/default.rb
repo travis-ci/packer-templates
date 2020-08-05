@@ -3,12 +3,12 @@
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
-override['travis_build_environment']['system_python']['pythons'] = %w[3.8] #apt packages
+override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
-  '3.8.3' => %w[3.8]
-#   '3.7.6' => %w[3.7]
-  #'pypy2.7-5.8.0' => %w[pypy],
-  #'pypy3.5-5.8.0' => %w[pypy3]
+  '3.8.3' => %w[3.8],
+  '3.7.7' => %w[3.7],
+  'pypy2.7-7.3.1' => %w[pypy],
+  'pypy3.6-7.3.1' => %w[pypy3]
 }
 # packages build by Cpython + our repo
 pythons = %w[
@@ -27,7 +27,6 @@ php_aliases = {
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
-
 
 # if node['kernel']['machine'] == "x86_64" # Is it required
 # arch = 'amd64'
@@ -48,8 +47,7 @@ override['travis_build_environment']['php_aliases'] = php_aliases
 #  override['travis_build_environment']['hhvm_enabled'] = false
 # end
 
-override['travis_perlbrew']['perls'] = [] # compare with bionic and possibly fill in with proper ver pre-install
-override['travis_perlbrew']['modules'] = []
+override['travis_perlbrew']['perls'] = [ { name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' } ]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
@@ -62,6 +60,11 @@ override['travis_build_environment']['gimme']['default_version'] = gimme_version
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
+elsif node['kernel']['machine'] == 'aarch64'
+  override['travis_build_environment']['arch'] = 'arm64'
+  override['travis_build_environment']['packer']['arm64']['version'] = '1.3.3'
+  override['travis_build_environment']['packer']['arm64']['checksum'] = \
+    'e08c9542ff6cb231dd03d6f8096f6749e79056734bf69d5399205451b94c9d03'
 else
   override['travis_jdk']['versions'] = %w[
     openjdk10
@@ -91,9 +94,14 @@ rubies = %w[
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
-override['travis_build_environment']['otp_releases'] = []
-override['travis_build_environment']['elixir_versions'] = []
-override['travis_build_environment']['default_elixir_version'] = ''
+override['travis_build_environment']['otp_releases'] = %w[
+  21.1
+]
+elixirs = %w[
+  1.7.4
+]
+override['travis_build_environment']['elixir_versions'] = elixirs
+override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'
@@ -105,7 +113,7 @@ override['travis_build_environment']['mercurial_version'] = '5.3'
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
 # not yet supported
-override['travis_postgresql']['default_version'] = ''
+override['travis_postgresql']['default_version'] = '12'
 override['travis_postgresql']['alternate_versions'] = %w[]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
@@ -153,6 +161,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   ruby
   scala
   julia
+  erlang
 ]
 
 # Override values in array : minimal set of options
@@ -172,4 +181,6 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   node_js
   smalltalk
   csharp
+  perl
+  erlang
 ]
