@@ -55,6 +55,21 @@ builders:
   - "{{ .Image }}"
   - /sbin/init
   commit: true
+- type: qemu
+  name: qemu
+  headless: true
+  iso_url: "http://archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/current/images/netboot/mini.iso"
+  cpus: 2
+  memory: 2048
+  disk_size: 40000M
+  ssh_username": "cesar"
+  ssh_password": "Tempo747y0001"
+  ssh_timeout: 10m
+  vm_name: vm001
+  output_directory: newvm
+  boot_wait: 30s
+  boot_command: "<tab> text ks=https://storage.googleapis.com/cs-pub/bionic-ks.cfg<enter><wait>"
+  shutdown_command: sudo -E -S poweroff
 provisioners:
 - type: shell
   inline: sleep 10
@@ -82,6 +97,7 @@ provisioners:
   only:
   - googlecompute
   - lxd
+  - qemu
 - type: file
   source: packer-assets/ci-ubuntu-1804-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -99,6 +115,7 @@ provisioners:
   - docker
   - googlecompute
   - lxd
+  - qemu
   # Recommendations for lxd images
 - type: shell
   inline: "systemctl mask sys-kernel-config.mount"
