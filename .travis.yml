@@ -37,8 +37,11 @@ install:
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"
 
 script:
+- packer version  
 - make
+- packer version
 - bundle exec make test
+- packer version
 - make update-gce-images
 - git diff --exit-code
 - git diff --cached --exit-code
