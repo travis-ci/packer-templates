@@ -61,7 +61,7 @@ builders:
   iso_url: "http://archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/current/images/netboot/mini.iso"
   cpus: 2
   memory: 2048
-  disk_size: 40000M
+  disk_size: 40
   ssh_username": "cesar"
   ssh_password": "Tempo747y0001"
   ssh_timeout: 10m
