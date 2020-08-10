@@ -58,13 +58,15 @@ builders:
 - type: qemu
   name: qemu
   headless: true
-  iso_url: "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso"
-  iso_checksum: "md5:d5bc5c59c24191bb45dd85fc6a420b34"
+  iso_url: "https://cloud-images.ubuntu.com/releases/bionic/release-20200729/ubuntu-18.04-server-cloudimg-amd64.img"
+  iso_checksum: "md5:21587f121206ff0ab33ffb21237d5abf "
   cpus: 2
   memory: 2048
-  disk_size: 40
-  ssh_username: "cesar"
-  ssh_password: "Tempo747y0001"
+  disk_size: 50
+  ssh_username: "ubuntu"
+  ssh_password: "passw0rd"
+  format: qcow2
+  accelerator: kvm
   ssh_timeout: 20m
   vm_name: vm001
   output_directory: newvm
