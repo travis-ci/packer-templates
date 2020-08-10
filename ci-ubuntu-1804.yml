@@ -65,10 +65,10 @@ builders:
   disk_size: 40
   ssh_username: "cesar"
   ssh_password: "Tempo747y0001"
-  ssh_timeout: 10m
+  ssh_timeout: 20m
   vm_name: vm001
   output_directory: newvm
-  boot_wait: 30s
+  boot_wait: 3m
   boot_command: "<tab> text ks=https://storage.googleapis.com/cs-pub/bionic-ks.cfg<enter><wait>"
   shutdown_command: sudo -E -S poweroff
 provisioners:
@@ -76,6 +76,7 @@ provisioners:
   inline: sleep 10
   only:
   - googlecompute
+  - qemu
 - type: shell
   inline: apt-get update -yqq && apt-get install sudo -yqq
   # Delay script execution until after /sbin/init has cleared out /tmp,
