@@ -71,7 +71,6 @@ builders:
   vm_name: vm001
   output_directory: newvm
   boot_wait: 3m
-  boot_command: "<tab> text ks=https://storage.googleapis.com/cs-pub/bionic-ks.cfg<enter><wait>"
   shutdown_command: sudo -E -S poweroff
 provisioners:
 - type: shell
