@@ -62,7 +62,7 @@ builders:
   iso_checksum: "md5:21587f121206ff0ab33ffb21237d5abf"
   cpus: 2
   memory: 2048
-  disk_size: 50
+  disk_size: 50G
   ssh_username: "ubuntu"
   ssh_password: "passw0rd"
   format: qcow2
