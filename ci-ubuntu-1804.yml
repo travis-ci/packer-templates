@@ -72,6 +72,17 @@ builders:
   output_directory: newvm
   boot_wait: 3m
   shutdown_command: sudo -E -S poweroff
+  qemuargs:
+  -
+    - -cpu
+    - max
+  -
+    - -display
+    - none
+  #- -nographic
+  -
+    - -fda
+  - user-data.img
 provisioners:
 - type: shell
   inline: sleep 10
