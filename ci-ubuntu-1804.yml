@@ -59,7 +59,7 @@ builders:
   name: qemu
   headless: true
   iso_url: "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso"
-  iso_checksum: "md5:e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b"
+  iso_checksum: "md5:d5bc5c59c24191bb45dd85fc6a420b34"
   cpus: 2
   memory: 2048
   disk_size: 40
