@@ -58,8 +58,8 @@ builders:
 - type: qemu
   name: qemu
   headless: true
-  iso_url: "http://archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/current/images/netboot/mini.iso"
-  iso_checksum: "md5:8388f7232b400bdc80279668847f90da"
+  iso_url: "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso"
+  iso_checksum: "md5:e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b"
   cpus: 2
   memory: 2048
   disk_size: 40
