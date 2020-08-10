@@ -59,7 +59,7 @@ builders:
   name: qemu
   headless: true
   iso_url: "https://cloud-images.ubuntu.com/releases/bionic/release-20200729/ubuntu-18.04-server-cloudimg-amd64.img"
-  iso_checksum: "md5:21587f121206ff0ab33ffb21237d5abf "
+  iso_checksum: "md5:21587f121206ff0ab33ffb21237d5abf"
   cpus: 2
   memory: 2048
   disk_size: 50
