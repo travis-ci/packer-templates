@@ -57,7 +57,7 @@ builders:
   commit: true
 - type: qemu
   name: qemu
-  headless: true
+  disk_image: true
   iso_url: "https://cloud-images.ubuntu.com/releases/bionic/release-20200729/ubuntu-18.04-server-cloudimg-amd64.img"
   iso_checksum: "md5:21587f121206ff0ab33ffb21237d5abf"
   cpus: 2
