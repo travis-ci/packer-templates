@@ -85,6 +85,12 @@ builders:
   - user-data.img
 provisioners:
 - type: shell
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  inline:
+  - "cloud-init clean"
+  only:
+  - qemu  
+- type: shell
   inline: sleep 10
   only:
   - googlecompute
