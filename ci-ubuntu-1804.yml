@@ -82,7 +82,7 @@ builders:
   #- -nographic
   -
     - -fda
-  - user-data.img
+    - user-data.img
 provisioners:
 - type: shell
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
