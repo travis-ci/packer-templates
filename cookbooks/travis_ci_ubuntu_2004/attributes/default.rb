@@ -78,7 +78,11 @@ override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['cmake']['version'] = '3.16.8'
 override['travis_build_environment']['cmake']['checksum'] = '6b5c856158c16307692ae54ba761cfe30df7b2a131d602e83fda42a572973063'
-
+override['travis_build_environment']['cmake']['download_url'] = ::File.join(
+  'https://cmake.org/files',
+  "v#{node['travis_build_environment']['cmake']['version'].split('.')[0, 2].join('.')}",
+  "cmake-#{node['travis_build_environment']['cmake']['version']}-Linux-x86_64.tar.gz"
+)
 
 override['travis_build_environment']['nodejs_versions'] = %w[
   12.7.0
