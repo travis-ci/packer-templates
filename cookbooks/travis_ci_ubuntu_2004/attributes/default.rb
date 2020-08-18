@@ -181,6 +181,10 @@ override['travis_packer_templates']['job_board']['features'] = %w[
 # Set minimal languages
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __ubuntu_2004__
+  c
+  c++
+  cplusplus
+  cpp
   ruby
   python
   go
