@@ -76,6 +76,10 @@ end
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
+override['travis_build_environment']['cmake']['version'] = '3.16.8'
+override['travis_build_environment']['cmake']['checksum'] = '6b5c856158c16307692ae54ba761cfe30df7b2a131d602e83fda42a572973063'
+
+
 override['travis_build_environment']['nodejs_versions'] = %w[
   12.7.0
   10.16.0
