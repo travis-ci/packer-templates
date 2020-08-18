@@ -84,6 +84,15 @@ override['travis_build_environment']['cmake']['download_url'] = ::File.join(
   "cmake-#{node['travis_build_environment']['cmake']['version']}-Linux-x86_64.tar.gz"
 )
 
+if node['kernel']['machine'] == 'aarch64'
+  default['travis_build_environment']['clang']['download_url'] = ::File.join(
+    'http://releases.llvm.org',
+    node['travis_build_environment']['clang']['version'],
+    "clang+llvm-#{node['travis_build_environment']['clang']['version']}-aarch64-linux-gnu-ubuntu-16.04.tar.xz"
+  )
+  default['travis_build_environment']['clang']['checksum'] = 'bd962b32818f8b07ae60e708f736eca5cd856f0d34ed9d1038cc9e0991390217'
+end
+
 override['travis_build_environment']['nodejs_versions'] = %w[
   12.7.0
   10.16.0
