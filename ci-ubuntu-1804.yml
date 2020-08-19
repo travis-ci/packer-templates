@@ -71,7 +71,8 @@ builders:
   vm_name: vm001
   output_directory: newvm
   boot_wait: 3m
-  shutdown_command: sudo -E -S poweroff
+  shutdown_command: echo 'passw0rd' | sudo -E -S poweroff
+  shutdown_timeout: 5m
   qemuargs:
   -
     - -cpu
