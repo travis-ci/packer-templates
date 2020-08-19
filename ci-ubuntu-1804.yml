@@ -135,7 +135,6 @@ provisioners:
   - docker
   - googlecompute
   - lxd
-  - qemu
   # Recommendations for lxd images
 - type: shell
   inline: "systemctl mask sys-kernel-config.mount"
