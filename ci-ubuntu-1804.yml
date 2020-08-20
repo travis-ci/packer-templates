@@ -68,7 +68,7 @@ builders:
   format: qcow2
   accelerator: kvm
   ssh_timeout: 10m
-  vm_name: {{ user `image_name` }}-qemu
+  vm_name: "{{ user `image_name` }}"-qemu
   output_directory: "/home/travis/images"
   boot_wait: 3m
   qemuargs:
@@ -276,3 +276,4 @@ post-processors:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - qemu
+    
