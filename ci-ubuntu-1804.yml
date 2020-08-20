@@ -65,15 +65,12 @@ builders:
   disk_size: 50000
   ssh_username: "ubuntu"
   ssh_password: "passw0rd"
-  headless: true
   format: qcow2
   accelerator: kvm
-  ssh_timeout: 20m
-  vm_name: vm001
-  output_directory: newvm
+  ssh_timeout: 10m
+  vm_name: {{ user `image_name` }}-qemu
+  output_directory: "/home/travis/images"
   boot_wait: 3m
-  shutdown_command: echo 'passw0rd' | sudo -E -S poweroff
-  shutdown_timeout: 5m
   qemuargs:
   -
     - -cpu
@@ -273,3 +270,9 @@ post-processors:
     - echo {{ user `image_name` }} > /tmp/packer-build-image-name
     only:
     - lxd
+  - type: shell-local
+    script: bin/qemu-export.sh
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - qemu
