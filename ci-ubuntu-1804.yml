@@ -65,6 +65,7 @@ builders:
   disk_size: 50000
   ssh_username: "ubuntu"
   ssh_password: "passw0rd"
+  headless: true
   format: qcow2
   accelerator: kvm
   ssh_timeout: 20m
