@@ -70,7 +70,7 @@ builders:
   ssh_timeout: 10m
   vm_name: "{{ user `image_name` }}"
   output_directory: "/home/travis/images"
-  boot_wait: 3m
+  boot_wait: 2m
   qemuargs:
   -
     - -cpu
