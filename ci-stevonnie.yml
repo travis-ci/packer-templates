@@ -14,6 +14,7 @@ variables:
   openstack_zone: "{{ env `OS_ZONE` }}"
   openstack_key_path: "{{ env `OS_SSH_KEY_PATH`}}"
   openstack_key_name: "{{ env `OS_SSH_KEY` }}"
+  ubnt_release: xenial
 builders:
 - type: googlecompute
   name: googlecompute
