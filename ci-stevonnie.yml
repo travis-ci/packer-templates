@@ -60,8 +60,8 @@ builders:
 - type: qemu
   name: qemu
   disk_image: true
-  iso_url: "https://cloud-images.ubuntu.com/releases/xenial/release-20200721/ubuntu-16.04-server-cloudimg-arm64-disk1.img"
-  iso_checksum: "md5:958f6ed694dbaaa4f6c89e9d8d5c5742"
+  iso_url: "https://cloud-images.ubuntu.com/releases/xenial/release-20200814/ubuntu-16.04-server-cloudimg-amd64-uefi1.img"
+  iso_checksum: "md5:d261ff2f4a126ba9c2ac249b5156b845"
   cpus: 2
   memory: 2048
   disk_size: 50000
