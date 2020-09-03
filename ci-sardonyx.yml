@@ -190,7 +190,9 @@ provisioners:
 - type: shell
   inline: hostname && cat /etc/hosts && cat /etc/hostname
 - type: shell
-  inline: cat /etc/nsswitch.conf && cat /etc/resolv.conf
+  inline: echo "127.0.1.1 ubuntu" >> /etc/hosts  
+# - type: shell
+#   inline: cat /etc/nsswitch.conf && cat /etc/resolv.conf
 - type: shell
   inline: sudo /etc/init.d/network-manager restart  
 - type: chef-solo
