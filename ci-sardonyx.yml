@@ -187,16 +187,6 @@ provisioners:
   destination: /var/tmp/sardonyx-system-info-commands.yml
 - type: shell
   inline: chmod 0644 /var/tmp/sardonyx-system-info-commands.yml
-- type: shell
-  inline: hostname && cat /etc/hosts && cat /etc/hostname
-- type: shell
-  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-  inline:
-  - echo "127.0.1.1 ubuntu" >> /etc/hosts   
-# - type: shell
-#   inline: cat /etc/nsswitch.conf && cat /etc/resolv.conf
-- type: shell
-  inline: sudo /etc/init.d/network-manager restart  
 - type: chef-solo
   version: 13.8.5
   config_template: chef-solo.rb.tmpl
