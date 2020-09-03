@@ -187,6 +187,12 @@ provisioners:
   destination: /var/tmp/sardonyx-system-info-commands.yml
 - type: shell
   inline: chmod 0644 /var/tmp/sardonyx-system-info-commands.yml
+- type: shell
+  inline: hostname && cat /etc/host && cat /etc/hostname
+- type: shell
+  inline: cat /etc/nsswitch.conf && cat /etc/resolv.conf
+- type: shell
+  inline: sudo /etc/init.d/network-manager restart  
 - type: chef-solo
   version: 13.8.5
   config_template: chef-solo.rb.tmpl
