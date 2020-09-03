@@ -188,7 +188,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/sardonyx-system-info-commands.yml
 - type: shell
-  inline: hostname && cat /etc/host && cat /etc/hostname
+  inline: hostname && cat /etc/hosts && cat /etc/hostname
 - type: shell
   inline: cat /etc/nsswitch.conf && cat /etc/resolv.conf
 - type: shell
