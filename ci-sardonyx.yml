@@ -77,8 +77,8 @@ builders:
 - type: qemu
   name: qemu
   disk_image: true
-  iso_url: "https://cloud-images.ubuntu.com/releases/xenial/release-20200814/ubuntu-16.04-server-cloudimg-amd64-uefi1.img"
-  iso_checksum: "md5:d261ff2f4a126ba9c2ac249b5156b845"
+  iso_url: "http://cloud-images-archive.ubuntu.com/releases/xenial/release-20181023/ubuntu-16.04-server-cloudimg-amd64-uefi1.img"
+  iso_checksum: "md5:024cb97cf62c03527a8445ea3bd103ce"
   cpus: 2
   memory: 2048
   disk_size: 50000
@@ -107,7 +107,7 @@ provisioners:
   inline:
   - "cloud-init clean"
   only:
-  - qemu
+  - qemu  
 - type: shell
   inline: sleep 10
   only:
