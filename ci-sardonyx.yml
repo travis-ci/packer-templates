@@ -77,8 +77,8 @@ builders:
 - type: qemu
   name: qemu
   disk_image: true
-  iso_url: "http://cloud-images-archive.ubuntu.com/releases/xenial/release-20181023/ubuntu-16.04-server-cloudimg-amd64-uefi1.img"
-  iso_checksum: "md5:024cb97cf62c03527a8445ea3bd103ce"
+  iso_url: "http://cloud-images-archive.ubuntu.com/releases/xenial/release-20181023/ubuntu-16.04-server-cloudimg-amd64-disk1.img"
+  iso_checksum: "md5:d15411fe1ca6ba86aa57723398192794"
   cpus: 2
   memory: 2048
   disk_size: 50000
@@ -89,7 +89,7 @@ builders:
   ssh_timeout: 10m
   vm_name: "{{ user `image_name` }}"
   output_directory: "/home/travis/images"
-  boot_wait: 2m
+  boot_wait: 1m
   qemuargs:
   -
     - -cpu
