@@ -7,6 +7,7 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
   __install_perlbrew
+  __install_cpanm
 
 }
 
@@ -17,6 +18,10 @@ __install_perlbrew() {
   tee /home/travis/.bash_profile.d/perlbrew.bash <<\EOF
 source ~/perl5/perlbrew/etc/bashrc
 EOF
+}
+
+__install_cpanm() {
+  source ~/perl5/perlbrew/etc/bashrc && perlbrew install-cpanm
 }
 
 main "$@"
