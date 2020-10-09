@@ -7,6 +7,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   __install_packages
   __install_java
+  __install_maven
 }
 
 __install_packages() {
@@ -22,6 +23,10 @@ __install_java(){
   rm -rf /var/lib/apt/lists/*
   apt-get update -yqq
   apt-get -yqq --no-install-suggests --no-install-recommends install adoptopenjdk-${JAVA_VERSION}-hotspot
+}
+
+__install_maven(){
+  apt-get -yqq --no-install-suggests --no-install-recommends install maven
 }
 
 main "$@"
