@@ -15,22 +15,13 @@ __ibm_advanced_tool_chain_install() {
     echo "IBM advanced tool chain - has no installation candidate"
 }
 
-__ibm_advanced_tool_chain_install_focal_ppc64el() {
+__ibm_advanced_tool_chain_install_focal_ppc64le() {
     __ibm_advanced_tool_chain_focal_install
 }
 
-__ibm_advanced_tool_chain_install_focal_amd64() {
-    __ibm_advnaced_tool_chain_focal_install
-}
-
-__ibm_advanced_tool_chain_install_bionic_ppc64el() {
+__ibm_advanced_tool_chain_install_bionic_ppc64le() {
     __ibm_advanced_tool_chain_bionic_install
 }
-
-__ibm_advanced_tool_chain_install_bionic_amd64() {
-    __ibm_advanced_tool_chain_bionic_install
-}
-
 
 __ibm_advanced_tool_chain_focal_install() {
     wget --quiet -O - https://public.dhe.ibm.com/software/server/POWER/Linux/toolchain/at/ubuntu/dists/focal/6976a827.gpg.key | apt-key add -
