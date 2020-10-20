@@ -23,10 +23,14 @@ __ibm_advanced_tool_chain_install_bionic_ppc64le() {
     __install_ibm_tool_chain 14.0 'bionic'
 }
 
+__ibm_advanced_tool_chain_install_xenial_ppc64le() {
+  __install_ibm_tool_chain 12.0 'xenial'
+}
+
 __install_ibm_tool_chain() {
     local ibm_advanced_tool_chain_version="${1}"
     local os_name="${2}"
-    wget --quiet -O - https://public.dhe.ibm.com/software/server/POWER/Linux/toolchain/at/ubuntu/dists/focal/6976a827.gpg.key | apt-key add -
+    wget --quiet -O - "https://public.dhe.ibm.com/software/server/POWER/Linux/toolchain/at/ubuntu/dists/${os_name}/6976a827.gpg.key" | apt-key add -
     echo "deb https://public.dhe.ibm.com/software/server/POWER/Linux/toolchain/at/ubuntu ${os_name} at${ibm_advanced_tool_chain_version}" > /etc/apt/sources.list.d/advanced_tool_chain.list
 
     apt-get -y update
