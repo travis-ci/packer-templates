@@ -16,7 +16,7 @@ execute 'find_line_number' do
 end
 
 execute 'sed_peer_to_trust' do
-  command 'sudo sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
+  command 'test -f /etc/postgresql/12/main/pg_hba.conf && sudo sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
 end
 
 execute 'change_log_dir_permissions' do
