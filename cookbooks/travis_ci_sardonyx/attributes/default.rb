@@ -111,6 +111,8 @@ override['travis_build_environment']['mercurial_version'] = '4.8'
 
 override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
 
+override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 12.0
+
 override['travis_postgresql']['default_version'] = '9.6'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 10]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?

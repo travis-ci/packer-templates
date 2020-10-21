@@ -66,6 +66,7 @@ include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
 include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
+include_recipe 'travis_build_environment::ibm_advanced_tool_chain'
 include_recipe 'travis_phantomjs::2'
 
 if node['kernel']['machine'] != 'aarch64'
