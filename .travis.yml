@@ -23,6 +23,7 @@ env:
   - SPEC_RUNNER='bash -lc'
   - SPEC_SUITES='travis_packer_templates'
   - SYSTEM_INFO_JSON="${TRAVIS_BUILD_DIR}/.example_system_info.json"
+  - TRAVIS_SOURCE_AMI="ami-01eefcaf0edcc4cf0"
 install:
 - if [[ -f .test-branch ]]; then
     export TRAVIS_COOKBOOKS_TEST_BRANCH="$(cat .test-branch 2>/dev/null)";
