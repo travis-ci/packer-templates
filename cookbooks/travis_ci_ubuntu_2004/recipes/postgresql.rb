@@ -11,12 +11,11 @@ service 'postgresql' do
   action [:stop, :disable]
 end
 
-execute 'find_line_number' do
-  command 'line_numb=$(sudo grep -n local /etc/postgresql/12/main/pg_hba.conf | sudo grep postgres | sudo grep peer | sudo cut -d: -f1) && echo $line_numb > ~/test.txt'
-end
-
-execute 'sed_peer_to_trust' do
-  command 'test -f /etc/postgresql/12/main/pg_hba.conf && sudo sed -i \'\'$line_numb\'s/peer/trust/\' /etc/postgresql/12/main/pg_hba.conf'
+template "/etc/postgresql/13/main/pg_hba.conf" do
+  source 'pg_hba.conf.erb'
+  owner 'postgres'
+  group 'postgres'
+  mode 0o640 # apply same permissions as in 'pdpg' packages
 end
 
 execute 'change_log_dir_permissions' do
