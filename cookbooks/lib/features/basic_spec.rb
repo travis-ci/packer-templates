@@ -465,7 +465,7 @@ end
 
 if os[:arch] !~ /aarch64/
   describe command('psql --version') do
-    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2})/) }
+    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2}|13\.[0-9]{1,2})/) }
     its(:exit_status) { should eq 0 }
   end
 end
