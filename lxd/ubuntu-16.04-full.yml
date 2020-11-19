@@ -110,8 +110,9 @@ provisioners:
   destination: /tmp/resolv.conf
 
 - type: shell
-  - sudo mv /tmp/resolv.conf /etc/resolv.conf
-  - sudo chmod 644 /etc/resolv.conf
+  inline: 
+    - sudo mv /tmp/resolv.conf /etc/resolv.conf
+    - sudo chmod 644 /etc/resolv.conf
 
   # Cleanup systemd units
 - type: shell
