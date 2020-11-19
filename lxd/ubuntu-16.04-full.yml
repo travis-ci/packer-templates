@@ -114,9 +114,9 @@ provisioners:
    - systemctl mask apt-daily.service
 
   # Cleanup network configuration
-- type: shell
-  inline:
-   - rm -f /etc/netplan/10-lxc.yaml
+# - type: shell
+#   inline:
+#    - rm -f /etc/netplan/10-lxc.yaml
 
   # Cleanup package list
 - type: shell
