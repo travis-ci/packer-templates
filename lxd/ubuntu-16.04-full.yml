@@ -106,14 +106,19 @@ provisioners:
 #   scripts:
 #   - scripts/resolv-conf.sh
 
-- type: file
-  source: files/resolv.conf
-  destination: /tmp/resolv.conf
+# - type: file
+#   source: files/resolv.conf
+#   destination: /tmp/resolv.conf
+
+# - type: shell
+#   inline: 
+#     - sudo mv /tmp/resolv.conf /etc/resolv.conf
+#     - sudo chmod 644 /etc/resolv.conf
 
 - type: shell
-  inline: 
-    - sudo mv /tmp/resolv.conf /etc/resolv.conf
-    - sudo chmod 644 /etc/resolv.conf
+  inline:
+   - echo 127.0.1.1 localhost ip4-loopback $HOSTNAME | sudo tee -a /etc/hosts
+   - echo -e nameserver 8.8.8.8'\n'nameserver 8.8.4.4'\n'nameserver 8.8.4.4'\n'nameserver 1.1.1.1'\n'nameserver 1.0.0.1 | sudo tee -a /etc/resolv.conf   
 
 - type: shell
   inline:
