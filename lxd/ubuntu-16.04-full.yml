@@ -101,9 +101,17 @@ provisioners:
    - sudo cat /etc/hosts
 
   # Use static DNS servers
+# - type: shell
+#   scripts:
+#   - scripts/resolv-conf.sh
+
+- type: file
+  source: files/resolv.conf
+  destination: /tmp/resolv.conf
+
 - type: shell
-  scripts:
-  - scripts/resolv-conf.sh
+  - sudo mv /tmp/resolv.conf /etc/resolv.conf
+  - sudo chmod 644 /etc/resolv.conf
 
   # Cleanup systemd units
 - type: shell
@@ -118,14 +126,10 @@ provisioners:
    - systemctl mask apt-daily.service
 
 #  Cleanup network configuration
-- type: shell
-  inline:
-   - rm -f /etc/netplan/10-lxc.yaml
-   - rm -f /etc/netplan/50-cloud-init.yaml
-
-- type: shell
-  inline:
-   - sudo cat /etc/hosts
+# - type: shell
+#   inline:
+#    - rm -f /etc/netplan/10-lxc.yaml
+#    - rm -f /etc/netplan/50-cloud-init.yaml
 
   # Cleanup package list
 - type: shell
