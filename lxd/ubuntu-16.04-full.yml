@@ -96,6 +96,10 @@ provisioners:
   - scripts/install-docker-compose.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
+- type: shell
+  inline:
+   - sudo cat /etc/hosts
+
   # Use static DNS servers
 - type: shell
   scripts:
@@ -113,10 +117,15 @@ provisioners:
    - systemctl mask apt-daily-upgrade.service
    - systemctl mask apt-daily.service
 
-  # Cleanup network configuration
-# - type: shell
-#   inline:
-#    - rm -f /etc/netplan/10-lxc.yaml
+#  Cleanup network configuration
+- type: shell
+  inline:
+   - rm -f /etc/netplan/10-lxc.yaml
+   - rm -f /etc/netplan/50-cloud-init.yaml
+
+- type: shell
+  inline:
+   - sudo cat /etc/hosts
 
   # Cleanup package list
 - type: shell
