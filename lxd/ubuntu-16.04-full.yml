@@ -99,6 +99,7 @@ provisioners:
 - type: shell
   inline:
    - sudo cat /etc/hosts
+   - sudo cat /etc/resolv.conf
 
   # Use static DNS servers
 # - type: shell
@@ -113,6 +114,11 @@ provisioners:
   inline: 
     - sudo mv /tmp/resolv.conf /etc/resolv.conf
     - sudo chmod 644 /etc/resolv.conf
+
+- type: shell
+  inline:
+   - sudo cat /etc/hosts
+   - sudo cat /etc/resolv.conf    
 
   # Cleanup systemd units
 - type: shell
