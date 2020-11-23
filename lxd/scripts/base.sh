@@ -22,7 +22,8 @@ __network_setup() {
 }
 
 __network_setup_xenial() {
-  echo "Xenial: don't override network config"
+  # echo "Xenial: don't override network config"
+  __network_setup()
 }
 
 export DEBIAN_FRONTEND=noninteractive
