@@ -44,7 +44,7 @@ done
 # Disable motd
 # in /etc/default/motd-news set ENABLED=0
 #
-if test -f /etc/default/motd-news &> /dev/null
+if test -f /etc/default/motd-news &>/dev/null
 then
 	sed -i 's|ENABLED=1|ENABLED=0|' /etc/default/motd-news
 fi
@@ -52,7 +52,7 @@ fi
 #
 # Disable services to speed up boot time
 #
-if command -v systemctl &> /dev/null
+if command -v systemctl &>/dev/null
 then
   systemctl --all --type service | grep -q lxd-containers.service && systemctl disable lxd-containers.service
   systemctl --all --type service | grep -q accounts-daemon.service && systemctl mask accounts-daemon.service
@@ -66,7 +66,7 @@ fi
 #
 # Disable package update on boot
 #
-if test -f /etc/cloud/cloud.cfg &> /dev/null
+if test -f /etc/cloud/cloud.cfg &>/dev/null
 then
 	sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
 fi
