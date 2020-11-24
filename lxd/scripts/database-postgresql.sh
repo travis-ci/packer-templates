@@ -58,20 +58,20 @@ EOF")
 
   __turn_off_postgres_xenial_ppc64le
 
-  #cat /tmp/__postgresql__9.6__main__postgresql.conf > /etc/postgresql/9.6/main/postgresql.conf
-  #cat /tmp/__postgresql__${PGSQL_VERSION}__main__pg_hba.conf > /etc/postgresql/9.6/main/pg_hba.conf
-  #cat /tmp/__postgresql__${PGSQL_VERSION}__initd-postgresql > /etc/init.d/postgresql
+  cat /tmp/__postgresql__9.6__main__postgresql.conf > /etc/postgresql/9.6/main/postgresql.conf
+  cat /tmp/__postgresql__9.5__main__pg_hba.conf > /etc/postgresql/9.6/main/pg_hba.conf
+  cat /tmp/__postgresql__9.5__initd-postgresql > /etc/init.d/postgresql
 
-  #chmod 755 /etc/init.d/postgresql
+  chmod 755 /etc/init.d/postgresql
 
-  #chmod 644 /etc/postgresql/9.6/main/postgresql.conf
-  #chown postgres:postgres /etc/postgresql/9.6/main/postgresql.conf
+  chmod 644 /etc/postgresql/9.6/main/postgresql.conf
+  chown postgres:postgres /etc/postgresql/9.6/main/postgresql.conf
 
-  #chmod 640 /etc/postgresql/9.6/main/pg_hba.conf
-  #chown postgres:postgres /etc/postgresql/9.6/main/pg_hba.conf
+  chmod 640 /etc/postgresql/9.6/main/pg_hba.conf
+  chown postgres:postgres /etc/postgresql/9.6/main/pg_hba.conf
 
-  #rm /lib/systemd/system/postgresql.service
-  #systemctl daemon-reload
+  rm /lib/systemd/system/postgresql.service
+  systemctl daemon-reload
 
 }
 
