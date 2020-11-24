@@ -40,6 +40,8 @@ apt dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--f
 
 call_build_function func_name="__install_packages"
 
+__network_setup
+
 tee /etc/apt/apt.conf.d/10-force-yes <<EOF
 APT::Get::Assume-Yes "true";
 EOF
