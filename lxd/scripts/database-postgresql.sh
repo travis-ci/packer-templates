@@ -8,7 +8,8 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
   call_build_function func_name="__install_packages"
-  call_build_function func_name="__setup_pgsql"
+  __install_packages_xenial_ppc64le
+  # call_build_function func_name="__setup_pgsql"
   __clear_cfg_files
   __link_ramfs
 }
@@ -58,9 +59,10 @@ EOF")
 
   __turn_off_postgres_xenial_ppc64le
 
-  cat /tmp/__postgresql__9.6__main__postgresql.conf > /etc/postgresql/9.6/main/postgresql.conf
-  cat /tmp/__postgresql__9.5__main__pg_hba.conf > /etc/postgresql/9.6/main/pg_hba.conf
-  cat /tmp/__postgresql__9.5__initd-postgresql > /etc/init.d/postgresql
+  cat /tmp/__postgresql__9.6__main__postgresql.conf | sudo tee /etc/postgresql/9.6/main/postgresql.conf
+  cat /tmp/__postgresql__9.6__main__pg_hba.conf | sudo tee /etc/postgresql/9.6/main/pg_hba.conf
+  cat /tmp/__postgresql__9.6__initd-postgresql | sudo tee /etc/init.d/postgresql
+  
 
   chmod 755 /etc/init.d/postgresql
 
