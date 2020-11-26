@@ -10,7 +10,8 @@ main() {
   call_build_function func_name="__install_packages"
   __install_packages_xenial_ppc64le
   # call_build_function func_name="__setup_pgsql"
-  __clear_cfg_files
+  __setup_pgsql_xenial_ppc64le
+  # __clear_cfg_files
   __link_ramfs
 }
 
