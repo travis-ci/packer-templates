@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -o errexit
+source /tmp/__common-lib.sh
 
 main() {
   set -o xtrace
@@ -11,6 +12,7 @@ main() {
   __install_pyenv
   __install_virtualenv
   __install_default_python
+  call_build_function func_name="__setup_system_site_packages"
 }
 
 __install_packages() {
@@ -80,6 +82,41 @@ __install_default_python() {
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
   pyenv install 3.6.0
+}
+
+__setup_system_site_packages_xenial(){
+
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
+  __setup_envirnoment "python2.7"
+  __setup_envirnoment "python3.5"
+}
+
+__setup_system_site_packages_bionic(){
+
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
+  __setup_envirnoment "python2.7"
+  __setup_envirnoment "python3.6"
+}
+
+__setup_system_site_packages_focal(){
+
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
+  __setup_envirnoment "python2.7"
+  __setup_envirnoment "python3.8"
+}
+
+__setup_system_site_packages() {
+  #noop
+  :
+}
+
+__setup_envirnoment() {
+
+  pyname=$1
+  venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
+  /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
+  ${venv_fullname}/bin/pip install --upgrade wheel
+  id travis && chown -R travis: ${venv_fullname}
 }
 
 main "$@"
