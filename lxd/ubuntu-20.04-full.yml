@@ -36,14 +36,6 @@ provisioners:
   - MIRROR={{user `apt_mirror`}}
 
 - type: file
-  source: files/docker.daemon.json.lxd
-  destination: /etc/docker/daemon.json
-
-- type: shell
-  inline:
-   - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
-
-- type: file
   source: files/postgresql/postgresql-12.conf
   destination: /tmp/__postgresql__12__main__postgresql.conf
 
@@ -130,7 +122,6 @@ provisioners:
   inline:
    - chmod 600 /etc/sudoers.d/travis
    - chmod 644 /etc/apt/sources.list
-   - chmod 644 /etc/docker/daemon.json
 
   # Creare image metadata tarball
 - type: shell
