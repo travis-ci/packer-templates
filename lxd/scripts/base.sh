@@ -22,7 +22,8 @@ __network_setup() {
 }
 
 __network_setup_xenial() {
-  echo "Xenial: don't override network config"
+  # echo "Xenial: don't override network config"
+  __network_setup
 }
 
 export DEBIAN_FRONTEND=noninteractive
@@ -38,6 +39,8 @@ apt install ruby curl gnupg wget git software-properties-common md5deep openssl 
 apt dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
 call_build_function func_name="__install_packages"
+
+__network_setup
 
 tee /etc/apt/apt.conf.d/10-force-yes <<EOF
 APT::Get::Assume-Yes "true";

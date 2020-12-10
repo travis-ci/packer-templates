@@ -1,3 +1,4 @@
+
 description: Travis CI Ubuntu 16.04 Full build env template!
 variables:
   apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
@@ -36,8 +37,17 @@ provisioners:
   - MIRROR={{user `apt_mirror`}}
 
 - type: file
+
   source: files/postgresql/postgresql-9.5.conf
   destination: /tmp/__postgresql__9.5__main__postgresql.conf
+
+- type: file
+  source: files/docker.daemon.json.lxd
+  destination: /etc/docker/daemon.json
+
+- type: shell
+  inline:
+   - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
 
 - type: file
   source: files/postgresql/postgresql-9.6.conf
@@ -45,11 +55,11 @@ provisioners:
 
 - type: file
   source: files/postgresql/pg_hba.conf
-  destination: /tmp/__postgresql__9.5__main__pg_hba.conf
+  destination: /tmp/__postgresql__9.6__main__pg_hba.conf
 
 - type: file
   source: files/postgresql/initd-postgresql
-  destination: /tmp/__postgresql__9.5__initd-postgresql
+  destination: /tmp/__postgresql__9.6__initd-postgresql
 
 - type: shell
   scripts:
@@ -88,10 +98,34 @@ provisioners:
   - scripts/install-docker-compose.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
-  # Use static DNS servers
 - type: shell
-  scripts:
-  - scripts/resolv-conf.sh
+  inline:
+   - sudo cat /etc/hosts
+   - sudo cat /etc/resolv.conf
+
+  # Use static DNS servers
+# - type: shell
+#   scripts:
+#   - scripts/resolv-conf.sh
+
+# - type: file
+#   source: files/resolv.conf
+#   destination: /tmp/resolv.conf
+
+# - type: shell
+#   inline: 
+#     - sudo mv /tmp/resolv.conf /etc/resolv.conf
+#     - sudo chmod 644 /etc/resolv.conf
+
+# - type: shell
+#   inline:
+#    - echo 127.0.1.1 localhost ip4-loopback $HOSTNAME | sudo tee -a /etc/hosts
+#    - echo -e nameserver 8.8.8.8'\n'nameserver 8.8.4.4'\n'nameserver 8.8.4.4'\n'nameserver 1.1.1.1'\n'nameserver 1.0.0.1 | sudo tee -a /etc/resolv.conf   
+
+- type: shell
+  inline:
+   - sudo cat /etc/hosts
+   - sudo cat /etc/resolv.conf    
 
   # Cleanup systemd units
 - type: shell
@@ -105,10 +139,11 @@ provisioners:
    - systemctl mask apt-daily-upgrade.service
    - systemctl mask apt-daily.service
 
-  # Cleanup network configuration
-- type: shell
-  inline:
-   - rm -f /etc/netplan/10-lxc.yaml
+#  Cleanup network configuration
+# - type: shell
+#   inline:
+#    - rm -f /etc/netplan/10-lxc.yaml
+#    - rm -f /etc/netplan/50-cloud-init.yaml
 
   # Cleanup package list
 - type: shell

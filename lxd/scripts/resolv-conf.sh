@@ -35,7 +35,7 @@ nameserver 192.168.0.1
 }
 
 __resolvconf_get_content_ppc64le(){
-  __resolvconf_get_content_optional
+  __resolvconf_get_content
 }
 
 __resolvconf_get_content_s390x(){
