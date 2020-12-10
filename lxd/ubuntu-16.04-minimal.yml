@@ -33,14 +33,6 @@ provisioners:
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 
-- type: file
-  source: files/docker.daemon.json.lxd
-  destination: /etc/docker/daemon.json
-
-- type: shell
-  inline:
-   - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
-
   # Install ruby and python travis
 - type: shell
   scripts:
@@ -91,7 +83,6 @@ provisioners:
   inline:
    - chmod 600 /etc/sudoers.d/travis
    - chmod 644 /etc/apt/sources.list
-   - chmod 644 /etc/docker/daemon.json
 
   # Creare image metadata tarball
 - type: shell
