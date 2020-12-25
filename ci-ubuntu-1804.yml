@@ -166,6 +166,8 @@ provisioners:
   - recipe[poise-profiler]
   <% end %>
 - type: shell
+  inline: "chown -R couchdb:couchdb /opt/couchdb/"
+- type: shell
   scripts:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
