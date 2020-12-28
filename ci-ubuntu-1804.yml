@@ -159,8 +159,6 @@ provisioners:
   - recipe[poise-profiler]
   <% end %>
 - type: shell
-  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
-- type: shell
   scripts:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
@@ -186,6 +184,8 @@ provisioners:
   #  - "find /etc/systemd -type f -o -type l"
   #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
+- type: shell
+  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
 - type: shell
   inline: "ls -lah /opt/couchdb/"  
 - type: shell
