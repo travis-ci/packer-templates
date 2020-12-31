@@ -213,9 +213,9 @@ provisioners:
   #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
 - type: shell
-  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
-- type: shell
-  inline: "ls -lah /opt/couchdb/"  
+  scripts:
+  - packer-scripts/install-couchdb
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball
