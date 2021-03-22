@@ -18,8 +18,9 @@ __install_packages() {
 }
 
 __install_java(){
+  . /etc/os-release
   wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
-  sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+  echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ ${VERSION_CODENAME} main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
   rm -rf /var/lib/apt/lists/*
   apt-get update -yqq
   apt-get -yqq --no-install-suggests --no-install-recommends install adoptopenjdk-${JAVA_VERSION}-hotspot
