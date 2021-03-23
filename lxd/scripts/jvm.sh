@@ -27,7 +27,13 @@ __install_java(){
 }
 
 __install_maven(){
-  apt-get -yqq --no-install-suggests --no-install-recommends install maven
+  mkdir -p /opt/mvn
+  curl https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz|tar -xz --strip 1 -C /opt/mvn
+
+  echo 'export MAVEN_HOME=/opt/mvn
+  export PATH=${MAVEN_HOME}/bin:${PATH}' > /home/travis/.bash_profile.d/mvn.bash
+  chmod 644 /home/travis/.bash_profile.d/mvn.bash
+  chown travis: /home/travis/.bash_profile.d/mvn.bash
 }
 
 main "$@"
