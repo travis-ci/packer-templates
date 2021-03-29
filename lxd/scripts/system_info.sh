@@ -3,7 +3,7 @@
 set -o errexit
 
 # system info gem
-curl -sSL --dns-servers 8.8.8.8 -o ./system-info-2.0.3.gem http://s3.amazonaws.com/travis-system-info/system-info-2.0.3.gem
+curl -sSL -o ./system-info-2.0.3.gem https://storage.googleapis.com/travis-system-info/system-info-2.0.3.gem
 gem install -b system-info-2.0.3.gem
 rm -f ./system-info-2.0.3.gem
 
