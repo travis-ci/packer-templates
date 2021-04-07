@@ -5,8 +5,9 @@ source <(sudo cat  "/tmp/__common-lib.sh")
 
 main() {
   set -o xtrace
-
-  export DOCKER_COMPOSE_VERSION="1.25.1"
+  pip install --upgrade pip
+  python3 -m pip install --upgrade pip
+  export DOCKER_COMPOSE_VERSION="1.29.0"
   call_build_function func_name="__install_docker_composer"
 }
 
