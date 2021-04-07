@@ -84,6 +84,12 @@ provisioners:
   - scripts/install-docker-compose.sh
   execute_command: "exec su - travis '{{ .Path }}'"
 
+  # system-info
+- type: shell
+  scripts:
+  - scripts/system_info.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
   # Use static DNS servers
 - type: shell
   scripts:
@@ -145,11 +151,7 @@ provisioners:
   scripts:
   - scripts/cleanup.sh
 
-# system-info
-- type: shell
-  scripts:
-  - scripts/system_info.sh
-  execute_command: "exec su - travis '{{ .Path }}'"
+
 
 post-processors:
 -
