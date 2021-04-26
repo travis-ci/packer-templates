@@ -83,6 +83,13 @@ provisioners:
 - type: shell
   scripts:
   - scripts/ibm-advanced-tool-chain.sh
+  
+# system-info
+- type: shell
+  scripts:
+  - scripts/system_info.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
 
   # Use static DNS servers
 - type: shell
@@ -144,12 +151,6 @@ provisioners:
 - type: shell
   scripts:
   - scripts/cleanup.sh
-
-# system-info
-- type: shell
-  scripts:
-  - scripts/system_info.sh
-  execute_command: "exec su - travis '{{ .Path }}'"
 
 post-processors:
 -

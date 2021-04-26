@@ -3,7 +3,7 @@
 set -o errexit
 
 # system info gem
-curl --ipv4 -sSL -o ./system-info-2.0.3.gem https://storage.googleapis.com/travis-system-info/system-info-2.0.3.gem
+curl --ipv4 -sSL -o ./system-info-2.0.3.gem https://s3.amazonaws.com/travis-system-info/system-info-2.0.3.gem
 gem install -b system-info-2.0.3.gem
 rm -f ./system-info-2.0.3.gem
 
