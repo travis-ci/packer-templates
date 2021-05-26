@@ -14,6 +14,9 @@ variables:
   openstack_zone: "{{ env `OS_ZONE` }}"
   openstack_key_path: "{{ env `OS_SSH_KEY_PATH`}}"
   openstack_key_name: "{{ env `OS_SSH_KEY` }}"
+  docker_login_username: "{{ env `DOCKER_LOGIN_USERNAME` }}"
+  docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
+  docker_login_server: "{{ env `DOCKER_LOGIN_SERVER` }}"
 builders:
 - type: googlecompute
   name: googlecompute
@@ -41,6 +44,10 @@ builders:
    - description: Travis CI stevonnie build env template!
 - type: docker
   name: docker
+  login: true
+  login_username: "{{ user `docker_login_username` }}"
+  login_password: "{{ user `docker_login_password` }}"
+  login_server: "{{ user `docker_login_server` }}"
   ssh_pty: true
   <% if RUBY_PLATFORM =~ /powerpc64/ %>
   image: "travisci/gce-parity:16.04-ppc64le"
