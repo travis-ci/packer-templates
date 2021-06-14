@@ -85,7 +85,7 @@ class StackPromotionReporter
         'is_default' => hash.fetch('is_default', false).to_s
       )
     end
-    stack_promotions_txt.write(lines.join("\n") + "\n")
+    stack_promotions_txt.write("#{lines.join("\n")}\n")
   end
 
   private def env

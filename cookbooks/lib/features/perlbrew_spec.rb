@@ -4,7 +4,7 @@ describe 'perlbrew installation' do
   describe command('perlbrew --version') do
     its(:stdout) do
       should match(
-        %r{perl5/perlbrew/bin/perlbrew.+App::perlbrew\/\d+\.\d+}
+        %r{perl5/perlbrew/bin/perlbrew.+App::perlbrew/\d+\.\d+}
       )
     end
     its(:exit_status) { should eq 0 }

@@ -66,19 +66,19 @@ class StackPromotionHydrator
   private def create_env_diff
     current_image_env = output_dir.join('current-image.env')
     current_image_env.write(
-      stack_promotion.cur.metadata.env_hash
+      "#{stack_promotion.cur.metadata.env_hash
         .map { |k, v| [k, v] }
         .sort
         .map { |e| "#{e[0]}=#{e[1]}" }
-        .join("\n") + "\n"
+        .join("\n")}\n"
     )
     next_image_env = output_dir.join('next-image.env')
     next_image_env.write(
-      stack_promotion.nxt.metadata.env_hash
+      "#{stack_promotion.nxt.metadata.env_hash
         .map { |k, v| [k, v] }
         .sort
         .map { |e| "#{e[0]}=#{e[1]}" }
-        .join("\n") + "\n"
+        .join("\n")}\n"
     )
     diff_command = %W[
       diff -u
@@ -93,15 +93,14 @@ class StackPromotionHydrator
   end
 
   private def create_index_files
+    sp = stack_promotion
     packer_templates_diff_url = File.join(
       'https://github.com/travis-ci/packer-templates/compare',
-      stack_promotion.cur.metadata.env_hash['PACKER_TEMPLATES_SHA'] + '...' +
-      stack_promotion.nxt.metadata.env_hash['PACKER_TEMPLATES_SHA']
+      "#{sp.cur.metadata.env_hash['PACKER_TEMPLATES_SHA']}...#{sp.nxt.metadata.env_hash['PACKER_TEMPLATES_SHA']}"
     )
     travis_cookbooks_diff_url = File.join(
       'https://github.com/travis-ci/travis-cookbooks/compare',
-      stack_promotion.cur.metadata.env_hash['TRAVIS_COOKBOOKS_SHA'] + '...' +
-      stack_promotion.nxt.metadata.env_hash['TRAVIS_COOKBOOKS_SHA']
+      "#{sp.cur.metadata.env_hash['TRAVIS_COOKBOOKS_SHA']}...#{sp.nxt.metadata.env_hash['TRAVIS_COOKBOOKS_SHA']}"
     )
     output_files = output_dir.children.reject do |child|
       child.directory? || child.basename == 'README.md' ||
