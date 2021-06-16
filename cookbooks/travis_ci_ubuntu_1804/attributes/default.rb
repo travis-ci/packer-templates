@@ -199,4 +199,5 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
 
 ]
 override['travis_docker']['version'] = '20.10.7~ce~3-0~ubuntu'
-override['travis_docker']['binary']['version'] = '20.10.7-ce'
+override['travis_docker']['binary']['version'] = '20.10.7'
+override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64'
