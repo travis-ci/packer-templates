@@ -198,4 +198,4 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   erlang
 
 ]
-override['travis_packer_templates']['docker_version'] = '20.10.7'
+override['travis_docker']['version'] = '20.10.7'
