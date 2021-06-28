@@ -1,7 +1,9 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.4
+  SuggestExtensions: false
+  NewCops: enable
+  TargetRubyVersion: 2.7
   Exclude:
     - 'tmp/**/*'
     - 'vendor/**/*'
@@ -12,6 +14,3 @@ Style/Documentation:
 
 Metrics/MethodLength:
   Max: 30
-
-Performance/RegexpMatch:
-  Enabled: false

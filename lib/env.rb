@@ -6,7 +6,7 @@ class Env
   extend Forwardable
 
   def initialize(base: ENV)
-    @state = Hash[base]
+    @state = base.to_h
   end
 
   def [](key)

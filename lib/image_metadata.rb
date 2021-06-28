@@ -45,13 +45,11 @@ class ImageMetadata
   end
 
   def tarball_files
-    @tarball_files ||= begin
-      `tar -tf #{tarball}`.split("\n")
-                          .map(&:strip)
-                          .reject { |p| p.end_with?('/') }
-                          .map do |p|
-        p.sub(%r{#{File.basename(tarball, '.tar.bz2')}/}, '')
-      end
+    @tarball_files ||= `tar -tf #{tarball}`.split("\n")
+                                           .map(&:strip)
+                                           .reject { |p| p.end_with?('/') }
+                                           .map do |p|
+      p.sub(%r{#{File.basename(tarball, '.tar.bz2')}/}, '')
     end
   end
 

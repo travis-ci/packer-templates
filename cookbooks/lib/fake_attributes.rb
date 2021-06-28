@@ -4,6 +4,7 @@ require_relative 'forever_hash'
 
 class FakeAttributes < ForeverHash
   def initialize(attributes_filename)
+    super
     @attributes_filename = attributes_filename
   end
 
