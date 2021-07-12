@@ -198,3 +198,10 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   rust
   erlang
 ]
+
+override['travis_docker']['version'] = '20.10.7'
+override['travis_docker']['binary']['version'] = '20.10.7'
+override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64'
+override['travis_docker']['compose']['sha256sum'] = 'f3f10cf3dbb8107e9ba2ea5f23c1d2159ff7321d16f0a23051d68d8e2547b323'
+override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-20.10.7.tgz'
+override['travis_docker']['binary']['checksum'] = '34AD50146FCE29B28E5115A1E8510DD5232459C9A4A9F28F65909F92CCA314D9'
