@@ -180,7 +180,7 @@ describe JobBoardRegistrar do
         end
 
         let :tags do
-          Hash[query['tags'].split(',').map { |s| s.split(':') }]
+          query['tags'].split(',').map { |s| s.split(':') }.to_h
         end
 
         before :each do
