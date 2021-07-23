@@ -4,13 +4,10 @@
 
 set -o errexit
 
-sudo apt update && sudo apt install -y curl apt-transport-https gnupg
-curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1
-source /etc/os-release
-echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" \
-    | sudo tee /etc/apt/sources.list.d/couchdb.list >/dev/null
+curl -L https://apache.jfrog.io/artifactory/couchdb-deb/dists/bionic/main/binary-amd64 -o /tmp/couchDB.deb
 
-sudo apt install -y couchdb
+sudo apt update -y -qq
+sudo apt install -f -y /tmp/couchDB.deb
 
 echo -e '[native_query_servers]\nerlang = {couch_native_process, start_link, []}' | sudo tee /opt/couchdb/etc/local.d/erlang_query_server.ini
 echo -e '[admins]\nadmin = travis' | sudo tee /opt/couchdb/etc/local.d/admins.ini
