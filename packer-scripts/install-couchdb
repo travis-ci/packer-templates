@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Download CouchDB .deb file an install it
+
+set -o errexit
+
+curl -L https://bintray.com/apache/couchdb-deb/download_file?file_path=pool%2FC%2FCouchDB%2Fcouchdb_3.1.1%7Efocal_amd64.deb -o /tmp/couchDB.deb
+
+sudo apt update -y -qq
+sudo apt install -f -y /tmp/couchDB.deb
+
+echo -e '[native_query_servers]\nerlang = {couch_native_process, start_link, []}' | sudo tee /opt/couchdb/etc/local.d/erlang_query_server.ini
+echo -e '[admins]\nadmin = travis' | sudo tee /opt/couchdb/etc/local.d/admins.ini
+
+sudo chown -R couchdb:couchdb /opt/couchdb/
+sudo systemctl disable couchdb
+
+sudo systemctl restart couchdb
+sleep 10
+curl http://admin:travis@127.0.0.1:5984
