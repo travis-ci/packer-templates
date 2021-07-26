@@ -62,8 +62,8 @@ then
   systemctl --all --type service | grep -q networkd-dispatcher.service && systemctl disable networkd-dispatcher.service
   systemctl --all --type service | grep -q grub-common.service && systemctl disable grub-common.service
   systemctl --all --type service | grep -q systemd-logind.service && systemctl disable systemd-logind.service && pam-auth-update
-  systemctl --all --type service | grep -q ua-messaging.service && systemctl disable ua-messaging.service
-  systemctl --all --type service | grep -q cloud-config.service && systemctl disable cloud-config.service
+  systemctl --all --type service | grep -q ua-messaging.service && systemctl mask ua-messaging.service
+  systemctl --all --type service | grep -q snapd.service && systemctl disable snapd.service
 fi
 
 #
