@@ -54,16 +54,16 @@ fi
 #
 if command -v systemctl &>/dev/null
 then
-  systemctl disable lxd-containers.service
-  systemctl mask accounts-daemon.service
-  systemctl disable docker.service
-  systemctl disable chrony.service
-  systemctl disable apport.service
-  systemctl disable networkd-dispatcher.service
-  systemctl disable grub-common.service
-  systemctl disable systemd-logind.service && pam-auth-update
-  systemctl mask ua-messaging.service
-  systemctl disable snapd.service
+  systemctl --all --type service | grep -q lxd-containers.service && systemctl disable lxd-containers.service
+  systemctl --all --type service | grep -q accounts-daemon.service && systemctl mask accounts-daemon.service
+  systemctl --all --type service | grep -q docker.service && systemctl disable docker.service
+  systemctl --all --type service | grep -q chrony.service && systemctl disable chrony.service
+  systemctl --all --type service | grep -q apport.service && systemctl disable apport.service
+  systemctl --all --type service | grep -q networkd-dispatcher.service && systemctl disable networkd-dispatcher.service
+  systemctl --all --type service | grep -q grub-common.service && systemctl disable grub-common.service
+  systemctl --all --type service | grep -q systemd-logind.service && systemctl disable systemd-logind.service && pam-auth-update
+  systemctl --all --type service | grep -q ua-messaging.service && systemctl disable ua-messaging.service
+  systemctl --all --type service | grep -q snapd.service && systemctl disable snapd.service
 fi
 
 #
