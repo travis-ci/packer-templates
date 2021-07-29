@@ -64,8 +64,6 @@ then
   systemctl --all --type service | grep -q systemd-logind.service && systemctl disable systemd-logind.service && pam-auth-update
   systemctl --all --type service | grep -q ua-messaging.service && systemctl disable ua-messaging.service
   systemctl --all --type service | grep -q snapd.service && systemctl disable snapd.service
-  systemctl --all --type service | grep -q cloud-config.service && systemctl disable cloud-config.service
-  systemctl --all --type service | grep -q snapd.seeded.service && systemctl disable snapd.seeded.service
 fi
 
 #
