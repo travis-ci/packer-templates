@@ -64,6 +64,9 @@ then
   systemctl --all --type service | grep -q systemd-logind.service && systemctl disable systemd-logind.service && pam-auth-update
   systemctl --all --type service | grep -q ua-messaging.service && systemctl disable ua-messaging.service
   systemctl --all --type service | grep -q snapd.service && systemctl disable snapd.service
+  systemctl --all --type service | grep -q motd-news.service && systemctl disable motd-news.service
+  
+
 fi
 
 #

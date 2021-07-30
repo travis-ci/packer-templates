@@ -22,7 +22,6 @@ binutils-doc
 bison
 bsdmainutils
 bsdutils
-btrfs-tools
 build-essential
 busybox-initramfs
 busybox-static
@@ -124,7 +123,6 @@ libjpeg8-dev
 libkrb5-dev
 libldap2-dev
 libltdl-dev
-libmagickwand-dev
 libmcrypt-dev
 libmhash-dev
 libmysqlclient-dev
