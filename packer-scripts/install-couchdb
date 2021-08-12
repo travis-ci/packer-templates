@@ -4,7 +4,7 @@
 
 set -o errexit
 
-curl -L https://bintray.com/apache/couchdb-deb/download_file?file_path=pool%2FC%2FCouchDB%2Fcouchdb_3.1.1%7Efocal_amd64.deb -o /tmp/couchDB.deb
+curl -L https://apache.jfrog.io/native/couchdb-deb/pool/C/CouchDB/couchdb_3.1.1~bionic_amd64.deb -o /tmp/couchDB.deb
 
 sudo apt update -y -qq
 sudo apt install -f -y /tmp/couchDB.deb
