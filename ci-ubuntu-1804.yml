@@ -196,10 +196,6 @@ provisioners:
   #- type: shell
   #inline: "ls -lah /opt/couchdb/"  
   #- type: shell
-- type: shell
-  scripts:
-  - packer-scripts/install-couchdb
-  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
   scripts:
   - packer-scripts/create-image-metadata-tarball
   environment_vars:
