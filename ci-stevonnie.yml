@@ -59,7 +59,7 @@ builders:
   - -v
   - <%= Dir.pwd %>/tmp/packer-builder-tmp:/tmp
   - --privileged=true
-  - --storage-opt=size=11G
+  #- --storage-opt=size=11G
   - "{{ .Image }}"
   - /sbin/init
   commit: true
