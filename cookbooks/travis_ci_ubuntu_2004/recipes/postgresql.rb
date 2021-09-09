@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 apt_repository 'postgresql' do
   uri 'http://apt.postgresql.org/pub/repos/apt/'
   distribution 'focal-pgdg'
@@ -11,7 +13,7 @@ service 'postgresql' do
   action [:stop, :disable]
 end
 
-template "/etc/postgresql/13/main/pg_hba.conf" do
+template '/etc/postgresql/13/main/pg_hba.conf' do
   source 'pg_hba.conf.erb'
   owner 'postgres'
   group 'postgres'

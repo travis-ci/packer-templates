@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 execute 'add_mongodb_gpg_key' do
   command 'sudo wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -'
 end
@@ -9,7 +11,7 @@ end
 apt_update
 
 package 'mongodb' do
-  action :install 
+  action :install
 end
 
 service 'mongodb' do

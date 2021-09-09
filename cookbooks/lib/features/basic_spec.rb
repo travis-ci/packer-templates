@@ -542,7 +542,7 @@ if os[:arch] !~ /aarch64|arm64/
         it { should be_readable }
       end
     end
-  end 
+  end
 end
 
 describe command('ssh -V') do

@@ -29,7 +29,10 @@ builders:
     role: worker
   associate_public_ip_address: true
   subnet_id: "{{ user `travis_subnet_id` }}"
-  vpc_id: "{{ user `travis_vpc_id` }}" 
+  vpc_id: "{{ user `travis_vpc_id` }}"
+  source_ami_filter:
+    owners:
+    - 099720109477
 - type: googlecompute
   name: googlecompute
   communicator: ssh
@@ -212,10 +215,6 @@ provisioners:
   #  - "find /etc/systemd -type f -o -type l"
   #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
-- type: shell
-  scripts:
-  - packer-scripts/install-couchdb
-  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball
