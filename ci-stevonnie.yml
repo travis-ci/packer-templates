@@ -79,6 +79,10 @@ builders:
   ssh_private_key_file: "{{ user `openstack_key_path`  }}"
 provisioners:
 - type: shell
+  incline: sudo apt-get update -yqq && sudo apt-get upgrade -yqq
+  only:
+  - docker
+- type: shell
   inline: sleep 10
   only:
   - googlecompute
