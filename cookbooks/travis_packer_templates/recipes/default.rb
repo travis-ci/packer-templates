@@ -48,12 +48,10 @@ end
 
 ruby_block 'write node attributes' do
   block { travis_packer_templates.write_node_attributes_yml }
-  action :nothing
 end
 
 ruby_block 'write job-board registration bits' do
   block { travis_packer_templates.write_job_board_register_yml }
-  action :nothing
 end
 
 Array(node['travis_packer_templates']['packages']).each_slice(10) do |slice|
