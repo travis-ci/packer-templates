@@ -138,15 +138,17 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/ubuntu-1804-minimal-system-info-commands.yml
 - type: chef-solo
-  version: 14.8.12
+  version: 17.6.18
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
-  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% else %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   <% if ENV['BUILDER'] == "lxd" %>
   # packer lxd builder copy cookbooks to wrong directory
   execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
-  {{if .Sudo}}sudo {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  {{if .Sudo}}sudo {{end}}chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   cookbook_paths:
   - cookbooks
@@ -168,7 +170,7 @@ provisioners:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
-  - packer-scripts/run-serverspecs
+  #- packer-scripts/run-serverspecs
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
