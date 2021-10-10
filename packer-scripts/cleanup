@@ -44,16 +44,14 @@ done
 # Disable motd
 # in /etc/default/motd-news set ENABLED=0
 #
-if test -f /etc/default/motd-news &> /dev/null
-then
-	sed -i 's|ENABLED=1|ENABLED=0|' /etc/default/motd-news
+if test -f /etc/default/motd-news >&/dev/null; then
+  sed -i 's|ENABLED=1|ENABLED=0|' /etc/default/motd-news
 fi
 
 #
 # Disable services to speed up boot time
 #
-if command -v systemctl &> /dev/null
-then
+if command -v systemctl >&/dev/null; then
   systemctl --all --type service | grep -q lxd-containers.service && systemctl disable lxd-containers.service
   systemctl --all --type service | grep -q accounts-daemon.service && systemctl mask accounts-daemon.service
   systemctl --all --type service | grep -q docker.service && systemctl disable docker.service
@@ -61,12 +59,12 @@ then
   systemctl --all --type service | grep -q apport.service && systemctl disable apport.service
   systemctl --all --type service | grep -q networkd-dispatcher.service && systemctl disable networkd-dispatcher.service
   systemctl --all --type service | grep -q grub-common.service && systemctl disable grub-common.service
+  systemctl --all --type service | grep -q systemd-logind.service && systemctl disable systemd-logind.service && pam-auth-update
 fi
 
 #
 # Disable package update on boot
 #
-if test -f /etc/cloud/cloud.cfg &> /dev/null
-then
-	sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
+if test -f /etc/cloud/cloud.cfg >&/dev/null; then
+  sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
 fi

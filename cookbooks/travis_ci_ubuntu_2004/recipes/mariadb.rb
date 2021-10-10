@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 execute 'mariadb_key' do
   command 'sudo apt-key adv --fetch-keys \'https://mariadb.org/mariadb_release_signing_key.asc\''
 end

@@ -166,8 +166,6 @@ net-tools
 netbase
 netcat-openbsd
 ntfs-3g
-ntp
-ntpdate
 openssh-client
 openssh-server
 openssh-sftp-server

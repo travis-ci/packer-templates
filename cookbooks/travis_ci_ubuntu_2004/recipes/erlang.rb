@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 execute 'add_erlang_gpg_key' do
   command 'wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key add -'
 end
