@@ -7,7 +7,7 @@ apt_repository 'postgresql' do
   key 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
 end
 
-package 'postgresql'
+package 'postgresql-13'
 
 service 'postgresql' do
   action [:stop, :disable]
