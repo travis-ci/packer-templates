@@ -24,7 +24,7 @@ main() {
   if [[ "$(uname -m)" =~ ppc64 ]]; then
     __install_serverspec
   else
-    __install_chefdk "${PACKER_CHEF_PREFIX}"
+    __install_chef "${PACKER_CHEF_PREFIX}"
   fi
 
   # shellcheck disable=SC2119
@@ -38,31 +38,20 @@ main() {
   if [[ "$(uname -m)" =~ ppc64 ]]; then
     __remove_serverspec_chef
   elif [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
-    __remove_chefdk
+    __remove_chef
   fi
 }
 
 __install_serverspec() {
   gem install -v 2.39.1 serverspec
 }
-__install_chefdk() {
-  if [[ -f /opt/chefdk/embedded/bin/rspec ]]; then
+__install_chef() {
+  if [[ -f /opt/chef/embedded/bin/rspec ]]; then
     return
   fi
 
-  local tmp="${1}"
-
-  __run_retry 2 30 curl -sSL -o "${tmp}/chef.asc" \
-    'https://packages.chef.io/chef.asc'
-
-  apt-key add "${tmp}/chef.asc"
-
-  echo "deb https://packages.chef.io/stable-apt $(lsb_release -cs) main" \
-    >/etc/apt/sources.list.d/chef-stable.list
-
-  __run_retry 2 30 apt-get update -y
-  __run_retry 2 30 apt-get install -y chefdk=3.10.1-1
-  __run_retry 2 30 apt-get install libc-client2007e-dev mysql-client
+  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 21.10.640
+  gem install -v 2.41.8 serverspec
 }
 
 __run_retry() {
@@ -96,9 +85,8 @@ EOF
   chmod 0755 /tmp/sudo-bash
 }
 
-__remove_chefdk() {
-  __run_retry 2 30 apt-get purge -y chefdk
-  rm -f /etc/apt/sources.list.d/chef-stable.list
+__remove_chef() {
+  __run_retry 2 30 apt-get purge -y chef-workstation
   __run_retry 2 30 apt-get update -y
 }
 
@@ -138,6 +126,7 @@ export TERM=xterm
 export PACKER_BUILDER_TYPE=${PACKER_BUILDER_TYPE}
 export RUBYOPT=${RUBYOPT}
 unset GEM_PATH
+rvm use system
 
 cd ${cookbook_dir}
 sudo systemctl start xvfb.service
