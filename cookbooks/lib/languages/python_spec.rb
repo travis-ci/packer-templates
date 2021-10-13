@@ -38,9 +38,27 @@ describe 'python environment' do
     its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
   end
 
-  {
-    'python3.8' => '3.8.3'
-  }.each do |python_alias, python_version|
+  if 'xenial'.include?(Support.distro)
+    vers = {
+      'python2.7' => '2.7.15',
+      'python3.6' => '3.6.7',
+      'python3.7' => '3.7.1'
+    }
+  elsif 'bionic'.include?(Support.distro)
+    vers = {
+      'python2.7' => '2.7.17',
+      'python3.6' => '3.6.10',
+      'python3.7' => '3.7.6',
+      'python3.8' => '3.8.1'
+    }
+  elsif 'focal'.include?(Support.distro)
+    vers = {
+      'python3.7' => '3.7.7',
+      'python3.8' => '3.8.3'
+    }
+  end
+
+  vers.each do |python_alias, python_version|
     describe pycommand('python -m this', version: python_alias), dev: true do
       its(:stderr) { should be_empty }
       its(:stdout) { should include('Now is better than never') }

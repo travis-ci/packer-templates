@@ -12,14 +12,12 @@ module Support
       now = Time.now
 
       loop do
-        begin
-          TCPSocket.new(host, port)
-          break
-        rescue Errno::ECONNREFUSED, Errno::EINVAL => e
-          raise e if Time.now - now >= timeout
+        TCPSocket.new(host, port)
+        break
+      rescue Errno::ECONNREFUSED, Errno::EINVAL => e
+        raise e if Time.now - now >= timeout
 
-          sleep 0.1
-        end
+        sleep 0.1
       end
     end
 

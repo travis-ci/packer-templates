@@ -34,7 +34,7 @@ class ImageTagger
   def tags_defaults
     {
       os: os,
-      :"group_#{group}" => 'true',
+      "group_#{group}": 'true',
       group: group,
       dist: dist,
       packer_templates_branch: env['PACKER_TEMPLATES_BRANCH'],
