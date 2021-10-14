@@ -5,9 +5,9 @@ main() {
   set -o xtrace
   shopt -s nullglob
 
-  export CHEF_PATH='/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin'
+  export CHEF_PATH='/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/bin'
   if [[ "$(uname -m)" =~ ppc64 ]]; then
-    export CHEF_PATH=$CHEF_PATH:/opt/chef/embedded/bin
+    export CHEF_PATH=$CHEF_PATH:/opt/chef-workstation/embedded/bin
   fi
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
@@ -37,7 +37,7 @@ main() {
 
   if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __remove_serverspec_chef
-  elif [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
+  elif [[ -z ${SKIP_CHEF_REMOVAL} ]]; then
     __remove_chef
   fi
 }
@@ -48,7 +48,7 @@ __install_serverspec() {
 }
 
 __install_chef() {
-  if [[ -f /opt/chef/embedded/bin/rspec ]]; then
+  if [[ -f /opt/chef-workstation/embedded/bin/rspec ]]; then
     return
   fi
 
