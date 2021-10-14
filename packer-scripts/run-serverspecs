@@ -21,7 +21,7 @@ main() {
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __install_serverspec
   else
     __install_chefdk "${PACKER_CHEF_PREFIX}"
@@ -35,7 +35,7 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __remove_serverspec_chef
   elif [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
     __remove_chefdk
@@ -43,9 +43,18 @@ main() {
 }
 
 __install_serverspec() {
+  apt-get install rubygems
   gem install -v 2.39.1 serverspec
 }
 __install_chefdk() {
+
+  if [[ "$(lsb_release -cs)" == "focal" ]]; then
+    CHEFDK_VERSION_FOCAL="3.10.1-1"
+    wget "https://packages.chef.io/repos/apt/stable/ubuntu/18.04/chefdk_${CHEFDK_VERSION_FOCAL}_amd64.deb"
+    dpkg -i ./chefdk_${CHEFDK_VERSION_FOCAL}_amd64.deb
+    return
+  fi
+
   if [[ -f /opt/chefdk/embedded/bin/rspec ]]; then
     return
   fi
@@ -104,6 +113,7 @@ __remove_chefdk() {
 
 __remove_serverspec_chef() {
   __run_retry 2 30 gem uninstall serverspec --version 2.39.1
+  __run_retry 2 30 apt-get purge -y rubygems
   __run_retry 2 30 apt-get purge -y chef
   __run_retry 2 30 apt-get update -y
 }

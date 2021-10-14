@@ -2,7 +2,7 @@
 
 include Support::Php
 
-if os[:arch] !~ /ppc64/
+if os[:arch] !~ /ppc64|aarch64|arm64/
   describe 'php interpreter' do
     describe phpcommand('php --version') do
       its(:stderr) { should be_empty }

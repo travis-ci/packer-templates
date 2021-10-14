@@ -12,5 +12,11 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
 Metrics/MethodLength:
   Max: 30
