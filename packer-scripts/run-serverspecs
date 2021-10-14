@@ -21,7 +21,7 @@ main() {
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __install_serverspec
   else
     __install_chef "${PACKER_CHEF_PREFIX}"
@@ -35,7 +35,7 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
     __remove_serverspec_chef
   elif [[ -z ${SKIP_CHEFDK_REMOVAL} ]]; then
     __remove_chef
@@ -43,8 +43,10 @@ main() {
 }
 
 __install_serverspec() {
+  apt-get install rubygems
   gem install -v 2.39.1 serverspec
 }
+
 __install_chef() {
   if [[ -f /opt/chef/embedded/bin/rspec ]]; then
     return
@@ -92,6 +94,7 @@ __remove_chef() {
 
 __remove_serverspec_chef() {
   __run_retry 2 30 gem uninstall serverspec --version 2.39.1
+  __run_retry 2 30 apt-get purge -y rubygems
   __run_retry 2 30 apt-get purge -y chef
   __run_retry 2 30 apt-get update -y
 }

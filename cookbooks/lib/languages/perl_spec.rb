@@ -2,7 +2,7 @@
 
 describe 'perl installation' do
   describe command('perlbrew list --verbose') do
-    its(:stdout) { should match(/\b5\.\d+\s+\(5\.\d+\.\d+\)/) }
+    its(:stdout) { should match(/5\.\d+(\.\d)?\s+\(installed on .+\)?/) }
   end
 
   describe command('cpanm --quiet --version </dev/null') do
