@@ -16,9 +16,9 @@ env:
   - LANG=en_US.UTF-8
   - NODE_ATTRIBUTES_YML="${TRAVIS_BUILD_DIR}/.example-node-attributes.yml"
   - PACKER_CHEF_PREFIX="${TRAVIS_BUILD_DIR}/tmp"
-  - PATH="/opt/chefdk/bin:/opt/chefdk/embedded/bin:/opt/chef/bin:${HOME}/bin:${PATH}"
+  - PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/bin:${HOME}/bin:${PATH}"
   - REQUEST_INTERVAL=5
-  - SKIP_CHEFDK_REMOVAL='1'
+  - SKIP_CHEF_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
   - SPEC_RUNNER='bash -lc'
   - SPEC_SUITES='travis_packer_templates'

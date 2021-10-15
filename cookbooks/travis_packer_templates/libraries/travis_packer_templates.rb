@@ -4,7 +4,7 @@ require 'json'
 require 'yaml'
 require 'fileutils'
 
-require 'chef'
+require 'rspec'
 
 class TravisPackerTemplates
   attr_reader :node, :init_time
