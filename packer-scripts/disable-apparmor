@@ -3,8 +3,15 @@
 set -o errexit
 set -o xtrace
 
-if service apparmor status; then
-  service apparmor stop
-  update-rc.d -f apparmor remove
-  service apparmor teardown
+if [ -x "$(command -v systemctl)" ]; then
+  if systemctl status apparmor.service; then
+    systemctl stop apparmor.service
+    systemctl disable apparmor.service
+  fi
+else
+  if service apparmor status; then
+    service apparmor stop
+    update-rc.d -f apparmor remove
+    service apparmor teardown
+  fi
 fi

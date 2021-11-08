@@ -23,13 +23,14 @@ env:
   - SPEC_RUNNER='bash -lc'
   - SPEC_SUITES='travis_packer_templates'
   - SYSTEM_INFO_JSON="${TRAVIS_BUILD_DIR}/.example_system_info.json"
+  - TRAVIS_SOURCE_AMI="ami-01eefcaf0edcc4cf0"
 install:
 - if [[ -f .test-branch ]]; then
     export TRAVIS_COOKBOOKS_TEST_BRANCH="$(cat .test-branch 2>/dev/null)";
   fi
 - export GIT_DESC="$(git describe --always --dirty --tags)"
-- rvm use 2.7.3 --install --binary --fuzzy
-- gem install bundler:2.1.4
+- rvm use 2.7.4 --install --binary --fuzzy
+- gem install bundler:2.2.27
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"

@@ -34,17 +34,14 @@ Layout/LineEndStringConcatenationIndentation:
 Layout/TrailingWhitespace:
   Exclude:
     - 'Vagrantfile'
-
-# Offense count: 1
-Lint/DuplicateMethods:
+=======
+# Offense count: 2
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, IndentationWidth.
+# SupportedStyles: aligned, indented
+Layout/LineEndStringConcatenationIndentation:
   Exclude:
-    - 'lib/image_metadata.rb'
-
-# Offense count: 17
-# Configuration parameters: IgnoredMethods, CountRepeatedAttributes.
-Metrics/AbcSize:
-  Max: 45
-
+    - 'cookbooks/lib/languages/erlang_spec.rb'
 # Offense count: 26
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
 # IgnoredMethods: refine
@@ -69,7 +66,6 @@ Naming/HeredocDelimiterNaming:
     - 'cookbooks/lib/features/phantomjs_spec.rb'
     - 'cookbooks/lib/languages/php_spec.rb'
     - 'spec/travis_packer_templates_spec.rb'
-
 # Offense count: 8
 # Cop supports --auto-correct.
 Security/IoMethods:
@@ -98,6 +94,7 @@ Style/AccessModifierDeclarations:
 
 # Offense count: 1
 # Cop supports --auto-correct.
+
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: always, always_true, never
 Style/FrozenStringLiteralComment:
@@ -135,3 +132,4 @@ Style/SelectByRegexp:
 Style/StringLiterals:
   Exclude:
     - 'Vagrantfile'
+    
