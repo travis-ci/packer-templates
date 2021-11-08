@@ -2,8 +2,8 @@
 
 source 'https://rubygems.org'
 
-gem 'chef-dk' # yes, it is unofficial oh noes
 gem 'foodcritic'
+# gem 'rake' left for later when foodcritic will be removed
 gem 'pry'
 gem 'rspec'
 gem 'rubocop'
