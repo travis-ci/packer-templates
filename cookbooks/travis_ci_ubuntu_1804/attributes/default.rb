@@ -93,6 +93,8 @@ pythons = %w[
   3.8.1
 ]
 
+override['travis_build_environment']['virtualenv']['version'] = '15.1.0' # issue with 20.0.20 version
+
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
 %w[3 2].each do |pyver|
@@ -138,7 +140,7 @@ override['travis_build_environment']['update_hostname'] = true if node['kernel']
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '4.8'
+override['travis_build_environment']['mercurial_version'] = '5.3'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 
@@ -148,6 +150,7 @@ override['travis_postgresql']['enabled'] = false # is default instance started o
 
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
+  couchdb
   disabled-ipv6
   docker
   docker-compose

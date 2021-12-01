@@ -55,9 +55,16 @@ __install_packages() {
     libelf-dev \
     sudo \
     wget \
-    python \
     rsync \
+    python3 \
+    python3-pip \
     ${APT_GET_INSTALL_PRE_CHEF}
+
+  # link python ##TODO move this to chef
+  if ! [ -x "$(command -v python)" ]; then
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+  fi
 }
 
 __setup_sshd() {
