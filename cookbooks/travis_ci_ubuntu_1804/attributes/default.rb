@@ -86,14 +86,14 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 ]
 override['travis_build_environment']['nodejs_default'] = '10.16.0'
 
+override['travis_build_environment']['virtualenv']['version'] = '15.1.0' # issues with 20.0.20
+
 pythons = %w[
   2.7.17
   3.6.10
   3.7.6
   3.8.1
 ]
-
-override['travis_build_environment']['virtualenv']['version'] = '15.1.0' # issue with 20.0.20 version
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.

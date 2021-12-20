@@ -42,7 +42,7 @@ describe 'python environment' do
     vers = {
       'python2.7' => '2.7.15',
       'python3.6' => '3.6.7',
-      'python3.7' => '3.7.2'
+      'python3.7' => '3.7.1'
     }
   elsif 'bionic'.include?(Support.distro)
     vers = {
