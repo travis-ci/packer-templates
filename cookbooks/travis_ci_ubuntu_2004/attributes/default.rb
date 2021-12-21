@@ -99,6 +99,8 @@ rubies = %w[
   2.7.1
 ]
 
+override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
+
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
 
