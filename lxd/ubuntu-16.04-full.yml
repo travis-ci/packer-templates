@@ -35,6 +35,11 @@ provisioners:
   environment_vars:
   - MIRROR={{user `apt_mirror`}}
 
+- type: shell
+  inline:
+   - sudo apt install apt-transport-https ca-certificates libgnutls30 libgnutls-openssl27 -y && sudo update-ca-certificates
+   - wget https://curl.se/ca/cacert.pem -P /tmp/ && sudo rm -rf /etc/ssl/cert.pem && sudo mv /tmp/cacert.pem /etc/ssl/cert.pem
+
 - type: file
   source: files/postgresql/postgresql-9.5.conf
   destination: /tmp/__postgresql__9.5__main__postgresql.conf
