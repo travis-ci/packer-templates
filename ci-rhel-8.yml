@@ -1,5 +1,5 @@
 ---
-description: Travis CI Ubuntu 20.04 build env template
+description: Travis CI Red Hat Universal Base Image 8 build env template
 variables:
   chef_log_level: info
   docker_repository: travisci/ci-ubuntu-2004
@@ -61,11 +61,7 @@ builders:
 - type: docker
   name: docker
   ssh_pty: true
-  <% if RUBY_PLATFORM =~ /powerpc64/ %>
-  image: "travisci/gce-parity:20.04-ppc64le"
-  <% else %>
-  image: "travisci/gce-parity:20.04"
-  <% end %>
+  image: "redhat/ubi8"
   run_command:
   - -d
   - -v
