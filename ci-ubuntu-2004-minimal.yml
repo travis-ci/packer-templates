@@ -125,7 +125,7 @@ provisioners:
   # end Recommendations
 - type: shell
   scripts:
-  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/pre-chef-bootstrap-focal
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - SKIP_APT_UPGRADE=1
@@ -171,7 +171,7 @@ provisioners:
   - packer-scripts/ensure-travis-user
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
-  #- packer-scripts/run-serverspecs
+  - packer-scripts/run-serverspecs
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums

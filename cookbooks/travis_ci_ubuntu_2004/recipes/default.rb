@@ -75,7 +75,7 @@ if node['kernel']['machine'] != 'aarch64'
   include_recipe '::mongodb'
   include_recipe '::mysql'
   include_recipe '::postgresql'
-  # include_recipe 'travis_build_environment::couchdb'
+  include_recipe 'travis_build_environment::couchdb'
   # include_recipe '::mariadb'
 end
 

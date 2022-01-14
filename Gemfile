@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'foodcritic'
+# gem 'rake' left for later when foodcritic will be removed
 gem 'pry'
 gem 'rspec'
 gem 'rubocop'

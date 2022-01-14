@@ -150,7 +150,7 @@ provisioners:
   # end Recommendations
 - type: shell
   scripts:
-  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/pre-chef-bootstrap-focal
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - SKIP_APT_UPGRADE=1
@@ -217,6 +217,10 @@ provisioners:
   #  - "find /etc/systemd -type f -o -type l"
   #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
+- type: shell
+  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
+- type: shell
+  inline: "ls -lah /opt/couchdb/"  
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball

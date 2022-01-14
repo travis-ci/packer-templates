@@ -7,9 +7,9 @@ main() {
   shopt -s nullglob
 
   if [[ "$(uname -m)" =~ ppc ]]; then
-    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chefdk}"
+    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chef-workstation}"
   else
-    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chefdk}"
+    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chef-workstation}"
   fi
   export DEBIAN_FRONTEND='noninteractive'
 

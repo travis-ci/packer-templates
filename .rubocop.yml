@@ -20,3 +20,6 @@ Style/SymbolArray:
 
 Metrics/MethodLength:
   Max: 30
+
+Style/SelectByRegexp:
+  Enabled: false

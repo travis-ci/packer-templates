@@ -14,9 +14,9 @@ override['travis_build_environment']['python_aliases'] = {
 pythons = %w[
   3.7.7
   3.8.3
+  3.9.0
 ]
 override['travis_build_environment']['pythons'] = pythons
-override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
 
 override['travis_build_environment']['pip']['packages'] = {} # need to fill in
 
@@ -98,6 +98,8 @@ rubies = %w[
   2.7.0
   2.7.1
 ]
+
+override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
 override['travis_build_environment']['rubies'] = rubies
