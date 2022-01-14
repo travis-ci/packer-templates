@@ -127,29 +127,29 @@ override['travis_postgresql']['alternate_versions'] = %w[]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
 override['travis_packer_templates']['job_board']['features'] = %w[
-  basic
-  couchdb
-  disabled-ipv6
-  docker
-  docker-compose
-  elasticsearch
-  firefox
-  go-toolchain
-  google-chrome
-  jdk
-  memcached
-  mongodb
-  mysql
+  #basic
+  #couchdb
+  #disabled-ipv6
+  #docker
+  #docker-compose
+  #elasticsearch
+  #firefox
+  #go-toolchain
+  #google-chrome
+  #jdk
+  #memcached
+  #mongodb
+  #mysql
   nodejs_interpreter
   perl_interpreter
-  perlbrew
-  phantomjs
+  #perlbrew
+  #phantomjs
   postgresql
-  python_interpreter
-  redis
+  #python_interpreter
+  #redis
   ruby_interpreter
-  sqlite
-  xserver
+  #sqlite
+  #xserver
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
   __ubuntu_2004__
