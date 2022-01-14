@@ -15,47 +15,17 @@ variables:
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
   travis_source_ami: "{{ env `TRAVIS_SOURCE_AMI` }}"
 builders:
-- type: amazon-ebs
-  name: amazon-ebs
-  access_key: "{{ user `aws_access_key` }}"
-  secret_key: "{{ user `aws_secret_key` }}"
-  region: us-east-1
-  source_ami: "{{ user `travis_source_ami` }}"
-  ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
-  instance_type: m6g.xlarge
-  ssh_username: ubuntu
-  ami_virtualization_type: hvm
-  tags:
-    role: worker
-  associate_public_ip_address: true
-  subnet_id: "{{ user `travis_subnet_id` }}"
-  vpc_id: "{{ user `travis_vpc_id` }}"
-  source_ami_filter:
-    owners:
-    - 099720109477
-- type: googlecompute
-  name: googlecompute
-  communicator: ssh
-  ssh_timeout: 10m
-  ssh_port: 22
-  ssh_username: packer
-  image_description: Travis CI Ubuntu 20.04
-  account_file: "{{ user `gce_account_file` }}"
-  project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-2004-focal-v20200423
-  image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
-  zone: us-central1-a
-  image_name: "{{ user `image_name` }}"
-  machine_type: n2-standard-4
-  disk_size: 50
-  tags:
-  - ci
-  - ubuntu-2004
-  - travis-ci-packer-templates
-- type: lxd
-  name: lxd
-  image: ubuntu:focal #identifier of image taken from https://us.images.linuxcontainers.org/
-  output_image: "{{ user `image_name` }}"
-  publish_properties:
-   - description: Travis CI focal build env template!
 - type: docker
+  name: docker
+  ssh_pty: true
+  image: "redhat/ubi8"
+  run_command:
+  - -d
+  - -v
+  - <%= Dir.pwd %>/tmp/packer-builder-tmp:/tmp
+  - --privileged=true
+    # Disable on bionic, it's only supported overlay fs on xfs with quota
+    #  - --storage-opt=size=11G
+  - "{{ .Image }}"
+  - /sbin/init
+  commit: true
