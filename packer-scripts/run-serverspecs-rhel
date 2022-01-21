@@ -1,0 +1,177 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  set -o xtrace
+  shopt -s nullglob
+
+  export CHEF_PATH='/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/bin'
+  if [[ "$(uname -m)" =~ ppc64 ]]; then
+    export CHEF_PATH=$CHEF_PATH:/opt/chef-workstation/embedded/bin
+  fi
+  export PATH="$CHEF_PATH:$PATH"
+  export DEBIAN_FRONTEND='noninteractive'
+  export RUBYOPT='-W0'
+
+  : "${PACKER_CHEF_PREFIX:=/tmp}"
+  : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
+  : "${PACKER_BUILDER_TYPE:=docker}"
+
+  if [[ "${PACKER_BUILDER_TYPE}" == 'docker' ]]; then
+    export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
+  fi
+
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
+    __install_serverspec
+  else
+    __install_chef "${PACKER_CHEF_PREFIX}"
+  fi
+
+  # shellcheck disable=SC2119
+  __create_sudo_bash
+  __chown_travis_dirs "${PACKER_CHEF_PREFIX}"
+
+  for suite in ${SPEC_SUITES/,/ }; do
+    __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
+  done
+
+  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
+    __remove_serverspec_chef
+  elif [[ -z ${SKIP_CHEF_REMOVAL} ]]; then
+    __remove_chef
+  fi
+}
+
+__install_serverspec() {
+  yum install rubygems
+  gem install -v 2.39.1 serverspec
+}
+
+__install_chef() {
+  if [[ -f /opt/chef-workstation/embedded/bin/rspec ]]; then
+    return
+  fi
+
+  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 21.10.640
+  gem install -v 2.41.8 serverspec
+}
+
+__run_retry() {
+  local retries="${1}"
+  shift
+  local retry_delay="${1}"
+  shift
+  local cmd=("${@}")
+
+  local i=0
+  while true; do
+    if [[ $i -gt "${retries}" ]]; then
+      exit 86
+    fi
+
+    if "${cmd[@]}"; then
+      return
+    fi
+
+    i=$((i + 1))
+    sleep "${retry_delay}"
+  done
+}
+
+# shellcheck disable=SC2120
+__create_sudo_bash() {
+  cat >/tmp/sudo-bash <<EOF
+#!/usr/bin/env bash
+exec sudo -- bash "\$@"
+EOF
+  chmod 0755 /tmp/sudo-bash
+}
+
+__remove_chef() {
+  __run_retry 2 30 yum remove -y chef-workstation
+  __run_retry 2 30 yum update -y
+}
+
+__remove_serverspec_chef() {
+  __run_retry 2 30 gem uninstall serverspec --version 2.39.1
+  __run_retry 2 30 yum remove -y rubygems
+  __run_retry 2 30 yum remove -y chef
+  __run_retry 2 30 yum update -y
+}
+__run_suite() {
+  local suite="${1}"
+  local chef_prefix="${2}"
+  local runner="${3}"
+  local cookbook_dir
+
+  cookbook_dir="$(
+    __suite_cookbook_dir "${suite}" "${chef_prefix}"
+  )"
+  pushd "${cookbook_dir}" &>/dev/null
+
+  __run_suite_as_travis "${suite}" "${cookbook_dir}" "${runner}"
+
+  popd &>/dev/null
+}
+
+__run_suite_as_travis() {
+  local suite="${1}"
+  local cookbook_dir="${2}"
+  local runner="${3}"
+
+  set +o errexit
+
+  ${runner} "
+set -o xtrace
+
+export PATH=\"${CHEF_PATH}:\$PATH\"
+export TERM=xterm
+export PACKER_BUILDER_TYPE=${PACKER_BUILDER_TYPE}
+export RUBYOPT=${RUBYOPT}
+unset GEM_PATH
+rvm use system
+
+cd ${cookbook_dir}
+sudo systemctl start xvfb.service
+
+set -o errexit
+rspec ${SPEC_ARGS} \\
+  --format documentation \\
+  --format json \\
+  --out /home/travis/.${suite}_rspec.json
+"
+  local exit_code="$?"
+
+  if [[ $exit_code != 0 ]]; then
+    echo "Spec suite exited with ${exit_code}" >&2
+    if [[ -n ${SPEC_FAILURE_SLEEP_FOREVER} ]]; then
+      while true; do
+        date -u
+        echo tick
+        sleep "${SLEEPYTIME:-60}"
+      done
+    fi
+    exit ${exit_code}
+  fi
+
+  set -o errexit
+}
+
+__suite_cookbook_dir() {
+  local suite="${1}"
+  local chef_prefix="${2}"
+  local spec_dir
+
+  spec_dir="$(
+    find "${chef_prefix}"/packer-chef-*/* \
+      -wholename "*${suite}/spec" \
+      -type d | head -1
+  )"
+  dirname "${spec_dir}"
+}
+
+__chown_travis_dirs() {
+  chown -R travis:travis "${1}"/packer-chef-* /var/tmp
+}
+
+main "$@"
