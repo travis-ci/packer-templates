@@ -11,9 +11,7 @@ main() {
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
   fi
-  # if ! [[ "$(uname -m)" =~ ppc64 ]]; then
-    # __enable_i386
-  # fi
+
   __install_packages
   __setup_sshd
   __setup_travis_user
@@ -25,10 +23,6 @@ __disable_ipv6() {
   sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
 }
 
-# __enable_i386() {
-  # dpkg --add-architecture i386
-# }
-
 __install_packages() {
   if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
@@ -39,15 +33,7 @@ __install_packages() {
       /var/lib/apt/lists/*
   fi
 
-  # if [[ "${PACKER_BUILDER_TYPE}" =~ amazon-ebs ]]; then
-    # dpkg --remove-architecture i386
-  # fi
-
-  # yum update -yqq
-  # yum install ca-certificates
-  # yum install curl
-  # yum install gawk
-  # yum install git
+  yum update -yqq
   yum install -y \
     ca-certificates \
     curl \
@@ -73,17 +59,6 @@ __install_packages() {
     sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
     sudo \curl -sSL https://get.rvm.io | bash
     source /etc/profile.d/rvm.sh
-    # cron \
-    # libelf-dev \
-    # --no-install-suggests \
-    # --no-install-recommends \
-
-
-  # link python ##TODO move this to chef
-  # if ! [ -x "$(command -v python)" ]; then
-    # update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-    # update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-  # fi
 }
 
 __setup_sshd() {
