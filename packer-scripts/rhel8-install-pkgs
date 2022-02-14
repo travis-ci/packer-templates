@@ -103,7 +103,7 @@ __install_packages() {
 ## JDK
     sudo yum install -y java-1.8.0-openjdk-devel java-11-openjdk-devel maven
 
-    curl -O https://services.gradle.org/distributions/gradle-6.3-bin.zip
+    curl -LO https://services.gradle.org/distributions/gradle-6.3-bin.zip
     unzip gradle-*.zip
     sudo mkdir /opt/gradle
     sudo mv gradle-*/* /opt/gradle
@@ -111,7 +111,8 @@ __install_packages() {
     echo 'export PATH=/opt/gradle/bin:${PATH}' | sudo tee /etc/profile.d/gradle.sh
     sudo chmod a+x /etc/profile.d/gradle.sh
 
-    curl -O https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz
+    curl -LO https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz
+    tar zxf apache-ant-1.10.12-bin.tar.gz
     sudo mv apache-ant-1.10.12 /opt
     echo "export ANT_HOME=/opt/apache-ant-1.10.12" | sudo tee /etc/profile.d/ant.sh
     echo 'export PATH=/opt/apache-ant-1.10.12/bin:${PATH}' | sudo tee -a /etc/profile.d/ant.sh
@@ -133,11 +134,9 @@ __install_packages() {
 
 ## Postgres
     sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-    sudo dnf -qy module disable postgresql
-    sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
+    #sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
     sudo dnf install -y postgresql12-server
     sudo systemctl enable postgresql-12
-    sudo systemctl start postgresql-12
 
 ## MySQL
     sudo cat<<EOT >> /etc/yum.repos.d/mysql.repo
