@@ -55,7 +55,7 @@ __install_packages() {
     oniguruma \
     libzip-devel
 
-    sudo yum -y --nogpgcheck --skip-broken localinstall http://repo.okay.com.mx/centos/8/x86_64/release/bison-3.0.4-10.el8.x86_64.rpm
+    sudo yum -y --nogpgcheck --skip-broken localinstall http://mirror.centos.org/centos/7/os/x86_64/Packages/bison-3.0.4-2.el7.x86_64.rpm
 
     curl http://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/readline-devel-7.0-10.el8.x86_64.rpm -o /tmp/readline-devel.rpm
     sudo dnf install -y /tmp/readline-devel.rpm
