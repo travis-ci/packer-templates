@@ -2,8 +2,8 @@
 
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
-  '/var/tmp/ubuntu-2004-system-info-commands.yml'
-override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
+  '/var/tmp/rhel-8-system-info-commands.yml'
+override['travis_build_environment']['system_python']['pythons'] = %w[3.8]
 override['travis_build_environment']['python_aliases'] = {
   '3.8.3' => %w[3.8],
   '3.7.7' => %w[3.7],
@@ -119,7 +119,7 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '5.3'
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
-override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
+override['travis_packer_templates']['job_board']['stack'] = 'rhel_8'
 
 # not yet supported
 override['travis_postgresql']['default_version'] = '12'
@@ -152,7 +152,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   #xserver
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __ubuntu_2004__
+  __rhel_8__
   c
   c++
   clojure
@@ -181,7 +181,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
 ]
 # Set minimal languages
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __ubuntu_2004__
+  __rhel_8__
   c
   c++
   cplusplus

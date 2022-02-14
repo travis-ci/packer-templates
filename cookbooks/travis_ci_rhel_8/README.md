@@ -1,4 +1,4 @@
-travis_ci_ubuntu_2004 Cookbook
+travis_ci_rhel_8 Cookbook
 =========================
 
-A wrapper cookbook for the "ubuntu_2004" CI image.
+A wrapper cookbook for the "rhel_8" CI image.

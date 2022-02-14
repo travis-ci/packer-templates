@@ -9,17 +9,10 @@ main() {
 }
 
 __install_packages() {
-  if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
-    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
-  fi
-
-  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
-    rm -rvf /etc/apt/sources.list.d/partner.list \
-      /var/lib/apt/lists/*
-  fi
   sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
   sudo yum update -yqq
   sudo yum install -y \
+    redhat-lsb-core \
     ca-certificates \
     curl \
     gawk \

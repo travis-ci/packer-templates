@@ -34,7 +34,6 @@ provisioners:
   scripts:
   - packer-scripts/pre-chef-bootstrap-rhel
   environment_vars:
-  - SKIP_APT_UPGRADE=1
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec bash '{{ .Path }}'"
 - type: shell
