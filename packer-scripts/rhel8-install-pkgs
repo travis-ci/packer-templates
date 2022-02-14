@@ -137,7 +137,7 @@ __install_packages() {
 ## Postgres
     sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
     #sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
-    sudo dnf install -y postgresql12-server
+    sudo dnf install --nogpgcheck -y postgresql12-server
     sudo systemctl enable postgresql-12
 
 ## MySQL
@@ -150,15 +150,16 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 EOT
 
-  sudo mv /tmp/mysql.repo /etc/yum.repos.d/
   sudo curl -L https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 -o /etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+  sudo mv /tmp/mysql.repo /etc/yum.repos.d/
 
-
-  sudo yum update -yqq
   curl https://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/numactl-libs-2.0.12-11.el8.x86_64.rpm -o /tmp/numactl-libs.rpm
   sudo dnf install -y  /tmp/numactl-libs.rpm
   sudo yum install -y cyrus-sasl-devel
-  sudo yum install -y mysql-community-server --nobest
+
+
+  sudo yum update -yqq
+  sudo yum install -y mysql-community-server --nobest --nogpgcheck
 }
 
 main "$@"
