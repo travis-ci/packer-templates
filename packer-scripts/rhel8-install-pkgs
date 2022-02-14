@@ -139,14 +139,16 @@ __install_packages() {
     sudo systemctl enable postgresql-12
 
 ## MySQL
-    sudo cat<<EOT >> /etc/yum.repos.d/mysql.repo
+    cat<<EOT >> /tmp/mysql.repo
 [mysql57-community]
 name=MySQL 5.7 Community Server
-baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/\$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 EOT
+
+  sudo mv /tmp/mysql.repo /etc/yum.repos.d/
 
 
   sudo yum update -yqq
