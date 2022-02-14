@@ -103,6 +103,20 @@ __install_packages() {
 ## JDK
     sudo yum install -y java-1.8.0-openjdk-devel java-11-openjdk-devel maven
 
+    curl -O https://services.gradle.org/distributions/gradle-6.3-bin.zip
+    unzip gradle-*.zip
+    sudo mkdir /opt/gradle
+    sudo mv gradle-*/* /opt/gradle
+    sudo rm -rf gradle-*
+    echo 'export PATH=/opt/gradle/bin:${PATH}' | sudo tee /etc/profile.d/gradle.sh
+    sudo chmod a+x /etc/profile.d/gradle.sh
+
+    curl -O https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz
+    sudo mv apache-ant-1.10.12 /opt
+    echo "export ANT_HOME=/opt/apache-ant-1.10.12" | sudo tee /etc/profile.d/ant.sh
+    echo 'export PATH=/opt/apache-ant-1.10.12/bin:${PATH}' | sudo tee -a /etc/profile.d/ant.sh
+    sudo chmod a+x /etc/profile.d/ant.sh
+
 ## PHP
     git clone git://github.com/phpenv/phpenv.git ~/.phpenv
     echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bash_profile
