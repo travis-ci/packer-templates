@@ -149,6 +149,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 EOT
 
   sudo mv /tmp/mysql.repo /etc/yum.repos.d/
+  sudo curl -L https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 -o /etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 
 
   sudo yum update -yqq
