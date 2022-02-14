@@ -39,81 +39,7 @@ __install_packages() {
     curl \
     gawk \
     git \
-    sudo \
-    wget \
-    rsync \
-    python3 \
-    python3-pip \
-    ruby \
-    gcc \
-    gcc-c++ \
-    gcc-gfortran \
-    gettext \
-    libtool \
-    patch \
-    redhat-rpm-config \
-    rpm-build \
-    procps \
-    cmake \
-    llvm \
-    make
-
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/a/autoconf-2.71-2.fc36.noarch.rpm
-    # curl https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/p/perl-File-Compare-1.100.600-482.fc36.noarch.rpm -o tmp.rpm && rpm -i tmp.rpm
-    # curl https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/a/autoconf-2.71-2.fc36.noarch.rpm -o tmp.rpm && rpm -i tmp.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/a/automake-1.16.5-2.fc36.noarch.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/l/libtool-2.4.6-47.fc36.x86_64.rpm
-    yum -y --nogpgcheck --skip-broken localinstall http://rpm.pbone.net/info_idpl_77510954_distro_rawhide_com_scons-doc-4.3.0-2.fc36.noarch.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/s/ShellCheck-0.7.2-5.fc36.x86_64.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/s/shfmt-3.4.0-1.fc36.x86_64.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/c/clang-13.0.0-5.fc36.x86_64.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/c/ccache-4.5.1-2.fc36.x86_64.rpm
-
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/p/python3.8-3.8.12-5.fc36.x86_64.rpm
-    yum -y --nogpgcheck --skip-broken localinstall https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/p/python3.9-3.9.10-2.fc36.x86_64.rpm
-
-    curl https://downloads.python.org/pypy/pypy3.8-v7.3.7-linux64.tar.bz2 -o /bin/pypy.tar.bz2
-    cd /bin/
-    tar xjf pypy.tar.bz2
-    export PATH="/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
-
-    python -m ensurepip --upgrade
-
-    yum install -y  gcc gcc-c++ make git patch openssl-devel zlib-devel sqlite-devel bzip2-devel #readline-devel
-
-    # git clone git://github.com/yyuu/pyenv.git ~/.pyenv
-
-    # export PATH="$HOME/.pyenv/bin:$PATH"
-    # eval "$(pyenv init -)"
-
-    # cat << _PYENVCONF_ >> ~/.zshrc
-    # export PATH="$HOME/.pyenv/bin:$PATH"
-    # eval "$(pyenv init -)"
-    # _PYENVCONF_
-
-    # pyenv install 3.9.0
-
-    ${APT_GET_INSTALL_PRE_CHEF}
-
-    sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-    sudo \curl -sSL https://get.rvm.io | bash
-    source /etc/profile.d/rvm.sh
-
-    mkdir ~/bin
-    curl -sL -o ~/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
-    chmod +x ~/bin/gimme
-    export PATH="$HOME/bin:$PATH"
-    gimme 1.17.2
-
-    touch /etc/profile.d/go.sh
-    chmod +x /etc/profile.d/go.sh
-    echo "unset GOOS;" >> /etc/profile.d/go.sh
-    echo "unset GOARCH;" >> /etc/profile.d/go.sh
-    echo "export GOROOT='/root/.gimme/versions/go1.17.2.linux.amd64';" >> /etc/profile.d/go.sh
-    echo "export PATH=\"/root/.gimme/versions/go1.17.2.linux.amd64/bin:${PATH}\";" >> /etc/profile.d/go.sh
-    echo "go version >&2;" >> /etc/profile.d/go.sh
-
-    echo "export GIMME_ENV='/root/.gimme/envs/go1.17.2.linux.amd64.env';" >> /etc/profile.d/go.sh
+    sudo
 }
 
 __setup_sshd() {
@@ -147,7 +73,6 @@ __setup_travis_user() {
   mkdir -p /opt
   chmod 0755 /opt
   chown -R travis:travis /home/travis /opt
-  sudo usermod -a -G rvm travis
 }
 
 __setup_sudoers() {

@@ -33,39 +33,13 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap-rhel
-  - packer-scripts/run-serverspecs-rhel
-  - packer-scripts/clone-travis-cookbooks-rhel
   environment_vars:
   - SKIP_APT_UPGRADE=1
-  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
-  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec bash '{{ .Path }}'"
-# - type: chef-solo
-#   version: 17.6.18
-#   config_template: chef-solo.rb.tmpl
-#   <% if ENV['CHEF_PROFILING'] %>
-#   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
-#   <% else %>
-#   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
-#   <% end %>
-#   <% if ENV['BUILDER'] == "lxd" %>
-#   # packer lxd builder copy cookbooks to wrong directory
-#   execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
-#   {{if .Sudo}}sudo {{end}}chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
-#   <% end %>
-#   cookbook_paths:
-#   - cookbooks
-#   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
-#   - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
-#   - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
-#   <% else %>
-#   remote_cookbook_paths:
-#   - /tmp/chef-stuff/travis-cookbooks/cookbooks
-#   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
-#   <% end %>
-#   run_list:
-#   - recipe[travis_ci_ubuntu_2004]
-#   <% if ENV['CHEF_PROFILING'] %>
-#   - recipe[poise-profiler]
-#   <% end %>
+- type: shell
+  scripts:
+  - packer-scripts/rhel8-install-pkgs
+  environment_vars:
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -u travis -E -S bash '{{ .Path }}'"

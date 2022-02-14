@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  set -o xtrace
+  shopt -s nullglob
+  __install_packages
+}
+
+__install_packages() {
+  if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
+    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
+  fi
+
+  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
+    rm -rvf /etc/apt/sources.list.d/partner.list \
+      /var/lib/apt/lists/*
+  fi
+  sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+  sudo yum update -yqq
+  sudo yum install -y \
+    ca-certificates \
+    curl \
+    gawk \
+    git \
+    sudo \
+    wget \
+    rsync \
+    python3 \
+    python3-pip \
+    ruby \
+    gcc \
+    gcc-c++ \
+    gcc-gfortran \
+    gettext \
+    libtool \
+    patch \
+    openssl-devel \
+    zlib-devel sqlite-devel bzip2-devel \
+    redhat-rpm-config \
+    rpm-build \
+    procps \
+    cmake \
+    llvm \
+    make \
+    autoconf \
+    automake \
+    libtool \
+    clang \
+    ccache \
+    python3.8 \
+    python3.9 \
+    libxml2-devel \
+    libcurl-devel \
+    libjpeg-devel \
+    libpng-devel \
+    libicu-devel \
+    libmcrypt-devel \
+    libtidy-devel \
+    libxslt-devel \
+    oniguruma \
+    libzip-devel
+
+    curl http://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/readline-devel-7.0-10.el8.x86_64.rpm -o /tmp/readline-devel.rpm
+    sudo dnf install -y /tmp/readline-devel.rpm
+    curl https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/oniguruma-devel-6.8.2-2.el8.x86_64.rpm -o /tmp/oniguruma-devel.rpm
+    sudo dnf install -y /tmp/oniguruma-devel.rpm
+
+    curl https://downloads.python.org/pypy/pypy3.8-v7.3.7-linux64.tar.bz2 -o ~/bin/pypy.tar.bz2
+    cd ~/bin/
+    tar xjf pypy.tar.bz2
+    export PATH="~/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
+
+## rvm
+    sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+    sudo \curl -sSL https://get.rvm.io | bash
+    pwd
+
+## Go
+    mkdir -p ~/bin
+    curl -sL -o ~/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
+    chmod +x ~/bin/gimme
+    export PATH="$HOME/bin:$PATH"
+    gimme 1.17.2
+
+    sudo touch /etc/profile.d/go.sh
+    sudo chmod a+rwx /etc/profile.d/go.sh
+    echo "unset GOOS;" >> /etc/profile.d/go.sh
+    echo "unset GOARCH;" >> /etc/profile.d/go.sh
+    echo "export GOROOT='/home/travis/.gimme/versions/go1.17.2.linux.amd64';" >> /etc/profile.d/go.sh
+    echo "export PATH=\"/home/travis/.gimme/versions/go1.17.2.linux.amd64/bin:${PATH}\";" >> /etc/profile.d/go.sh
+    echo "go version >&2;" >> /etc/profile.d/go.sh
+
+    echo "export GIMME_ENV='/home/travis/.gimme/envs/go1.17.2.linux.amd64.env';" >> /etc/profile.d/go.sh
+
+## NodeJS
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install 17.1.0
+
+## JDK
+    sudo yum install -y java-1.8.0-openjdk-devel java-11-openjdk-devel maven
+
+## PHP
+    git clone git://github.com/phpenv/phpenv.git ~/.phpenv
+    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bash_profile
+    echo 'eval "$(phpenv init -)"' >> ~/.bash_profile
+
+    export PATH="$HOME/.phpenv/bin:$PATH"
+    eval "$(phpenv init -)"
+    git clone https://github.com/php-build/php-build $(phpenv root)/plugins/php-build
+    phpenv install 7.1.33
+    phpenv install 7.2.34
+    phpenv install 7.3.32
+    phpenv install 7.4.25
+    phpenv install 8.0.12
+
+## Postgres
+    sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    sudo dnf -qy module disable postgresql
+    sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
+    sudo dnf install -y postgresql12-server
+    sudo systemctl enable postgresql-12
+    sudo systemctl start postgresql-12
+
+## MySQL
+    sudo cat<<EOT >> /etc/yum.repos.d/mysql.repo
+[mysql57-community]
+name=MySQL 5.7 Community Server
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+EOT
+
+
+  sudo yum update -yqq
+  curl https://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/numactl-libs-2.0.12-11.el8.x86_64.rpm -o /tmp/numactl-libs.rpm
+  sudo dnf install -y  /tmp/numactl-libs.rpm
+  sudo yum install -y cyrus-sasl-devel
+  sudo yum install -y mysql-community-server --nobest
+}
+
+main "$@"
