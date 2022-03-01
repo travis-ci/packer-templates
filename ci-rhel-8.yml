@@ -42,3 +42,45 @@ provisioners:
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -u travis -E -S bash '{{ .Path }}'"
+
+post-processors:
+-
+  - type: docker-tag
+    repository: "{{ user `docker_repository` }}"
+    tag: "{{ user `docker_tag` }}"
+    only:
+    - docker
+  - type: shell-local
+    scripts: bin/docker-push
+    environment_vars:
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - googlecompute
+    - lxd
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: shell-local
+    script: bin/write-latest-image-name
+  - type: shell-local
+    script: bin/lxc-export.sh
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - lxd
+  - type: shell-local
+    inline:
+    - echo {{ user `image_name` }} > /tmp/packer-build-image-name
+    only:
+    - lxd
