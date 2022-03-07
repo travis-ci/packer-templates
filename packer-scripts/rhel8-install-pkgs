@@ -55,7 +55,8 @@ __install_packages() {
     oniguruma \
     libzip-devel
 
-    sudo yum -y --nogpgcheck --skip-broken localinstall http://mirror.centos.org/centos/7/os/x86_64/Packages/bison-3.0.4-2.el7.x86_64.rpm
+    curl -L https://rpmfind.net/linux/centos/8-stream/AppStream/x86_64/os/Packages/bison-3.0.4-10.el8.x86_64.rpm -o /tmp/bison.rpm
+    sudo dnf install -y /tmp/bison.rpm
 
     curl http://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/readline-devel-7.0-10.el8.x86_64.rpm -o /tmp/readline-devel.rpm
     sudo dnf install -y /tmp/readline-devel.rpm
@@ -115,12 +116,13 @@ __install_packages() {
 
 ## PHP
     git clone git://github.com/phpenv/phpenv.git ~/.phpenv
-    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bash_profile
-    echo 'eval "$(phpenv init -)"' >> ~/.bash_profile
+    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(phpenv init -)"' >> ~/.bashrc
 
     export PATH="$HOME/.phpenv/bin:$PATH"
     eval "$(phpenv init -)"
     git clone https://github.com/php-build/php-build $(phpenv root)/plugins/php-build
+    export PHP_BUILD_CONFIGURE_OPTS=--with-pear
     phpenv install 7.1.33
     phpenv install 7.2.34
     phpenv install 7.3.32
@@ -129,30 +131,24 @@ __install_packages() {
 
 ## Postgres
     sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-    #sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
     sudo dnf install --nogpgcheck -y postgresql12-server
     sudo systemctl enable postgresql-12
+    sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
 
 ## MySQL
-    cat<<EOT >> /tmp/mysql.repo
-[mysql57-community]
-name=MySQL 5.7 Community Server
-baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/\$basearch/
-enabled=1
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
-EOT
-
-  sudo curl -L https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 -o /etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
-  sudo mv /tmp/mysql.repo /etc/yum.repos.d/
 
   curl https://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/numactl-libs-2.0.12-11.el8.x86_64.rpm -o /tmp/numactl-libs.rpm
   sudo dnf install -y  /tmp/numactl-libs.rpm
   sudo yum install -y cyrus-sasl-devel
 
-
-  sudo yum update -yqq
-  sudo yum install -y mysql-community-server --nobest --nogpgcheck
+  wget https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/perl-common-sense-3.7.4-8.el8.x86_64.rpm
+  sudo dnf install -y perl-common-sense-3.7.4-8.el8.x86_64.rpm
+  wget https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/perl-Types-Serialiser-1.0-12.el8.noarch.rpm
+  sudo dnf install -y perl-Types-Serialiser-1.0-12.el8.noarch.rpm
+  wget https://rpmfind.net/linux/centos/8-stream/AppStream/x86_64/os/Packages/perl-JSON-2.97.001-2.el8.noarch.rpm
+  sudo dnf install -y perl-JSON-2.97.001-2.el8.noarch.rpm
+  curl -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.28-1.el8.x86_64.rpm-bundle.tar -o /tmp/mysql-bundle.tar
+  cd /tmp && tar -xf /tmp/mysql-bundle.tar && sudo dnf install -y mysql-community* && cd -
 }
 
 main "$@"
