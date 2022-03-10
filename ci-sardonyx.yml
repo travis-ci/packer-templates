@@ -69,7 +69,7 @@ builders:
 # https://github.com/travis-ci/packer-templates/issues/555
 - type: openstack
   name: openstack
-  flavor: m1.large
+  flavor: p9.large
   insecure: true
   image_name: "{{ user `image_name` }}"
   ssh_username: ubuntu
