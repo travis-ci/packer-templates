@@ -117,7 +117,7 @@ export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
 export PACKER_BUILDER_TYPE=${PACKER_BUILDER_TYPE}
 export RUBYOPT=${RUBYOPT}
-if [[ "$(uname -m)" =~ ppc64 ]]; then
+if [[ $(uname -m) =~ ppc64 ]]; then
   gem install serverspec
 else
   chef gem install serverspec
@@ -126,7 +126,7 @@ unset GEM_PATH
 cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
-if [[ "$(uname -m)" =~ ppc64 ]]; then
+if [[ $(uname -m) =~ ppc64 ]]; then
   rspec ${SPEC_ARGS} \\
     --format documentation \\
     --format json \\
