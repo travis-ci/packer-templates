@@ -6,7 +6,7 @@ source <(sudo cat  "/tmp/__common-lib.sh")
 main() {
   set -o xtrace
   
-  export DOCKER_COMPOSE_VERSION="1.29.0"
+  export DOCKER_COMPOSE_VERSION="1.29.2"
   call_build_function func_name="__install_docker_composer"
 }
 
