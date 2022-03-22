@@ -148,7 +148,7 @@ provisioners:
 
 - type: shell
   inline:
-   - id travis && chown -R travis: /home/travis/.cargo/
+   - "chown -R travis: /home/travis/.cargo/"
 
 
 # cleanup
