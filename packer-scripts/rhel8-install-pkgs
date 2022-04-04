@@ -70,7 +70,7 @@ __install_packages() {
     export PATH="~/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
     sudo /home/travis/bin/pypy3.8-v7.3.7-linux64/bin/python -m ensurepip --upgrade
 ## Python w/a for builder
-    cd /opt && sudo git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&&cd -
+    cd /opt && sudo git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&& cd -
     cd /opt/pyenv && src/configure && make -C src && cd -
     echo 'export PYENV_ROOT="/opt/pyenv"' >> /home/travis/.bashrc
     echo 'export PATH="$PYENV_ROOT:$PATH"' >> /home/travis/.bashrc
@@ -107,7 +107,7 @@ __install_packages() {
 
 ## JDK
     sudo yum install -y java-1.8.0-openjdk-devel java-11-openjdk-devel maven
-
+    cd ~/bin
     curl -LO https://services.gradle.org/distributions/gradle-6.3-bin.zip
     unzip gradle-*.zip
     sudo mkdir /opt/gradle
@@ -116,6 +116,7 @@ __install_packages() {
     echo 'export PATH=/opt/gradle/bin:${PATH}' | sudo tee /etc/profile.d/gradle.sh
     sudo chmod a+x /etc/profile.d/gradle.sh
 
+    cd ~/bin
     curl -LO https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz
     tar zxf apache-ant-1.10.12-bin.tar.gz
     sudo mv apache-ant-1.10.12 /opt
