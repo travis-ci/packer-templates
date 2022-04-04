@@ -63,10 +63,19 @@ __install_packages() {
     curl https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/oniguruma-devel-6.8.2-2.el8.x86_64.rpm -o /tmp/oniguruma-devel.rpm
     sudo dnf install -y /tmp/oniguruma-devel.rpm
 
+## PyPy
     curl https://downloads.python.org/pypy/pypy3.8-v7.3.7-linux64.tar.bz2 -o ~/bin/pypy.tar.bz2
     cd ~/bin/
     tar xjf pypy.tar.bz2
     export PATH="~/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
+    sudo /home/travis/bin/pypy3.8-v7.3.7-linux64/bin/python -m ensurepip --upgrade
+## Python w/a for builder
+    cd /opt && sudo git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&&cd -
+    cd /opt/pyenv && src/configure && make -C src && cd -
+    echo 'export PYENV_ROOT="/opt/pyenv"' >> /home/travis/.bashrc
+    echo 'export PATH="$PYENV_ROOT:$PATH"' >> /home/travis/.bashrc
+    echo 'eval "$(pyenv init -)"' >> /home/travis/.bashrc
+
 
 ## rvm
     sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -149,6 +158,7 @@ __install_packages() {
   sudo dnf install -y perl-JSON-2.97.001-2.el8.noarch.rpm
   curl -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.28-1.el8.x86_64.rpm-bundle.tar -o /tmp/mysql-bundle.tar
   cd /tmp && tar -xf /tmp/mysql-bundle.tar && sudo dnf install -y mysql-community* && cd -
+
 }
 
 main "$@"
