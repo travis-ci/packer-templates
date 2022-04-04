@@ -125,7 +125,7 @@ __install_packages() {
     sudo chmod a+x /etc/profile.d/ant.sh
 
 ## PHP
-    git clone git://github.com/phpenv/phpenv.git ~/.phpenv
+    git clone https://github.com/phpenv/phpenv.git ~/.phpenv
     echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bashrc
     echo 'eval "$(phpenv init -)"' >> ~/.bashrc
 
