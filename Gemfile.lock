@@ -44,7 +44,7 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (~> 2.9)
       net-http-pipeline
-    git (1.9.1)
+    git (1.11.0)
       rchardet (~> 1.8)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
