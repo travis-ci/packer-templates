@@ -1,0 +1,248 @@
+---
+description: Travis CI Ubuntu 22.04 build env template
+variables:
+  chef_log_level: info
+  docker_repository: travisci/ci-ubuntu-2204
+  docker_tag: packer-minimal-{{ timestamp }}-<%= git_desc %>
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+  image_name: travis-ci-ubuntu-2204-minimal-{{ timestamp }}-<%= git_desc %>
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_edge_branch: master
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
+  docker_login_username: "{{ env `DOCKER_LOGIN_USERNAME` }}"
+  docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
+  docker_login_server: "{{ env `DOCKER_LOGIN_SERVER` }}"
+builders:
+- type: googlecompute
+  name: googlecompute
+  communicator: ssh
+  ssh_timeout: 10m
+  ssh_port: 22
+  ssh_username: packer
+  image_description: Travis CI Ubuntu 22.04
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image: jammy-20220426
+  source_image_project_id: travis-staging-1
+  image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
+  zone: us-central1-a
+  image_name: "{{ user `image_name` }}"
+  machine_type: n2-standard-4
+  disk_size: 50
+  tags:
+  - ci
+  - ubuntu-2204
+  - travis-ci-packer-templates
+- type: lxd
+  name: lxd
+  image: images:ubuntu/jammy
+  output_image: "{{ user `image_name` }}"
+  publish_properties:
+   - description: Travis CI jammy build env template!
+- type: docker
+  name: docker
+  login: true
+  login_username: "{{ user `docker_login_username` }}"
+  login_password: "{{ user `docker_login_password` }}"
+  login_server: "{{ user `docker_login_server` }}"
+  ssh_pty: true
+  <% if RUBY_PLATFORM =~ /powerpc64/ %>
+  image: "travisci/gce-parity:22.04-ppc64le"
+  <% else %>
+  image: "travisci/gce-parity:22.04"
+  <% end %>
+  run_command:
+  - -d
+  - -v
+  - <%= Dir.pwd %>/tmp/packer-builder-tmp:/tmp
+  - --privileged=true
+  - "{{ .Image }}"
+  - /sbin/init
+  commit: true
+provisioners:
+- type: shell
+  inline: sleep 10
+  only:
+  - googlecompute
+- type: shell
+  inline: apt-get update -yqq && apt-get install sudo -yqq
+  # Delay script execution until after /sbin/init has cleared out /tmp,
+  # otherwise the uploaded script gets deleted before it can be run.
+  # TODO: Decide if the container startup command should be /bin/bash and the
+  # /sbin/init call made the first provision step instead of this workaround:
+  # https://github.com/travis-ci/packer-templates/issues/544#issuecomment-344971947
+  pause_before: 5s
+  only:
+  - docker
+- type: file
+  source: tmp/travis-cookbooks
+  destination: /var/tmp/travis-cookbooks
+- type: file
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
+- type: file
+  source: packer-assets/ubuntu-2204-normal-purge.txt
+  destination: /var/tmp/purge.txt
+- type: file
+  source: packer-assets/ci-ubuntu-2204-packages.txt
+  destination: /var/tmp/packages.txt
+  only:
+  - googlecompute
+  - lxd
+- type: file
+  source: packer-assets/ci-ubuntu-2204-docker-packages.txt
+  destination: /var/tmp/packages.txt
+  only:
+  - docker
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-dump
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/remove-default-users
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  only:
+  - docker
+  - googlecompute
+  - lxd
+  # Recommendations for lxd images
+- type: shell
+  inline: "systemctl mask sys-kernel-config.mount"
+  only:
+  - lxd
+- type: shell
+  inline: "systemctl mask systemd-modules-load.service"
+  only:
+  - lxd
+- type: shell
+  inline: "apt install snapd -y && snap install core"
+  only:
+  - lxd
+- type: shell
+  inline: "apt-get remove --purge cloud-init --yes"
+  only:
+  - lxd
+  # end Recommendations
+- type: shell
+  scripts:
+  - packer-scripts/pre-chef-bootstrap-focal
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - SKIP_APT_UPGRADE=1
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: packer-assets/ubuntu-2204-minimal-system-info-commands.yml
+  destination: /var/tmp/ubuntu-2204-minimal-system-info-commands.yml
+- type: shell
+  inline: chmod 0644 /var/tmp/ubuntu-2204-minimal-system-info-commands.yml
+- type: chef-solo
+  version: 17.6.18
+  config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% else %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  <% if ENV['BUILDER'] == "lxd" %>
+  # packer lxd builder copy cookbooks to wrong directory
+  execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
+  {{if .Sudo}}sudo {{end}}chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  cookbook_paths:
+  - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
+  <% else %>
+  remote_cookbook_paths:
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
+  <% end %>
+  run_list:
+  - recipe[travis_ci_ubuntu_2204_minimal]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
+- type: shell
+  scripts:
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/purge
+  - packer-scripts/disable-apparmor
+  - packer-scripts/run-serverspecs
+  - packer-scripts/test-system-info-output
+  - packer-scripts/dump-dpkg-manifest
+  - packer-scripts/create-bin-lib-checksums
+  - packer-scripts/cleanup
+  # - packer-scripts/minimize
+  environment_vars:
+  - DISPLAY=:99.0
+  - SPEC_SUITES=travis_packer_templates
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  environment_vars:
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  inline:
+  - "find /etc/systemd -type f -o -type l"
+  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
+  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
+- type: shell
+  scripts:
+  - packer-scripts/create-image-metadata-tarball
+  environment_vars:
+  - IMAGE_METADATA_TARBALL=/var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+post-processors:
+-
+  - type: docker-tag
+    repository: "{{ user `docker_repository` }}"
+    tag: "{{ user `docker_tag` }}"
+    only:
+    - docker
+  - type: shell-local
+    scripts: bin/docker-push
+    environment_vars:
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - googlecompute
+    - lxd
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+-
+  - type: shell-local
+    script: bin/write-latest-image-name
+  - type: shell-local
+    script: bin/lxc-export.sh
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - lxd
+  - type: shell-local
+    inline:
+    - echo {{ user `image_name` }} > /tmp/packer-build-image-name
+    only:
+    - lxd
