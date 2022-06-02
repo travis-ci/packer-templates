@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
-set -o errexit
-
-main() {
 
 set -o errexit
 set -o xtrace
 
-COUCHDB_COOKIE=$(openssl rand -hex 32)
-echo "couchdb couchdb/cookie string ${COUCHDB_COOKIE}
-couchdb couchdb/cookie seen true" | debconf-set-selections
+main() {
+
+  COUCHDB_COOKIE=$(openssl rand -hex 32)
+  echo "couchdb couchdb/cookie string ${COUCHDB_COOKIE}
+  couchdb couchdb/cookie seen true" | debconf-set-selections
 
 }
 
