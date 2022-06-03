@@ -59,8 +59,8 @@ rvm_autolibs_flag='read-fail'
 EOF
 
 source "$HOME/.rvm/scripts/rvm"
-rvm install ruby-2.7.0 --autolibs=enable --fuzzy
-rvm install ruby-2.6.3 --autolibs=enable --fuzzy
-rvm install ruby-2.6.5 --autolibs=enable --fuzzy
+rvm install ruby-2.7.5 --autolibs=enable --fuzzy
+rvm install ruby-2.6.6 --autolibs=enable --fuzzy
+rvm install ruby-2.6.8 --autolibs=enable --fuzzy
 rvm use default
 gem i bundler

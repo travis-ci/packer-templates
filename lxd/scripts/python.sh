@@ -42,13 +42,14 @@ __install_packages() {
 
 __install_pip() {
 
-  wget https://bootstrap.pypa.io/get-pip.py
+  wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
   sudo python get-pip.py
   pip install --user --upgrade setuptools wheel
+  rm -f get-pip.py
 
   # Install pip3
+  wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
   sudo python3 get-pip.py
-
   rm -f get-pip.py
   
   # update wheel permissions
