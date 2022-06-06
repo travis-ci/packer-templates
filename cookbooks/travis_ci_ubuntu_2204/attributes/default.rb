@@ -91,12 +91,8 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '10.16.0'
 
 rubies = %w[
-  2.5.7
-  2.5.8
-  2.6.5
-  2.6.6
-  2.7.0
-  2.7.1
+  3.0.4
+  3.1.2
 ]
 
 override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
