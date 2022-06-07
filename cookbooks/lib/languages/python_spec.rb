@@ -56,6 +56,12 @@ describe 'python environment' do
       'python3.7' => '3.7.7',
       'python3.8' => '3.8.3'
     }
+  elsif 'jammy'.include?(Support.distro)
+    vers = {
+      'python3.8' => '3.8.3',
+      'python3.9' => '3.9.13',
+      'python3.10' => '3.10.5'
+    }
   end
 
   vers.each do |python_alias, python_version|
