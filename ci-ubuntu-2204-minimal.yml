@@ -24,7 +24,7 @@ builders:
   image_description: Travis CI Ubuntu 22.04
   #account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: jammy-20220426
+  source_image: ubuntu-minimal-2204-jammy-v20220607
   source_image_project_id: travis-staging-1
   image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
   zone: us-central1-a
