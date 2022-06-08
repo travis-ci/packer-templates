@@ -129,7 +129,7 @@ provisioners:
   # end Recommendations
 - type: shell
   scripts:
-  - packer-scripts/pre-chef-bootstrap-focal
+  - packer-scripts/pre-chef-bootstrap-jammy
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - SKIP_APT_UPGRADE=1
