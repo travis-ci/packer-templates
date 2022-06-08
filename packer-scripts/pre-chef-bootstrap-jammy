@@ -73,6 +73,8 @@ __setup_sshd() {
   if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
     echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
   fi
+  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
+  echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
 }
 
 __setup_travis_user() {
@@ -130,8 +132,6 @@ __setup_travis_ssh() {
   chmod 0600 /home/travis/.ssh/authorized_keys
   echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/ssh_config
   echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config
-  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
-  echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
 }
 
 __write_pre_chef_env() {
