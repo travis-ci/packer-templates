@@ -77,9 +77,9 @@ provisioners:
   pause_before: 5s
   only:
   - docker
-- type: file
-  source: tmp/travis-cookbooks
-  destination: /var/tmp/travis-cookbooks
+# - type: file
+#   source: tmp/travis-cookbooks
+#   destination: /var/tmp/travis-cookbooks
 - type: file
   source: tmp/git-meta
   destination: /var/tmp/git-meta
