@@ -48,7 +48,7 @@ builders:
   image_name: "{{ user `image_name` }}"
   machine_type: n2-standard-4
   disk_size: 50
-  #temporary_key_pair_type: ed25519
+  temporary_key_pair_type: ed25519
   tags:
   - ci
   - ubuntu-2204
