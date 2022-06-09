@@ -70,3 +70,6 @@ fi
 if test -f /etc/cloud/cloud.cfg >&/dev/null; then
   sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
 fi
+
+echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
+echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
