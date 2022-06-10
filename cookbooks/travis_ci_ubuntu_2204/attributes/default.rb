@@ -103,10 +103,10 @@ override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ 
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
-  21.1
+  24
 ]
 elixirs = %w[
-  1.7.4
+  1.12.2
 ]
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
