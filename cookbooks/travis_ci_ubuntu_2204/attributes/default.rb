@@ -103,7 +103,7 @@ override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ 
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
-  24.0
+  24.2.1
 ]
 elixirs = %w[
   1.12.2
