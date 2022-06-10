@@ -24,10 +24,10 @@ override['travis_build_environment']['pip']['packages'] = {} # need to fill in
 
 # our php builder
 php_aliases = {
-  '7.4' => '7.4.6'
+  '8.1' => '8.1.2'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
-override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
+override['travis_build_environment']['php_default_version'] = php_aliases['8.1']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
 # if node['kernel']['machine'] == "x86_64" # Is it required
