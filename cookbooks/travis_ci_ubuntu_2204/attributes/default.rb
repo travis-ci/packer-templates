@@ -49,7 +49,7 @@ override['travis_build_environment']['php_aliases'] = php_aliases
 #  override['travis_build_environment']['hhvm_enabled'] = false
 # end
 
-override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' }]
+override['travis_perlbrew']['perls'] = [{ name: '5.33.0', version: 'perl-5.33.0' }, { name: '5.34.0', version: 'perl-5.34.0' }]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
@@ -146,7 +146,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   phantomjs
   postgresql
   python_interpreter
-  redis
   ruby_interpreter
   sqlite
   xserver
