@@ -55,7 +55,7 @@ include_recipe 'travis_build_environment::gradle'
 # include_recipe 'travis_postgresql'
 # include_recipe 'travis_build_environment::mysql'
 include_recipe 'travis_perlbrew::multi'
-include_recipe 'travis_build_environment::redis'
+#include_recipe 'travis_build_environment::redis'
 # include_recipe 'travis_build_environment::mongodb'
 include_recipe 'memcached'
 # TODO: Uncomment when cassandra works on Java 8 again
