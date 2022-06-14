@@ -70,7 +70,6 @@ elsif node['kernel']['machine'] == 'aarch64'
 else
   override['travis_jdk']['versions'] = %w[
     openjdk11
-    openjdk17
   ]
   override['travis_jdk']['default'] = 'openjdk11'
 end
