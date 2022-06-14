@@ -128,7 +128,7 @@ override['travis_postgresql']['enabled'] = false # is default instance started o
 
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
-  couchdb
+  # couchdb
   disabled-ipv6
   docker
   docker-compose
