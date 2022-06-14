@@ -121,7 +121,7 @@ override['travis_build_environment']['mercurial_version'] = '5.3'
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2204'
 
 # not yet supported
-override['travis_postgresql']['default_version'] = '12'
+override['travis_postgresql']['default_version'] = '14'
 override['travis_postgresql']['alternate_versions'] = %w[]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
