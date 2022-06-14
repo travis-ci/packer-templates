@@ -26,7 +26,7 @@ describe 'python environment' do
       its(:stdout) { should be_empty }
       its(:stderr) { should match(/pytest (version )?\d+\.\d+\.\d+/) }
     end
-  elsif 'focal'.include?(Support.distro) || 'jammy'.include?(Support.distro)
+  elsif %w[focal jammy].include?(Support.distro)
     describe pycommand('py.test --version') do
       its(:stderr) { should be_empty }
       its(:stdout) { should match(/pytest (version )?\d+\.\d+\.\d+/) }
