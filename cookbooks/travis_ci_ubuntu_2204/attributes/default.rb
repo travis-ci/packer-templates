@@ -10,7 +10,8 @@ override['travis_build_environment']['python_aliases'] = {
   '3.8.3' => %w[3.8],
   '3.7.7' => %w[3.7],
   'pypy2.7-7.3.1' => %w[pypy],
-  'pypy3.6-7.3.1' => %w[pypy3]
+  'pypy3.6-7.3.1' => %w[pypy3],
+  'pypy3.9-7.3.9' => %w[pypy3.9]
 }
 # packages build by Cpython + our repo
 pythons = %w[
