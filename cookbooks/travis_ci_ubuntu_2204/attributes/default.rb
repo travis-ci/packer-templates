@@ -87,10 +87,11 @@ override['travis_build_environment']['cmake']['download_url'] = ::File.join(
 )
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  12.7.0
-  10.16.0
+  14.18.1
+  16.13.0
+  17.1.0
 ]
-override['travis_build_environment']['nodejs_default'] = '10.16.0'
+override['travis_build_environment']['nodejs_default'] = '14.18.1'
 
 rubies = %w[
   3.0.4
