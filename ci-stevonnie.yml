@@ -193,6 +193,7 @@ provisioners:
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
+  - packer-scripts/perforce-install
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
