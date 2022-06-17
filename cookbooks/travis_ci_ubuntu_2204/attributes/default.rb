@@ -73,6 +73,7 @@ else
   override['travis_jdk']['versions'] = %w[
     openjdk8
     openjdk11
+    openjdk17
   ]
   override['travis_jdk']['default'] = 'openjdk11'
 end
