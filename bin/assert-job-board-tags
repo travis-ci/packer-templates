@@ -67,10 +67,10 @@ end
 
 def parse_args(argv: ARGV)
   parsed = {
-    op: ENV['OP'] || 'incl',
-    base: ENV['BASE'],
-    other: ENV['OTHER'],
-    tagset: ENV['TAGSET'],
+    op: ENV.fetch('OP', 'incl'),
+    base: ENV.fetch('BASE', nil),
+    other: ENV.fetch('OTHER', nil),
+    tagset: ENV.fetch('TAGSET', nil),
     stdin: false
   }
 

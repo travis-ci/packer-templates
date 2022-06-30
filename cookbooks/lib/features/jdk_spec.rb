@@ -28,8 +28,8 @@ describe 'jdk installation' do
   end
 
   it 'should have JAVA_HOME defined' do
-    expect(ENV['JAVA_HOME']).to_not be_nil
-    expect(ENV['JAVA_HOME']).to_not be_empty
+    expect(ENV.fetch('JAVA_HOME', nil)).to_not be_nil
+    expect(ENV.fetch('JAVA_HOME', nil)).to_not be_empty
   end
 
   describe 'java command' do

@@ -32,7 +32,7 @@ module Support
     end
 
     def job_board_register_yml
-      ENV['TRAVIS_JOB_BOARD_REGISTER_YML'] || '/.job-board-register.yml'
+      ENV.fetch('TRAVIS_JOB_BOARD_REGISTER_YML', '/.job-board-register.yml')
     end
 
     def draconian?

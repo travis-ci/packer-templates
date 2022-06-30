@@ -34,7 +34,7 @@ module Support
   module_function :base_packages
 
   def base_packages_file
-    ENV['TRAVIS_BASE_PACKAGES_FILE'] || '/var/tmp/packages.txt'
+    ENV.fetch('TRAVIS_BASE_PACKAGES_FILE', '/var/tmp/packages.txt')
   end
 
   module_function :base_packages_file
