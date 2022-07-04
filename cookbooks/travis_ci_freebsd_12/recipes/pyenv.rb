@@ -61,7 +61,7 @@ bash 'pyenv_global_2.7.17_genc_pycparser' do
   group node['travis_build_environment']['group']
   environment(
     'HOME' => node['travis_build_environment']['home'],
-    'PATH' => ENV['PATH']
+    'PATH' => ENV.fetch('PATH', nil)
   )
 end
 
@@ -78,7 +78,7 @@ pyenv_versions.each do |p|
     group node['travis_build_environment']['group']
     environment(
       'HOME' => node['travis_build_environment']['home'],
-      'PATH' => ENV['PATH']
+      'PATH' => ENV.fetch('PATH', nil)
     )
   end
 end
@@ -92,7 +92,7 @@ bash 'pyenv_global_set_to_3.6' do
   group node['travis_build_environment']['group']
   environment(
     'HOME' => node['travis_build_environment']['home'],
-    'PATH' => ENV['PATH']
+    'PATH' => ENV.fetch('PATH', nil)
   )
 end
 
@@ -102,6 +102,6 @@ bash 'pip_install_virtualenv' do
   group node['travis_build_environment']['group']
   environment(
     'HOME' => node['travis_build_environment']['home'],
-    'PATH' => ENV['PATH']
+    'PATH' => ENV.fetch('PATH', nil)
   )
 end

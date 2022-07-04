@@ -40,7 +40,7 @@ template jdk_switcher_source_path do
   )
 end
 
-ENV['PATH'] = "#{jdk_switcher_dir}:#{ENV['PATH']}"
+ENV['PATH'] = "#{jdk_switcher_dir}:#{ENV.fetch('PATH', nil)}"
 bash 'source_jdk_switcher_in_bash_profile' do
   code "echo 'source #{jdk_switcher_source_path}' >> #{node['travis_build_environment']['home']}/.bash_profile"
   user node['travis_build_environment']['user']
