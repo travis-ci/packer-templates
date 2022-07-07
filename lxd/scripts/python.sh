@@ -48,7 +48,7 @@ __install_pip() {
   rm -f get-pip.py
 
   # Install pip3
-  wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
+  wget https://bootstrap.pypa.io/get-pip.py
   sudo python3 get-pip.py
   rm -f get-pip.py
   
@@ -73,7 +73,7 @@ __install_pyenv() {
 __install_virtualenv() {
 
   virtualenv_root="/home/travis/virtualenv"
-  pip install --user virtualenv==15.1.0
+  pip install --user virtualenv==20.15.1
   mkdir -p ${virtualenv_root}
   id travis && chown -R travis: ${virtualenv_root}
 }
@@ -82,7 +82,7 @@ __install_default_python() {
 
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
-  pyenv install 3.6.0
+  pyenv install 3.10.5
 }
 
 __setup_system_site_packages_xenial(){
@@ -96,7 +96,7 @@ __setup_system_site_packages_bionic(){
 
   sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
   __setup_envirnoment "python2.7"
-  __setup_envirnoment "python3.6"
+  __setup_envirnoment "python3.10"
 }
 
 __setup_system_site_packages_focal(){

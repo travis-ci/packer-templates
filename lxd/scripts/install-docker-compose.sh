@@ -13,7 +13,7 @@ main() {
 __install_docker_composer() {
   sudo pip3 install --upgrade pip
   sudo pip3 install cryptography wheel setuptools
-  sudo apt install rustc -y
+  sudo apt install rustc cargo -y
   sudo pip3 install -IU "docker-compose==${DOCKER_COMPOSE_VERSION}"
 }
 
