@@ -28,7 +28,7 @@ __install_java(){
 
 __install_maven(){
   mkdir -p /opt/mvn
-  curl https://downloads.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz|tar -xz --strip 1 -C /opt/mvn
+  curl https://downloads.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz|tar -xz --strip 1 -C /opt/mvn
 
   echo 'export MAVEN_HOME=/opt/mvn
   export PATH=${MAVEN_HOME}/bin:${PATH}' > /home/travis/.bash_profile.d/mvn.bash
