@@ -81,7 +81,7 @@ __install_virtualenv() {
 __install_default_python() {
 
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --enable-loadable-sqlite-extensions --with-computed-gotos"
-  PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
+  PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -I/usr/include/openssl LDFLAGS=-L/usr/lib"
   pyenv install 3.10.5
 }
 
