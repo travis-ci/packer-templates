@@ -200,6 +200,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   rust
   elixir
   erlang
+  generic
 ]
 
 override['travis_docker']['version'] = '20.10.7'
