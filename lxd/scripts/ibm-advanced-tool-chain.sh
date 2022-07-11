@@ -16,7 +16,7 @@ __ibm_advanced_tool_chain_install() {
 }
 
 __ibm_advanced_tool_chain_install_focal_ppc64le() {
-    __install_ibm_tool_chain 14.0'focal'
+    __install_ibm_tool_chain 14.0 'focal'
 }
 
 __ibm_advanced_tool_chain_install_bionic_ppc64le() {
