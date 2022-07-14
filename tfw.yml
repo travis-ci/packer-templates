@@ -51,7 +51,7 @@ builders:
     owners:
     - 099720109477
     most_recent: true
-  ami_name: tfw {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
+  ami_name: tfw {{ isotime "2006-01-02 15:04:06" | clean_resource_name }}
   instance_type: t2.large
   ssh_username: ubuntu
   ami_virtualization_type: hvm
