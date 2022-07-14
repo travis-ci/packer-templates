@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+
+  machine=$(lsb_release -sc)
+
+  # Add Perforce packaging key
+  wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
+
+  # Add Perforce repository
+  echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
+
+  apt-get update
+
+  # Install Perforce
+  sudo apt-get install helix-p4d
+}
+
+main "$@"
