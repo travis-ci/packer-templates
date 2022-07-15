@@ -23,6 +23,8 @@ fi
 '  > $HOME/.bash_profile.d/nvm.bash
   chmod 644 $HOME/.bash_profile.d/nvm.bash
 
-  nvm install 18.5.0
+  nvm install 8.12.0
 }
 main "$@"
+
+
