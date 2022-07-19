@@ -13,7 +13,7 @@ override['travis_build_environment']['python_aliases'] = {
 # packages build by Cpython + our repo
 pythons = %w[
   3.7.7
-  3.8.3
+  3.8.13
   3.9.0
 ]
 override['travis_build_environment']['pythons'] = pythons
