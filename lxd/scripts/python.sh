@@ -86,7 +86,7 @@ __install_default_python() {
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
   
-  pyenv install 3.7.13
+  pyenv install 3.10.5
 }
 
 __setup_system_site_packages_xenial(){
