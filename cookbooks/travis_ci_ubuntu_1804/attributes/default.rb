@@ -5,12 +5,12 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-1804-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[2.7 3.6]
 override['travis_build_environment']['python_aliases'] = {
-  '2.7.17' => %w[2.7],
-  '3.6.10' => %w[3.6],
-  '3.7.6' => %w[3.7],
-  '3.8.1' => %w[3.8],
-  'pypy2.7-5.8.0' => %w[pypy],
-  'pypy3.5-5.8.0' => %w[pypy3]
+  '2.7.18' => %w[2.7],
+  '3.6.15' => %w[3.6],
+  '3.7.13' => %w[3.7],
+  '3.8.13' => %w[3.8],
+  'pypy2.7-7.3.9' => %w[pypy],
+  'pypy3.7-7.3.9' => %w[pypy3]
 }
 php_aliases = {
   '7.1' => '7.1.33',
@@ -23,6 +23,8 @@ override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
 override['travis_build_environment']['php_aliases'] = php_aliases
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
+override['travis_build_environment']['virtualenv']['version'] = '20.15.1'
+
 override['travis_build_environment']['elasticsearch']['version'] = '5.5.0'
 if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['php_versions'] = []
@@ -34,12 +36,12 @@ if node['kernel']['machine'] == 'ppc64le'
 end
 
 override['travis_perlbrew']['perls'] = [
-  { name: '5.26', version: 'perl-5.26.2' },
-  { name: '5.26-extras', version: 'perl-5.26.2',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.26-shrplib' },
-  { name: '5.24', version: 'perl-5.24.0' },
-  { name: '5.24-extras', version: 'perl-5.24.0',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.24-shrplib' }
+  { name: '5.36', version: 'perl-5.36.0' },
+  { name: '5.30.3-extras', version: 'perl-5.30.3',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.36-shrplib' },
+  { name: '5.28', version: 'perl-5.28.2' },
+  { name: '5.28.2-extras', version: 'perl-5.28.2',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.28-shrplib' }
 ]
 override['travis_perlbrew']['modules'] = %w[
   Dist::Zilla
@@ -83,10 +85,10 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '16.15.1'
 
 pythons = %w[
-  2.7.17
-  3.6.10
-  3.7.6
-  3.8.1
+  2.7.18
+  3.6.15
+  3.7.13
+  3.8.13
 ]
 
 # Reorder pythons so that default python2 and python3 come first
@@ -110,18 +112,17 @@ pythons.each do |full_name|
 end
 
 rubies = %w[
-  2.4.9
-  2.5.3
-  2.5.7
-  2.7.0
-  2.6.5
+  2.5.9
+  2.6.9
+  2.7.6
+  3.1.2
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.last
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
-  21.1
+  24.3.1
 ]
 elixirs = %w[
   1.7.4
