@@ -12,9 +12,9 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/opal-system-info-commands.yml'
 
 override['travis_perlbrew']['perls'] = [
-  { name: '5.26', version: 'perl-5.26.2' },
-  { name: '5.26-extras', version: 'perl-5.26.2',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.26-shrplib' },
+  { name: '5.28', version: 'perl-5.28.2' },
+  { name: '5.28-extras', version: 'perl-5.28.2',
+    arguments: '-Duseshrplib -Duseithreads', alias: '5.28-shrplib' },
   { name: '5.24', version: 'perl-5.24.0' },
   { name: '5.24-extras', version: 'perl-5.24.0',
     arguments: '-Duseshrplib -Duseithreads', alias: '5.24-shrplib' }
@@ -106,7 +106,7 @@ override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ 
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
-  21.1
+  25.0.2
 ]
 elixirs = %w[
   1.7.4

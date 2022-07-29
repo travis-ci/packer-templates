@@ -5,14 +5,15 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
-  '3.8.3' => %w[3.8],
-  '3.7.7' => %w[3.7],
+  '3.9.0' => %w[3.9],
+  '3.8.13' => %w[3.8],
+  '3.7.13' => %w[3.7],
   'pypy2.7-7.3.1' => %w[pypy],
-  'pypy3.6-7.3.1' => %w[pypy3]
+  'pypy3.8-7.3.9' => %w[pypy3]
 }
 # packages build by Cpython + our repo
 pythons = %w[
-  3.7.7
+  3.7.13
   3.8.13
   3.9.0
 ]
@@ -90,12 +91,10 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '18.4.0'
 
 rubies = %w[
-  2.5.7
-  2.5.8
-  2.6.5
-  2.6.6
-  2.7.0
-  2.7.1
+  2.5.9
+  2.6.9
+  2.7.6
+  3.1.2
 ]
 
 override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
@@ -104,7 +103,7 @@ override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ 
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
-  21.1
+  24.3.1
 ]
 elixirs = %w[
   1.7.4
