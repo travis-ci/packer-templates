@@ -6,7 +6,7 @@ require 'features/python_interpreter_spec'
 require 'features/pyenv_spec'
 
 describe 'python environment' do
-  if %w[xenial bionic].include?(Support.distro) #issue with system python3.8 for Focal dist 
+  if %w[xenial bionic].include?(Support.distro) # issue with system python3.8 for Focal dist
     describe pycommand('easy_install --version') do
       its(:stderr) { should be_empty }
       its(:stdout) { should match(/^setuptools \d+\.\d+\.\d+/) }
