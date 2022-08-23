@@ -39,6 +39,7 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/rhel8-install-pkgs
+  - packer-scripts/cosign-install
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -u travis -E -S bash '{{ .Path }}'"
