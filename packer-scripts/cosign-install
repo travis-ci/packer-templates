@@ -9,15 +9,15 @@ main() {
   local COSIGN_VERSION="v1.10.1"
   wget -q "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64"
   # rename the binary
-  sudo mv cosign-linux-amd64 /usr/local/bin/not_cosign
-  sudo chmod +x /usr/local/bin/not_cosign
+  sudo mv cosign-linux-amd64 /home/travis/bin/not_cosign
+  sudo chmod +x /home/travis/bin/not_cosign 
   not_cosign version
 
   # Rekor-cli installtion
   local REKOR_VERSION="v0.10.0"
   wget -q "https://github.com/sigstore/rekor/releases/download/${REKOR_VERSION}/rekor-cli-linux-amd64"
-  sudo mv rekor-cli-linux-amd64 /usr/local/bin/rekor-cli
-  sudo chmod +x /usr/local/bin/rekor-cli
+  sudo mv rekor-cli-linux-amd64 /home/travis/bin/rekor-cli
+  sudo chmod +x /home/travis/bin/rekor-cli
   rekor-cli version
 
   # create dummy cosign script
@@ -34,7 +34,7 @@ main "$@"
 EOF
 
   # make cosign script executable and move to /usr/local/bin
-  sudo chmod +x cosign && sudo mv cosign /usr/local/bin/cosign
+  sudo chmod +x cosign && sudo mv cosign /home/travis/bin/cosign
 
 }
 
