@@ -14,12 +14,10 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
 php_aliases = {
-  '5.6' => '5.6.40',
-  '7.1' => '7.1.27',
-  '7.2' => '7.2.15'
+  '7.4' => '7.4.30'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
-override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
+override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
 if node['kernel']['machine'] == 'ppc64le'
@@ -31,12 +29,15 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['perls'] = %w[
+    5.34.1
+    5.36.0
+  ]
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.18.4
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -46,7 +47,7 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
 else
   override['travis_jdk']['versions'] = %w[
-    openjdk10
+    openjdk8
     openjdk11
   ]
   override['travis_jdk']['default'] = 'openjdk11'
@@ -56,15 +57,13 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  11.0.0
-  8.12.0
+  16.16.0
 ]
-override['travis_build_environment']['nodejs_default'] = '8.12.0'
+override['travis_build_environment']['nodejs_default'] = '16.16.0'
 
 pythons = %w[
-  2.7.15
-  3.6.7
-  3.7.1
+  3.7.13
+  3.8.13
 ]
 
 # Reorder pythons so that default python2 and python3 come first
@@ -89,9 +88,9 @@ pythons.each do |full_name|
 end
 
 rubies = %w[
-  2.3.8
-  2.4.5
-  2.5.3
+  2.7.6
+  3.0.4
+  3.1.2
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
