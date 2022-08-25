@@ -30,6 +30,17 @@ main() {
   main() {
 
   args="$@"
+  
+  if [ ! -z "${COSIGN_EXPERIMENTAL}" ] \
+   && [ ! -z "${TRAVIS_REPO_PRIVATE}" ] \
+   && [ $COSIGN_EXPERIMENTAL == 1 ] \
+   && [ $TRAVIS_REPO_PRIVATE == "true" ] \
+   && [[ $args != *"--key"* ]]
+  then
+    echo "Experimental cosign features are not allowed in builds for private repositories"
+    exit 1
+  fi
+  
   # call original cosign binary and send arguments
   not_cosign $args
 
