@@ -29,10 +29,8 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = %w[
-  5.34.1
-  5.36.0
-]
+override['travis_perlbrew']['perls'] = [{ name: '5.34.1', version: 'perl-5.34.1' }, { name: '5.36.0', version: 'perl-5.36.0' }]
+
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
