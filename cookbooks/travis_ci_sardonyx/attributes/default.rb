@@ -30,9 +30,9 @@ if node['kernel']['machine'] == 'ppc64le'
 end
 
 override['travis_perlbrew']['perls'] = %w[
-    5.34.1
-    5.36.0
-  ]
+  5.34.1
+  5.36.0
+]
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
