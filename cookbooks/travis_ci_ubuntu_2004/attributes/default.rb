@@ -151,27 +151,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
-override['travis_packer_templates']['job_board']['languages'] = %w[
-  __ubuntu_2004__
-  c
-  c++
-  clojure
-  cplusplus
-  cpp
-  default
-  generic
-  go
-  groovy
-  java
-  node_js
-  php
-  pure_java
-  python
-  ruby
-  scala
-  julia
-  erlang
-]
 
 # Override values in array : minimal set of options
 override['travis_packer_templates']['job_board']['features'] = %w[
@@ -188,6 +167,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cpp
   ruby
   python
+  generic
   go
   java
   php
