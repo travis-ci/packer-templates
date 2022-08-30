@@ -108,7 +108,7 @@ GEM
     thread_safe (0.3.6)
     treetop (1.6.11)
       polyglot (~> 0.3)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unicode-display_width (2.2.0)
 
