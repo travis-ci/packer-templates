@@ -189,9 +189,9 @@ provisioners:
   <% end %>
   # defaults to installed versions 
 - type: shell
-  inline: "perlbrew switch 5.34.1"
+  inline: "/home/travis/perl5/perlbrew/bin/perlbrew switch 5.34.1"
 - type: shell
-  inline: "pyenv global 3.8.13"  
+  inline: "/opt/pyenv/bin/pyenv global 3.8.13"
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
