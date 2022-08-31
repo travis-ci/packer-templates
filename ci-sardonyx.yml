@@ -187,6 +187,11 @@ provisioners:
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>
+  # defaults to installed versions 
+- type: shell
+  inline: "perlbrew switch 5.34.1"
+- type: shell
+  inline: "pyenv global 3.8.13"  
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
