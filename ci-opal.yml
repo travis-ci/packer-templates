@@ -1,6 +1,7 @@
 ---
 description: Travis CI opal build env template
 variables:
+  chef_log_level: info
   docker_repository: travisci/ci-opal
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"

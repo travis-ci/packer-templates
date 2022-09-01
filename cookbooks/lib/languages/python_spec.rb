@@ -22,7 +22,7 @@ describe 'python environment' do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^wheel \d+\.\d+\.\d+/) }
   end
-  
+
   # TO DO: pytest for Xenial
 
   if %w[bionic].include?(Support.distro)
@@ -50,7 +50,7 @@ describe 'python environment' do
   end
 
   if 'xenial'.include?(Support.distro)
-    vers = { 
+    vers = {
       'python3.7' => '3.7.13',
       'python3.8' => '3.8.13'
     }
