@@ -11,14 +11,16 @@ default['travis_ci_opal']['prerequisite_packages'] = %w[
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/opal-system-info-commands.yml'
 
-override['travis_perlbrew']['perls'] = [
-  { name: '5.34.1', version: 'perl-5.34.1' },
-  { name: '5.34.1-extras', version: 'perl-5.34.1',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.34.1-shrplib' },
-  { name: '5.36.0', version: 'perl-5.36.0' },
-  { name: '5.36.0-extras', version: 'perl-5.36.0',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.36.0-shrplib' }
-]
+override['travis_perlbrew']['perls'] = [{ name: '5.34.1', version: 'perl-5.34.1' }, { name: '5.36.0', version: 'perl-5.36.0' }]
+
+# override['travis_perlbrew']['perls'] = [
+#   { name: '5.34.1', version: 'perl-5.34.1' },
+#   { name: '5.34.1-extras', version: 'perl-5.34.1',
+#     arguments: '-Duseshrplib -Duseithreads', alias: '5.34.1-shrplib' },
+#   { name: '5.36.0', version: 'perl-5.36.0' },
+#   { name: '5.36.0-extras', version: 'perl-5.36.0',
+#     arguments: '-Duseshrplib -Duseithreads', alias: '5.36.0-shrplib' }
+# ]
 override['travis_perlbrew']['modules'] = %w[
   Dist::Zilla
   Dist::Zilla::Plugin::Bootstrap::lib
