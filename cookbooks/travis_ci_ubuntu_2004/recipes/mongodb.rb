@@ -1,19 +1,35 @@
 # frozen_string_literal: true
 
-execute 'add_mongodb_gpg_key' do
-  command 'sudo wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -'
+apt_repository 'mongodb-4.4' do
+  uri 'http://repo.mongodb.org/apt/ubuntu'
+  distribution 'focal/mongodb-org/4.4'
+  components %w[multiverse]
+  key 'https://www.mongodb.org/static/pgp/server-4.4.asc'
+  retries 2
+  retry_delay 30
+  not_if { node['kernel']['machine'] == 'ppc64le' }
 end
 
-execute 'add_mongodb_repository' do
-  command 'sudo echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/5.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list'
+package 'mongodb-org' do
+  not_if { node['kernel']['machine'] == 'ppc64le' }
 end
 
-apt_update
-
-package 'mongodb' do
-  action :install
+service 'mongod' do
+  action %i[stop disable]
+  not_if { node['kernel']['machine'] == 'ppc64le' }
+  not_if { node['travis_build_environment']['mongodb']['service_enabled'] }
 end
 
-service 'mongodb' do
-  action [:disable, :stop]
+apt_repository 'mongodb-4.0' do
+  action :remove
+  not_if { node['kernel']['machine'] == 'ppc64le' }
+  not_if { node['travis_build_environment']['mongodb']['keep_repo'] }
+end
+
+ruby_block 'job_board adjustments mongodb ppc64le' do
+  only_if { node['kernel']['machine'] == 'ppc64le' }
+  block do
+    features = node['travis_packer_templates']['job_board']['features'] - ['mongodb']
+    node.override['travis_packer_templates']['job_board']['features'] = features
+  end
 end

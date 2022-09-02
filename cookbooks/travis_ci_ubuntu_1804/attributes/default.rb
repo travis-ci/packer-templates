@@ -70,6 +70,7 @@ if node['kernel']['machine'] == 'ppc64le'
 else
   override['travis_jdk']['versions'] = %w[
     openjdk8
+    openjdk9
     openjdk10
     openjdk11
   ]
@@ -118,7 +119,7 @@ rubies = %w[
   3.1.2
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.last
+override['travis_build_environment']['default_ruby'] = '2.7.6'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
