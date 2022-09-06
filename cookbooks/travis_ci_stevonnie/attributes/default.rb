@@ -38,11 +38,11 @@ pythons = %w[
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
-# %w[3].each do |pyver|
-#   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
-#     pythons.unshift(pythons.delete(py))
-#   end
-# end
+%w[3].each do |pyver|
+  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+    pythons.unshift(pythons.delete(py))
+  end
+end
 
 def python_aliases(full_name)
   nodash = full_name.split('-').first
