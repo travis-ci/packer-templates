@@ -11,7 +11,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.18.4
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -28,14 +28,13 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 pythons = %w[
-  2.7.15
-  3.6.7
-  3.7.1
+  3.7.13
+  3.8.13
 ]
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
-%w[3 2].each do |pyver|
+%w[3].each do |pyver|
   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
     pythons.unshift(pythons.delete(py))
   end
@@ -58,8 +57,9 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/stevonnie-system-info-commands.yml'
 
 rubies = %w[
-  2.4.5
-  2.5.3
+  2.7.6
+  3.0.4
+  3.1.2
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.max

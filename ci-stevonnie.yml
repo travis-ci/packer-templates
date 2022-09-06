@@ -1,6 +1,7 @@
 ---
 description: Travis CI stevonnie build env template
 variables:
+  chef_log_level: info
   docker_repository: travisci/ci-stevonnie
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
@@ -187,6 +188,11 @@ provisioners:
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>
+  # defaults to installed versions 
+- type: shell
+  inline: "/opt/pyenv/bin/pyenv global 3.7.13"
+- type: shell
+  inline: "/home/travis/.rvm/bin/rvm --default use 2.7.6"   
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
