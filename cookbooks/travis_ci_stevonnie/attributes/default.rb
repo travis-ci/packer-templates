@@ -17,10 +17,14 @@ gimme_versions = %w[
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
+override['travis_jdk']['versions'] = %w[
+    openjdk8
+  ]
+
 override['travis_build_environment']['pythons'] = []
 override['travis_build_environment']['python_aliases'] = {}
 override['travis_build_environment']['pip']['packages'] = {}
-override['travis_build_environment']['system_python']['pythons'] = []
+override['travis_build_environment']['system_python']['pythons'] = %w(3.7.13)
 
 override['travis_build_environment']['nodejs_default'] = ''
 override['travis_build_environment']['nodejs_versions'] = []
@@ -34,11 +38,11 @@ pythons = %w[
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
-%w[3].each do |pyver|
-  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
-    pythons.unshift(pythons.delete(py))
-  end
-end
+# %w[3].each do |pyver|
+#   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+#     pythons.unshift(pythons.delete(py))
+#   end
+# end
 
 def python_aliases(full_name)
   nodash = full_name.split('-').first
@@ -62,7 +66,7 @@ rubies = %w[
   3.1.2
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.max
+override['travis_build_environment']['default_ruby'] = 2.7.6
 override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_aliases'] = {}
