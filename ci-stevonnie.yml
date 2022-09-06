@@ -192,7 +192,7 @@ provisioners:
 # - type: shell
 #   inline: "/opt/pyenv/bin/pyenv global 3.7.13"
 - type: shell
-  inline: "/home/travis/.rvm/bin/rvm --default use 2.7.6"   
+  inline: "sudo /home/travis/.rvm/bin/rvm --default use 2.7.6"   
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
