@@ -66,7 +66,7 @@ rubies = %w[
   3.1.2
 ]
 
-override['travis_build_environment']['default_ruby'] = 2.7.6
+override['travis_build_environment']['default_ruby'] = %w(2.7.6)
 override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['php_versions'] = []
 override['travis_build_environment']['php_aliases'] = {}
