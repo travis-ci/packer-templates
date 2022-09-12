@@ -4,7 +4,7 @@ require 'json'
 
 describe 'pyenv', dev: true do
   describe command('pyenv version-name') do
-    its(:stdout) { should eql("system\n") }
+    its(:stdout) { should eql("3.7.13\n") }
   end
 
   describe command('pyenv root') do
