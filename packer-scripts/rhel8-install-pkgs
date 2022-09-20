@@ -67,19 +67,22 @@ __install_packages() {
     curl https://downloads.python.org/pypy/pypy3.8-v7.3.7-linux64.tar.bz2 -o ~/bin/pypy.tar.bz2
     cd ~/bin/
     tar xjf pypy.tar.bz2
-    export PATH="~/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
+    export PATH="$HOME/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
     sudo /home/travis/bin/pypy3.8-v7.3.7-linux64/bin/python -m ensurepip --upgrade
 ## Python w/a for builder
     cd /opt && sudo git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&& cd -
     cd /opt/pyenv && src/configure && make -C src && cd -
+# shellcheck disable=SC2016,SC2129
     echo 'export PYENV_ROOT="/opt/pyenv"' >> /home/travis/.bashrc
+# shellcheck disable=SC2016
     echo 'export PATH="$PYENV_ROOT:$PATH"' >> /home/travis/.bashrc
+# shellcheck disable=SC2016
     echo 'eval "$(pyenv init -)"' >> /home/travis/.bashrc
 
 
 ## rvm
     sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-    sudo \curl -sSL https://get.rvm.io | bash
+    sudo curl -sSL https://get.rvm.io | bash
     pwd
 
 ## Go
@@ -91,6 +94,7 @@ __install_packages() {
 
     sudo touch /etc/profile.d/go.sh
     sudo chmod a+rwx /etc/profile.d/go.sh
+# shellcheck disable=SC2129
     echo "unset GOOS;" >> /etc/profile.d/go.sh
     echo "unset GOARCH;" >> /etc/profile.d/go.sh
     echo "export GOROOT='/home/travis/.gimme/versions/go1.17.2.linux.amd64';" >> /etc/profile.d/go.sh
@@ -102,6 +106,7 @@ __install_packages() {
 ## NodeJS
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
+# shellcheck source=/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     nvm install 17.1.0
 
@@ -113,6 +118,7 @@ __install_packages() {
     sudo mkdir /opt/gradle
     sudo mv gradle-*/* /opt/gradle
     sudo rm -rf gradle-*
+# shellcheck disable=SC2016
     echo 'export PATH=/opt/gradle/bin:${PATH}' | sudo tee /etc/profile.d/gradle.sh
     sudo chmod a+x /etc/profile.d/gradle.sh
 
@@ -120,18 +126,22 @@ __install_packages() {
     curl -LO https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz
     tar zxf apache-ant-1.10.12-bin.tar.gz
     sudo mv apache-ant-1.10.12 /opt
+# shellcheck disable=SC2016
     echo "export ANT_HOME=/opt/apache-ant-1.10.12" | sudo tee /etc/profile.d/ant.sh
+# shellcheck disable=SC2016
     echo 'export PATH=/opt/apache-ant-1.10.12/bin:${PATH}' | sudo tee -a /etc/profile.d/ant.sh
     sudo chmod a+x /etc/profile.d/ant.sh
 
 ## PHP
     git clone https://github.com/phpenv/phpenv.git ~/.phpenv
+# shellcheck disable=SC2016
     echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bashrc
+# shellcheck disable=SC2016
     echo 'eval "$(phpenv init -)"' >> ~/.bashrc
 
     export PATH="$HOME/.phpenv/bin:$PATH"
     eval "$(phpenv init -)"
-    git clone https://github.com/php-build/php-build $(phpenv root)/plugins/php-build
+    git clone https://github.com/php-build/php-build "$(phpenv root)"/plugins/php-build
     export PHP_BUILD_CONFIGURE_OPTS=--with-pear
     phpenv install 7.1.33
     phpenv install 7.2.34
