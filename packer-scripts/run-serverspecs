@@ -8,9 +8,6 @@ main() {
 
   export CHEF_PATH='/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:/opt/chef/bin'
 
-  if [[ "$(uname -m)" =~ ppc64 ]]; then
-    export CHEF_PATH=$CHEF_PATH:/opt/chef-workstation/embedded/bin
-  fi
   export CHEF_LICENSE='accept-silent'
   export PATH="$CHEF_PATH:$PATH"
   export DEBIAN_FRONTEND='noninteractive'
@@ -22,8 +19,10 @@ main() {
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
+  if [[ "$(uname -m)" =~ aarch64 ]]; then
     __install_serverspec
+  elif [[ "$(uname -m)" =~ ppc64 ]]; then
+    __install_serverspec_ppc64le
   else
     __install_chef "${PACKER_CHEF_PREFIX}"
   fi
@@ -45,12 +44,16 @@ __install_serverspec() {
   chef gem install serverspec
 }
 
+__install_serverspec_ppc64le() {
+  gem install serverspec
+}
+
 __install_chef() {
   if [[ -f /opt/chef-workstation/embedded/bin/rspec ]]; then
     return
   fi
 
-  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 21.10.640
+  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 22.5.923
   __run_retry 2 30 apt-get update -y
   __run_retry 2 30 apt-get install libc-client2007e-dev mysql-client
 
@@ -114,15 +117,26 @@ export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
 export PACKER_BUILDER_TYPE=${PACKER_BUILDER_TYPE}
 export RUBYOPT=${RUBYOPT}
-chef gem install serverspec
+if [[ $(uname -m) =~ ppc64 ]]; then
+  gem install serverspec
+else
+  chef gem install serverspec
+fi
 unset GEM_PATH
 cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
-chef exec rspec ${SPEC_ARGS} \\
-  --format documentation \\
-  --format json \\
-  --out /home/travis/.${suite}_rspec.json
+if [[ $(uname -m) =~ ppc64 ]]; then
+  rspec ${SPEC_ARGS} \\
+    --format documentation \\
+    --format json \\
+    --out /home/travis/.${suite}_rspec.json
+else
+  chef exec rspec ${SPEC_ARGS} \\
+    --format documentation \\
+    --format json \\
+    --out /home/travis/.${suite}_rspec.json
+fi
 "
 
   local exit_code="$?"

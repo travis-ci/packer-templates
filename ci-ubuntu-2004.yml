@@ -42,7 +42,7 @@ builders:
   image_description: Travis CI Ubuntu 20.04
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-2004-focal-v20200423
+  source_image_family: ubuntu-2004-lts
   image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
@@ -149,6 +149,10 @@ provisioners:
   - lxd
   # end Recommendations
 - type: shell
+  scripts: 
+  - packer-scripts/couchdb_pre_config # couchdb template for version 3.2.2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap-focal
   - packer-scripts/clone-travis-cookbooks
@@ -164,7 +168,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/ubuntu-2004-system-info-commands.yml
 - type: chef-solo
-  version: 17.6.18
+  version: 17.10.3
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
@@ -197,6 +201,8 @@ provisioners:
   - packer-scripts/purge
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
+  - packer-scripts/perforce-install
+  - packer-scripts/cosign-install
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
@@ -218,7 +224,7 @@ provisioners:
   #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
 - type: shell
-  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
+  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
 - type: shell
   inline: "ls -lah /opt/couchdb/"  
 - type: shell

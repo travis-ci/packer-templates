@@ -68,6 +68,7 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_build_environment::ibm_advanced_tool_chain'
 include_recipe 'travis_phantomjs::2'
+include_recipe 'travis_phpenv::libargon2'
 
 # HACK: sardonyx-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
