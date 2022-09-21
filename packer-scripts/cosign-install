@@ -11,7 +11,8 @@ main() {
   # rename the binary
   sudo mv cosign-linux-amd64 /usr/local/bin/not_cosign
   sudo chmod +x /usr/local/bin/not_cosign
-  not_cosign version
+  /usr/local/bin/not_cosign version
+  which not_cosign
 
   # Rekor-cli installtion
   local REKOR_VERSION="v0.10.0"

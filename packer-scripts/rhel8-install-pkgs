@@ -89,7 +89,7 @@ __install_packages() {
     mkdir -p ~/bin
     curl -sL -o ~/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
     chmod +x ~/bin/gimme
-    export PATH="$HOME/bin:$PATH"
+    export PATH="$HOME/bin:/usr/local/bin:$PATH"
     gimme 1.17.2
 
     sudo touch /etc/profile.d/go.sh
