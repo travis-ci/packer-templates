@@ -42,3 +42,48 @@ provisioners:
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -u travis -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/cosign-install
+  environment_vars:
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-dump
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/create-rhel8-job-board-data
+  - packer-scripts/create-image-metadata-tarball-bsd
+  environment_vars:
+  - JOB_BOARD_REGISTER_FILE=/.job_board_register.yml
+  - IMAGE_METADATA_TARBALL=/var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+post-processors:
+-
+  - type: docker-tag
+    repository: "{{ user `docker_repository` }}"
+    tag: "{{ user `docker_tag` }}"
+    only:
+    - docker
+  - type: shell-local
+    scripts: bin/docker-push
+    environment_vars:
+    - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
+#-
+#  - type: shell-local
+#    script: bin/job-board-register
+#    environment_vars:
+#    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+#    only:
+#    - docker
+-
+  - type: shell-local
+    script: bin/write-latest-image-name
