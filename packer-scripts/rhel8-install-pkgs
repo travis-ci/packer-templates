@@ -1,0 +1,175 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  set -o xtrace
+  shopt -s nullglob
+  __install_packages
+}
+
+__install_packages() {
+  sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+  sudo yum update -yqq
+  sudo yum install -y \
+    redhat-lsb-core \
+    ca-certificates \
+    curl \
+    gawk \
+    git \
+    sudo \
+    wget \
+    rsync \
+    python3 \
+    python3-pip \
+    ruby \
+    gcc \
+    gcc-c++ \
+    gcc-gfortran \
+    gettext \
+    libtool \
+    patch \
+    openssl-devel \
+    zlib-devel sqlite-devel bzip2-devel \
+    redhat-rpm-config \
+    rpm-build \
+    procps \
+    cmake \
+    llvm \
+    make \
+    autoconf \
+    automake \
+    libtool \
+    clang \
+    ccache \
+    python3.8 \
+    python3.9 \
+    libxml2-devel \
+    libcurl-devel \
+    libjpeg-devel \
+    libpng-devel \
+    libicu-devel \
+    libmcrypt-devel \
+    libtidy-devel \
+    libxslt-devel \
+    oniguruma \
+    libzip-devel
+
+    curl -L https://rpmfind.net/linux/centos/8-stream/AppStream/x86_64/os/Packages/bison-3.0.4-10.el8.x86_64.rpm -o /tmp/bison.rpm
+    sudo dnf install -y /tmp/bison.rpm
+
+    curl http://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/readline-devel-7.0-10.el8.x86_64.rpm -o /tmp/readline-devel.rpm
+    sudo dnf install -y /tmp/readline-devel.rpm
+    curl https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/oniguruma-devel-6.8.2-2.el8.x86_64.rpm -o /tmp/oniguruma-devel.rpm
+    sudo dnf install -y /tmp/oniguruma-devel.rpm
+
+## PyPy
+    curl https://downloads.python.org/pypy/pypy3.8-v7.3.7-linux64.tar.bz2 -o ~/bin/pypy.tar.bz2
+    cd ~/bin/
+    tar xjf pypy.tar.bz2
+    export PATH="$HOME/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
+    sudo /home/travis/bin/pypy3.8-v7.3.7-linux64/bin/python -m ensurepip --upgrade
+## Python w/a for builder
+    cd /opt && sudo git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&& cd -
+    cd /opt/pyenv && src/configure && make -C src && cd -
+# shellcheck disable=SC2016,SC2129
+    echo 'export PYENV_ROOT="/opt/pyenv"' >> /home/travis/.bashrc
+# shellcheck disable=SC2016
+    echo 'export PATH="$PYENV_ROOT:$PATH"' >> /home/travis/.bashrc
+# shellcheck disable=SC2016
+    echo 'eval "$(pyenv init -)"' >> /home/travis/.bashrc
+
+
+## rvm
+    sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+    sudo curl -sSL https://get.rvm.io | bash
+    pwd
+
+## Go
+    mkdir -p ~/bin
+    curl -sL -o ~/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
+    chmod +x ~/bin/gimme
+    export PATH="$HOME/bin:/usr/local/bin:$PATH"
+    gimme 1.17.2
+
+    sudo touch /etc/profile.d/go.sh
+    sudo chmod a+rwx /etc/profile.d/go.sh
+# shellcheck disable=SC2129
+    echo "unset GOOS;" >> /etc/profile.d/go.sh
+    echo "unset GOARCH;" >> /etc/profile.d/go.sh
+    echo "export GOROOT='/home/travis/.gimme/versions/go1.17.2.linux.amd64';" >> /etc/profile.d/go.sh
+    echo "export PATH=\"/home/travis/.gimme/versions/go1.17.2.linux.amd64/bin:${PATH}\";" >> /etc/profile.d/go.sh
+    echo "go version >&2;" >> /etc/profile.d/go.sh
+
+    echo "export GIMME_ENV='/home/travis/.gimme/envs/go1.17.2.linux.amd64.env';" >> /etc/profile.d/go.sh
+
+## NodeJS
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+# shellcheck source=/dev/null
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install 17.1.0
+
+## JDK
+    sudo yum install -y java-1.8.0-openjdk-devel java-11-openjdk-devel maven
+    cd ~/bin
+    curl -LO https://services.gradle.org/distributions/gradle-6.3-bin.zip
+    unzip gradle-*.zip
+    sudo mkdir /opt/gradle
+    sudo mv gradle-*/* /opt/gradle
+    sudo rm -rf gradle-*
+# shellcheck disable=SC2016
+    echo 'export PATH=/opt/gradle/bin:${PATH}' | sudo tee /etc/profile.d/gradle.sh
+    sudo chmod a+x /etc/profile.d/gradle.sh
+
+    cd ~/bin
+    curl -LO https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz
+    tar zxf apache-ant-1.10.12-bin.tar.gz
+    sudo mv apache-ant-1.10.12 /opt
+# shellcheck disable=SC2016
+    echo "export ANT_HOME=/opt/apache-ant-1.10.12" | sudo tee /etc/profile.d/ant.sh
+# shellcheck disable=SC2016
+    echo 'export PATH=/opt/apache-ant-1.10.12/bin:${PATH}' | sudo tee -a /etc/profile.d/ant.sh
+    sudo chmod a+x /etc/profile.d/ant.sh
+
+## PHP
+    git clone https://github.com/phpenv/phpenv.git ~/.phpenv
+# shellcheck disable=SC2016
+    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> ~/.bashrc
+# shellcheck disable=SC2016
+    echo 'eval "$(phpenv init -)"' >> ~/.bashrc
+
+    export PATH="$HOME/.phpenv/bin:$PATH"
+    eval "$(phpenv init -)"
+    git clone https://github.com/php-build/php-build "$(phpenv root)"/plugins/php-build
+    export PHP_BUILD_CONFIGURE_OPTS=--with-pear
+    phpenv install 7.1.33
+    phpenv install 7.2.34
+    phpenv install 7.3.32
+    phpenv install 7.4.25
+    phpenv install 8.0.12
+
+## Postgres
+    sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    sudo dnf install --nogpgcheck -y postgresql12-server
+    sudo systemctl enable postgresql-12
+    sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
+
+## MySQL
+
+  curl https://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/numactl-libs-2.0.12-11.el8.x86_64.rpm -o /tmp/numactl-libs.rpm
+  sudo dnf install -y  /tmp/numactl-libs.rpm
+  sudo yum install -y cyrus-sasl-devel
+
+  wget https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/perl-common-sense-3.7.4-8.el8.x86_64.rpm
+  sudo dnf install -y perl-common-sense-3.7.4-8.el8.x86_64.rpm
+  wget https://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/perl-Types-Serialiser-1.0-12.el8.noarch.rpm
+  sudo dnf install -y perl-Types-Serialiser-1.0-12.el8.noarch.rpm
+  wget https://rpmfind.net/linux/centos/8-stream/AppStream/x86_64/os/Packages/perl-JSON-2.97.001-2.el8.noarch.rpm
+  sudo dnf install -y perl-JSON-2.97.001-2.el8.noarch.rpm
+  curl -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.28-1.el8.x86_64.rpm-bundle.tar -o /tmp/mysql-bundle.tar
+  cd /tmp && tar -xf /tmp/mysql-bundle.tar && sudo dnf install -y mysql-community* && cd -
+
+}
+
+main "$@"
