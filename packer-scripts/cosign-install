@@ -5,14 +5,15 @@ set -o xtrace
 
 main() {
 
+  export PATH=/usr/local/bin:$PATH
+
   # Cosign installation
   local COSIGN_VERSION="v1.10.1"
   wget -q "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64"
   # rename the binary
   sudo mv cosign-linux-amd64 /usr/local/bin/not_cosign
   sudo chmod +x /usr/local/bin/not_cosign
-  /usr/local/bin/not_cosign version
-  which not_cosign
+  not_cosign version
 
   # Rekor-cli installtion
   local REKOR_VERSION="v0.10.0"
