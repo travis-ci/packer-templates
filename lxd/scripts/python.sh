@@ -54,6 +54,7 @@ __install_pip() {
   
   # update wheel permissions
   id travis && chown -R travis: /home/travis/.cache/pip/
+  id travis && chown -R travis: /home/travis/.cargo/
 }
 
 __install_pyenv() {
