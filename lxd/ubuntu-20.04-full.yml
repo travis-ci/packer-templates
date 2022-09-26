@@ -147,6 +147,10 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+- type: shell
+  inline:
+   - "chown -R travis: /home/travis/.cargo/"
+
 # cleanup
 - type: shell
   scripts:
