@@ -178,6 +178,7 @@ provisioners:
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
   - packer-scripts/perforce-install
+  - packer-scripts/cosign-install
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
@@ -199,7 +200,7 @@ provisioners:
   #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
 - type: shell
-  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
+  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
 - type: shell
   inline: "ls -lah /opt/couchdb/"  
 - type: shell
