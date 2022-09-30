@@ -34,7 +34,7 @@ main() {
    && [ ! -z "${TRAVIS_REPO_PRIVATE}" ] \
    && [ $COSIGN_EXPERIMENTAL == 1 ] \
    && [ $TRAVIS_REPO_PRIVATE == "true" ] \
-   && [[ $args != *"-key"* ]]
+   && [[ $args != *"--key"* ]]
   then
     echo "Experimental cosign features are not allowed in builds for private repositories"
     exit 1
