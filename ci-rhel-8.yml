@@ -48,6 +48,25 @@ provisioners:
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: chef-solo
+  version: 17.10.3
+  config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  cookbook_paths:
+  - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  <% else %>
+  remote_cookbook_paths:
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  <% end %>
+  run_list:
+  - recipe[travis_ci_rhel_8]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
 - type: shell
   scripts:
   - packer-scripts/packer-env-dump

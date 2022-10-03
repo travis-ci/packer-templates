@@ -70,12 +70,12 @@ __install_packages() {
     export PATH="$HOME/bin/pypy3.8-v7.3.7-linux64/bin:$PATH"
     sudo /home/travis/bin/pypy3.8-v7.3.7-linux64/bin/python -m ensurepip --upgrade
 ## Python w/a for builder
-    cd /opt && sudo git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&& cd -
-    cd /opt/pyenv && src/configure && make -C src && cd -
+    cd /home/travis && git clone https://github.com/pyenv/pyenv && chown travis:travis -R pyenv&& cd -
+    cd /home/travis/pyenv && src/configure && make -C src && cd -
 # shellcheck disable=SC2016,SC2129
-    echo 'export PYENV_ROOT="/opt/pyenv"' >> /home/travis/.bashrc
+    echo 'export PYENV_ROOT="/home/travis/pyenv"' >> /home/travis/.bashrc
 # shellcheck disable=SC2016
-    echo 'export PATH="$PYENV_ROOT:$PATH"' >> /home/travis/.bashrc
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> /home/travis/.bashrc
 # shellcheck disable=SC2016
     echo 'eval "$(pyenv init -)"' >> /home/travis/.bashrc
 
