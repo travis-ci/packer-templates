@@ -70,6 +70,7 @@ if node['kernel']['machine'] == 'ppc64le'
 else
   override['travis_jdk']['versions'] = %w[
     openjdk8
+    openjdk9
     openjdk10
     openjdk11
   ]
