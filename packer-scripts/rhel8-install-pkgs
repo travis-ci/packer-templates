@@ -169,6 +169,7 @@ __install_packages() {
   sudo dnf install -y perl-JSON-2.97.001-2.el8.noarch.rpm
   curl -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.28-1.el8.x86_64.rpm-bundle.tar -o /tmp/mysql-bundle.tar
   cd /tmp && tar -xf /tmp/mysql-bundle.tar && sudo dnf install -y mysql-community* && cd -
+  sudo ln -s /usr/lib/systemd/system/mysqld.service /usr/lib/systemd/system/mysql.service
 
 }
 

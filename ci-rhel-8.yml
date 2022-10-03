@@ -33,8 +33,11 @@ provisioners:
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap-rhel
+  - packer-scripts/clone-travis-cookbooks-rhel
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
+  - TRAVIS_COOKBOOKS_BRANCH=ci-rhel-8
+  - TRAVIS_COOKBOOKS_SHA=d490afde88e2d8fe292ddb0780f167b9d29cc294
   execute_command: "{{ .Vars }} exec bash '{{ .Path }}'"
 - type: shell
   scripts:
@@ -58,9 +61,11 @@ provisioners:
   - cookbooks
   <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
   - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
   <% else %>
   remote_cookbook_paths:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   <% end %>
   run_list:
   - recipe[travis_ci_rhel_8]
