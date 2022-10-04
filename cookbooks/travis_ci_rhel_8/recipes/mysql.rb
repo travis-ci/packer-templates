@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-package 'mysql-server'
-package 'mysql-client'
-
 template "#{node['travis_build_environment']['home']}/.my.cnf" do
   source 'ci_user/dot_my.cnf.erb'
   user node['travis_build_environment']['user']
