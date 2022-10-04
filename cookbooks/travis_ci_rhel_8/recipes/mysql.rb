@@ -5,7 +5,6 @@ template "#{node['travis_build_environment']['home']}/.my.cnf" do
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
   mode 0o640
-  variables(socket: node['travis_build_environment']['mysql']['socket'])
 end
 
 bash 'config_mysql' do
