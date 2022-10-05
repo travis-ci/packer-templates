@@ -155,6 +155,9 @@ __install_packages() {
     sudo systemctl enable postgresql-12
     sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
 
+    sudo ln -s /usr/lib/systemd/system/postgresql-12.service /usr/lib/systemd/system/postgresql.service
+    sudo systemctl start postgresql
+
 ## MySQL
 
   cd ~
