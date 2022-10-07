@@ -33,7 +33,7 @@ features:
 tags:
   dist: ${JOB_BOARD_IMAGE_DIST}
   os: linux
-  group: edge
+  group: test
   packer_chef_time: "${nowtime}"
 ${languages}
 tags_string: "dist:${JOB_BOARD_IMAGE_DIST},os:linux,packer_chef_time:${nowtime}${languages_list//[[:space:]]/}"
