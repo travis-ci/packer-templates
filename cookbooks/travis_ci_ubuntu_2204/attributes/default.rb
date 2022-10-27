@@ -103,7 +103,7 @@ rubies = %w[
 
 override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = '2.7.6'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
