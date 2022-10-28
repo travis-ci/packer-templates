@@ -15,7 +15,7 @@ languages:
 features:
 - rhel8
 tags:
-  dist: rhel9
+  dist: rhel8
   os: linux
   packer_chef_time: "${nowtime}"
   language_default: true
