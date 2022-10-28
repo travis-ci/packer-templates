@@ -41,7 +41,7 @@ provisioners:
   execute_command: "{{ .Vars }} exec bash '{{ .Path }}'"
 - type: shell
   scripts:
-  - packer-scripts/rhel8-install-pkgs-mini
+  - packer-scripts/rhel8-install-pkgs
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -u travis -E -S bash '{{ .Path }}'"
