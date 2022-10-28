@@ -41,7 +41,7 @@ provisioners:
   execute_command: "{{ .Vars }} exec bash '{{ .Path }}'"
 - type: shell
   scripts:
-  - packer-scripts/rhel8-install-pkgs
+  - packer-scripts/rhel8-install-pkgs-mini
   environment_vars:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -u travis -E -S bash '{{ .Path }}'"
@@ -101,13 +101,13 @@ post-processors:
     - DOCKER_DEST={{ user `docker_repository` }}:{{ user `docker_tag` }}
     only:
     - docker
-#-
-#  - type: shell-local
-#    script: bin/job-board-register
-#    environment_vars:
-#    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
-#    only:
-#    - docker
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `docker_repository` }}:{{ user `docker_tag` }}
+    only:
+    - docker
 -
   - type: shell-local
     script: bin/write-latest-image-name
