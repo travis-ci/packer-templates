@@ -68,6 +68,7 @@ elsif node['kernel']['machine'] == 'aarch64'
     'e08c9542ff6cb231dd03d6f8096f6749e79056734bf69d5399205451b94c9d03'
 else
   override['travis_jdk']['versions'] = %w[
+    openjdk9
     openjdk10
     openjdk11
   ]
@@ -99,7 +100,7 @@ rubies = %w[
 
 override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = '2.7.6'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
@@ -151,27 +152,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   sqlite
   xserver
 ]
-override['travis_packer_templates']['job_board']['languages'] = %w[
-  __ubuntu_2004__
-  c
-  c++
-  clojure
-  cplusplus
-  cpp
-  default
-  generic
-  go
-  groovy
-  java
-  node_js
-  php
-  pure_java
-  python
-  ruby
-  scala
-  julia
-  erlang
-]
 
 # Override values in array : minimal set of options
 override['travis_packer_templates']['job_board']['features'] = %w[
@@ -188,6 +168,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cpp
   ruby
   python
+  generic
   go
   java
   php
