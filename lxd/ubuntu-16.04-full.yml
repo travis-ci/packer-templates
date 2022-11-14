@@ -150,6 +150,13 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+  # Fix Scala/JVM missing config
+- type: shell
+  inline:
+  - printf "%s\n" "-Xms2048M" "-Xmx2048M" "-Xss6M" > /tmp/jvmopts
+  - mkdir -p /etc/sbt/
+  - mv /tmp/jvmopts /etc/sbt/jvmopts
+
 # cleanup
 - type: shell
   scripts:

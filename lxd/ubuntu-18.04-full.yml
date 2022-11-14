@@ -52,6 +52,7 @@ provisioners:
   - scripts/compilers_build_tool_chains.sh
   - scripts/net-tools.sh
   - scripts/vcs.sh
+  - scripts/cosign-install.sh
 
 - type: shell
   scripts:
@@ -129,7 +130,7 @@ provisioners:
    - chmod 600 /etc/sudoers.d/travis
    - chmod 644 /etc/apt/sources.list
 
-  # Creare image metadata tarball
+  # Create image metadata tarball
 - type: shell
   scripts:
   - scripts/create-job-board-data-lxd.sh
@@ -146,10 +147,17 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+  # Fix permissions for .cargo
 - type: shell
   inline:
-   - "chown -R travis: /home/travis/.cargo/"
+  - "chown -R travis: /home/travis/.cargo/ || echo 'Cargo not in HOME'"
 
+  # Fix Scala/JVM missing config
+- type: shell
+  inline:
+  - printf "%s\n" "-Xms2048M" "-Xmx2048M" "-Xss6M" > /tmp/jvmopts
+  - mkdir -p /etc/sbt/
+  - mv /tmp/jvmopts /etc/sbt/jvmopts
 
 # cleanup
 - type: shell
