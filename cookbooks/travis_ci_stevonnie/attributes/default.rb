@@ -18,8 +18,8 @@ override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
 override['travis_jdk']['versions'] = %w[
-    openjdk8
-  ]
+  openjdk8
+]
 override['travis_jdk']['default'] = 'openjdk8'
 
 override['travis_build_environment']['pythons'] = []
