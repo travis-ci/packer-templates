@@ -14,12 +14,10 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
 php_aliases = {
-  '5.6' => '5.6.40',
-  '7.1' => '7.1.27',
-  '7.2' => '7.2.15'
+  '7.4' => '7.4.30'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
-override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
+override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
 if node['kernel']['machine'] == 'ppc64le'
@@ -31,12 +29,13 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = []
+override['travis_perlbrew']['perls'] = [{ name: '5.34.1', version: 'perl-5.34.1' }, { name: '5.36.0', version: 'perl-5.36.0' }]
+
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.18.4
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -46,7 +45,7 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
 else
   override['travis_jdk']['versions'] = %w[
-    openjdk10
+    openjdk8
     openjdk11
   ]
   override['travis_jdk']['default'] = 'openjdk11'
@@ -56,20 +55,18 @@ override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  11.0.0
-  8.12.0
+  16.16.0
 ]
-override['travis_build_environment']['nodejs_default'] = '8.12.0'
+override['travis_build_environment']['nodejs_default'] = '16.16.0'
 
 pythons = %w[
-  2.7.15
-  3.6.7
-  3.7.1
+  3.7.13
+  3.8.13
 ]
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
-%w[3 2].each do |pyver|
+%w[3].each do |pyver|
   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
     pythons.unshift(pythons.delete(py))
   end
@@ -89,12 +86,12 @@ pythons.each do |full_name|
 end
 
 rubies = %w[
-  2.3.8
-  2.4.5
-  2.5.3
+  2.7.6
+  3.0.4
+  3.1.2
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = '2.7.6'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = []
@@ -106,7 +103,7 @@ override['travis_build_environment']['update_hostname'] = true if node['kernel']
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '4.8'
+override['travis_build_environment']['mercurial_version'] = '5.9.3'
 
 override['travis_packer_templates']['job_board']['stack'] = 'sardonyx'
 

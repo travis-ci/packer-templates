@@ -16,9 +16,9 @@ describe 'erlang environment' do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^R?\d+/) }
   end
-
-  describe erlcommand('rebar --version') do
-    its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^rebar \d+\.\d+\.\d+/) }
-  end
+  # deprecating rebar2 (archived)
+  # describe erlcommand('rebar --version') do
+  #   its(:stderr) { should be_empty }
+  #   its(:stdout) { should match(/^rebar \d+\.\d+\.\d+/) }
+  # end
 end

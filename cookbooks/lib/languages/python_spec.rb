@@ -23,7 +23,9 @@ describe 'python environment' do
     its(:stdout) { should match(/^wheel \d+\.\d+\.\d+/) }
   end
 
-  if %w[xenial bionic].include?(Support.distro)
+  # TO DO: pytest for Xenial
+
+  if %w[bionic].include?(Support.distro)
     describe pycommand('py.test --version') do
       its(:stdout) { should be_empty }
       its(:stderr) { should match(/pytest version \d+\.\d+\.\d+/) }
@@ -49,9 +51,8 @@ describe 'python environment' do
 
   if 'xenial'.include?(Support.distro)
     vers = {
-      'python2.7' => '2.7.15',
-      'python3.6' => '3.6.7',
-      'python3.7' => '3.7.1'
+      'python3.7' => '3.7.13',
+      'python3.8' => '3.8.13'
     }
   elsif 'bionic'.include?(Support.distro)
     vers = {

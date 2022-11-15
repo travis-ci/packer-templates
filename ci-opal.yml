@@ -1,6 +1,7 @@
 ---
 description: Travis CI opal build env template
 variables:
+  chef_log_level: info
   docker_repository: travisci/ci-opal
   docker_tag: packer-{{ timestamp }}-<%= git_desc %>
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
@@ -31,7 +32,7 @@ builders:
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n1-standard-4
-  disk_size: 15
+  disk_size: 20
   tags:
   - ci
   - opal

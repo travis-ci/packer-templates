@@ -11,14 +11,16 @@ default['travis_ci_opal']['prerequisite_packages'] = %w[
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/opal-system-info-commands.yml'
 
-override['travis_perlbrew']['perls'] = [
-  { name: '5.28', version: 'perl-5.28.2' },
-  { name: '5.28-extras', version: 'perl-5.28.2',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.28-shrplib' },
-  { name: '5.24', version: 'perl-5.24.0' },
-  { name: '5.24-extras', version: 'perl-5.24.0',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.24-shrplib' }
-]
+override['travis_perlbrew']['perls'] = [{ name: '5.34.1', version: 'perl-5.34.1' }, { name: '5.36.0', version: 'perl-5.36.0' }]
+
+# override['travis_perlbrew']['perls'] = [
+#   { name: '5.34.1', version: 'perl-5.34.1' },
+#   { name: '5.34.1-extras', version: 'perl-5.34.1',
+#     arguments: '-Duseshrplib -Duseithreads', alias: '5.34.1-shrplib' },
+#   { name: '5.36.0', version: 'perl-5.36.0' },
+#   { name: '5.36.0-extras', version: 'perl-5.36.0',
+#     arguments: '-Duseshrplib -Duseithreads', alias: '5.36.0-shrplib' }
+# ]
 override['travis_perlbrew']['modules'] = %w[
   Dist::Zilla
   Dist::Zilla::Plugin::Bootstrap::lib
@@ -34,7 +36,7 @@ override['travis_perlbrew']['modules'] = %w[
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.18.4
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -58,27 +60,25 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
 else
   override['travis_jdk']['versions'] = %w[
-    openjdk10
+    openjdk8
     openjdk11
   ]
   override['travis_jdk']['default'] = 'openjdk11'
 end
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  11.0.0
-  8.12.0
+  16.16.0
 ]
-override['travis_build_environment']['nodejs_default'] = '8.12.0'
+override['travis_build_environment']['nodejs_default'] = '16.16.0'
 
 pythons = %w[
-  2.7.15
-  3.6.7
-  3.7.1
+  3.7.13
+  3.8.13
 ]
 
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
-%w[3 2].each do |pyver|
+%w[3].each do |pyver|
   pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
     pythons.unshift(pythons.delete(py))
   end
@@ -98,18 +98,19 @@ pythons.each do |full_name|
 end
 
 rubies = %w[
-  2.4.5
-  2.5.3
+  2.7.6
+  3.0.4
+  3.1.2
 ]
 
-override['travis_build_environment']['default_ruby'] = rubies.reject { |n| n =~ /jruby/ }.max
+override['travis_build_environment']['default_ruby'] = '2.7.6'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
   25.0.2
 ]
 elixirs = %w[
-  1.7.4
+  1.13.4
 ]
 
 override['travis_build_environment']['php_versions'] = []
@@ -122,7 +123,7 @@ override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '4.8'
+override['travis_build_environment']['mercurial_version'] = '5.9.3'
 
 override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'

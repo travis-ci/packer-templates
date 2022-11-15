@@ -55,7 +55,7 @@ __install_packages() {
     libelf-dev \
     sudo \
     wget \
-    python \
+    python3 \
     rsync \
     ${APT_GET_INSTALL_PRE_CHEF}
 }
