@@ -6,7 +6,7 @@ set -o xtrace
 main() {
 
   # Cosign installation
-  local COSIGN_VERSION="v1.10.1"
+  local COSIGN_VERSION="v1.13.1"
   wget -q "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64"
   # rename the binary
   sudo mv cosign-linux-amd64 /usr/local/bin/not_cosign
@@ -14,7 +14,7 @@ main() {
   not_cosign version
 
   # Rekor-cli installtion
-  local REKOR_VERSION="v0.10.0"
+  local REKOR_VERSION="v1.0.1"
   wget -q "https://github.com/sigstore/rekor/releases/download/${REKOR_VERSION}/rekor-cli-linux-amd64"
   sudo mv rekor-cli-linux-amd64 /usr/local/bin/rekor-cli
   sudo chmod +x /usr/local/bin/rekor-cli
