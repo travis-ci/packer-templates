@@ -60,7 +60,10 @@ EOF
 
 source "$HOME/.rvm/scripts/rvm"
 # Ruby 3.X.X causes isuess with DPL
-# rvm install ruby-3.1.2 --autolibs=enable --fuzzy
+arch=$(uname -m)
+if [[ $arch = "s390x" ]]; then
+  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
+fi
 rvm install ruby-2.7.6 --autolibs=enable --fuzzy
 rvm install ruby-2.6.10 --autolibs=enable --fuzzy
 rvm use default

@@ -80,6 +80,7 @@ provisioners:
   - scripts/go.sh
   - scripts/python.sh
   - scripts/php.sh
+  - scripts/lein.sh
   - scripts/nodejs.sh
   - scripts/perl.sh
   - scripts/install-docker-compose.sh

@@ -14,6 +14,7 @@ main() {
 }
 
 __install_packages() {
+  echo "Installing default packages"
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
@@ -22,6 +23,9 @@ __install_packages() {
 }
 
 __install_packages_bionic() {
+  echo "Installing packages for Bionic"
+  echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
@@ -30,6 +34,9 @@ __install_packages_bionic() {
 }
 
 __install_packages_focal() {
+  echo "Installing packages for Focal"
+  echo "deb http://apt.postgresql.org/pub/repos/apt/ focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
@@ -38,6 +45,8 @@ __install_packages_focal() {
 }
 
 __install_packages_xenial_ppc64le(){
+  # Packages for Xenial ARM are missing"
+  echo "Installing packages for Xenial ppc64le"
   echo "deb https://apt-archive.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   apt-get update -yqq
