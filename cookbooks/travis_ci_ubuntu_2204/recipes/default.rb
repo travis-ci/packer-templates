@@ -62,6 +62,7 @@ include_recipe 'memcached'
 # https://github.com/travis-ci/packer-templates/issues/589
 # include_recipe 'travis_build_environment::cassandra'
 # include_recipe 'travis_build_environment::couchdb'
+include_recipe 'travis_build_environment::git'
 include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
 include_recipe 'travis_build_environment::google_chrome'
