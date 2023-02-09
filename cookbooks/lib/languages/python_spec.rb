@@ -65,8 +65,8 @@ describe 'python environment' do
     }
   elsif 'jammy'.include?(Support.distro)
     vers = {
+      'python3.7' => '3.7.13',
       'python3.8' => '3.8.3',
-      'python3.9' => '3.9.13',
       'python3.10' => '3.10.5'
     }
   end
