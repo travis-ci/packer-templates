@@ -127,7 +127,9 @@ libmysqlclient-dev
 libncurses5-dev
 libncursesw5-dev
 libossp-uuid-dev
+libu2f-udev
 libpng-dev
+libpq5
 libpq-dev
 libreadline-dev
 libsasl2-dev
