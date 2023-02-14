@@ -144,6 +144,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   elasticsearch
   firefox
   go-toolchain
+  google-chrome
   jdk
   memcached
   mongodb
