@@ -1,0 +1,152 @@
+---
+description: Travis CI Ubuntu 20.04 build env template
+variables:
+  chef_log_level: info
+  docker_repository: travisci/ci-ubuntu-2004
+  docker_tag: packer-{{ timestamp }}-<%= git_desc %>
+  gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
+  gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
+  image_name: travis-ci-ubuntu-2004-{{ timestamp }}-<%= git_desc %>
+  travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
+  travis_cookbooks_edge_branch: master
+  travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
+  travis_uid: "{{ env `TRAVIS_UID` }}"
+  travis_subnet_id: "{{ env `TRAVIS_SUBNET_ID` }}"
+  travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
+  travis_source_ami: "{{ env `TRAVIS_SOURCE_AMI` }}"
+builders:
+- type: googlecompute
+  name: googlecompute
+  communicator: ssh
+  ssh_timeout: 10m
+  ssh_port: 22
+  ssh_username: packer
+  image_description: Travis CI Ubuntu 20.04
+  account_file: "{{ user `gce_account_file` }}"
+  project_id: "{{ user `gce_project_id` }}"
+  source_image_family: ubuntu-2004-lts
+  image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
+  zone: us-central1-a
+  image_name: "{{ user `image_name` }}"
+  machine_type: n1-standard-4
+  disk_size: 50
+  tags:
+  - ci
+  - ubuntu-2004
+  - travis-ci-packer-templates
+provisioners:
+- type: shell
+  inline: sleep 10
+  only:
+  - googlecompute
+- type: file
+  source: tmp/git-meta
+  destination: /var/tmp/git-meta
+- type: file
+  source: packer-assets/ubuntu-2004-normal-purge.txt
+  destination: /var/tmp/purge.txt
+- type: file
+  source: packer-assets/ci-ubuntu-2004-packages.txt
+  destination: /var/tmp/packages.txt
+  only:
+  - googlecompute
+- type: shell
+  scripts:
+  - packer-scripts/packer-env-dump
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/remove-default-users
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+  only:
+  - googlecompute
+- type: shell
+  scripts: 
+  - packer-scripts/couchdb_pre_config # couchdb template for version 3.2.2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  scripts:
+  - packer-scripts/pre-chef-bootstrap-focal
+  - packer-scripts/clone-travis-cookbooks
+  environment_vars:
+  - SKIP_APT_UPGRADE=1
+  - TRAVIS_COOKBOOKS_BRANCH={{ user `travis_cookbooks_branch` }}
+  - TRAVIS_COOKBOOKS_SHA={{ user `travis_cookbooks_sha` }}
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: packer-assets/ubuntu-2004-system-info-commands.yml
+  destination: /var/tmp/ubuntu-2004-system-info-commands.yml
+- type: shell
+  inline: chmod 0644 /var/tmp/ubuntu-2004-system-info-commands.yml
+- type: chef-solo
+  version: 17.10.3
+  config_template: chef-solo.rb.tmpl
+  <% if ENV['CHEF_PROFILING'] %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% else %>
+  execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  <% if ENV['BUILDER'] == "lxd" %>
+  # packer lxd builder copy cookbooks to wrong directory
+  execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
+  {{if .Sudo}}sudo {{end}}chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
+  <% end %>
+  cookbook_paths:
+  - cookbooks
+  <% if ENV['COOKBOOKS_LOCAL'] && ENV['TRAVIS_COOKBOOKS_DIR'] %>
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/cookbooks
+  - <%= ENV['TRAVIS_COOKBOOKS_DIR'] %>/community-cookbooks
+  <% else %>
+  remote_cookbook_paths:
+  - /tmp/chef-stuff/travis-cookbooks/cookbooks
+  - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
+  <% end %>
+  run_list:
+  - recipe[travis_ci_ubuntu_2004]
+  <% if ENV['CHEF_PROFILING'] %>
+  - recipe[poise-profiler]
+  <% end %>
+- type: shell
+  scripts:
+  - packer-scripts/ensure-travis-user
+  - packer-scripts/purge
+  - packer-scripts/disable-apparmor
+  - packer-scripts/run-serverspecs
+  - packer-scripts/perforce-install
+  - packer-scripts/cosign-install
+  - packer-scripts/test-system-info-output
+  - packer-scripts/dump-dpkg-manifest
+  - packer-scripts/create-bin-lib-checksums
+  - packer-scripts/cleanup
+  environment_vars:
+  - DISPLAY=:99.0
+  - SPEC_SUITES=travis_packer_templates
+  - TRAVIS_OBFUSCATE_PASSWORD=1
+  - TRAVIS_UID={{ user `travis_uid` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: shell
+  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
+- type: shell
+  inline: "ls -lah /opt/couchdb/"  
+- type: shell
+  scripts:
+  - packer-scripts/create-image-metadata-tarball
+  environment_vars:
+  - IMAGE_METADATA_TARBALL=/var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /var/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+post-processors:
+-
+  - type: shell-local
+    script: bin/job-board-register
+    environment_vars:
+    - IMAGE_NAME={{ user `image_name` }}
+    only:
+    - googlecompute
+-
+  - type: shell-local
+    script: bin/write-latest-image-name
