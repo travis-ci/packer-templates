@@ -68,6 +68,7 @@ elsif node['kernel']['machine'] == 'aarch64'
     'e08c9542ff6cb231dd03d6f8096f6749e79056734bf69d5399205451b94c9d03'
 else
   override['travis_jdk']['versions'] = %w[
+    openjdk8
     openjdk9
     openjdk10
     openjdk11

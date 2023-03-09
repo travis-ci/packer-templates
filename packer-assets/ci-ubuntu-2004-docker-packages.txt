@@ -4,6 +4,7 @@ emacs-nox
 hashdeep
 libmysqlclient-dev
 libtidy-dev
+libpq-dev
 locales
 mysql-client
 postgresql-client

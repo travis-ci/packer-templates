@@ -48,6 +48,10 @@ if node['kernel']['machine'] == 'ppc64le'
 else
   include_recipe 'travis_jdk'
 end
+
+# HACK: install google-chrome missing dependencies differently
+execute 'wget http://archive.ubuntu.com/ubuntu/pool/main/libu/libu2f-host/libu2f-udev_1.1.10-1_all.deb && sudo apt install ./libu2f-udev_1.1.10-1_all.deb'
+
 include_recipe 'travis_build_environment::maven'
 include_recipe 'travis_build_environment::lein'
 include_recipe 'travis_sbt_extras'
@@ -61,6 +65,7 @@ include_recipe 'memcached'
 # TODO: Uncomment when cassandra works on Java 8 again
 # https://github.com/travis-ci/packer-templates/issues/589
 # include_recipe 'travis_build_environment::cassandra'
+include_recipe 'travis_build_environment::git'
 include_recipe 'travis_build_environment::couchdb'
 include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
