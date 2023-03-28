@@ -151,6 +151,11 @@ provisioners:
   destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
   direction: download
 
+  # Fix permissions for .cargo
+- type: shell
+  inline:
+  - "chown -R travis: /home/travis/.cargo/ || echo 'Cargo not in HOME'"
+
   # Fix Scala/JVM missing config
 - type: shell
   inline:

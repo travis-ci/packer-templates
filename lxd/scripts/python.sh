@@ -55,9 +55,12 @@ __install_pip() {
   sudo python3 get-pip.py
   rm -f get-pip.py
   
+  # Install cargo and rust
+  sudo apt install rustc cargo -y
+
   # update wheel permissions
   id travis && chown -R travis: /home/travis/.cache/pip/
-  id travis && chown -R travis: /home/travis/.cargo/
+  #id travis && chown -R travis: /usr/bin/cargo/
 }
 
 __install_pyenv() {
