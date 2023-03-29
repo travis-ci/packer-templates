@@ -32,7 +32,7 @@ EOF
   echo "shopt -s expand_aliases" >> /home/travis/.bash_profile
   echo "alias docker='docker_func'" >> /home/travis/.bash_profile
   echo "alias sudo='sudo '" >> /home/travis/.bash_profile
-  source ~/.bash_profile
+  #source ~/.bash_profile
 }
 
 main "$@"
