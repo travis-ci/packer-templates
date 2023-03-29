@@ -84,7 +84,7 @@ __install_default_php(){
 }
 
 __install_default_php_bionic_ppc64le(){
-  local PHP_VERSION=7.2
+  local PHP_VERSION=8.1.7
 
   . /etc/os-release
   archive_url="https://travis-php-archives.s3.amazonaws.com/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"

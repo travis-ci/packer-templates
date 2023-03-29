@@ -22,7 +22,9 @@ __network_setup() {
 }
 
 __network_setup_xenial() {
-  echo "Xenial: don't override network config"
+  #echo "Xenial: don't override network config"
+  # enable manage_etc_hosts: true
+  grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
 }
 
 export DEBIAN_FRONTEND=noninteractive

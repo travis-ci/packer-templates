@@ -15,6 +15,7 @@ main() {
   call_build_function func_name="__setup_system_site_packages"
 }
 
+
 __install_packages() {
 
   sudo apt-get update -yqq
@@ -36,6 +37,8 @@ __install_packages() {
     make \
     tk-dev \
     wget \
+    openssl \
+    wget \
     zlib1g-dev
 
 }
@@ -52,9 +55,12 @@ __install_pip() {
   sudo python3 get-pip.py
   rm -f get-pip.py
   
+  # Install cargo and rust
+  sudo apt install rustc cargo -y
+
   # update wheel permissions
   id travis && chown -R travis: /home/travis/.cache/pip/
-  id travis && chown -R travis: /home/travis/.cargo/
+  #id travis && chown -R travis: /usr/bin/cargo/
 }
 
 __install_pyenv() {
@@ -74,7 +80,7 @@ __install_pyenv() {
 __install_virtualenv() {
 
   virtualenv_root="/home/travis/virtualenv"
-  pip install --user virtualenv==15.1.0
+  pip install --user virtualenv==20.15.1
   mkdir -p ${virtualenv_root}
   id travis && chown -R travis: ${virtualenv_root}
 }
@@ -83,7 +89,8 @@ __install_default_python() {
 
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
-  pyenv install 3.6.0
+  
+  pyenv install 3.7.13
 }
 
 __setup_system_site_packages_xenial(){
