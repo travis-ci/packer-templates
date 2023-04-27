@@ -29,7 +29,6 @@ install:
   fi
 - export GIT_DESC="$(git describe --always --dirty --tags)"
 - rvm use 2.5.3 --install --binary --fuzzy
-- gem update --system
 - bundle install --jobs=3 --retry=2 --path=vendor/bundle
 - ./bin/packer-build-install
 - ln -sv "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/tmp/packer-chef-local"

@@ -1,0 +1,132 @@
+description: Travis CI Ubuntu 22.04 Minimal build env template!
+variables:
+  apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
+  docker_registry: "https://registry.docker.io"
+  image_time: "{{ timestamp }}"
+  image_name: ubuntu-22.04-minimal-{{user `image_time`}}
+  dist_name: "jammy"
+  languages: "minimal,bash,sh,shell"
+builders:
+- type: lxd
+  name: lxd-{{ uuid }}
+  image: ubuntu:22.04
+  output_image: ubuntu-22.04-minimal-{{user `image_time`}}
+  publish_properties:
+   - description: Travis CI Ubuntu 22.04 Minimal build env template!
+provisioners:
+
+- type: file
+  source: files/common-lib.sh
+  destination: /tmp/__common-lib.sh
+
+  # Setup repositories
+- type: file
+  source: files/sources.list
+  destination: /etc/apt/sources.list
+
+- type: shell
+  scripts:
+  - scripts/base.sh
+  - scripts/minimal.sh
+  - scripts/install-docker.sh
+  - scripts/gitconfig.sh
+  environment_vars:
+  - MIRROR={{user `apt_mirror`}}
+
+- type: file
+  source: files/docker.daemon.json.lxd
+  destination: /etc/docker/daemon.json
+
+- type: shell
+  inline:
+   - sed -i "s#REGISTRY#{{user `docker_registry`}}#g" /etc/docker/daemon.json
+
+  # Install ruby and python travis
+- type: shell
+  scripts:
+  - scripts/ruby.sh
+  - scripts/python.sh
+  - scripts/install-docker-compose.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
+  # Use static DNS servers
+- type: shell
+  scripts:
+  - scripts/resolv-conf.sh
+
+  # Cleanup systemd units
+- type: shell
+  inline:
+   - systemctl mask fstrim.service
+   - systemctl mask sys-kernel-config.mount
+   - systemctl mask systemd-journal-flush.service
+   - systemctl mask console-setup.service
+   - systemctl mask systemd-networkd-wait-online.service
+   - systemctl mask systemd-update-utmp.service
+   - systemctl mask apt-daily-upgrade.service
+   - systemctl mask apt-daily.service
+
+  # Cleanup network configuration
+- type: shell
+  inline:
+   - rm -f /etc/netplan/10-lxc.yaml
+   - rm -f /etc/netplan/50-cloud-init.yaml
+
+  # Cleanup package list
+- type: shell
+  inline:
+   - apt-get remove --purge cron krb5-locales logrotate networkd-dispatcher rsyslog ucf -y
+
+  # Cleanup APT
+- type: shell
+  inline:
+   - apt-get autoremove --purge -y
+   - apt-get clean
+
+  # Fix permissions
+- type: shell
+  inline:
+   - chmod 600 /etc/sudoers.d/travis
+   - chmod 644 /etc/apt/sources.list
+   - chmod 644 /etc/docker/daemon.json
+
+  # Creare image metadata tarball
+- type: shell
+  scripts:
+  - scripts/create-job-board-data-lxd.sh
+  - scripts/create-image-metadata-tarball-lxd.sh
+  environment_vars:
+  - IMAGE_METADATA_TARBALL=/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  - JOB_BOARD_REGISTER_FILE=/tmp/.job_board_register.yml
+  - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
+  - IMAGE_NAME={{ user `image_name` }}
+  - LANGUAGES={{ user `languages` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+
+# cleanup
+- type: shell
+  scripts:
+  - scripts/cleanup.sh
+
+# system-info
+- type: shell
+  scripts:
+  - scripts/system_info.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
+post-processors:
+-
+  - type: shell-local
+    scripts:
+    - scripts/lxc-export.sh
+    - scripts/lxc-aws-s3-upload.sh
+    - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
+    - scripts/job-board-register.rb # register lxc image in job board staging
+    environment_vars:
+    - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
+    - IMAGE_NAME={{ user `image_name` }}
+    - LANGUAGES={{ user `languages` }}

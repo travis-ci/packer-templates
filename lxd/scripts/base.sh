@@ -13,6 +13,11 @@ __install_packages_focal() {
   apt install python3-jsonpatch -y --no-install-recommends
 }
 
+__install_packages_jammy() {
+
+  apt install python3-jsonpatch -y --no-install-recommends
+}
+
 __network_setup() {
   # disable cloud network init
   echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg

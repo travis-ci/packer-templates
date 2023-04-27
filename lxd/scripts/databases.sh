@@ -88,7 +88,31 @@ __mongodb_install_bionic_ppc64le(){
 }
 
 __mongodb_install_focal(){
-  echo "mongodb - not supported"
+  . /etc/os-release
+  curl -sL https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
+  echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+  apt-get update -yqq
+  apt-get install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    mongodb-org;
+}
+
+__mongodb_install_jammy(){
+  arch=$(uname -m)
+  curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
+   sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg \
+   --dearmor
+  echo "deb [signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+  if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
+    echo "MongoDB not available for $arch";
+  else
+    apt-get update -yqq
+    apt-get install -yqq \
+      --no-install-suggests \
+      --no-install-recommends \
+      mongodb-org;
+  fi
 }
 
 __mysql_setup() {
@@ -173,6 +197,14 @@ __redis_focal(){
   systemctl disable redis-server
 }
 
+__redis_jammy(){
+  apt-get update
+  apt-get install -y redis-server
+  __redis_setup
+  systemctl stop redis-server
+  systemctl disable redis-server
+}
+
 __turn_off_all() {
   systemctl stop mysql
   systemctl disable mysql
@@ -201,6 +233,10 @@ __couchdb_install_bionic(){
 }
 
 __couchdb_install_focal(){
+  echo "couchdb - has no installation candidate"
+}
+
+__couchdb_install_jammy(){
   echo "couchdb - has no installation candidate"
 }
 

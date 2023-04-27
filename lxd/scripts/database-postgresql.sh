@@ -44,6 +44,22 @@ __install_packages_focal() {
     postgresql postgresql-contrib postgresql-${PGSQL_VERSION}-postgis-3 postgresql-${PGSQL_VERSION}-postgis-3-scripts postgresql-client libpq-dev libgeos++-dev;
 }
 
+__install_packages_jammy() {
+  echo "Installing packages for Jammy"
+  curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+  sudo gpg -o /usr/share/keyrings/pgdg.gpg \
+  --dearmor
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+
+  # curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /usr/share/keyrings/pgdg.gpg > /dev/null
+  # echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+  apt-get update -y
+  apt-get install -y \
+    --no-install-suggests \
+    --no-install-recommends \
+    postgresql-14 postgresql-contrib-14 postgresql-${PGSQL_VERSION}-postgis-3 postgresql-${PGSQL_VERSION}-postgis-3-scripts postgresql-client-14 libpq-dev libgeos++-dev;
+}
+
 __install_packages_xenial_ppc64le(){
   # Packages for Xenial ARM are missing"
   echo "Installing packages for Xenial ppc64le"

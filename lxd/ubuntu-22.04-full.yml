@@ -1,0 +1,180 @@
+description: Travis CI Ubuntu 22.04 Full build env template!
+variables:
+  apt_mirror: "http://ports.ubuntu.com/ubuntu-ports"
+  docker_registry: "https://registry.docker.io"
+  image_time: "{{ timestamp }}"
+  image_name: ubuntu-22.04-full-{{user `image_time`}}
+  dist_name: "jammy"
+  languages: "ruby,c,python,go,elixir,erlang,php,java,perl,cpp,cplusplus,c++,scala"
+builders:
+- type: lxd
+  name: lxd-{{ uuid }}
+  image: ubuntu:22.04
+  output_image: ubuntu-22.04-full-{{user `image_time`}}
+  publish_properties:
+   - description: Travis CI Ubuntu 22.04 Full build env template!
+provisioners:
+
+- type: file
+  source: files/common-lib.sh
+  destination: /tmp/__common-lib.sh
+
+  # Setup repositories
+- type: file
+  source: files/sources.list
+  destination: /etc/apt/sources.list
+
+- type: shell
+  scripts:
+  - scripts/base.sh
+  - scripts/minimal.sh
+  - scripts/install-c-lang.sh
+  - scripts/full.sh
+  - scripts/install-docker.sh
+  - scripts/gitconfig.sh
+  environment_vars:
+  - MIRROR={{user `apt_mirror`}}
+
+- type: file
+  source: files/postgresql/postgresql-14.conf
+  destination: /tmp/__postgresql__14__main__postgresql.conf
+
+- type: file
+  source: files/postgresql/pg_hba.conf
+  destination: /tmp/__postgresql__14__main__pg_hba.conf
+
+- type: file
+  source: files/postgresql/initd-postgresql
+  destination: /tmp/__postgresql__14__initd-postgresql
+
+- type: shell
+  scripts:
+  - scripts/compilers_build_tool_chains.sh
+  - scripts/net-tools.sh
+  - scripts/vcs.sh
+  - scripts/cosign-install.sh
+
+- type: shell
+  scripts:
+  - scripts/databases.sh
+  - scripts/database-postgresql.sh
+  environment_vars:
+  - PGSQL_VERSION="14"
+
+- type: shell
+  scripts:
+  - scripts/jvm.sh
+  environment_vars:
+  - JAVA_VERSION="11"
+
+  # Install languages as travis
+- type: shell
+  scripts:
+  - scripts/elixir.sh
+  - scripts/erlang.sh
+  - scripts/ruby.sh
+  - scripts/go.sh
+  - scripts/python.sh
+  - scripts/php.sh
+  - scripts/lein.sh
+  - scripts/nodejs.sh
+  - scripts/perl.sh
+  - scripts/install-docker-compose.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
+- type: shell
+  scripts:
+  - scripts/ibm-advanced-tool-chain.sh
+  
+# system-info
+- type: shell
+  scripts:
+  - scripts/system_info.sh
+  execute_command: "exec su - travis '{{ .Path }}'"
+
+
+  # Use static DNS servers
+- type: shell
+  scripts:
+  - scripts/resolv-conf.sh
+
+  # Cleanup systemd units
+- type: shell
+  inline:
+   - systemctl mask fstrim.service
+   - systemctl mask sys-kernel-config.mount
+   - systemctl mask systemd-journal-flush.service
+   - systemctl mask console-setup.service
+   - systemctl mask systemd-networkd-wait-online.service
+   - systemctl mask systemd-update-utmp.service
+   - systemctl mask apt-daily-upgrade.service
+   - systemctl mask apt-daily.service
+
+  # Cleanup network configuration
+- type: shell
+  inline:
+   - rm -f /etc/netplan/10-lxc.yaml
+   - rm -f /etc/netplan/50-cloud-init.yaml
+
+  # Cleanup package list
+- type: shell
+  inline:
+   - apt-get remove --purge cron krb5-locales logrotate networkd-dispatcher rsyslog -y
+  # Cleanup APT
+- type: shell
+  inline:
+   - apt-get autoremove --purge -y
+   - apt-get clean
+
+  # Fix permissions
+- type: shell
+  inline:
+   - chmod 600 /etc/sudoers.d/travis
+   - chmod 644 /etc/apt/sources.list
+
+  # Creare image metadata tarball
+- type: shell
+  scripts:
+  - scripts/create-job-board-data-lxd.sh
+  - scripts/create-image-metadata-tarball-lxd.sh
+  environment_vars:
+  - IMAGE_METADATA_TARBALL=/tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  - JOB_BOARD_REGISTER_FILE=/tmp/.job_board_register.yml
+  - JOB_BOARD_IMAGE_DIST={{ user `dist_name` }}
+  - IMAGE_NAME={{ user `image_name` }}
+  - LANGUAGES={{ user `languages` }}
+  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+- type: file
+  source: /tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
+  direction: download
+
+  # Fix permissions for .cargo
+- type: shell
+  inline:
+  - "chown -R travis: /home/travis/.cargo/ || echo 'Cargo not in HOME'"
+
+  # Fix Scala/JVM missing config
+- type: shell
+  inline:
+  - printf "%s\n" "-Xms2048M" "-Xmx2048M" "-Xss6M" > /tmp/jvmopts
+  - mkdir -p /etc/sbt/
+  - mv /tmp/jvmopts /etc/sbt/jvmopts
+
+# cleanup
+- type: shell
+  scripts:
+  - scripts/cleanup.sh
+
+post-processors:
+-
+  - type: shell-local
+    scripts:
+    - scripts/lxc-export.sh
+    - scripts/lxc-aws-s3-upload.sh
+    - scripts/lxc-push.sh # push and init images in lxc hosts with salt (only for staging)
+    - scripts/job-board-register.rb # register lxc image in job board staging
+    environment_vars:
+    - IMAGE_METADATA_FILE=image-metadata-{{ user `image_name` }}.tar.bz2
+    - IMAGE_NAME={{ user `image_name` }}
+    - LANGUAGES={{ user `languages` }}

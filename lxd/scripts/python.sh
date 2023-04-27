@@ -23,7 +23,6 @@ __install_packages() {
     --no-install-suggests \
     --no-install-recommends \
     build-essential \
-    python \
     python3 \
     python3-dev \
     curl \
@@ -44,22 +43,28 @@ __install_packages() {
 }
 
 __install_pip() {
-
+  dist=$(lsb_release -cs)
+  if [[ "${dist}" = "jammy" ]]; then
+    echo "Skipping pip2 install for Jammy"
+  else
+    # Install pip2
   wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
   sudo python get-pip.py
   pip install --user --upgrade setuptools wheel
   rm -f get-pip.py
-
+    # update wheel permissions
+  id travis && chown -R travis: /home/travis/.cache/pip/
+  fi
   # Install pip3
-  wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
+  wget https://bootstrap.pypa.io/pip/get-pip.py
   sudo python3 get-pip.py
+  pip install --user --upgrade setuptools wheel
   rm -f get-pip.py
+  id travis && chown -R travis: /home/travis/.cache/pip/
   
   # Install cargo and rust
   sudo apt install rustc cargo -y
 
-  # update wheel permissions
-  id travis && chown -R travis: /home/travis/.cache/pip/
   #id travis && chown -R travis: /usr/bin/cargo/
 }
 
@@ -95,23 +100,29 @@ __install_default_python() {
 
 __setup_system_site_packages_xenial(){
 
-  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python python-dev python3-dev
   __setup_envirnoment "python2.7"
   __setup_envirnoment "python3.5"
 }
 
 __setup_system_site_packages_bionic(){
 
-  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python python-dev python3-dev
   __setup_envirnoment "python2.7"
   __setup_envirnoment "python3.6"
 }
 
 __setup_system_site_packages_focal(){
 
-  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python-dev python3-dev
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python python-dev python3-dev
   __setup_envirnoment "python2.7"
   __setup_envirnoment "python3.8"
+}
+
+__setup_system_site_packages_jammy(){
+
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python3-dev
+  __setup_envirnoment_jammy "python3.10"
 }
 
 __setup_system_site_packages() {
@@ -125,6 +136,15 @@ __setup_envirnoment() {
   venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
   /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
   ${venv_fullname}/bin/pip install --upgrade wheel
+  id travis && chown -R travis: ${venv_fullname}
+}
+
+__setup_envirnoment_jammy() {
+
+  pyname=$1
+  venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
+  /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
+  ${venv_fullname}/local/bin/pip install --upgrade wheel
   id travis && chown -R travis: ${venv_fullname}
 }
 

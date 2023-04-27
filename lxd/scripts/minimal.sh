@@ -14,6 +14,11 @@ __install_python_focal() {
   apt install python python3-pip -y --no-install-recommends
 }
 
+__install_python_jammy() {
+
+  apt install python3 python3-pip -y --no-install-recommends
+}
+
 export DEBIAN_FRONTEND=noninteractive
 
 # https://docs.travis-ci.com/user/reference/trusty/#version-control
