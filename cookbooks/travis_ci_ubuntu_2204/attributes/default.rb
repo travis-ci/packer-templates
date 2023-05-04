@@ -79,8 +79,8 @@ end
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
-override['travis_build_environment']['cmake']['version'] = '3.16.8'
-override['travis_build_environment']['cmake']['checksum'] = '6b5c856158c16307692ae54ba761cfe30df7b2a131d602e83fda42a572973063'
+override['travis_build_environment']['cmake']['version'] = '3.26.3'
+override['travis_build_environment']['cmake']['checksum'] = '28d4d1d0db94b47d8dfd4f7dec969a3c747304f4a28ddd6fd340f553f2384dc2'
 override['travis_build_environment']['cmake']['download_url'] = ::File.join(
   'https://cmake.org/files',
   "v#{node['travis_build_environment']['cmake']['version'].split('.')[0, 2].join('.')}",
