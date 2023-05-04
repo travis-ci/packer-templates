@@ -84,7 +84,7 @@ override['travis_build_environment']['cmake']['checksum'] = '28d4d1d0db94b47d8df
 override['travis_build_environment']['cmake']['download_url'] = ::File.join(
   'https://cmake.org/files',
   "v#{node['travis_build_environment']['cmake']['version'].split('.')[0, 2].join('.')}",
-  "cmake-#{node['travis_build_environment']['cmake']['version']}-Linux-x86_64.tar.gz"
+  "cmake-#{node['travis_build_environment']['cmake']['version']}-linux-x86_64.tar.gz"
 )
 
 override['travis_build_environment']['nodejs_versions'] = %w[
