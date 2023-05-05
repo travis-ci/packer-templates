@@ -100,13 +100,13 @@ __mongodb_install_focal(){
 
 __mongodb_install_jammy(){
   arch=$(uname -m)
+  if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
+  echo "MongoDB not available for $arch";
+  else
+  echo "deb [signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
   curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
    sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg \
    --dearmor
-  echo "deb [signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-  if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
-    echo "MongoDB not available for $arch";
-  else
     apt-get update -yqq
     apt-get install -yqq \
       --no-install-suggests \
