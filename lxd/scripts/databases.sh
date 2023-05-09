@@ -100,13 +100,12 @@ __mongodb_install_focal(){
 
 __mongodb_install_jammy(){
   arch=$(uname -m)
+  # missing binary files for s390x arch
   if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
   echo "MongoDB not available for $arch";
   else
   wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc |  gpg --dearmor | sudo tee /usr/share/keyrings/mongodb.gpg > /dev/null
   echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-  #echo "deb [signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-  #curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
     apt-get update -yqq
     apt-get install -yqq \
       --no-install-suggests \
