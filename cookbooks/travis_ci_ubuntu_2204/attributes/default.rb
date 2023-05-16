@@ -194,6 +194,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   php
   node_js
   smalltalk
+  shell
   csharp
   perl
   rust
