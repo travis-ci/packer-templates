@@ -4,3 +4,4 @@ pppconfig
 pppoeconf
 sshguard
 unattended-upgrades
+ubuntu-restricted-extras
