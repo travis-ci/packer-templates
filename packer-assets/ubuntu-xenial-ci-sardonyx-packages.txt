@@ -391,6 +391,7 @@ python-minimal
 python-oauth
 python-openssl
 python-pam
+python-nose
 python-pkg-resources
 python-prettytable
 python-pycurl

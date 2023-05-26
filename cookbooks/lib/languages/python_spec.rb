@@ -42,11 +42,20 @@ describe 'python environment' do
     its(:stdout) { should match(/^nosetests version \d+\.\d+\.\d+/) }
   end
 
-  describe pycommand(
-    %q(python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")')
-  ) do
-    its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
+  if %w[bionic].include?(Support.distro)
+    describe pycommand(
+      %q(python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")')
+    ) do
+      its(:stderr) { should be_empty }
+      its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
+    end
+  else
+    describe pycommand(
+      %q(python -c 'import sys;from unittest import mock;sys.stdout.write(mock.__version__ + "\n")')
+    ) do
+      its(:stderr) { should be_empty }
+      its(:stdout) { should match(/^\d+\.\d+/) }
+    end
   end
 
   if 'xenial'.include?(Support.distro)

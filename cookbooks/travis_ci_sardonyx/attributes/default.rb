@@ -64,6 +64,14 @@ pythons = %w[
   3.8.13
 ]
 
+override['travis_build_environment']['clang']['version'] = '7.0.0'
+override['travis_build_environment']['clang']['download_url'] = ::File.join(
+  'http://releases.llvm.org',
+  node['travis_build_environment']['clang']['version'],
+  "clang+llvm-#{node['travis_build_environment']['clang']['version']}-x86_64-linux-gnu-ubuntu-16.04.tar.xz"
+)
+override['travis_build_environment']['clang']['checksum'] = '69b85c833cd28ea04ce34002464f10a6ad9656dd2bba0f7133536a9927c660d2'
+
 # Reorder pythons so that default python2 and python3 come first
 # as this affects the ordering in $PATH.
 %w[3].each do |pyver|
