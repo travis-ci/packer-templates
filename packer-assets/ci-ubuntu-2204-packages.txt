@@ -125,6 +125,7 @@ libncurses5
 libncurses5-dev
 libncursesw5-dev
 libossp-uuid-dev
+libonig-dev
 libpng-dev
 libpq-dev
 libreadline-dev
