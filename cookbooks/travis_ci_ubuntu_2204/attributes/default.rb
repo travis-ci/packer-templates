@@ -95,6 +95,7 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '14.18.1'
 
 rubies = %w[
+  2.7.8
   3.0.4
   3.1.2
 ]
