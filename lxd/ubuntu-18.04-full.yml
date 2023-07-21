@@ -56,6 +56,12 @@ provisioners:
 
 - type: shell
   scripts:
+  - scripts/jvm.sh
+  environment_vars:
+  - JAVA_VERSION="11"
+
+- type: shell
+  scripts:
   - scripts/ibm-advanced-tool-chain.sh
 
 - type: shell
@@ -64,12 +70,6 @@ provisioners:
   - scripts/database-postgresql.sh
   environment_vars:
   - PGSQL_VERSION="10"
-
-- type: shell
-  scripts:
-  - scripts/jvm.sh
-  environment_vars:
-  - JAVA_VERSION="11"
 
   # Install languages as travis
 - type: shell

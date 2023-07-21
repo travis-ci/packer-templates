@@ -19,16 +19,22 @@ __install_packages() {
 }
 
 __install_java(){
-  # wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
-  # sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
-  wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /usr/share/keyrings/adoptium.asc
-  echo "deb [signed-by=/usr/share/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
-  #curl https://download.bell-sw.com/pki/GPG-KEY-bellsoft | gpg --dearmor | sudo tee /usr/share/keyrings/bellsoft.gpg > /dev/null
-  #echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bellsoft.gpg] https://apt.bell-sw.com/ stable main" | sudo tee /etc/apt/sources.list.d/bellsoft.list
-  rm -rf /var/lib/apt/lists/*
+  arch=$(uname -m)
+  if [[ $arch = "aarch64" ]]; then
+  arch="arm64"
+  elif [[ $arch = "ppc64le" ]]; then
+  arch="ppc64el"
+  fi
+  wget -O - https://adoptium.jfrog.io/artifactory/api/security/keypair/default-gpg-key/public | apt-key add -
+  add-apt-repository --yes https://packages.adoptium.net/artifactory/deb
+  # wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /usr/share/keyrings/adoptium.asc
+  # echo "deb [signed-by=/usr/share/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
   apt-get update -yqq
-  #adoptopenjdk-${JAVA_VERSION}-hotspot
-  apt-get -yqq --no-install-suggests --no-install-recommends install temurin-${JAVA_VERSION}-jdk
+  apt-get -yqq --no-install-suggests --no-install-recommends install temurin-$JAVA_VERSION-jdk || true
+  JAVA_HOME=/usr/lib/jvm/temurin-$JAVA_VERSION-jdk-$arch
+  export JAVA_HOME=$JAVA_HOME
+  export PATH=$JAVA_HOME/bin:$PATH
+  update-java-alternatives -s temurin-$JAVA_VERSION-jdk-$arch
 }
 
 __install_maven(){
@@ -38,15 +44,6 @@ __install_maven(){
 __install_ant() {
   mkdir -p /opt/ant
   curl -sL https://downloads.apache.org/ant/binaries/apache-ant-1.10.12-bin.tar.gz | tar -xz --strip 1 -C /opt/ant
-  echo 'export ANT_HOME=/opt/ant
-  export PATH=${ANT_HOME}/bin:${PATH}' > /home/travis/.bash_profile.d/ant.bash
-  chmod 644 /home/travis/.bash_profile.d/ant.bash
-  chown travis: /home/travis/.bash_profile.d/ant.bash
-}
-
-__install_ant() {
-  mkdir -p /opt/ant
-  curl -sL https://downloads.apache.org//ant/binaries/apache-ant-1.10.12-bin.tar.gz | tar -xz --strip 1 -C /opt/ant
   echo 'export ANT_HOME=/opt/ant
   export PATH=${ANT_HOME}/bin:${PATH}' > /home/travis/.bash_profile.d/ant.bash
   chmod 644 /home/travis/.bash_profile.d/ant.bash

@@ -44,23 +44,20 @@ __install_packages() {
 
 __install_pip() {
   dist=$(lsb_release -cs)
-  if [[ "${dist}" = "jammy" ]]; then
-    echo "Skipping pip2 install for Jammy"
+  if [[ "${dist}" = "xenial" ]]; then
+    # Install pip for xenial
+    wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
+    sudo python3 get-pip.py
+    pip3 install --user --upgrade setuptools wheel
+    rm -f get-pip.py
+    id travis && chown -R travis: /home/travis/.cache/pip/
   else
-    # Install pip2
-  wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-  sudo python get-pip.py
-  pip install --user --upgrade setuptools wheel
-  rm -f get-pip.py
-    # update wheel permissions
-  id travis && chown -R travis: /home/travis/.cache/pip/
+    wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+    sudo python3 get-pip.py
+    pip3 install --user --upgrade setuptools wheel
+    rm -f get-pip.py
+    id travis && chown -R travis: /home/travis/.cache/pip/
   fi
-  # Install pip3
-  wget https://bootstrap.pypa.io/pip/get-pip.py
-  sudo python3 get-pip.py
-  pip install --user --upgrade setuptools wheel
-  rm -f get-pip.py
-  id travis && chown -R travis: /home/travis/.cache/pip/
   
   # Install cargo and rust
   sudo apt install rustc cargo -y

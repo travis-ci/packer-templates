@@ -45,14 +45,21 @@ __install_packages() {
 # }
 
 __mongodb_install() {
-  . /etc/os-release
-  curl -sL https://www.mongodb.org/static/pgp/server-4.0.asc | apt-key add -
-  echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list
-  apt-get update -yqq
-  apt-get install -yqq \
-    --no-install-suggests \
-    --no-install-recommends \
-    mongodb-org;
+  echo "Missing MongoDB binaries for arm64, skipping installation"
+  # arch=$(uname -m)
+  # # missing binary files for arm64
+  # if [[ "$arch" = "arm64" ]]; then
+  #   echo "Missing MongoDB binaries for arm64, skipping installation"
+  # else
+  #   . /etc/os-release
+  #   curl -sL https://www.mongodb.org/static/pgp/server-4.0.asc | apt-key add -
+  #   echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+  #   apt-get update -yqq
+  #   apt-get install -yqq \
+  #     --no-install-suggests \
+  #     --no-install-recommends \
+  #     mongodb-org;
+  # fi
 }
 
 __mongodb_install_xenial_ppc64le(){
@@ -71,8 +78,8 @@ __mongodb_install_xenial_s390x(){
 
 __mongodb_install_bionic(){
   . /etc/os-release
-  curl -sL https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -
-  echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+  curl -sL https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
+  echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
@@ -89,18 +96,24 @@ __mongodb_install_bionic_ppc64le(){
 
 __mongodb_install_focal(){
   . /etc/os-release
+  arch=$(uname -m)
+  # missing binary files for s390x and ppc64le arch
+  if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
+  echo "MongoDB not available for $arch";
+  else
   curl -sL https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
   echo "deb https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-  apt-get update -yqq
+  apt-get update -y
   apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
     mongodb-org;
+  fi
 }
 
 __mongodb_install_jammy(){
   arch=$(uname -m)
-  # missing binary files for s390x arch
+  # missing binary files for s390x and ppc64le arch
   if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
   echo "MongoDB not available for $arch";
   else
