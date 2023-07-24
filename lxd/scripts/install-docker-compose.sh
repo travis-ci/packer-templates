@@ -11,7 +11,7 @@ main() {
 }
 
 __install_docker_composer() {
-  sudo pip3 install --upgrade pip wheel
+  sudo pip3 install pip wheel
   sudo pip3 install cryptography setuptools
   sudo pip3 install -IU "docker-compose==${DOCKER_COMPOSE_VERSION}"
 

@@ -132,7 +132,7 @@ __setup_envirnoment() {
   pyname=$1
   venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
   /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
-  ${venv_fullname}/bin/pip install --upgrade wheel
+  ${venv_fullname}/bin/pip install wheel
   id travis && chown -R travis: ${venv_fullname}
 }
 
@@ -141,7 +141,7 @@ __setup_envirnoment_jammy() {
   pyname=$1
   venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
   /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
-  ${venv_fullname}/local/bin/pip install --upgrade wheel
+  ${venv_fullname}/local/bin/pip install wheel
   id travis && chown -R travis: ${venv_fullname}
 }
 
