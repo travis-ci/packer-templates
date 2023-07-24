@@ -112,7 +112,6 @@ __setup_system_site_packages_bionic(){
 __setup_system_site_packages_focal(){
 
   sudo apt-get -yqq --no-install-suggests --no-install-recommends install python python-dev python3-dev
-  __setup_envirnoment "python2.7"
   __setup_envirnoment "python3.8"
 }
 
