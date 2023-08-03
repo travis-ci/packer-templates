@@ -19,10 +19,13 @@ __install_docker_composer() {
   cat <<'EOF' >>docker_func
   #!/usr/bin/env bash
     main() {
-    args="$@"
-    docker -v /proc/cpuinfo:/proc/cpuinfo:rw -v /proc/meminfo:/proc/meminfo:rw -v /proc/stat:/proc/stat:rw node:latest bash
-    docker $args;
-  }
+      if [ "$1" = "run" ]; then
+          shift
+          command docker run -t -v /proc/cpuinfo:/proc/cpuinfo:rw -v /proc/meminfo:/proc/meminfo:rw -v /proc/stat:/proc/stat:rw "$@"
+      else
+          command docker "$@"
+      fi
+}
   main "$@";
 EOF
 
