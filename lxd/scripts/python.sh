@@ -119,6 +119,8 @@ __setup_system_site_packages_focal(){
 __setup_system_site_packages_jammy(){
 
   sudo apt-get -yqq --no-install-suggests --no-install-recommends install python3-dev
+  sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+  sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
   __setup_envirnoment_jammy "python3.10"
 }
 
