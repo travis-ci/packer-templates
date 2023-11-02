@@ -7,7 +7,7 @@ override['travis_build_environment']['system_python']['pythons'] = %w[3.10] # ap
 override['travis_build_environment']['python_aliases'] = {
   '3.10.5' => %w[3.10],
   '3.8.3' => %w[3.8],
-  '3.7.7' => %w[3.7],
+  '3.7.13' => %w[3.7],
   'pypy2.7-7.3.1' => %w[pypy],
   'pypy3.6-7.3.1' => %w[pypy3],
   'pypy3.9-7.3.9' => %w[pypy3.9]
@@ -88,20 +88,22 @@ override['travis_build_environment']['cmake']['download_url'] = ::File.join(
 )
 
 override['travis_build_environment']['nodejs_versions'] = %w[
-  14.18.1
-  16.13.0
-  17.1.0
+  16.20.2
+  18.18.2
 ]
-override['travis_build_environment']['nodejs_default'] = '14.18.1'
+override['travis_build_environment']['nodejs_default'] = '18.18.2'
 
 rubies = %w[
+  2.7.8
   3.0.4
   3.1.2
 ]
 
 override['travis_build_environment']['virtualenv']['version'] = '20.0.20'
 
-override['travis_build_environment']['default_ruby'] = '3.1.2'
+
+# changing default ruby version due to dpl issues
+override['travis_build_environment']['default_ruby'] = '2.7.8'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
