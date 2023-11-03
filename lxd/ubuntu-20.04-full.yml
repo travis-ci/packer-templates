@@ -5,7 +5,7 @@ variables:
   image_time: "{{ timestamp }}"
   image_name: ubuntu-20.04-full-{{user `image_time`}}
   dist_name: "focal"
-  languages: "ruby,c,python,go,elixir,erlang,php,java,perl,cpp,cplusplus,c++,scala"
+  languages: "ruby,c,python,go,elixir,erlang,php,java,perl,cpp,cplusplus,c++,scala, shell, node_js"
 builders:
 - type: lxd
   name: lxd-{{ uuid }}

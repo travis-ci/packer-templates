@@ -6,14 +6,18 @@ source <(sudo cat  "/tmp/__common-lib.sh")
 main() {
   set -o xtrace
   
-  export DOCKER_COMPOSE_VERSION="1.28.6"
+  # issue with docker-compose version 1.29.2 - PyYAML=5.4.1 and it's cython dependency, need to downgrade either docker-compose or fight with pyyaml version
+  export DOCKER_COMPOSE_VERSION="1.29.2"
   call_build_function func_name="__install_docker_composer"
 }
 
 __install_docker_composer() {
   sudo pip3 install pip wheel
+  sudo pip3 install --upgrade pip
   sudo pip3 install cryptography setuptools
-  sudo pip3 install -IU "docker-compose==${DOCKER_COMPOSE_VERSION}"
+  # sudo pip3 install pyyaml~=6.0
+  sudo pip3 install -U --ignore-installed pyyaml 
+  sudo pip3 install --no-deps "docker-compose==${DOCKER_COMPOSE_VERSION}"
 
   # create an alias for docker
   cat <<'EOF' >>docker_func

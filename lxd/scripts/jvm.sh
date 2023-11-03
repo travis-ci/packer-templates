@@ -41,7 +41,7 @@ __install_maven(){
 
 __install_ant() {
   mkdir -p /opt/ant
-  curl -sL https://downloads.apache.org/ant/binaries/apache-ant-1.10.12-bin.tar.gz | tar -xz --strip 1 -C /opt/ant
+  curl -sL https://downloads.apache.org/ant/binaries/apache-ant-1.10.14-bin.tar.gz | tar -xz --strip 1 -C /opt/ant
   echo 'export ANT_HOME=/opt/ant
   export PATH=${ANT_HOME}/bin:${PATH}' > /home/travis/.bash_profile.d/ant.bash
   chmod 644 /home/travis/.bash_profile.d/ant.bash

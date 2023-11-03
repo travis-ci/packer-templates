@@ -10,9 +10,9 @@ main() {
 }
 
 __install_nvm() {
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
+  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.5/install.sh | bash
   export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" >/dev/null  # This loads nvm
 
   echo '#!/usr/bin/env bash
 export NVM_DIR="/home/travis/.nvm"
@@ -23,8 +23,8 @@ fi
 '  > $HOME/.bash_profile.d/nvm.bash
   chmod 644 $HOME/.bash_profile.d/nvm.bash
 
-  nvm install 8.12.0
-}
+
+} &> /dev/null
 main "$@"
 
 

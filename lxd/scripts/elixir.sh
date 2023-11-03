@@ -19,8 +19,8 @@ __install_elixir() {
 test -s "$HOME/.kiex/scripts/kiex" && source "$HOME/.kiex/scripts/kiex"
 EOF
 
-  elixir="1.13.4"
-  curl -sL -o /tmp/v${elixir}.zip https://github.com/elixir-lang/elixir/releases/download/v${elixir}/Precompiled.zip
+  elixir="1.15.4"
+  curl -sL -o /tmp/v${elixir}.zip https://github.com/elixir-lang/elixir/releases/download/v${elixir}/elixir-otp-26.zip
 
   mkdir -p ${HOME}/.kiex/elixirs
   unzip -d ${HOME}/.kiex/elixirs/elixir-${elixir} /tmp/v${elixir}.zip
