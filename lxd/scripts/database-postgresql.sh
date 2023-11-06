@@ -24,7 +24,7 @@ __install_packages() {
 
 __install_packages_bionic() {
   echo "Installing packages for Bionic"
-  echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+  echo "deb https://apt-archive.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   apt-get update -yqq
   apt-get install -yqq \
