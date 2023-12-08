@@ -51,6 +51,7 @@ end
 
 # HACK: install google-chrome missing dependencies differently
 execute 'wget http://archive.ubuntu.com/ubuntu/pool/main/libu/libu2f-host/libu2f-udev_1.1.10-1_all.deb && sudo apt install ./libu2f-udev_1.1.10-1_all.deb'
+execute 'wget http://security.ubuntu.com/ubuntu/pool/main/n/nss/libnss3_3.49.1-1ubuntu1.9_amd64.deb && sudo apt install ./libnss3_3.49.1-1ubuntu1.9_amd64.deb'
 
 include_recipe 'travis_build_environment::maven'
 include_recipe 'travis_build_environment::lein'

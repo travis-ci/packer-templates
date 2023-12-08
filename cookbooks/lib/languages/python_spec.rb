@@ -27,8 +27,8 @@ describe 'python environment' do
 
   if %w[bionic].include?(Support.distro)
     describe pycommand('py.test --version') do
-      its(:stdout) { should be_empty }
-      its(:stderr) { should match(/pytest version \d+\.\d+\.\d+/) }
+      its(:stderr) { should be_empty }
+      its(:stdout) { should match(/pytest (version )?\d+\.\d+\.\d+/) }
     end
   elsif 'focal'.include?(Support.distro)
     describe pycommand('py.test --version') do
@@ -42,11 +42,20 @@ describe 'python environment' do
     its(:stdout) { should match(/^nosetests version \d+\.\d+\.\d+/) }
   end
 
-  describe pycommand(
-    %q(python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")')
-  ) do
-    its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
+  if %w[bionic].include?(Support.distro)
+    describe pycommand(
+      %q(python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")')
+    ) do
+      its(:stderr) { should be_empty }
+      its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
+    end
+  else
+    describe pycommand(
+      %q(python -c 'import sys;from unittest import mock;sys.stdout.write(mock.__version__ + "\n")')
+    ) do
+      its(:stderr) { should be_empty }
+      its(:stdout) { should match(/^\d+\.\d+/) }
+    end
   end
 
   if 'xenial'.include?(Support.distro)
@@ -56,16 +65,15 @@ describe 'python environment' do
     }
   elsif 'bionic'.include?(Support.distro)
     vers = {
-      'python2.7' => '2.7.18',
       'python3.6' => '3.6.15',
-      'python3.7' => '3.7.13',
+      'python3.7' => '3.7.17',
       'python3.8' => '3.8.13'
     }
   elsif 'focal'.include?(Support.distro)
     vers = {
-      'python3.7' => '3.7.13',
-      'python3.8' => '3.8.13',
-      'python3.9' => '3.9.0'
+      'python3.7' => '3.7.17',
+      'python3.8' => '3.8.18',
+      'python3.9' => '3.9.18'
     }
   end
 

@@ -9,4 +9,3 @@ mysql-client
 postgresql-client
 tmate
 uuid-dev
-ant

@@ -5,7 +5,7 @@ execute 'mariadb_key' do
 end
 
 execute 'mariadb_repo' do
-  command 'sudo add-apt-repository \'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal main\''
+  command 'sudo add-apt-repository \'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/11.2.1/ubuntu focal main\''
 end
 
 execute 'mariadb_install' do

@@ -30,6 +30,9 @@ __enable_i386() {
 }
 
 __install_packages() {
+
+  machine=$(lsb_release -sc)
+
   if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
@@ -42,6 +45,29 @@ __install_packages() {
   if [[ "${PACKER_BUILDER_TYPE}" =~ amazon-ebs ]]; then
     dpkg --remove-architecture i386
   fi
+
+  # Add Perforce packaging key
+  wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
+
+  # Add Perforce repository
+  echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
+
+  # Bionic issues with dubious ownership
+  git config --global --add safe.directory /opt/pyenv
+  
+  # mysql issue
+  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
+  sudo service mysql start
+  fi
+  
+  # Bionic old psql repository
+  sudo rm -f /etc/apt/sources.list.d/pgdg.list
+
+  # Bionic old containered.io
+  sudo apt-get remove containerd.io
+
+  # We are using "used" image of bionic, hence we need to remove lein first and install it again
+  rm -rf /home/travis/.lein/self-installs
 
   apt-get update -yqq
   apt-get install -yqq \
