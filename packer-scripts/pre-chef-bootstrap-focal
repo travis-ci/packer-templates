@@ -66,6 +66,9 @@ __install_packages() {
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
     pip3 install pip setuptools --upgrade
   fi
+
+  # Add the newest rabbitmq source
+  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
 }
 
 __setup_sshd() {

@@ -29,21 +29,6 @@ override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
-# if node['kernel']['machine'] == "x86_64" # Is it required
-# arch = 'amd64'
-# else
-# arch = node['kernel']['machine']
-# end
-
-# version = '7.6.0'
-override['travis_build_environment']['elasticsearch']['version'] = '8.11.1'
-# override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
-
-# if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
-#  override['travis_build_environment']['php_versions'] = []
-#  override['travis_build_environment']['php_default_version'] = []
-#  override['travis_build_environment']['php_aliases'] = {}
-
 # TODO: remove if/when an HHVM version is available on ppc64
 #  override['travis_build_environment']['hhvm_enabled'] = false
 # end
