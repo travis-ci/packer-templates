@@ -107,7 +107,7 @@ override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
 # not yet supported
 override['travis_postgresql']['default_version'] = '12'
-override['travis_postgresql']['alternate_versions'] = %w[]
+override['travis_postgresql']['alternate_versions'] = %w[13]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
 override['travis_build_environment']['pyenv_revision'] = 'v2.3.24'
