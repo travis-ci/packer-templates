@@ -57,7 +57,7 @@ __install_packages() {
   
   # SSH test
   ssh-agent -s
-
+  ssh-add -d
   # mysql issue
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
   sudo service mysql start
