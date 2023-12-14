@@ -56,7 +56,7 @@ __install_packages() {
   git config --global --add safe.directory /opt/pyenv
   
   # SSH test
-  sudo ssh-add -d
+  ssh-agent -s
 
   # mysql issue
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
