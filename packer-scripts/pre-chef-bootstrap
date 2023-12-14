@@ -55,6 +55,9 @@ __install_packages() {
   # Bionic issues with dubious ownership
   git config --global --add safe.directory /opt/pyenv
   
+  # SSH test
+  sudo ssh-add -d
+
   # mysql issue
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
   sudo service mysql start
