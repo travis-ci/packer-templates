@@ -64,6 +64,7 @@ __install_packages() {
     curl \
     gawk \
     git \
+    git-all \
     libelf-dev \
     sudo \
     wget \
