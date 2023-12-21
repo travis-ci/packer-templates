@@ -53,7 +53,7 @@ __install_packages() {
   echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
 
   apt-get clean
-  apt-get update -yqq
+  apt-get update -y
   apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
