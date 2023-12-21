@@ -73,6 +73,18 @@ __install_packages() {
     ${APT_GET_INSTALL_PRE_CHEF}
 }
 
+__setup_git() {
+  mkdir tmp_git
+  cd /tmp
+  curl -o git.tar.gz https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.43.0.tar.gz
+  tar -zxf git.tar.gz
+  cd git-*
+  make prefix=/usr/local all
+  sudo make prefix=/usr/local install
+  cd ..
+  cd ..
+}
+
 __setup_sshd() {
   mkdir -p /var/run/sshd
 
