@@ -66,6 +66,7 @@ __install_packages() {
     gawk \
     git \
     git-all \
+    build-essential \
     libelf-dev \
     sudo \
     wget \
