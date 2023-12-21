@@ -52,27 +52,6 @@ __install_packages() {
   # Add Perforce repository
   echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
 
-  # Bionic issues with dubious ownership
-  git config --global --add safe.directory /opt/pyenv
-  
-  # SSH test
-  ssh-agent -s
-  systemctl restart sshd.service
-  
-  # mysql issue
-  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
-  sudo service mysql start
-  fi
-  
-  # Bionic old psql repository
-  sudo rm -f /etc/apt/sources.list.d/pgdg.list
-
-  # Bionic old containered.io
-  sudo apt-get remove containerd.io
-
-  # We are using "used" image of bionic, hence we need to remove lein first and install it again
-  rm -rf /home/travis/.lein/self-installs
-
   apt-get update -yqq
   apt-get install -yqq \
     --no-install-suggests \
