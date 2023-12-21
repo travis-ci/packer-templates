@@ -68,6 +68,11 @@ main() {
    sudo apt-get update -y
    sudo apt-get install redis -y
    sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
+
+   # Bionic install git
+   if [[ "${dist}" = "bionic" ]]; then
+      sudo apt-get install git-all
+   fi
 }
 
 main "$@"
