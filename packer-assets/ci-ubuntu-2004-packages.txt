@@ -118,6 +118,7 @@ libgdbm-dev
 libgmp3-dev
 libicu-dev
 libjpeg8-dev
+libdbus-1-dev
 libkrb5-dev
 libldap2-dev
 libltdl-dev
@@ -133,6 +134,7 @@ libpng-dev
 libpq5
 libpq-dev
 libreadline-dev
+libpython3-dev
 libsasl2-dev
 libsqlite3-dev
 libssl-dev
