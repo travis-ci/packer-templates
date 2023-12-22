@@ -14,7 +14,7 @@ service 'postgresql' do
 end
 
 service 'postgresql' do
-  action :restart
+  action [:stop, :disable]
 end
 
 template '/etc/postgresql/9.4/main/pg_hba.conf' do
