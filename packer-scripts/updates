@@ -65,6 +65,10 @@ main() {
    if [[ "${dist}" = "bionic" ]]; then
       sudo apt-get install git-all
    fi
+
+   # DPL issue with bundler >2.5.X
+   gem install --default bundler -v 2.4.13
+   gem update --system
 }
 
 main "$@"
