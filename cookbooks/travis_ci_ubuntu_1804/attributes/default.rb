@@ -7,7 +7,7 @@ override['travis_build_environment']['system_python']['pythons'] = %w[3.6]
 override['travis_build_environment']['python_aliases'] = {
   '3.6.15' => %w[3.6],
   '3.7.17' => %w[3.7],
-  '3.8.13' => %w[3.8],
+  '3.8.18' => %w[3.8],
   'pypy3.7-7.3.9' => %w[pypy3]
 }
 php_aliases = {
@@ -81,7 +81,7 @@ override['travis_build_environment']['nodejs_default'] = '16.15.1'
 pythons = %w[
   3.6.15
   3.7.17
-  3.8.13
+  3.8.18
 ]
 
 override['travis_build_environment']['pythons'] = pythons
