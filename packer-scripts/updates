@@ -68,7 +68,6 @@ main() {
 
    # DPL issue with bundler >2.5.X
    gem install --default bundler -v 2.4.13
-   gem update --system
 }
 
 main "$@"
