@@ -7,13 +7,13 @@ apt_repository 'postgresql' do
   key 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
 end
 
-package 'postgresql-13'
+package 'postgresql-12'
 
 service 'postgresql' do
   action [:stop, :disable]
 end
 
-template '/etc/postgresql/13/main/pg_hba.conf' do
+template '/etc/postgresql/12/main/pg_hba.conf' do
   source 'pg_hba.conf.erb'
   owner 'postgres'
   group 'postgres'
