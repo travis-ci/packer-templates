@@ -154,6 +154,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cplusplus
   cpp
   crystal
+  shell
   default
   generic
   go
