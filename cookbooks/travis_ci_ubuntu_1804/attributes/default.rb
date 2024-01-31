@@ -66,8 +66,9 @@ else
     openjdk9
     openjdk10
     openjdk11
+    openjdk17
   ]
-  override['travis_jdk']['default'] = 'openjdk11'
+  override['travis_jdk']['default'] = 'openjdk17'
 end
 
 override['leiningen']['home'] = '/home/travis'
