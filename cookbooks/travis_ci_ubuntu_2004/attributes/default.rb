@@ -5,6 +5,7 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
+  '3.12.0' => %w[3.12],
   '3.9.18' => %w[3.9],
   '3.8.18' => %w[3.8],
   '3.7.17' => %w[3.7],
@@ -16,6 +17,7 @@ pythons = %w[
   3.7.17
   3.8.18
   3.9.18
+  3.12.0
 ]
 override['travis_build_environment']['pythons'] = pythons
 
@@ -51,10 +53,9 @@ override['travis_jdk']['versions'] = %w[
   openjdk9
   openjdk10
   openjdk11
-  openjdk17
 ]
   
-override['travis_jdk']['default'] = 'openjdk17'
+override['travis_jdk']['default'] = 'openjdk11'
 
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'

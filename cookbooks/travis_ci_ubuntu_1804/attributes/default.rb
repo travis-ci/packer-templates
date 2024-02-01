@@ -8,6 +8,7 @@ override['travis_build_environment']['python_aliases'] = {
   '3.6.15' => %w[3.6],
   '3.7.17' => %w[3.7],
   '3.8.18' => %w[3.8],
+  '3.12.0' => %w[3.12],
   'pypy3.7-7.3.9' => %w[pypy3]
 }
 php_aliases = {
@@ -66,9 +67,8 @@ else
     openjdk9
     openjdk10
     openjdk11
-    openjdk17
   ]
-  override['travis_jdk']['default'] = 'openjdk17'
+  override['travis_jdk']['default'] = 'openjdk11'
 end
 
 override['leiningen']['home'] = '/home/travis'
@@ -83,6 +83,7 @@ pythons = %w[
   3.6.15
   3.7.17
   3.8.18
+  3.12.0
 ]
 
 override['travis_build_environment']['pythons'] = pythons
