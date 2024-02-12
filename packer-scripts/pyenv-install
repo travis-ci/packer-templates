@@ -5,7 +5,7 @@ set -o xtrace
 
 main() {
 
-   Install pyenv-update plugin
+   # Install pyenv-update plugin
    git config --global --add safe.directory /opt/pyenv
    cd /opt/pyenv/bin/
    git checkout master
