@@ -61,7 +61,7 @@ __install_packages() {
     ${APT_GET_INSTALL_PRE_CHEF}
 
   # Install missing distutils
-  python3 -m pip install setuptools
+  sudo python3 -m pip install setuptools
 
   # link python ##TODO move this to chef
   if ! [ -x "$(command -v python)" ]; then
