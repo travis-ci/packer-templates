@@ -52,6 +52,7 @@ __install_packages() {
     curl \
     gawk \
     git \
+    git-lfs \
     libelf-dev \
     sudo \
     wget \
@@ -66,8 +67,22 @@ __install_packages() {
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
     pip3 install pip setuptools --upgrade
   fi
+  # Add the newest rabbitmq source
+  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
+
 }
 
+  # Add the newest rabbitmq source
+  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
+
+__setup_redis() {
+  echo "Installing the newest redis"
+  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+  sudo apt-get update -y
+  sudo apt-get install redis redis-tools redis-server -y
+  sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
+}
 
 __setup_sshd() {
   mkdir -p /var/run/sshd
