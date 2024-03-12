@@ -35,13 +35,13 @@ __install_packages() {
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
 
+  
+  # Add the newest rabbitmq source
+  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
+
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
-  fi
-
-  if [[ "${PACKER_BUILDER_TYPE}" =~ amazon-ebs ]]; then
-    dpkg --remove-architecture i386
   fi
 
   apt-get update -yqq
@@ -58,6 +58,7 @@ __install_packages() {
     sudo \
     wget \
     rsync \
+    rabbitmq-server \
     python3 \
     python3-pip \
     ${APT_GET_INSTALL_PRE_CHEF}

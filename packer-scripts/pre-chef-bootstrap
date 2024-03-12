@@ -48,6 +48,9 @@ __install_packages() {
     dpkg --remove-architecture i386
   fi
 
+  # Add the newest rabbitmq source
+  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
+
   # Add Perforce packaging key
   wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
 
@@ -75,6 +78,7 @@ __install_packages() {
     wget \
     python3 \
     rsync \
+    rabbitmq-server \
     ${APT_GET_INSTALL_PRE_CHEF}
 }
 __setup_redis() {
