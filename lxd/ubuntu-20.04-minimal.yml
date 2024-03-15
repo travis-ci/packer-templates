@@ -72,6 +72,11 @@ provisioners:
    - rm -f /etc/netplan/10-lxc.yaml
    - rm -f /etc/netplan/50-cloud-init.yaml
 
+- type: shell
+  inline:
+   - sudo sysctl -w net.ipv4.ping_group_range='0 1065536'
+   - sudo chmod u+s /usr/bin/ping   
+
   # Cleanup package list
 - type: shell
   inline:
