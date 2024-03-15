@@ -74,7 +74,7 @@ provisioners:
 
 - type: shell
   inline:
-   - sudo sysctl -w net.ipv4.ping_group_range='0 4294967295'
+   - sudo sysctl -w net.ipv4.ping_group_range='0 1165536'
    - sudo chmod u+s /usr/bin/ping
 
   # Cleanup package list
