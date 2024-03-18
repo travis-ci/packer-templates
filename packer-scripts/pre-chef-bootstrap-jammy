@@ -68,9 +68,6 @@ __install_packages() {
 
 }
 
-  # Add the newest rabbitmq source
-  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
-
 __setup_redis() {
   echo "Installing the newest redis"
   curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
