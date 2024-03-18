@@ -17,7 +17,7 @@ override['travis_build_environment']['python_aliases'] = {
 pythons = %w[
   3.7.13
   3.8.3
-  3.10.6
+  3.10.5
   3.12.0
 ]
 override['travis_build_environment']['pythons'] = pythons
