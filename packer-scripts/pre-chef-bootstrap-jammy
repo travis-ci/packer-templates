@@ -31,9 +31,6 @@ __enable_i386() {
 
 __install_packages() {
 
-  # Add the newest rabbitmq source
-  curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
-
   if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
     APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
   fi
