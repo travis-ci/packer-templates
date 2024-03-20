@@ -60,14 +60,14 @@ __install_packages() {
     ${APT_GET_INSTALL_PRE_CHEF}
 
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  python3.10 get-pip.py 
+  python3.10 get-pip.py --user travis
 
-  # link python ##TODO move this to chef
-  if ! [ -x "$(command -v python)" ]; then
-    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-    pip3 install pip setuptools --upgrade
-  fi
+  # # link python ##TODO move this to chef
+  # if ! [ -x "$(command -v python)" ]; then
+  #   update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+  #   update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+  #   pip3 install pip setuptools --upgrade
+  # fi
 
 }
 
