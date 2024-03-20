@@ -48,6 +48,7 @@ __install_packages() {
     cron \
     curl \
     gawk \
+    python-pip \
     git \
     git-lfs \
     libelf-dev \
