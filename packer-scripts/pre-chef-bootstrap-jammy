@@ -48,7 +48,6 @@ __install_packages() {
     cron \
     curl \
     gawk \
-    python-pip \
     git \
     git-lfs \
     libelf-dev \
@@ -59,6 +58,9 @@ __install_packages() {
     python3 \
     python3-pip \
     ${APT_GET_INSTALL_PRE_CHEF}
+
+  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+  python3.10 get-pip.py 
 
   # link python ##TODO move this to chef
   if ! [ -x "$(command -v python)" ]; then
