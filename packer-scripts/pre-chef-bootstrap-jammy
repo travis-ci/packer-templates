@@ -60,9 +60,10 @@ __install_packages() {
     ${APT_GET_INSTALL_PRE_CHEF}
 
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  python3.12 get-pip.py
-  apt install -y python3.12-distutils
-  
+  python3.110 get-pip.py
+  pip3 install setuptools --upgrade
+  pip install setuptools --upgrade
+
   # # link python ##TODO move this to chef
   # if ! [ -x "$(command -v python)" ]; then
   #   update-alternatives --install /usr/bin/python python /usr/bin/python3 1
