@@ -63,12 +63,11 @@ __install_packages() {
   python3.10 get-pip.py
   pip install setuptools --upgrade
 
-  # # link python ##TODO move this to chef
-  # if ! [ -x "$(command -v python)" ]; then
-  #   update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-  #   update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-  #   pip3 install pip setuptools --upgrade
-  # fi
+  # link python ##TODO move this to chef
+  if ! [ -x "$(command -v python)" ]; then
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+  fi
 
 }
 
