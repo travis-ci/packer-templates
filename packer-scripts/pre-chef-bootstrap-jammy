@@ -60,8 +60,8 @@ __install_packages() {
     ${APT_GET_INSTALL_PRE_CHEF}
 
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  apt install -y python3.10-distutils
-  python3.10 get-pip.py --user travis
+  apt install -y python3.12-distutils
+  python3.10 get-pip.py
 
   # # link python ##TODO move this to chef
   # if ! [ -x "$(command -v python)" ]; then
