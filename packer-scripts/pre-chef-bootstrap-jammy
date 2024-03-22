@@ -60,7 +60,7 @@ __install_packages() {
     ${APT_GET_INSTALL_PRE_CHEF}
 
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  python3.110 get-pip.py
+  python3.10 get-pip.py
   pip3 install setuptools --upgrade
   pip install setuptools --upgrade
 
