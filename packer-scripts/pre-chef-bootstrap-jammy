@@ -61,7 +61,6 @@ __install_packages() {
 
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   python3.10 get-pip.py
-  pip3 install setuptools --upgrade
   pip install setuptools --upgrade
 
   # # link python ##TODO move this to chef
