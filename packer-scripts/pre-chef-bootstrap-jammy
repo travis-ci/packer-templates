@@ -41,6 +41,7 @@ __install_packages() {
   fi
 
   apt-get update -yqq
+  apt-get upgrade -y \
   apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
