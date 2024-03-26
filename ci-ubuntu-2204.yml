@@ -83,7 +83,7 @@ provisioners:
   only:
   - googlecompute
 - type: shell
-  inline: apt-get update -yqq && apt-get install sudo -yqq
+  inline: apt-get update -yqq && apt-get install sudo -yqq && apt-get upgrade -y
   # Delay script execution until after /sbin/init has cleared out /tmp,
   # otherwise the uploaded script gets deleted before it can be run.
   # TODO: Decide if the container startup command should be /bin/bash and the
