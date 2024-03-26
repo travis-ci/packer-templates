@@ -60,8 +60,8 @@ __install_packages() {
     python3-pip \
     ${APT_GET_INSTALL_PRE_CHEF}
 
-  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  python3.10 get-pip.py
+  # curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+  # python3.10 get-pip.py
   pip install setuptools --upgrade
 
   # link python ##TODO move this to chef
