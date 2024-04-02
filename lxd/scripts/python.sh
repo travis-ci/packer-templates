@@ -32,6 +32,8 @@ __install_packages() {
     libreadline-dev \
     libsqlite3-dev \
     libssl-dev \
+    libffi-dev \
+    libbz2dev \
     llvm \
     make \
     tk-dev \
