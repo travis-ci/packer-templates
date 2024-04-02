@@ -71,7 +71,6 @@ if [[ $dist = "jammy" ]]; then
   rvm install ruby-2.7.6 --autolibs=enable --fuzzy
 else
 rvm install ruby-2.7.6 --autolibs=enable --fuzzy
-rvm install ruby-2.6.10 --autolibs=enable --fuzzy
 fi
 rvm use default
 gem i bundler
