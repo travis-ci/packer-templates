@@ -63,6 +63,7 @@ source "$HOME/.rvm/scripts/rvm"
 # Ruby 3.X.X causes isuess with DPL
 arch=$(uname -m)
 dist=$(lsb_release -sc)
+chmod -R a+w /var/lib/gems/
 # if [[ $arch = "s390x" ]]; then
 #   gem install bundler -v 2.5.6
 #   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
