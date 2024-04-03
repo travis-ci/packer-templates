@@ -76,6 +76,14 @@ __install_pyenv() {
   export PATH="$PATH:${install_dir}/bin"
   export PYENV_ROOT="${install_dir}"
 
+  # Install pyenv-update addon
+  pyenv -v
+  git config --global --add safe.directory /opt/pyenv
+  cd /opt/pyenv/bin/
+  git checkout master
+  git clone https://github.com/pyenv/pyenv-update.git $(pyenv root)/plugins/pyenv-update
+  pyenv update
+
   #echo 'export PYENV_ROOT="${install_dir}"' >> ~/.bash_profile
   #echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
 }
@@ -97,7 +105,7 @@ __install_default_python() {
   if [[ "${dist}" = "xenial" ]]; then
   pyenv install 3.11.9
   else
-  pyenv install 3.12.4
+  pyenv install 3.12.2
   fi
 }
 
