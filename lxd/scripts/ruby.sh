@@ -78,7 +78,7 @@ else
   rvm install ruby-2.7.6 --autolibs=enable --fuzzy
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 fi
-rvm use default
+rvm use 2.7.6
 gem i bundler
 
 # Fix permissions for common-lib.sh for minimal image
