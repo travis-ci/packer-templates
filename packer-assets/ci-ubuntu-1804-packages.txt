@@ -118,6 +118,7 @@ libffi-dev
 libfreetype6-dev
 libgdbm-dev
 libgmp3-dev
+libonig-dev
 libicu-dev
 libjpeg8-dev
 libkrb5-dev

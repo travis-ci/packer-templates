@@ -7,7 +7,8 @@ override['travis_build_environment']['system_python']['pythons'] = %w[3.6]
 override['travis_build_environment']['python_aliases'] = {
   '3.6.15' => %w[3.6],
   '3.7.17' => %w[3.7],
-  '3.8.13' => %w[3.8],
+  '3.8.18' => %w[3.8],
+  '3.12.0' => %w[3.12],
   'pypy3.7-7.3.9' => %w[pypy3]
 }
 php_aliases = {
@@ -81,14 +82,14 @@ override['travis_build_environment']['nodejs_default'] = '16.15.1'
 pythons = %w[
   3.6.15
   3.7.17
-  3.8.13
+  3.8.18
+  3.12.0
 ]
 
 override['travis_build_environment']['pythons'] = pythons
 
 rubies = %w[
   2.5.9
-  2.6.9
   2.7.6
   3.1.2
 ]
@@ -111,6 +112,10 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '5.3'
+
+override['travis_build_environment']['packer']['amd64']['version'] = '1.9.4'
+override['travis_build_environment']['packer']['amd64']['checksum'] = \
+'6cd5269c4245aa8c99e551d1b862460d63fe711c58bec618fade25f8492e80d9'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 
@@ -151,6 +156,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cplusplus
   cpp
   crystal
+  shell
   default
   generic
   go

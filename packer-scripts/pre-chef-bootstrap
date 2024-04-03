@@ -15,6 +15,8 @@ main() {
     __enable_i386
   fi
   __install_packages
+  __setup_redis
+  __setup_git
   __setup_sshd
   __setup_travis_user
   __write_pre_chef_env
@@ -51,25 +53,11 @@ __install_packages() {
 
   # Add Perforce repository
   echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
-
-  # Bionic issues with dubious ownership
-  git config --global --add safe.directory /opt/pyenv
   
-  # mysql issue
-  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
-  sudo service mysql start
-  fi
-  
-  # Bionic old psql repository
-  sudo rm -f /etc/apt/sources.list.d/pgdg.list
-
-  # Bionic old containered.io
-  sudo apt-get remove containerd.io
-
-  # We are using "used" image of bionic, hence we need to remove lein first and install it again
-  rm -rf /home/travis/.lein/self-installs
-
-  apt-get update -yqq
+  apt-get clean
+  apt-get autoclean -y
+  apt-get autoremove -y
+  apt-get update -y
   apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
@@ -78,12 +66,36 @@ __install_packages() {
     curl \
     gawk \
     git \
+    make \
+    git-all \
+    build-essential \
     libelf-dev \
     sudo \
     wget \
     python3 \
     rsync \
+    rabbitmq-server \
     ${APT_GET_INSTALL_PRE_CHEF}
+}
+__setup_redis() {
+  echo "Installing the newest redis"
+  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+  sudo apt-get update -y
+  sudo apt-get install redis redis-tools redis-server -y
+  sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
+}
+__setup_git() {
+  apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
+  mkdir tmp_git
+  cd /tmp
+  curl -o git.tar.gz https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.43.0.tar.gz
+  tar -zxf git.tar.gz
+  cd git-*
+  make prefix=/usr/local all
+  sudo make prefix=/usr/local install
+  cd ..
+  cd ..
 }
 
 __setup_sshd() {

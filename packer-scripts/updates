@@ -6,13 +6,16 @@ set -o xtrace
 main() {
 
    dist=$(lsb_release -cs)
-   # Main update
+   echo "Appling main updates"
    apt-get update -yqq
    apt-get dist-upgrade -y
    apt full-upgrade -y
    # Uninstall old kernels (yes they are still there) - use it to uninstall when needed
+   echo "Uninstalling old kernel modules"
    if [[ "${dist}" = "focal" ]]; then
    apt-get remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-87-generic linux-modules-5.15.0-1045-gcp linux-gcp-headers-5.4.0-1116 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-84-generic linux-modules-5.15.0-1044-gcp linux-modules-5.4.0-165-generic
+   # Installing updated kernel modules
+   echo "Installing updated kernel modules"
    apt-get install -yqq --no-install-suggests --no-install-recommends \
    linux-gcp-headers-5.4.0-1117 \
    linux-modules-5.15.0-1046-gcp \
@@ -43,13 +46,26 @@ main() {
    # # Remove system-package installed python packages
    # apt-get remove --purge python3-setuptools -y
 
-   # # Python update
+   echo "Appling python updates"
    # wget https://bootstrap.pypa.io/get-pip.py
    # sudo python3 get-pip.py
    pip install pip-review
    pip-review --auto
+
+   echo "Appling docker buildx fix"
+   sudo install -m 0755 -d /etc/apt/keyrings
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   sudo chmod a+r /etc/apt/keyrings/docker.gpg
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   sudo apt-get update -y
+   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
    #pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy
 
+   # Bionic install git
+   if [[ "${dist}" = "bionic" ]]; then
+      sudo apt-get install git-all
+   fi
+   
 }
 
 main "$@"

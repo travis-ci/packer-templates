@@ -7,13 +7,13 @@ apt_repository 'postgresql' do
   key 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
 end
 
-package 'postgresql-12'
+package 'postgresql-13'
 
 service 'postgresql' do
   action [:stop, :disable]
 end
 
-template '/etc/postgresql/12/main/pg_hba.conf' do
+template '/etc/postgresql/13/main/pg_hba.conf' do
   source 'pg_hba.conf.erb'
   owner 'postgres'
   group 'postgres'
@@ -24,6 +24,3 @@ execute 'change_log_dir_permissions' do
   command 'sudo chmod -R 777 /var/log/postgresql'
 end
 
-apt_repository 'postgresql' do
-  action :remove
-end

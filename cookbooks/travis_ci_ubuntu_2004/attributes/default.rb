@@ -5,6 +5,7 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
+  '3.12.0' => %w[3.12],
   '3.9.18' => %w[3.9],
   '3.8.18' => %w[3.8],
   '3.7.17' => %w[3.7],
@@ -16,6 +17,7 @@ pythons = %w[
   3.7.17
   3.8.18
   3.9.18
+  3.12.0
 ]
 override['travis_build_environment']['pythons'] = pythons
 
@@ -28,21 +30,6 @@ php_aliases = {
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
 override['travis_build_environment']['php_aliases'] = php_aliases
-
-# if node['kernel']['machine'] == "x86_64" # Is it required
-# arch = 'amd64'
-# else
-# arch = node['kernel']['machine']
-# end
-
-# version = '7.6.0'
-override['travis_build_environment']['elasticsearch']['version'] = '8.11.1'
-# override['travis_build_environment']['elasticsearch']['package_name'] = "elasticsearch-#{version}-#{arch}.deb"
-
-# if node['kernel']['machine'] == 'ppc64le' # consider removing, for ppc64le creation we use bash scripts
-#  override['travis_build_environment']['php_versions'] = []
-#  override['travis_build_environment']['php_default_version'] = []
-#  override['travis_build_environment']['php_aliases'] = {}
 
 # TODO: remove if/when an HHVM version is available on ppc64
 #  override['travis_build_environment']['hhvm_enabled'] = false
@@ -120,9 +107,11 @@ override['travis_build_environment']['packer']['amd64']['checksum'] = \
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
+override['travis_build_environment']['firefox_version'] = '99.0'
+
 # not yet supported
 override['travis_postgresql']['default_version'] = '12'
-override['travis_postgresql']['alternate_versions'] = %w[]
+override['travis_postgresql']['alternate_versions'] = %w[13]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
 override['travis_build_environment']['pyenv_revision'] = 'v2.3.24'
@@ -170,6 +159,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   python
   generic
   go
+  shell
   java
   php
   node_js
