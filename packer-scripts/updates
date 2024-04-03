@@ -35,11 +35,11 @@ main() {
    # linux-gcp-headers-5.4.0-1113
    
    # Install pyenv-update plugin
-   # git config --global --add safe.directory /opt/pyenv
-   # cd /opt/pyenv/bin/
-   # git checkout master
-   # git clone https://github.com/pyenv/pyenv-update.git $(pyenv root)/plugins/pyenv-update
-   # pyenv update
+   git config --global --add safe.directory /opt/pyenv
+   cd /opt/pyenv/bin/
+   git checkout master
+   git clone https://github.com/pyenv/pyenv-update.git $(pyenv root)/plugins/pyenv-update
+   pyenv update
    # apt-get autoremove -y
    # apt-get clean -y
 
