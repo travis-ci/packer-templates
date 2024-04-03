@@ -67,11 +67,11 @@ if [[ $arch = "s390x" ]]; then
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 fi
 if [[ $dist = "jammy" ]]; then
-  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
   rvm install ruby-2.7.6 --autolibs=enable --fuzzy
+  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 else
-rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 rvm install ruby-2.7.6 --autolibs=enable --fuzzy
+rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 fi
 rvm use default
 gem i bundler

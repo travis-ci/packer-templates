@@ -90,10 +90,15 @@ __install_virtualenv() {
 
 __install_default_python() {
 
+  dist=$(lsb_release -cs)
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --with-ssl --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
   
-  pyenv install 3.12.0
+  if [[ "${dist}" = "xenial" ]]; then
+  pyenv install 3.11.9
+  else
+  pyenv install 3.12.4
+  fi
 }
 
 __setup_system_site_packages_xenial(){
