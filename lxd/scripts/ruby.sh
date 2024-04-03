@@ -64,12 +64,14 @@ source "$HOME/.rvm/scripts/rvm"
 arch=$(uname -m)
 dist=$(lsb_release -sc)
 if [[ $arch = "s390x" ]]; then
+  gem install bundler -v 2.5.6
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 fi
 if [[ $dist = "jammy" ]]; then
   rvm install ruby-2.7.6 --autolibs=enable --fuzzy
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 else
+gem install bundler -v 2.5.6
 rvm install ruby-2.7.6 --autolibs=enable --fuzzy
 rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 fi
