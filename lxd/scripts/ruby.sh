@@ -68,10 +68,12 @@ dist=$(lsb_release -sc)
 #   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 # fi
 if [[ $dist = "jammy" ]]; then
+  gem install bundler -v 2.4.22
   rvm pkg install openssl
   rvm install 2.7.6 --with-openssl-dir=$HOME/.rvm/usr
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 else
+  gem install bundler -v 2.4.22
   gem install bundler -v 2.5.6
   rvm install ruby-2.7.6 --autolibs=enable --fuzzy
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
