@@ -63,17 +63,18 @@ source "$HOME/.rvm/scripts/rvm"
 # Ruby 3.X.X causes isuess with DPL
 arch=$(uname -m)
 dist=$(lsb_release -sc)
-if [[ $arch = "s390x" ]]; then
-  gem install bundler -v 2.5.6
-  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
-fi
+# if [[ $arch = "s390x" ]]; then
+#   gem install bundler -v 2.5.6
+#   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
+# fi
 if [[ $dist = "jammy" ]]; then
-  rvm install ruby-2.7.6 --autolibs=enable --fuzzy
+  rvm pkg install openssl
+  rvm install 2.7.6 --with-openssl-dir=$HOME/.rvm/usr
   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 else
-gem install bundler -v 2.5.6
-rvm install ruby-2.7.6 --autolibs=enable --fuzzy
-rvm install ruby-3.1.2 --autolibs=enable --fuzzy
+  gem install bundler -v 2.5.6
+  rvm install ruby-2.7.6 --autolibs=enable --fuzzy
+  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
 fi
 rvm use default
 gem i bundler
