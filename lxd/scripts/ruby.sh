@@ -64,6 +64,7 @@ source "$HOME/.rvm/scripts/rvm"
 arch=$(uname -m)
 dist=$(lsb_release -sc)
 sudo chmod -R a+w /var/lib/gems/
+sudo chmod -R a+w /usr/local/bin
 # if [[ $arch = "s390x" ]]; then
 #   gem install bundler -v 2.5.6
 #   rvm install ruby-3.1.2 --autolibs=enable --fuzzy
