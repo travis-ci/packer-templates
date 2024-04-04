@@ -103,7 +103,7 @@ __install_default_python() {
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
   
   if [[ "${dist}" = "xenial" ]]; then
-  pyenv install 3.11.9
+  pyenv install 3.10.14
   else
   pyenv install 3.12.2
   fi
