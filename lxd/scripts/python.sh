@@ -102,8 +102,9 @@ __install_default_python() {
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --with-ssl --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
   
+  # openssl issue in xenial with new versions
   if [[ "${dist}" = "xenial" ]]; then
-  pyenv install 3.10.14
+  pyenv install 3.8.8
   else
   pyenv install 3.12.2
   fi
