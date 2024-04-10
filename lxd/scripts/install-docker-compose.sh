@@ -23,7 +23,7 @@ __install_docker_composer() {
   cat <<'EOF' >>docker_func
   #!/usr/bin/env bash
     main() {
-      if [ "$1" = "run" ]; then
+      if [ "$2" = "run" ]; then
           shift
           command docker run -t -v /proc/cpuinfo:/proc/cpuinfo:rw -v /proc/meminfo:/proc/meminfo:rw -v /proc/stat:/proc/stat:rw "$@"
       else
