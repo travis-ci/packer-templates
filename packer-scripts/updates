@@ -48,8 +48,10 @@ main() {
    # Focal install python modules
    if [[ "${dist}" = "focal" ]]; then
       pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy pip-review
+      pip-review --auto
    else
-      pip install --upgrade pip-review --auto
+      pip install --upgrade pip-review
+      pip-review --auto
    fi
 
    echo "Appling docker buildx fix"
