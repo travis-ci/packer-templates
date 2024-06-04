@@ -35,17 +35,9 @@ __install_packages() {
 
   machine=$(lsb_release -sc)
 
-  if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
-    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
-  fi
-
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
-  fi
-
-  if [[ "${PACKER_BUILDER_TYPE}" =~ amazon-ebs ]]; then
-    dpkg --remove-architecture i386
   fi
 
   # Add Perforce packaging key
@@ -66,6 +58,7 @@ __install_packages() {
     curl \
     gawk \
     git \
+    git-lfs \
     make \
     git-all \
     build-essential \

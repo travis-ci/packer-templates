@@ -72,7 +72,7 @@ describe 'python environment' do
     }
   elsif 'focal'.include?(Support.distro)
     vers = {
-      'python3.7' => '3.7.13',
+      'python3.7' => '3.7.17',
       'python3.8' => '3.8.18',
       'python3.9' => '3.9.18',
       'python3.12' => '3.12.0'

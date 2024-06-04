@@ -15,24 +15,6 @@ variables:
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
   travis_source_ami: "{{ env `TRAVIS_SOURCE_AMI` }}"
 builders:
-- type: amazon-ebs
-  name: amazon-ebs
-  access_key: "{{ user `aws_access_key` }}"
-  secret_key: "{{ user `aws_secret_key` }}"
-  region: us-east-1
-  source_ami: "{{ user `travis_source_ami` }}"
-  ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_ami_name }}
-  instance_type: m6g.xlarge
-  ssh_username: ubuntu
-  ami_virtualization_type: hvm
-  tags:
-    role: worker
-  associate_public_ip_address: true
-  subnet_id: "{{ user `travis_subnet_id` }}"
-  vpc_id: "{{ user `travis_vpc_id` }}"
-  source_ami_filter:
-    owners:
-    - 099720109477
 - type: googlecompute
   name: googlecompute
   communicator: ssh
@@ -102,7 +84,6 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
-  - lxd
 - type: file
   source: packer-assets/ci-ubuntu-2004-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -119,35 +100,6 @@ provisioners:
   only:
   - docker
   - googlecompute
-  - lxd
-- type: shell
-  inline: "uname -a"
-  only:
-  - amazon-ebs
-  - lxd
-  # Recommendations for lxd images
-- type: shell
-  inline: "systemctl mask sys-kernel-config.mount"
-  only:
-  - lxd
-- type: shell
-  inline: "systemctl mask systemd-modules-load.service"
-  only:
-  - lxd
-- type: shell
-  inline: sleep 25
-  # Delay command 'snap install' execution. Problem with snap install core. Workaround : error: too early for operation, device not yet seeded..."
-  only:
-  - lxd
-- type: shell
-  inline: "apt install snapd -y && snap install core"
-  only:
-  - lxd
-- type: shell
-  inline: "apt-get remove --purge cloud-init --yes"
-  only:
-  - lxd
-  # end Recommendations
 - type: shell
   scripts: 
   - packer-scripts/couchdb_pre_config # couchdb template for version 3.2.2
@@ -168,7 +120,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/ubuntu-2004-system-info-commands.yml
 - type: chef-solo
-  version: 17.10.3
+  version: 18.4.12
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
@@ -216,19 +168,21 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-  #- type: shell
-  #  environment_vars:
-  #  - TRAVIS_OBFUSCATE_PASSWORD=1
-  #  - TRAVIS_UID={{ user `travis_uid` }}
-  #  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-  #  inline:
-  #  - "find /etc/systemd -type f -o -type l"
-  #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
-  #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
+# - type: shell
+#   environment_vars:
+#   - TRAVIS_OBFUSCATE_PASSWORD=1
+#   - TRAVIS_UID={{ user `travis_uid` }}
+#   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+#   inline:
+#   - "find /etc/systemd -type f -o -type l"
+#   - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
+#   - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
 - type: shell
   inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
 - type: shell
-  inline: "ls -lah /opt/couchdb/" 
+  inline: "ls -lah /opt/couchdb/"
+- type: shell
+  inline: "sudo ssh-keygen -A && sudo dpkg-reconfigure openssh-server && sudo cat /etc/ssh/sshd_config"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball

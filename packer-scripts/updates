@@ -7,49 +7,44 @@ main() {
 
    dist=$(lsb_release -cs)
    echo "Appling main updates"
-   apt-get update -yqq
-   apt-get dist-upgrade -y
-   apt full-upgrade -y
-   # Uninstall old kernels (yes they are still there) - use it to uninstall when needed
+   apt update -yqq
    echo "Uninstalling old kernel modules"
-   if [[ "${dist}" = "focal" ]]; then
-   apt-get remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-87-generic linux-modules-5.15.0-1045-gcp linux-gcp-headers-5.4.0-1116 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-84-generic linux-modules-5.15.0-1044-gcp linux-modules-5.4.0-165-generic
+   dpkg --list | grep linux-image | awk '{ print $2 }' | sort -V | sed -n '/'`uname -r`'/q;p' | xargs sudo apt-get -y purge
+   apt purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
+
+   apt full-upgrade -y
+   apt install linux-headers-generic -y
+   # Uninstall old kernels (yes they are still there) - use it to uninstall when needed
+   #if [[ "${dist}" = "focal" ]]; then
+   #apt remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-87-generic linux-modules-5.15.0-1045-gcp linux-gcp-headers-5.4.0-1116 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-84-generic linux-modules-5.15.0-1044-gcp linux-modules-5.4.0-165-generic
    # Installing updated kernel modules
    echo "Installing updated kernel modules"
-   apt-get install -yqq --no-install-suggests --no-install-recommends \
-   linux-gcp-headers-5.4.0-1117 \
-   linux-modules-5.15.0-1046-gcp \
-   linux-modules-5.15.0-89-generic \
-   linux-headers-generic \
-   linux-image-gcp \
-   linux-image-generic
+   # apt install -yqq --no-install-suggests --no-install-recommends \
+   # linux-gcp-headers-5.4.0-1117 \
+   # linux-modules-5.15.0-1046-gcp \
+   # linux-modules-5.15.0-89-generic \
+   # linux-headers-generic \
+   # linux-image-gcp \
+   # linux-image-generic
    #elif [[ "${dist}" = "bionic" ]]; then
-   #apt-get remove -y linux-modules-5.4.0-1080
-   #apt-get install -yqq --no-install-suggests --no-install-recommends \
+   #apt remove -y linux-modules-5.4.0-1080
+   #apt install -yqq --no-install-suggests --no-install-recommends \
    #linux-modules-5.4.0-1106
-   fi
+   #fi
    # linux-modules-5.15.0-87-generic \
    # linux-modules-5.15.0-1044-gcp \
    # linux-gcp-5.15-headers-5.15.0-1044 \
    # linux-modules-5.15.0-1044-gcp \
    # linux-gcp-headers-5.4.0-1113
-   
-   # Install pyenv-update plugin
-   git config --global --add safe.directory /opt/pyenv
-   cd /opt/pyenv/bin/
-   git checkout master
-   git clone https://github.com/pyenv/pyenv-update.git $(pyenv root)/plugins/pyenv-update
-   pyenv update
-   # apt-get autoremove -y
-   # apt-get clean -y
+
 
    # # Remove system-package installed python packages
-   # apt-get remove --purge python3-setuptools -y
+   # apt remove --purge python3-setuptools -y
 
    echo "Appling python updates"
    # wget https://bootstrap.pypa.io/get-pip.py
    # sudo python3 get-pip.py
-   pip install pip-review
+   pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy pip-review
    pip-review --auto
 
    echo "Appling docker buildx fix"
@@ -57,15 +52,31 @@ main() {
    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
    sudo chmod a+r /etc/apt/keyrings/docker.gpg
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-   sudo apt-get update -y
-   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+   sudo apt update -y
+   sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
    #pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy
 
    # Bionic install git
    if [[ "${dist}" = "bionic" ]]; then
-      sudo apt-get install git-all
+      sudo apt install git-all
    fi
-   
-}
 
-main "$@"
+   # SSH changes
+   #apt install openssh-server --reinstall
+   # ssh-keygen -A
+   # dpkg-reconfigure openssh-server
+
+   # sudo echo 'PubkeyAcceptedKeyTypes +ssh-rsa' >> /etc/ssh/sshd_config
+   # sudo echo 'HostKeyAlgorithms +ssh-rsa' >> /etc/ssh/sshd_config
+
+   # echo "## Stopping GCE cert refresh... (stops currently running instances)"
+   # systemctl stop gce-workload-cert-refresh.timer
+   # systemctl stop gce-workload-cert-refresh.service
+
+   # echo "## Disable GCE cert refresh... (prevents instance from coming back after restart)"
+   # systemctl disable gce-workload-cert-refresh.timer
+   # systemctl disable gce-workload-cert-refresh.service
+
+   # d /run/sshd 0755 root root
+
+}

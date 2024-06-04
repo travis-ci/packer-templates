@@ -31,16 +31,16 @@ __enable_i386() {
 }
 
 __install_packages() {
-  if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
-    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
-  fi
 
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
   fi
 
-  apt-get update -yqq
+  apt-get clean
+  apt-get autoclean -y
+  apt-get autoremove -y
+  apt-get update -y
   apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
@@ -52,7 +52,10 @@ __install_packages() {
     git-lfs \
     libelf-dev \
     sudo \
+    build-essential \
+    make \
     wget \
+    pollinate \
     rsync \
     rabbitmq-server \
     python3 \
@@ -82,6 +85,8 @@ __setup_sshd() {
   if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
     echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
   fi
+  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
+  echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
 }
 
 __setup_travis_user() {

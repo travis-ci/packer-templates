@@ -42,9 +42,6 @@ gimme_versions = %w[
   1.11.1
 ]
 
-override['travis_build_environment']['shfmt_url'] = 'https://github.com/mvdan/sh/releases/download/v3.7.0/shfmt_v3.7.0_linux_amd64'
-default['travis_build_environment']['shfmt_checksum'] = '0264c424278b18e22453fe523ec01a19805ce3b8ebf18eaf3aadc1edc23f42e3'
-
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
@@ -101,9 +98,9 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '6.5.2'
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.9.4'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.0'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'6cd5269c4245aa8c99e551d1b862460d63fe711c58bec618fade25f8492e80d9'
+'dcac06a4c671bbb71e916da5abe947ebf4d6aa35c197e21c7c7b1d68cb8b7cad'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 

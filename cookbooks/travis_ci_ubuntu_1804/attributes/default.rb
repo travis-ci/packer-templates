@@ -113,9 +113,9 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '5.3'
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.9.4'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.0'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'6cd5269c4245aa8c99e551d1b862460d63fe711c58bec618fade25f8492e80d9'
+'dcac06a4c671bbb71e916da5abe947ebf4d6aa35c197e21c7c7b1d68cb8b7cad'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 
