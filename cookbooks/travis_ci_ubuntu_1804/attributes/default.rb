@@ -76,6 +76,7 @@ override['leiningen']['user'] = 'travis'
 
 override['travis_build_environment']['nodejs_versions'] = %w[
   16.15.1
+  18.20.3
 ]
 override['travis_build_environment']['nodejs_default'] = '16.15.1'
 
