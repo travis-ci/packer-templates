@@ -44,8 +44,13 @@ main() {
    echo "Appling python updates"
    # wget https://bootstrap.pypa.io/get-pip.py
    # sudo python3 get-pip.py
-   pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy pip-review
-   pip-review --auto
+
+   # Focal install python modules
+   if [[ "${dist}" = "focal" ]]; then
+      pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy pip-review
+   else
+      pip install --upgrade pip-review --auto
+   fi
 
    echo "Appling docker buildx fix"
    sudo install -m 0755 -d /etc/apt/keyrings
