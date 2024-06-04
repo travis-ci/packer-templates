@@ -18,7 +18,7 @@ main() {
    #if [[ "${dist}" = "focal" ]]; then
    #apt remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-87-generic linux-modules-5.15.0-1045-gcp linux-gcp-headers-5.4.0-1116 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-84-generic linux-modules-5.15.0-1044-gcp linux-modules-5.4.0-165-generic
    # Installing updated kernel modules
-   echo "Installing updated kernel modules"
+   #echo "Installing updated kernel modules"
    # apt install -yqq --no-install-suggests --no-install-recommends \
    # linux-gcp-headers-5.4.0-1117 \
    # linux-modules-5.15.0-1046-gcp \
@@ -80,3 +80,5 @@ main() {
    # d /run/sshd 0755 root root
 
 }
+
+main "$@"
