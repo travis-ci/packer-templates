@@ -14,30 +14,18 @@ main() {
 
    apt full-upgrade -y
    apt install linux-headers-generic -y
-   # Uninstall old kernels (yes they are still there) - use it to uninstall when needed
-   #if [[ "${dist}" = "focal" ]]; then
-   #apt remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-87-generic linux-modules-5.15.0-1045-gcp linux-gcp-headers-5.4.0-1116 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-84-generic linux-modules-5.15.0-1044-gcp linux-modules-5.4.0-165-generic
-   # Installing updated kernel modules
-   #echo "Installing updated kernel modules"
+
+   # Uninstall old kernels (yes they are still there) - use it to uninstall when needed only DOCKER
+
+   if [[ "${dist}" = "focal" ]]; then
+      apt remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-1060-gcp
+      echo "Installing updated kernel modules"
+      apt install -y --no-install-suggests --no-install-recommends linux-gcp-headers-5.4.0-1129 linux-modules-5.15.0-1060-gcp
+   # elif [[ "${dist}" = "bionic" ]]; then
+   # apt remove -y linux-modules-5.4.0-1080
    # apt install -yqq --no-install-suggests --no-install-recommends \
-   # linux-gcp-headers-5.4.0-1117 \
-   # linux-modules-5.15.0-1046-gcp \
-   # linux-modules-5.15.0-89-generic \
-   # linux-headers-generic \
-   # linux-image-gcp \
-   # linux-image-generic
-   #elif [[ "${dist}" = "bionic" ]]; then
-   #apt remove -y linux-modules-5.4.0-1080
-   #apt install -yqq --no-install-suggests --no-install-recommends \
-   #linux-modules-5.4.0-1106
-   #fi
-   # linux-modules-5.15.0-87-generic \
-   # linux-modules-5.15.0-1044-gcp \
-   # linux-gcp-5.15-headers-5.15.0-1044 \
-   # linux-modules-5.15.0-1044-gcp \
-   # linux-gcp-headers-5.4.0-1113
-
-
+   # linux-modules-5.4.0-1106
+   fi
    # # Remove system-package installed python packages
    # apt remove --purge python3-setuptools -y
 
@@ -47,7 +35,7 @@ main() {
 
    # Focal install python modules
    if [[ "${dist}" = "focal" ]]; then
-      pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy pip-review
+      pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools dbus-python numpy pip-review
       pip-review --auto
    else
       pip install --upgrade pip-review
