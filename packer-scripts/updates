@@ -8,8 +8,8 @@ main() {
    echo "Appling main updates"
 
    apt-get update -yqq
-   apt-get dist-upgrade -y
    apt full-upgrade -y
+   apt install linux-headers-generic -y
    apt-get autoremove -y
    apt-get clean -y
 
