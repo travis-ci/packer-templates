@@ -15,24 +15,6 @@ variables:
   travis_vpc_id: "{{ env `TRAVIS_VPC_ID` }}"
   travis_source_ami: "{{ env `TRAVIS_SOURCE_AMI` }}"
 builders:
-- type: amazon-ebs
-  name: amazon-ebs
-  access_key: "{{ user `aws_access_key` }}"
-  secret_key: "{{ user `aws_secret_key` }}"
-  region: us-east-1
-  source_ami: "{{ user `travis_source_ami` }}"
-  ami_name: travis-ci-worker {{ isotime "2006-01-02 15:04:06" | clean_resource_name }}
-  instance_type: m6g.xlarge
-  ssh_username: ubuntu
-  ami_virtualization_type: hvm
-  tags:
-    role: worker
-  associate_public_ip_address: true
-  subnet_id: "{{ user `travis_subnet_id` }}"
-  vpc_id: "{{ user `travis_vpc_id` }}"
-  source_ami_filter:
-    owners:
-    - 099720109477
 - type: googlecompute
   name: googlecompute
   communicator: ssh
@@ -42,7 +24,7 @@ builders:
   image_description: Travis CI Ubuntu 22.04
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: ubuntu-2204-jammy-v20220607 
+  source_image_family: ubuntu-2204-lts
   image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
@@ -53,12 +35,6 @@ builders:
   - ci
   - ubuntu-2204
   - travis-ci-packer-templates
-- type: lxd
-  name: lxd
-  image: ubuntu:jammy #identifier of image taken from https://us.images.linuxcontainers.org/
-  output_image: "{{ user `image_name` }}"
-  publish_properties:
-  - description: Travis CI jammy build env template!
 - type: docker
   name: docker
   ssh_pty: true
@@ -103,7 +79,6 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
-  - lxd
 - type: file
   source: packer-assets/ci-ubuntu-2204-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -120,35 +95,6 @@ provisioners:
   only:
   - docker
   - googlecompute
-  - lxd
-- type: shell
-  inline: "uname -a"
-  only:
-  - amazon-ebs
-  - lxd
-  # Recommendations for lxd images
-- type: shell
-  inline: "systemctl mask sys-kernel-config.mount"
-  only:
-  - lxd
-- type: shell
-  inline: "systemctl mask systemd-modules-load.service"
-  only:
-  - lxd
-- type: shell
-  inline: sleep 25
-  # Delay command 'snap install' execution. Problem with snap install core. Workaround : error: too early for operation, device not yet seeded..."
-  only:
-  - lxd
-- type: shell
-  inline: "apt install snapd -y && snap install core"
-  only:
-  - lxd
-- type: shell
-  inline: "apt-get remove --purge cloud-init --yes"
-  only:
-  - lxd
-  # end Recommendations
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap-jammy
@@ -165,7 +111,7 @@ provisioners:
 - type: shell
   inline: chmod 0644 /var/tmp/ubuntu-2204-system-info-commands.yml
 - type: chef-solo
-  version: 17.10.3
+  version: 18.4.12
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
@@ -199,6 +145,9 @@ provisioners:
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
   - packer-scripts/perforce-install
+  - packer-scripts/pyenv-install
+  - packer-scripts/cosign-install
+  - packer-scripts/updates
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
@@ -210,20 +159,12 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-  #- type: shell
-  #  environment_vars:
-  #  - TRAVIS_OBFUSCATE_PASSWORD=1
-  #  - TRAVIS_UID={{ user `travis_uid` }}
-  #  execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
-  #  inline:
-  #  - "find /etc/systemd -type f -o -type l"
-  #  # - "rm -v /etc/systemd/system/network-online.target.wants/networking.service"
-  #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
-#- type: shell #no couchdb for jammy yet, needs to be commented till
-#  inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
-#- type: shell
-#  inline: "ls -lah /opt/couchdb/"  #here
-- type: shell
+# STILL ISSUE WITH COUCHDB 2024
+# - type: shell
+#   inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
+# - type: shell
+#   inline: "ls -lah /opt/couchdb/"
+# - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball
   environment_vars:
@@ -253,7 +194,6 @@ post-processors:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - googlecompute
-    - lxd
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -263,14 +203,3 @@ post-processors:
 -
   - type: shell-local
     script: bin/write-latest-image-name
-  - type: shell-local
-    script: bin/lxc-export.sh
-    environment_vars:
-    - IMAGE_NAME={{ user `image_name` }}
-    only:
-    - lxd
-  - type: shell-local
-    inline:
-    - echo {{ user `image_name` }} > /tmp/packer-build-image-name
-    only:
-    - lxd

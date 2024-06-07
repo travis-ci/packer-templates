@@ -8,6 +8,8 @@ apt_repository 'postgresql' do
 end
 
 package 'postgresql-14'
+  action :install
+end
 
 service 'postgresql' do
   action [:stop, :disable]

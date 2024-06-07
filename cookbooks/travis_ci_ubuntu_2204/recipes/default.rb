@@ -56,7 +56,6 @@ include_recipe 'travis_build_environment::gradle'
 # include_recipe 'travis_build_environment::mysql'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::redis'
-# include_recipe 'travis_build_environment::mongodb'
 include_recipe 'memcached'
 include_recipe '::mongodb'
 # TODO: Uncomment when cassandra works on Java 8 again
@@ -70,15 +69,6 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 # include_recipe 'travis_build_environment::ibm_advanced_tool_chain'
 include_recipe 'travis_phantomjs::2'
-
-if node['kernel']['machine'] != 'aarch64'
-  include_recipe '::erlang'
-  # include_recipe '::couchdb'
-  include_recipe '::mysql'
-  include_recipe '::postgresql'
-  # include_recipe 'travis_build_environment::couchdb'
-  # include_recipe '::mariadb'
-end
 
 # HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'

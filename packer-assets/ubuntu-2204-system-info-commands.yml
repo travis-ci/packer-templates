@@ -114,9 +114,9 @@ commands:
     name: default ruby version
   - command: python --version
     name: default python version
-  - command: couchdb -V
-    name: CouchDB version
-    pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
+  # - command: couchdb -V
+  #   name: CouchDB version
+  #   pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
   - name: ElasticSearch version
     port: 9200
     command: curl localhost:9200
