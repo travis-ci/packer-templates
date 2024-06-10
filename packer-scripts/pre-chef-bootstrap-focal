@@ -53,6 +53,7 @@ __install_packages() {
     libelf-dev \
     sudo \
     build-essential \
+    rabbitmq-server \
     make \
     wget \
     pollinate \
