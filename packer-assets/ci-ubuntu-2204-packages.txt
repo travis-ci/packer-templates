@@ -185,6 +185,8 @@ postgresql-client
 powermgmt-base
 procps
 psmisc
+python-setuptools
+python3-setuptools
 python3
 python3-apport
 python3-apt
