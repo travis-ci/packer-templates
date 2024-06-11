@@ -95,11 +95,10 @@ end
 
 rubies = %w[
   2.7.6
-  3.0.4
-  3.1.2
+  3.3.0
 ]
 
-override['travis_build_environment']['default_ruby'] = '2.7.6'
+override['travis_build_environment']['default_ruby'] = '3.3.0'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = []

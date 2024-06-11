@@ -73,12 +73,12 @@ override['travis_build_environment']['nodejs_default'] = '18.20.3'
 rubies = %w[
   2.5.9
   2.7.6
-  3.1.2
+  3.3.0
 ]
 
 override['travis_build_environment']['virtualenv']['version'] = '20.24.6'
 
-override['travis_build_environment']['default_ruby'] = '2.7.6'
+override['travis_build_environment']['default_ruby'] = '3.3.0'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[

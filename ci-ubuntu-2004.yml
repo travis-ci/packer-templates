@@ -156,6 +156,7 @@ provisioners:
   - packer-scripts/perforce-install
   - packer-scripts/cosign-install
   - packer-scripts/ant-install
+  - packer-scripts/rabbitmq-install
   - packer-scripts/updates
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
