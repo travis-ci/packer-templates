@@ -58,6 +58,7 @@ __install_packages() {
     curl \
     gawk \
     git \
+    git-lfs \
     make \
     git-all \
     build-essential \

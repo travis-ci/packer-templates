@@ -130,7 +130,7 @@ provisioners:
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: shell
   scripts:
-  - packer-scripts/pre-chef-bootstrap
+  - packer-scripts/pre-chef-bootstrap-bionic
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - SKIP_APT_UPGRADE=1
