@@ -17,7 +17,7 @@ main() {
    
    # wget https://bootstrap.pypa.io/get-pip.py
    # sudo python3 get-pip.py
-   pip install pip-review
+   pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools dbus-python numpy pip-review
    pip-review --auto
 
    echo "Appling docker buildx fix"
@@ -27,7 +27,15 @@ main() {
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
    sudo apt-get update -y
    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-   #pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy
+
+   # Install required clang
+   clang_version=18
+   wget https://apt.llvm.org/llvm.sh
+   chmod +x llvm.sh
+   sudo ./llvm.sh $clang_version
+
+   # Update composer
+   /home/travis/.phpenv/shims/composer self-update
 
 }
 
