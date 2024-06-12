@@ -179,9 +179,9 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   erlang
 
 ]
-override['travis_docker']['version'] = '26.1.3'
-override['travis_docker']['binary']['version'] = '26.1.3'
-override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-Linux-x86_64'
-override['travis_docker']['compose']['sha256sum'] = 'ddc876fe2a89d5b7ea455146b0975bfe52904eecba9b192193377d6f99d69ad9'
-override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-26.1.3.tgz'
-override['travis_docker']['binary']['checksum'] = 'a50076d372d3bbe955664707af1a4ce4f5df6b2d896e68b12ecc74e724d1db31'
+override['travis_docker']['version'] = '24.0.5'
+override['travis_docker']['binary']['version'] = '24.0.5'
+override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-Linux-x86_64'
+override['travis_docker']['compose']['sha256sum'] = 'f45e4cb687df8b48a57f656097ce7175fa8e8bef70be407b011e29ff663f475f'
+override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-24.0.5.tgz'
+override['travis_docker']['binary']['checksum'] = '0a5f3157ce25532c5c1261a97acf3b25065cfe25940ef491fa01d5bea18ddc86'

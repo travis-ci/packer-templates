@@ -56,23 +56,14 @@ main() {
       sudo apt install git-all
    fi
 
-   # SSH changes
-   #apt install openssh-server --reinstall
-   # ssh-keygen -A
-   # dpkg-reconfigure openssh-server
+   # Install required clang
+   clang_version=18
+   wget https://apt.llvm.org/llvm.sh
+   chmod +x llvm.sh
+   sudo ./llvm.sh $clang_version
 
-   # sudo echo 'PubkeyAcceptedKeyTypes +ssh-rsa' >> /etc/ssh/sshd_config
-   # sudo echo 'HostKeyAlgorithms +ssh-rsa' >> /etc/ssh/sshd_config
-
-   # echo "## Stopping GCE cert refresh... (stops currently running instances)"
-   # systemctl stop gce-workload-cert-refresh.timer
-   # systemctl stop gce-workload-cert-refresh.service
-
-   # echo "## Disable GCE cert refresh... (prevents instance from coming back after restart)"
-   # systemctl disable gce-workload-cert-refresh.timer
-   # systemctl disable gce-workload-cert-refresh.service
-
-   # d /run/sshd 0755 root root
+   # Update composer
+   /home/travis/.phpenv/shims/composer self-update
 
 }
 
