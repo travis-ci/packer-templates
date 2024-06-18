@@ -72,12 +72,13 @@ sudo chmod -R a+w /usr/local/bin
 if [[ $dist = "jammy" ]]; then
   rvm pkg install openssl
   rvm install 2.7.6 --with-openssl-dir=$HOME/.rvm/usr
-  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
+  rvm install ruby-3.3.1 --autolibs=enable --fuzzy
 else
   rvm install ruby-2.7.6 --autolibs=enable --fuzzy
-  rvm install ruby-3.1.2 --autolibs=enable --fuzzy
+  rvm install ruby-3.3.1 --autolibs=enable --fuzzy
 fi
-rvm use 2.7.6
+# DPLv2 needs default 3.3.1 ruby and 2.7 preinstalled
+rvm use 3.3.1
 gem install bundler -v 2.4.22
 
 
