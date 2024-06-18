@@ -5,13 +5,13 @@ set -o xtrace
 shopt -s nullglob
 
 # clear the APT cache and delete everything from /var/cache/apt/archives/
+# removed   /etc/ssh/ssh_host_* \ - this probably caused issues with ssh connection for some reason..
 apt clean
 
 rm -rf \
   /etc/apparmor* \
   /etc/profile.d/jdk.csh \
   /etc/profile.d/jdk.sh \
-  /etc/ssh/ssh_host_* \
   /lib/recovery-mode \
   /opt/chef* \
   /tmp/* \

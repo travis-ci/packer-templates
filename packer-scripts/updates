@@ -8,16 +8,16 @@ main() {
    echo "Appling main updates"
 
    apt-get update -yqq
-   apt full-upgrade -y
-   apt install linux-headers-generic -y
-   apt-get autoremove -y
-   apt-get clean -y
+   # apt full-upgrade -y
+   # apt install linux-headers-generic -y
+   # apt-get autoremove -y
+   # apt-get clean -y
 
    echo "Installing pip-review"
    
    # wget https://bootstrap.pypa.io/get-pip.py
    # sudo python3 get-pip.py
-   pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools dbus-python numpy pip-review
+   pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools numpy pip-review
    pip-review --auto
 
    echo "Appling docker buildx fix"
@@ -36,6 +36,9 @@ main() {
 
    # Update composer
    /home/travis/.phpenv/shims/composer self-update
+
+   # Update bundler
+   gem install bundler
 
 }
 

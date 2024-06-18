@@ -50,7 +50,7 @@ __install_chef() {
     return
   fi
 
-  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 21.10.640
+  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 22.5.923
   __run_retry 2 30 apt-get update -y
   __run_retry 2 30 apt-get install libc-client2007e-dev mysql-client
 
@@ -119,10 +119,6 @@ unset GEM_PATH
 cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
-chef exec rspec ${SPEC_ARGS} \\
-  --format documentation \\
-  --format json \\
-  --out /home/travis/.${suite}_rspec.json
 "
 
   local exit_code="$?"

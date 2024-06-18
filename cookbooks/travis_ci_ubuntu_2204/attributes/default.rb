@@ -80,7 +80,7 @@ override['travis_build_environment']['virtualenv']['version'] = '20.24.6'
 
 
 # changing default ruby version due to dpl issues
-override['travis_build_environment']['default_ruby'] = '3.3.0'
+override['travis_build_environment']['default_ruby'] = '3.3.1'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
