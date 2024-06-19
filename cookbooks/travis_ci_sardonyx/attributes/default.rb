@@ -10,6 +10,8 @@ default['travis_ci_sardonyx']['prerequisite_packages'] = %w[
   wget
 ]
 
+override['travis_build_environment']['pip']['packages'] = {} # need to fill in
+
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
@@ -37,7 +39,7 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 gimme_versions = %w[
   1.18.4
 ]
-
+override['travis_build_environment']['virtualenv']['version'] = '20.15.1'
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 

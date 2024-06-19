@@ -182,8 +182,8 @@ provisioners:
   inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
 - type: shell
   inline: "ls -lah /opt/couchdb/"
-- type: shell
-  inline: "sudo ssh-keygen -A && sudo dpkg-reconfigure openssh-server && sudo cat /etc/ssh/sshd_config"
+# - type: shell
+#   inline: "sudo ssh-keygen -A && sudo dpkg-reconfigure openssh-server && sudo cat /etc/ssh/sshd_config"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball

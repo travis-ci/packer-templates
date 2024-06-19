@@ -65,6 +65,12 @@ main() {
    # Update composer
    /home/travis/.phpenv/shims/composer self-update
 
+   # # Update bundler - to fix in the future
+   # /home/travis/.rvm/bin/rvm use 3.3.1
+   # gem install rubygems-update
+   # update_rubygems
+   # gem update --system
+
 }
 
 main "$@"
