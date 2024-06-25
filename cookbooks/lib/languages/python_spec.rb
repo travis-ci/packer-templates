@@ -60,6 +60,7 @@ describe 'python environment' do
 
   if 'xenial'.include?(Support.distro)
     vers = {
+      'python2.7' => '2.7.18',
       'python3.7' => '3.7.17',
       'python3.8' => '3.8.13'
     }

@@ -39,7 +39,7 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 gimme_versions = %w[
   1.18.4
 ]
-override['travis_build_environment']['virtualenv']['version'] = '20.15.1'
+#override['travis_build_environment']['virtualenv']['version'] = '20.15.1'
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
@@ -61,7 +61,17 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 ]
 override['travis_build_environment']['nodejs_default'] = '16.16.0'
 
+override['travis_build_environment']['system_python']['pythons'] = %w[2.7]
+override['travis_build_environment']['python_aliases'] = {
+  '2.7.18' => %w[2.7],
+  '3.7.17' => %w[3.7],
+  '3.8.13' => %w[3.8],
+  'pypy2.7-7.3.16' => %w[pypy],
+  'pypy3.7-7.3.9' => %w[pypy3]
+}
+
 pythons = %w[
+  2.7.18
   3.7.17
   3.8.13
 ]

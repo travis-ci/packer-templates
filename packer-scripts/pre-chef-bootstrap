@@ -58,6 +58,7 @@ __install_packages() {
     curl \
     gawk \
     git \
+    gconf-service \
     make \
     git-all \
     build-essential \
@@ -65,7 +66,11 @@ __install_packages() {
     sudo \
     wget \
     python3 \
+    python-pip \
+    python-dev \
     python3-pip \
+    python3-setuptools \
+    python-setuptools \
     rsync \
     rabbitmq-server \
     ${APT_GET_INSTALL_PRE_CHEF}
@@ -73,11 +78,15 @@ __install_packages() {
   # Install necessary python packages
   apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 
+  # Install chromium since google chrome is not installable
+  apt install -y chromium-browser
+
+
   # link python ##TODO move this to chef
   if ! [ -x "$(command -v python)" ]; then
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-    pip3 install pip setuptools --upgrade
+    pip install pip setuptools --upgrade
   fi
 
 }
