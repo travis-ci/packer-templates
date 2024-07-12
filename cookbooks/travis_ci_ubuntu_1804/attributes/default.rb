@@ -115,9 +115,9 @@ override['travis_build_environment']['mercurial_version'] = '5.3'
 override['travis_build_environment']['shfmt_url'] = 'https://github.com/mvdan/sh/releases/download/v3.8.0/shfmt_v3.8.0_linux_amd64'
 override['travis_build_environment']['shfmt_checksum'] = '27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0'
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.11.0'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.1'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'dcac06a4c671bbb71e916da5abe947ebf4d6aa35c197e21c7c7b1d68cb8b7cad'
+'07a9d92fe98d7bb4be09392c06ef6c4f9ffbc905fe6c29fff0622432367f01cc'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 
