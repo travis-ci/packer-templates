@@ -5,13 +5,7 @@ set -o xtrace
 
 main() {
 
-   echo "Appling main updates"
-
-   apt-get update -yqq
-   # apt full-upgrade -y
-   # apt install linux-headers-generic -y
-   # apt-get autoremove -y
-   # apt-get clean -y
+   apt install linux-headers-generic -y
 
    echo "Installing pip-review"
    
@@ -39,7 +33,7 @@ main() {
 
    # Update bundler
    gem install bundler
-
+   
 }
 
 main "$@"

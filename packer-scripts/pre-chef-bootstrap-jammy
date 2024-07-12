@@ -40,9 +40,9 @@ __install_packages() {
       /var/lib/apt/lists/*
   fi
 
-  apt-get update -yqq
-  apt-get upgrade -y
-  apt-get install -yqq \
+  apt update -yqq
+  apt full-upgrade -y
+  apt install -yqq \
     --no-install-suggests \
     --no-install-recommends \
     ca-certificates \

@@ -8,8 +8,6 @@ apt_repository 'postgresql' do
 end
 
 package 'postgresql-14'
-  action :install
-end
 
 service 'postgresql' do
   action [:stop, :disable]
@@ -24,8 +22,4 @@ end
 
 execute 'change_log_dir_permissions' do
   command 'sudo chmod -R 777 /var/log/postgresql'
-end
-
-apt_repository 'postgresql' do
-  action :remove
 end

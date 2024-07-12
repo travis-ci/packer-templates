@@ -29,7 +29,8 @@ builders:
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n2-standard-16
-  disk_size: 50
+  # Dont go over 70 - worker won't boot the image
+  disk_size: 70
   temporary_key_pair_type: ed25519
   tags:
   - ci
@@ -147,7 +148,7 @@ provisioners:
   - packer-scripts/perforce-install
   - packer-scripts/pyenv-install
   - packer-scripts/cosign-install
-  - packer-scripts/rabbitmq-install
+  # - packer-scripts/rabbitmq-install
   - packer-scripts/updates
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
@@ -165,6 +166,10 @@ provisioners:
 #   inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"  
 # - type: shell
 #   inline: "ls -lah /opt/couchdb/"
+- type: shell
+  inline: "sudo systemctl disable --now ssh.socket && sudo systemctl enable --now ssh.service && sudo systemctl daemon-reload && sudo systemctl restart ssh"
+# - type: shell
+#   inline: "sudo ssh-keygen -A && sudo dpkg-reconfigure openssh-server"
 - type: shell
   scripts:
   - packer-scripts/create-image-metadata-tarball

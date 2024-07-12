@@ -8,13 +8,11 @@ override['travis_build_environment']['python_aliases'] = {
   '3.12.2' => %w[3.12],
   '3.10.14' => %w[3.10],
   '3.8.18' => %w[3.8],
-  '3.7.17' => %w[3.7],
   'pypy2.7-7.3.1' => %w[pypy],
   'pypy3.6-7.3.1' => %w[pypy3],
 }
 # packages build by Cpython + our repo
 pythons = %w[
-  3.7.17
   3.8.18
   3.10.14
   3.12.2
@@ -73,7 +71,7 @@ override['travis_build_environment']['nodejs_default'] = '18.20.3'
 rubies = %w[
   2.7.8
   3.1.2
-  3.3.0
+  3.3.1
 ]
 
 override['travis_build_environment']['virtualenv']['version'] = '20.24.6'
@@ -100,9 +98,9 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '6.5.2'
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.11.0'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.1'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'dcac06a4c671bbb71e916da5abe947ebf4d6aa35c197e21c7c7b1d68cb8b7cad'
+'07a9d92fe98d7bb4be09392c06ef6c4f9ffbc905fe6c29fff0622432367f01cc'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2204'
 
