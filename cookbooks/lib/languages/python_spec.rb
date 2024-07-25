@@ -67,7 +67,7 @@ describe 'python environment' do
     vers = {
       'python3.8' => '3.8.18',
       'python3.10' => '3.10.14',
-      'python3.12' => '3.12.2'
+      'python3.12' => '3.12.4'
     }
   end
 
