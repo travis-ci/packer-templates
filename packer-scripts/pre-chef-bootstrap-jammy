@@ -55,7 +55,6 @@ __install_packages() {
     sudo \
     wget \
     rsync \
-    rabbitmq-server \
     python3 \
     python3.10 \
     python3-pip \
