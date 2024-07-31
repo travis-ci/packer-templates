@@ -106,9 +106,9 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '6.5.2'
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.11.1'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'07a9d92fe98d7bb4be09392c06ef6c4f9ffbc905fe6c29fff0622432367f01cc'
+'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2204'
 
