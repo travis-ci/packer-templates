@@ -69,6 +69,9 @@ __install_packages() {
     rsync \
     rabbitmq-server \
     ${APT_GET_INSTALL_PRE_CHEF}
+
+    # rabbitmq service fix
+    sudo systemctl unmask rabbitmq-server.service
 }
 __setup_redis() {
   echo "Installing the newest redis"

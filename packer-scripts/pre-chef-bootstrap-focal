@@ -53,12 +53,10 @@ __install_packages() {
     libelf-dev \
     sudo \
     build-essential \
-    rabbitmq-server \
     make \
     wget \
     pollinate \
     rsync \
-    rabbitmq-server \
     python3 \
     python3-pip \
     ${APT_GET_INSTALL_PRE_CHEF}

@@ -8,7 +8,7 @@ override['travis_build_environment']['python_aliases'] = {
   '3.6.15' => %w[3.6],
   '3.7.17' => %w[3.7],
   '3.8.18' => %w[3.8],
-  '3.12.0' => %w[3.12],
+  '3.12.4' => %w[3.12],
   'pypy3.7-7.3.9' => %w[pypy3]
 }
 php_aliases = {
@@ -52,7 +52,7 @@ override['travis_perlbrew']['modules'] = %w[
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.22.5
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -83,7 +83,7 @@ pythons = %w[
   3.6.15
   3.7.17
   3.8.18
-  3.12.0
+  3.12.4
 ]
 
 override['travis_build_environment']['pythons'] = pythons
@@ -115,11 +115,19 @@ override['travis_build_environment']['mercurial_version'] = '5.3'
 override['travis_build_environment']['shfmt_url'] = 'https://github.com/mvdan/sh/releases/download/v3.8.0/shfmt_v3.8.0_linux_amd64'
 override['travis_build_environment']['shfmt_checksum'] = '27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0'
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.11.1'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'07a9d92fe98d7bb4be09392c06ef6c4f9ffbc905fe6c29fff0622432367f01cc'
+'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
+
+override['travis_build_environment']['clang']['version'] = '18.1.8'
+override['travis_build_environment']['clang']['download_url'] = ::File.join(
+  "https://github.com/llvm/llvm-project/releases/download/llvmorg-#{node['travis_build_environment']['clang']['version']}",
+  "clang+llvm-#{node['travis_build_environment']['clang']['version']}-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+)
+
+override['travis_build_environment']['clang']['checksum'] = '54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36'
 
 override['travis_postgresql']['default_version'] = '9.3'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10 11]

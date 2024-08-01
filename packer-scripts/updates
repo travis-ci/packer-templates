@@ -35,9 +35,13 @@ main() {
 
    # Focal install python modules
    if [[ "${dist}" = "focal" ]]; then
-      pip install --upgrade pip pyopenssl certifi rsa pytest oauthlib testresources setuptools dbus-python numpy pip-review
+      echo "Installing pip-review"
+      # Focal docker issue with pip-review - docker will fail with these
+      pip install importlib_metadata --force-reinstall
+      pip install pip-review
       pip-review --auto
    else
+      echo "Installing pip-review"
       pip install --upgrade pip-review
       pip-review --auto
    fi
@@ -55,12 +59,6 @@ main() {
    if [[ "${dist}" = "bionic" ]]; then
       sudo apt install git-all
    fi
-
-   # Install required clang
-   clang_version=18
-   wget https://apt.llvm.org/llvm.sh
-   chmod +x llvm.sh
-   sudo ./llvm.sh $clang_version
 
    # Update composer
    /home/travis/.phpenv/shims/composer self-update

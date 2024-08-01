@@ -69,14 +69,14 @@ describe 'python environment' do
       'python3.6' => '3.6.15',
       'python3.7' => '3.7.17',
       'python3.8' => '3.8.18',
-      'python3.12' => '3.12.0'
+      'python3.12' => '3.12.4'
     }
   elsif 'focal'.include?(Support.distro)
     vers = {
       'python3.7' => '3.7.17',
       'python3.8' => '3.8.18',
       'python3.9' => '3.9.18',
-      'python3.12' => '3.12.0'
+      'python3.12' => '3.12.4'
     }
   end
 

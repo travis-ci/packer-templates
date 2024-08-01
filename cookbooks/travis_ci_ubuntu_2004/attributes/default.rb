@@ -5,7 +5,7 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
-  '3.12.0' => %w[3.12],
+  '3.12.4' => %w[3.12],
   '3.9.18' => %w[3.9],
   '3.8.18' => %w[3.8],
   '3.7.17' => %w[3.7],
@@ -17,7 +17,7 @@ pythons = %w[
   3.7.17
   3.8.18
   3.9.18
-  3.12.0
+  3.12.4
 ]
 override['travis_build_environment']['pythons'] = pythons
 
@@ -39,7 +39,7 @@ override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0'
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.22.5
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -100,9 +100,17 @@ override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '6.5.2'
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.11.1'
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'07a9d92fe98d7bb4be09392c06ef6c4f9ffbc905fe6c29fff0622432367f01cc'
+'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
+
+override['travis_build_environment']['clang']['version'] = '18.1.8'
+override['travis_build_environment']['clang']['download_url'] = ::File.join(
+  "https://github.com/llvm/llvm-project/releases/download/llvmorg-#{node['travis_build_environment']['clang']['version']}",
+  "clang+llvm-#{node['travis_build_environment']['clang']['version']}-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+)
+
+override['travis_build_environment']['clang']['checksum'] = '54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2004'
 
