@@ -16,7 +16,6 @@ __install_packages_focal() {
 __install_packages_jammy() {
 
   apt install python3-jsonpatch -y --no-install-recommends
-  apt-get install cloud-init=23.1.2-0ubuntu0~22.04.1 --allow-downgrades -y
 }
 
 __network_setup() {
