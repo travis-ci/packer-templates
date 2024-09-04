@@ -107,7 +107,7 @@ end
 
 rubies = %w[
   2.7.6
-  3.3.0
+  3.3.5
 ]
 
 override['travis_build_environment']['default_ruby'] = '3.3.0'

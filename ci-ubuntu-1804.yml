@@ -203,6 +203,9 @@ provisioners:
   #  # - "rm -v /etc/systemd/system/multi-user.target.wants/networking.service"
 - type: shell
   inline: "sudo chown -R couchdb:couchdb /opt/couchdb/"
+  # Update gems as user
+- type: shell
+  inline: "sudo gem update"
 - type: shell
   inline: "ls -lah /opt/couchdb/"  
 - type: shell

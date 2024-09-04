@@ -9,6 +9,7 @@ locales
 mysql-client
 postgresql-client
 tmate
+ruby
 uuid-dev
 build-essential
 libdbus-glib-1-dev
