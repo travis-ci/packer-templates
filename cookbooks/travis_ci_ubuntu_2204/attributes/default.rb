@@ -33,7 +33,7 @@ override['travis_perlbrew']['perls'] = [{ name: '5.33.0', version: 'perl-5.33.0'
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.22.5
+  1.23.0
 ]
 
 override['travis_build_environment']['clang']['version'] = '18.1.8'
