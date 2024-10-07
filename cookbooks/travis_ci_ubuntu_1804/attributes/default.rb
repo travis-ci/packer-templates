@@ -3,13 +3,12 @@
 override['maven']['install_java'] = false
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-1804-system-info-commands.yml'
-override['travis_build_environment']['system_python']['pythons'] = %w[2.7 3.6]
+override['travis_build_environment']['system_python']['pythons'] = %w[3.6]
 override['travis_build_environment']['python_aliases'] = {
-  '2.7.18' => %w[2.7],
   '3.6.15' => %w[3.6],
-  '3.7.13' => %w[3.7],
-  '3.8.13' => %w[3.8],
-  'pypy2.7-7.3.9' => %w[pypy],
+  '3.7.17' => %w[3.7],
+  '3.8.18' => %w[3.8],
+  '3.12.4' => %w[3.12],
   'pypy3.7-7.3.9' => %w[pypy3]
 }
 php_aliases = {
@@ -35,14 +34,9 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_build_environment']['hhvm_enabled'] = false
 end
 
-override['travis_perlbrew']['perls'] = [
-  { name: '5.36', version: 'perl-5.36.0' },
-  { name: '5.30.3-extras', version: 'perl-5.30.3',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.36-shrplib' },
-  { name: '5.28', version: 'perl-5.28.2' },
-  { name: '5.28.2-extras', version: 'perl-5.28.2',
-    arguments: '-Duseshrplib -Duseithreads', alias: '5.28-shrplib' }
-]
+override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' }]
+override['travis_perlbrew']['prerequisite_packages'] = []
+
 override['travis_perlbrew']['modules'] = %w[
   Dist::Zilla
   Dist::Zilla::Plugin::Bootstrap::lib
@@ -58,7 +52,7 @@ override['travis_perlbrew']['modules'] = %w[
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.11.1
+  1.23.0
 ]
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -86,40 +80,20 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '16.15.1'
 
 pythons = %w[
-  2.7.18
   3.6.15
-  3.7.13
-  3.8.13
+  3.7.17
+  3.8.18
+  3.12.4
 ]
-
-# Reorder pythons so that default python2 and python3 come first
-# as this affects the ordering in $PATH.
-%w[3 2].each do |pyver|
-  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
-    pythons.unshift(pythons.delete(py))
-  end
-end
-def python_aliases(full_name)
-  nodash = full_name.split('-').first
-  return [nodash] unless nodash.include?('.')
-
-  [nodash[0, 3]]
-end
 
 override['travis_build_environment']['pythons'] = pythons
-pythons.each do |full_name|
-  override['travis_build_environment']['python_aliases'][full_name] = \
-    python_aliases(full_name)
-end
 
 rubies = %w[
-  2.5.9
-  2.6.9
   2.7.6
-  3.1.2
+  3.3.5
 ]
 
-override['travis_build_environment']['default_ruby'] = '2.7.6'
+override['travis_build_environment']['default_ruby'] = '3.3.5'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
@@ -138,7 +112,22 @@ override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
 override['travis_build_environment']['mercurial_version'] = '5.3'
 
+override['travis_build_environment']['shfmt_url'] = 'https://github.com/mvdan/sh/releases/download/v3.8.0/shfmt_v3.8.0_linux_amd64'
+override['travis_build_environment']['shfmt_checksum'] = '27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0'
+
+override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
+override['travis_build_environment']['packer']['amd64']['checksum'] = \
+'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
+
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
+
+override['travis_build_environment']['clang']['version'] = '18.1.8'
+override['travis_build_environment']['clang']['download_url'] = ::File.join(
+  "https://github.com/llvm/llvm-project/releases/download/llvmorg-#{node['travis_build_environment']['clang']['version']}",
+  "clang+llvm-#{node['travis_build_environment']['clang']['version']}-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+)
+
+override['travis_build_environment']['clang']['checksum'] = '54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36'
 
 override['travis_postgresql']['default_version'] = '9.3'
 override['travis_postgresql']['alternate_versions'] = %w[9.4 9.5 9.6 10 11]
@@ -177,6 +166,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cplusplus
   cpp
   crystal
+  shell
   default
   generic
   go
@@ -196,9 +186,9 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   erlang
 
 ]
-override['travis_docker']['version'] = '5:20.10.9~3-0~ubuntu-bionic'
-override['travis_docker']['binary']['version'] = '20.10.7'
-override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64'
-override['travis_docker']['compose']['sha256sum'] = 'f3f10cf3dbb8107e9ba2ea5f23c1d2159ff7321d16f0a23051d68d8e2547b323'
-override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-20.10.7.tgz'
-override['travis_docker']['binary']['checksum'] = '34ad50146fce29b28e5115a1e8510dd5232459c9a4a9f28f65909f92cca314d9'
+override['travis_docker']['version'] = '24.0.5'
+override['travis_docker']['binary']['version'] = '24.0.5'
+override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-Linux-x86_64'
+override['travis_docker']['compose']['sha256sum'] = 'f45e4cb687df8b48a57f656097ce7175fa8e8bef70be407b011e29ff663f475f'
+override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-24.0.5.tgz'
+override['travis_docker']['binary']['checksum'] = '0a5f3157ce25532c5c1261a97acf3b25065cfe25940ef491fa01d5bea18ddc86'

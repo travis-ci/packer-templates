@@ -16,6 +16,7 @@ main() {
   fi
   __install_packages
   __setup_redis
+  __setup_git
   __setup_sshd
   __setup_travis_user
   __write_pre_chef_env
@@ -32,11 +33,19 @@ __enable_i386() {
 
 __install_packages() {
 
+  machine=$(lsb_release -sc)
+
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
     rm -rvf /etc/apt/sources.list.d/partner.list \
       /var/lib/apt/lists/*
   fi
 
+  # Add Perforce packaging key
+  wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
+
+  # Add Perforce repository
+  echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
+  
   apt-get clean
   apt-get autoclean -y
   apt-get autoremove -y
@@ -50,25 +59,20 @@ __install_packages() {
     gawk \
     git \
     git-lfs \
+    make \
+    git-all \
+    build-essential \
     libelf-dev \
     sudo \
-    build-essential \
-    make \
     wget \
-    pollinate \
-    rsync \
     python3 \
-    python3-pip \
+    rsync \
+    rabbitmq-server \
     ${APT_GET_INSTALL_PRE_CHEF}
 
-  # link python ##TODO move this to chef
-  if ! [ -x "$(command -v python)" ]; then
-    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-    #pip3 install pip setuptools testresources --upgrade
-  fi
+    # rabbitmq service fix
+    sudo systemctl unmask rabbitmq-server.service
 }
-
 __setup_redis() {
   echo "Installing the newest redis"
   curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
@@ -77,6 +81,18 @@ __setup_redis() {
   sudo apt-get install redis redis-tools redis-server -y
   sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
 }
+__setup_git() {
+  apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
+  mkdir tmp_git
+  cd /tmp
+  curl -o git.tar.gz https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.43.0.tar.gz
+  tar -zxf git.tar.gz
+  cd git-*
+  make prefix=/usr/local all
+  sudo make prefix=/usr/local install
+  cd ..
+  cd ..
+}
 
 __setup_sshd() {
   mkdir -p /var/run/sshd
@@ -84,8 +100,6 @@ __setup_sshd() {
   if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
     echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
   fi
-  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
-  echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
 }
 
 __setup_travis_user() {

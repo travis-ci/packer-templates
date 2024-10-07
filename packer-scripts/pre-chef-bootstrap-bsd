@@ -13,6 +13,8 @@ __install_packages() {
 }
 
 __setup_sshd() {
+  mkdir -p /var/run/sshd
+
   if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
     echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
   fi

@@ -10,6 +10,8 @@ default['travis_ci_sardonyx']['prerequisite_packages'] = %w[
   wget
 ]
 
+override['travis_build_environment']['pip']['packages'] = {} # need to fill in
+
 override['travis_system_info']['commands_file'] = \
   '/var/tmp/sardonyx-system-info-commands.yml'
 
@@ -37,7 +39,7 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 gimme_versions = %w[
   1.18.4
 ]
-
+#override['travis_build_environment']['virtualenv']['version'] = '20.15.1'
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
 
@@ -59,8 +61,18 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 ]
 override['travis_build_environment']['nodejs_default'] = '16.16.0'
 
+override['travis_build_environment']['system_python']['pythons'] = %w[2.7]
+override['travis_build_environment']['python_aliases'] = {
+  '2.7.18' => %w[2.7],
+  '3.7.17' => %w[3.7],
+  '3.8.13' => %w[3.8],
+  'pypy2.7-7.3.16' => %w[pypy],
+  'pypy3.7-7.3.9' => %w[pypy3]
+}
+
 pythons = %w[
-  3.7.13
+  2.7.18
+  3.7.17
   3.8.13
 ]
 
@@ -95,11 +107,10 @@ end
 
 rubies = %w[
   2.7.6
-  3.0.4
-  3.1.2
+  3.3.5
 ]
 
-override['travis_build_environment']['default_ruby'] = '2.7.6'
+override['travis_build_environment']['default_ruby'] = '3.3.0'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = []
