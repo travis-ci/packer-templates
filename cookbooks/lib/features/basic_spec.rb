@@ -149,11 +149,12 @@ if os[:arch] !~ /aarch64|arm64/
   end
 end
 
-if os[:arch] !~ /aarch64|arm64/
-  describe package('pollinate') do
-    it { should be_installed }
-  end
-end
+# Pollinate repository doesn't contain newer packages no longer
+# if os[:arch] !~ /aarch64|arm64/
+#   describe package('pollinate') do
+#     it { should be_installed }
+#   end
+# end
 
 describe file('/etc/cloud/templates') do
   it { should be_directory }

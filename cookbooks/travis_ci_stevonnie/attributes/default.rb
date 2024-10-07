@@ -33,7 +33,7 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 pythons = %w[
-  3.7.13
+  3.7.17
   3.8.13
 ]
 

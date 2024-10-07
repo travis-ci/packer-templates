@@ -118,6 +118,7 @@ libffi-dev
 libfreetype6-dev
 libgdbm-dev
 libgmp3-dev
+libonig-dev
 libicu-dev
 libjpeg8-dev
 libkrb5-dev
@@ -126,6 +127,7 @@ libltdl-dev
 libmcrypt-dev
 libmhash-dev
 libmysqlclient-dev
+libncurses5
 libncurses5-dev
 libncursesw5-dev
 libossp-uuid-dev
@@ -189,7 +191,6 @@ pkg-config
 plymouth
 plymouth-theme-ubuntu-text
 pollinate
-postgresql-client
 powermgmt-base
 procps
 psmisc
@@ -302,4 +303,3 @@ zerofree
 zip
 zlib1g
 zlib1g-dev
-ant

@@ -5,13 +5,13 @@ set -o xtrace
 shopt -s nullglob
 
 # clear the APT cache and delete everything from /var/cache/apt/archives/
+# removed   /etc/ssh/ssh_host_* \ - this probably caused issues with ssh connection for some reason..
 apt clean
 
 rm -rf \
   /etc/apparmor* \
   /etc/profile.d/jdk.csh \
   /etc/profile.d/jdk.sh \
-  /etc/ssh/ssh_host_* \
   /lib/recovery-mode \
   /opt/chef* \
   /tmp/* \
@@ -70,3 +70,6 @@ fi
 if test -f /etc/cloud/cloud.cfg >&/dev/null; then
   sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
 fi
+
+echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
+echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
