@@ -191,7 +191,6 @@ pkg-config
 plymouth
 plymouth-theme-ubuntu-text
 pollinate
-postgresql-client
 powermgmt-base
 procps
 psmisc
