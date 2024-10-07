@@ -186,8 +186,8 @@ provisioners:
 # - type: shell
 #   inline: "sudo ssh-keygen -A && sudo dpkg-reconfigure openssh-server && sudo cat /etc/ssh/sshd_config"
   # Update gems as user
-- type: shell
-  inline: "sudo gem update"
+# - type: shell
+#   inline: "sudo gem update"
 #   environment_vars:
 #   - TRAVIS_UID={{ user `travis_uid` }}
 - type: shell

@@ -7,7 +7,7 @@ main() {
 
    dist=$(lsb_release -cs)
    echo "Appling main updates"
-   apt update -yqq
+   apt update -yqq --fix-missing
    echo "Uninstalling old kernel modules"
    dpkg --list | grep linux-image | awk '{ print $2 }' | sort -V | sed -n '/'`uname -r`'/q;p' | xargs sudo apt-get -y purge
    apt purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
@@ -17,15 +17,15 @@ main() {
 
    # Uninstall old kernels (yes they are still there) - use it to uninstall when needed only DOCKER
 
-   if [[ "${dist}" = "focal" ]]; then
-      apt remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-1060-gcp
-      echo "Installing updated kernel modules"
-      apt install -y --no-install-suggests --no-install-recommends linux-gcp-headers-5.4.0-1129 linux-modules-5.15.0-1060-gcp
+   # if [[ "${dist}" = "focal" ]]; then
+   #    apt remove -y linux-gcp-headers-5.4.0-1080 linux-modules-5.15.0-1006-gcp linux-modules-5.15.0-1060-gcp
+   #    echo "Installing updated kernel modules"
+   #    apt install -y --no-install-suggests --no-install-recommends linux-gcp-headers-5.4.0-1129 linux-modules-5.15.0-1060-gcp
    # elif [[ "${dist}" = "bionic" ]]; then
    # apt remove -y linux-modules-5.4.0-1080
    # apt install -yqq --no-install-suggests --no-install-recommends \
    # linux-modules-5.4.0-1106
-   fi
+   # fi
    # # Remove system-package installed python packages
    # apt remove --purge python3-setuptools -y
 
@@ -38,8 +38,8 @@ main() {
       echo "Installing pip-review"
       # Focal docker issue with pip-review - docker will fail with these
       pip install importlib_metadata --force-reinstall
-      pip install pip-review
-      pip-review --auto
+      # pip install pip-review
+      # pip-review --auto
    else
       echo "Installing pip-review"
       pip install --upgrade pip-review
