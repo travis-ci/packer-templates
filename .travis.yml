@@ -1,4 +1,4 @@
-dist: bionic
+dist: focal
 services:
 - postgresql
 filter_secrets: false
