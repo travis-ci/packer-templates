@@ -1,6 +1,4 @@
-language: __sardonyx__
-dist: xenial
-group: edge
+dist: bionic
 services:
 - postgresql
 filter_secrets: false
