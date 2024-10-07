@@ -50,8 +50,8 @@ else
 end
 
 # HACK: install google-chrome missing dependencies differently
-#execute 'wget -q http://archive.ubuntu.com/ubuntu/pool/main/libu/libu2f-host/libu2f-udev_1.1.10-1_all.deb && sudo apt install ./libu2f-udev_1.1.10-1_all.deb'
-#execute 'wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg --force-depends -i ./google-chrome-stable_current_amd64.deb'
+execute 'wget -q http://archive.ubuntu.com/ubuntu/pool/main/libu/libu2f-host/libu2f-udev_1.1.10-1_all.deb && sudo apt install ./libu2f-udev_1.1.10-1_all.deb'
+execute 'wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg --force-depends -i ./google-chrome-stable_current_amd64.deb'
 
 include_recipe 'travis_build_environment::maven'
 include_recipe 'travis_build_environment::lein'
