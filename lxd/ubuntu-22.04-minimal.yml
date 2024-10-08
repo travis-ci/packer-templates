@@ -90,6 +90,11 @@ provisioners:
    - chmod 644 /etc/apt/sources.list
    - chmod 644 /etc/docker/daemon.json
 
+   # Fix cloud-init
+- type: shell
+  inline:
+  - snap refresh lxd --channel=4.0/stable
+
   # Creare image metadata tarball
 - type: shell
   scripts:

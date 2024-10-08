@@ -15,15 +15,19 @@ __install_packages_focal() {
 
 __install_packages_jammy() {
 
-  apt install python3-jsonpatch -y --no-install-recommends
+  apt install  -y --no-install-recommends
+  #sudo apt update && sudo apt upgrade -y
 }
 
 __network_setup() {
   # disable cloud network init
   echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
-
   # enable manage_etc_hosts: true
   grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
+  mkdir -p /etc/systemd/system/systemd-networkd.service.d
+  echo "[Service]" >> /etc/systemd/system/systemd-networkd.service.d/override.conf
+  echo "ReadOnlyPaths=/sys" >> /etc/systemd/system/systemd-networkd.service.d/override.conf
+  systemctl daemon-reload
 }
 
 __network_setup_xenial() {
