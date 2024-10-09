@@ -19,6 +19,9 @@ main() {
 
 __install_go() {
   arch=$(uname -m)
+  if [[ $arch = "aarch64" ]]; then
+    arch="arm64"
+  fi
   wget https://go.dev/dl/go1.21.1.linux-$arch.tar.gz
   sudo tar -C /usr/local -xzf go1.21.1.linux-$arch.tar.gz
   echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
