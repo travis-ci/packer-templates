@@ -26,6 +26,8 @@ __install_go() {
   sudo tar -C /usr/local -xzf go1.21.1.linux-$arch.tar.gz
   echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
   export PATH=\$PATH:/usr/local/go/bin
+  export GOROOT=$(go1.21.1 env GOROOT)
+  export PATH=$GOROOT/bin:$PATH
 }
 
 main "$@"
