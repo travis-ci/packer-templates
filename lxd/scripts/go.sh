@@ -18,18 +18,18 @@ main() {
 # }
 
 __install_go() {
-  arch=$(uname -m)
-  if [[ $arch = "aarch64" ]]; then
-    arch="arm64"
-  fi
-  wget https://go.dev/dl/go1.21.1.linux-$arch.tar.gz
-  sudo tar -C /usr/local -xzf go1.21.1.linux-$arch.tar.gz
-  echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
-  export PATH=\$PATH:/usr/local/go/bin
-  source ~/.bashrc
-  export GOROOT=$(go1.21.1 env GOROOT)
-  export PATH=$GOROOT/bin:$PATH
-  source ~/.bashrc
+  # arch=$(uname -m)
+  # if [[ $arch = "aarch64" ]]; then
+  #   arch="arm64"
+  # fi
+  # wget https://go.dev/dl/go1.21.1.linux-$arch.tar.gz
+  # sudo tar -C /usr/local -xzf go1.21.1.linux-$arch.tar.gz
+  # echo "export PATH=$PATH:/usr/local/go/bin" >> /home/travis/.bashrc
+  # source /home/travis/.bashrc
+  echo "Installing newest GO"
+  sudo snap install go --classic
+  go version
+
 }
 
 main "$@"

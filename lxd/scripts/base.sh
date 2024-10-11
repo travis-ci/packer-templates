@@ -24,6 +24,9 @@ __network_setup() {
   echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
   # enable manage_etc_hosts: true
   grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
+  # Limit ds
+  echo datasource_list: [ NoCloud ] > /etc/cloud/cloud.cfg.d/98-disable-ds.cfg
+  
   mkdir -p /etc/systemd/system/systemd-networkd.service.d
   echo "[Service]" >> /etc/systemd/system/systemd-networkd.service.d/override.conf
   echo "ReadOnlyPaths=/sys" >> /etc/systemd/system/systemd-networkd.service.d/override.conf
