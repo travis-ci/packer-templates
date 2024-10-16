@@ -50,7 +50,7 @@ else
 end
 
 # HACK: install google-chrome missing dependencies differently
-#execute 'wget -q http://archive.ubuntu.com/ubuntu/pool/main/libu/libu2f-host/libu2f-udev_1.1.10-1_all.deb && sudo apt install ./libu2f-udev_1.1.10-1_all.deb'
+#xecute 'wget -q http://archive.ubuntu.com/ubuntu/pool/main/libu/libu2f-host/libu2f-udev_1.1.10-1_all.deb && sudo apt install ./libu2f-udev_1.1.10-1_all.deb'
 #execute 'wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg --force-depends -i ./google-chrome-stable_current_amd64.deb'
 
 include_recipe 'travis_build_environment::maven'
@@ -70,7 +70,8 @@ include_recipe 'travis_build_environment::git'
 include_recipe 'travis_build_environment::couchdb'
 include_recipe 'travis_build_environment::elasticsearch'
 include_recipe 'travis_build_environment::xserver'
-include_recipe 'travis_build_environment::google_chrome'
+# google_chrome is deprecated for Xenial, no workaround
+# include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 include_recipe 'travis_build_environment::ibm_advanced_tool_chain'
 include_recipe 'travis_phantomjs::2'

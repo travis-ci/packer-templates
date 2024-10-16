@@ -37,7 +37,7 @@ override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 gimme_versions = %w[
-  1.18.4
+  1.23.0
 ]
 #override['travis_build_environment']['virtualenv']['version'] = '20.15.1'
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
@@ -110,7 +110,7 @@ rubies = %w[
   3.3.5
 ]
 
-override['travis_build_environment']['default_ruby'] = '3.3.0'
+override['travis_build_environment']['default_ruby'] = '3.3.5'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = []
@@ -141,7 +141,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   elasticsearch
   firefox
   go-toolchain
-  google-chrome
   jdk
   memcached
   mongodb
