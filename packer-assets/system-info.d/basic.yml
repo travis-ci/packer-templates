@@ -40,7 +40,7 @@ commands:
     - { command: curl --version, pipe: head -1, name: curl version }
     - { command: wget --version, pipe: head -1, name: wget version }
     - { command: rsync --version, pipe: head -1, name: rsync version }
-    - { command: gimme --version, name: gimme version }
+    - { command: go version, name: go version }
     - { command: nvm --version, name: nvm version }
     - { command: perlbrew --version, name: perlbrew version }
     - { command: phpenv --version, name: phpenv version }

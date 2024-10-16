@@ -10,12 +10,12 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-gimme_versions = %w[
+go_versions = %w[
   1.11.1
 ]
 
-override['travis_build_environment']['gimme']['versions'] = gimme_versions
-override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
+override['travis_build_environment']['go']['versions'] = go_versions
+override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_build_environment']['pythons'] = []
 override['travis_build_environment']['python_aliases'] = {}

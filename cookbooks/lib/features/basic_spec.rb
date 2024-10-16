@@ -244,22 +244,6 @@ describe 'gcc installation' do
   end
 end
 
-describe 'gimme installation' do
-  describe command('gimme --version') do
-    its(:exit_status) { should eq 0 }
-  end
-
-  if os[:arch] !~ /ppc64/
-    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
-      its(:stdout) { should match 'go version go1.6.3' }
-    end
-  elsif os[:arch] =~ /ppc64/
-    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.4)" 2>&1)) do
-      its(:stdout) { should match 'go version go1.6.4 linux/ppc64le' }
-    end
-  end
-end
-
 def git_project
   Support.tmpdir.join('git-project')
 end

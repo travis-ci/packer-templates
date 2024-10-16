@@ -13,10 +13,6 @@ describe 'go toolchain installation' do
     its(:stdout) { should match(/^go version go/) }
   end
 
-  describe command('go env GOROOT') do
-    its(:stdout) { should match(%r{/\.gimme/}) }
-  end
-
   describe 'compiling something' do
     before do
       go_source.write(<<-EOF.gsub(/^\s+> ?/, ''))

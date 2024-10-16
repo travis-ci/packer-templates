@@ -38,12 +38,12 @@ override['travis_build_environment']['php_aliases'] = php_aliases
 override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' }]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-gimme_versions = %w[
+go_versions = %w[
   1.23.0
 ]
 
-override['travis_build_environment']['gimme']['versions'] = gimme_versions
-override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
+override['travis_build_environment']['go']['versions'] = go_versions
+override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_jdk']['versions'] = %w[
   openjdk8
