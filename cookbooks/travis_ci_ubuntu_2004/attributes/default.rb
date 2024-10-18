@@ -39,7 +39,7 @@ override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0'
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 go_versions = %w[
-  1.23.0
+  1.23
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
