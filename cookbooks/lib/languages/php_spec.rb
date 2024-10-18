@@ -11,9 +11,16 @@ if os[:arch] !~ /ppc64|aarch64|arm64/
       its(:stdout) { should match(/^PHP \d+\.\d+\.\d+.+fpm-fcgi/) }
     end
 
-    describe phpcommand('php -m --version') do
-      # Running `php -m` hangs, but adding more args doesn't (???)
-      its(:stdout) { should include(*PHP_MODULES) }
+    if %w[xenial bionic focal].include?(Support.distro)
+      describe phpcommand('php -m --version') do
+        # Running `php -m` hangs, but adding more args doesn't (???)
+        its(:stdout) { should include(*PHP_MODULES_OLDER) }
+      end
+    elsif 'jammy'.include?(Support.distro)
+      describe phpcommand('php -m --version') do
+        # Running `php -m` hangs, but adding more args doesn't (???)
+        its(:stdout) { should include(*PHP_MODULES_NEWER) }
+      end
     end
 
     describe file('/home/travis/.pearrc') do
