@@ -7,14 +7,10 @@ variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
   image_name: travis-ci-stevonnie-xenial-{{ timestamp }}-<%= git_desc %>
-  openstack_source_image_name: "{{ env `OS_SOURCE_IMAGE_XENIAL` }}"
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
   travis_uid: "{{ env `TRAVIS_UID` }}"
-  openstack_zone: "{{ env `OS_ZONE` }}"
-  openstack_key_path: "{{ env `OS_SSH_KEY_PATH`}}"
-  openstack_key_name: "{{ env `OS_SSH_KEY` }}"
   docker_login_username: "{{ env `DOCKER_LOGIN_USERNAME` }}"
   docker_login_password: "{{ env `DOCKER_LOGIN_PASSWORD` }}"
   docker_login_server: "{{ env `DOCKER_LOGIN_SERVER` }}"
@@ -37,12 +33,6 @@ builders:
   - ci
   - stevonnie
   - travis-ci-packer-templates
-- type: lxd
-  name: lxd
-  image: images:ubuntu/xenial
-  output_image: "{{ user `image_name` }}"
-  publish_properties:
-   - description: Travis CI stevonnie build env template!
 - type: docker
   name: docker
   login: true
@@ -64,20 +54,6 @@ builders:
   - "{{ .Image }}"
   - /sbin/init
   commit: true
-- type: openstack
-  name: openstack
-  flavor: m1.large
-  insecure: true
-  image_name: "{{ user `image_name` }}"
-  ssh_username: ubuntu
-  networks:
-  <% ENV['OS_NETWORKS'].to_s.split(',').map(&:strip).each do |network| %>
-  - <%= network %>
-  <% end %>
-  source_image_name: "{{ user `openstack_source_image_name` }}"
-  availability_zone: "{{ user `openstack_zone` }}"
-  ssh_keypair_name:  "{{ user `openstack_key_name` }}"
-  ssh_private_key_file: "{{ user `openstack_key_path`  }}"
 provisioners:
 - type: shell
   inline: sudo apt-get update -yqq && sudo apt-get upgrade -yqq
@@ -108,8 +84,6 @@ provisioners:
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
-  - openstack
-  - lxd
 - type: file
   source: packer-assets/ubuntu-xenial-ci-stevonnie-docker-packages.txt
   destination: /var/tmp/packages.txt
@@ -126,25 +100,6 @@ provisioners:
   only:
   - docker
   - googlecompute
-  - lxd
-  # Recommendations for lxd images
-- type: shell
-  inline: "systemctl mask sys-kernel-config.mount"
-  only:
-  - lxd
-- type: shell
-  inline: "systemctl mask systemd-modules-load.service"
-  only:
-  - lxd
-- type: shell
-  inline: "apt install snapd -y && snap install core"
-  only:
-  - lxd
-- type: shell
-  inline: "apt-get remove --purge cloud-init --yes"
-  only:
-  - lxd
-  # end Recommendations
 - type: shell
   scripts:
   - packer-scripts/pre-chef-bootstrap
@@ -167,11 +122,6 @@ provisioners:
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% else %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
-  <% end %>
-  <% if ENV['BUILDER'] == "lxd" %>
-  # packer lxd builder copy cookbooks to wrong directory
-  execute_command: "rsync -a --delete-after /tmp/packer-chef-solo/cookbooks-0/cookbooks/ /tmp/packer-chef-solo/cookbooks-0/ && \
-  {{if .Sudo}}sudo {{end}}chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
   <% end %>
   cookbook_paths:
   - cookbooks
@@ -240,7 +190,6 @@ post-processors:
     - IMAGE_NAME={{ user `image_name` }}
     only:
     - googlecompute
-    - lxd
   - type: shell-local
     script: bin/job-board-register
     environment_vars:
@@ -250,14 +199,3 @@ post-processors:
 -
   - type: shell-local
     script: bin/write-latest-image-name
-  - type: shell-local
-    script: bin/lxc-export.sh
-    environment_vars:
-    - IMAGE_NAME={{ user `image_name` }}
-    only:
-    - lxd
-  - type: shell-local
-    inline:
-    - echo {{ user `image_name` }} > /tmp/packer-build-image-name
-    only:
-    - lxd

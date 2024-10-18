@@ -36,7 +36,7 @@ override['travis_perlbrew']['modules'] = %w[
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 go_versions = %w[
-  1.18.4
+  1.23
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
