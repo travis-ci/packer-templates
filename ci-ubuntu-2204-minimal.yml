@@ -1,12 +1,12 @@
 ---
-description: Travis CI Ubuntu 20.04 build env template
+description: Travis CI Ubuntu 22.04 build env template
 variables:
   chef_log_level: info
-  docker_repository: travisci/ci-ubuntu-2004
+  docker_repository: travisci/ci-ubuntu-2204
   docker_tag: packer-minimal-{{ timestamp }}-<%= git_desc %>
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  image_name: travis-ci-ubuntu-2004-minimal-{{ timestamp }}-<%= git_desc %>
+  image_name: travis-ci-ubuntu-2204-minimal-{{ timestamp }}-<%= git_desc %>
   travis_cookbooks_branch: "{{ env `TRAVIS_COOKBOOKS_BRANCH` }}"
   travis_cookbooks_edge_branch: master
   travis_cookbooks_sha: "{{ env `TRAVIS_COOKBOOKS_SHA` }}"
@@ -21,19 +21,19 @@ builders:
   ssh_timeout: 10m
   ssh_port: 22
   ssh_username: packer
-  image_description: Travis CI Ubuntu 20.04
+  image_description: Travis CI Ubuntu 22.04
   account_file: "{{ user `gce_account_file` }}"
   project_id: "{{ user `gce_project_id` }}"
-  source_image: travis-ci-focal-fossa
-  source_image_project_id: travis-staging-1
+  source_image_family: ubuntu-2204-lts
   image_licenses: ["projects/vm-options/global/licenses/enable-vmx"]
   zone: us-central1-a
   image_name: "{{ user `image_name` }}"
   machine_type: n2-standard-4
   disk_size: 50
+  temporary_key_pair_type: ed25519
   tags:
   - ci
-  - ubuntu-2004
+  - ubuntu-2204
   - travis-ci-packer-templates
 - type: docker
   name: docker
@@ -43,9 +43,9 @@ builders:
   login_server: "{{ user `docker_login_server` }}"
   ssh_pty: true
   <% if RUBY_PLATFORM =~ /powerpc64/ %>
-  image: "travisci/gce-parity:20.04-ppc64le"
+  image: "travisci/gce-parity:22.04-ppc64le"
   <% else %>
-  image: "travisci/gce-parity:20.04"
+  image: "travisci/gce-parity:22.04"
   <% end %>
   run_command:
   - -d
@@ -70,19 +70,22 @@ provisioners:
   pause_before: 5s
   only:
   - docker
+# - type: file
+#   source: tmp/travis-cookbooks
+#   destination: /var/tmp/travis-cookbooks
 - type: file
   source: tmp/git-meta
   destination: /var/tmp/git-meta
 - type: file
-  source: packer-assets/ubuntu-2004-normal-purge.txt
+  source: packer-assets/ubuntu-2204-normal-purge.txt
   destination: /var/tmp/purge.txt
 - type: file
-  source: packer-assets/ci-ubuntu-2004-packages.txt
+  source: packer-assets/ci-ubuntu-2204-packages.txt
   destination: /var/tmp/packages.txt
   only:
   - googlecompute
 - type: file
-  source: packer-assets/ci-ubuntu-2004-docker-packages.txt
+  source: packer-assets/ci-ubuntu-2204-docker-packages.txt
   destination: /var/tmp/packages.txt
   only:
   - docker
@@ -99,7 +102,7 @@ provisioners:
   - googlecompute
 - type: shell
   scripts:
-  - packer-scripts/pre-chef-bootstrap-focal
+  - packer-scripts/pre-chef-bootstrap-jammy
   - packer-scripts/clone-travis-cookbooks
   environment_vars:
   - SKIP_APT_UPGRADE=1
@@ -108,12 +111,12 @@ provisioners:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 - type: file
-  source: packer-assets/ubuntu-2004-minimal-system-info-commands.yml
-  destination: /var/tmp/ubuntu-2004-minimal-system-info-commands.yml
+  source: packer-assets/ubuntu-2204-minimal-system-info-commands.yml
+  destination: /var/tmp/ubuntu-2204-minimal-system-info-commands.yml
 - type: shell
-  inline: chmod 0644 /var/tmp/ubuntu-2004-minimal-system-info-commands.yml
+  inline: chmod 0644 /var/tmp/ubuntu-2204-minimal-system-info-commands.yml
 - type: chef-solo
-  version: 17.10.3
+  version: 17.6.18
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo --chef-license accept-silent -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
@@ -131,7 +134,7 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   <% end %>
   run_list:
-  - recipe[travis_ci_ubuntu_2004_minimal]
+  - recipe[travis_ci_ubuntu_2204_minimal]
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>

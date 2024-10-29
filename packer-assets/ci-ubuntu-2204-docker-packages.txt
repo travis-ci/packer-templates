@@ -1,0 +1,12 @@
+bridge-utils
+ccache
+emacs-nox
+hashdeep
+libmysqlclient-dev
+libtidy-dev
+locales
+mysql-client
+postgresql-client
+tmate
+uuid-dev
+ant

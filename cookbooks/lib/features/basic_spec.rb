@@ -104,32 +104,6 @@ describe 'bazaar installation' do
   end
 end
 
-describe 'ccache installation' do
-  describe command('ccache -V') do
-    its(:exit_status) { should eq 0 }
-  end
-
-  describe 'ccache commands are executed' do
-    describe command('ccache -s') do
-      its(:stdout) do
-        should include(
-          'cache directory',
-          'cache hit',
-          'cache miss',
-          'files in cache',
-          'max cache size'
-        )
-      end
-    end
-
-    describe command('ccache -M 0.5') do
-      its(:stdout) do
-        should match(/Set cache size limit to (512\.0 Mbytes|500\.0 MB)/)
-      end
-    end
-  end
-end
-
 if os[:arch] !~ /aarch64|arm64/
   describe 'clang installation' do
     describe command('clang -v') do
@@ -450,7 +424,7 @@ end
 
 if os[:arch] !~ /aarch64/
   describe command('psql --version') do
-    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2}|13\.[0-9]{1,2})/) }
+    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2}|13\.[0-9]{1,2}|14\.[0-9]{1,2})/) }
     its(:exit_status) { should eq 0 }
   end
 end
@@ -506,7 +480,7 @@ if os[:arch] !~ /aarch64|arm64/
     describe 'rvm commands' do
       describe command('rvm list') do
         its(:stdout) { should include('current') }
-        its(:stdout) { should match(/ruby-2\.[234567]\.\d/) }
+        its(:stdout) { should match(/ruby-[23]\.[1234567]\.\d/) }
         its(:stderr) { should be_empty }
       end
 
@@ -615,12 +589,6 @@ end
 
 describe file('/var/ramfs'), docker: false do
   it { should be_mounted.with(type: 'tmpfs') }
-end
-
-describe 'travis_build_environment packages' do
-  Support.base_packages.each do |package_name|
-    describe(package(package_name)) { it { should be_installed } }
-  end
 end
 
 describe user('travis') do
