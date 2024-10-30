@@ -20,10 +20,10 @@ main() {
 
       sudo apt-get install -y libgirepository1.0-dev libdbus-1-dev libsystemd-dev libcurl4-openssl-dev python3-testresources
 
-      sudo chown -R $USER:$USER /home/packer/.cache/pip
+      #sudo chown -R $USER:$USER /home/packer/.cache/pip
 
-      pip3 install --upgrade pip
-      pip3 install pip-review
+      pip3 install --upgrade pip -H
+      pip3 install pip-review -H
       pip-review --auto
 
       echo "Appling docker buildx fix"
