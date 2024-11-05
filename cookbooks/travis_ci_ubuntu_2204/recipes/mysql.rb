@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
-package 'mysql-server'
-package 'mysql-client'
+package 'mysql-server' do
+  action :install
+end
+
+package 'mysql-client' do
+  action :install
+end
+
+service 'mysql' do
+  action [:start]
+end
 
 template "#{node['travis_build_environment']['home']}/.my.cnf" do
   source 'ci_user/dot_my.cnf.erb'

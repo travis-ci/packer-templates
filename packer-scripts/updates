@@ -22,9 +22,9 @@ main() {
 
       #sudo chown -R $USER:$USER /home/packer/.cache/pip
 
-      pip3 install --upgrade pip -H
-      pip3 install pip-review -H
-      pip-review --auto
+      pip install --upgrade pip
+      #pip install pip-review
+      #pip-review --auto
 
       echo "Appling docker buildx fix"
       sudo install -m 0755 -d /etc/apt/keyrings

@@ -55,6 +55,7 @@ __install_packages() {
     sudo \
     wget \
     rsync \
+    rubygems \
     python3 \
     python3.10 \
     python3-pip \
