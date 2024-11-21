@@ -7,6 +7,8 @@ main() {
   shopt -s nullglob
 
   export DEBIAN_FRONTEND='noninteractive'
+  ENV LC_ALL=C.UTF-8 
+  ENV LANG=C.UTF-8
 
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
