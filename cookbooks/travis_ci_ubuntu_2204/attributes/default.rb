@@ -19,6 +19,13 @@ pythons = %w[
   3.10.14
   3.12.4
 ]
+
+%w[3].each do |pyver|
+  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+    pythons.unshift(pythons.delete(py))
+  end
+end
+
 override['travis_build_environment']['pythons'] = pythons
 
 override['travis_build_environment']['pip']['packages'] = {} # need to fill in
