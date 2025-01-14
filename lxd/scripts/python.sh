@@ -53,9 +53,10 @@ __install_pip() {
     rm -f get-pip.py
     id travis && chown -R travis: /home/travis/.cache/pip/
   else
-    wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+    wget https://bootstrap.pypa.io/pip/get-pip.py
     sudo python3 get-pip.py
-    pip3 install --user --upgrade setuptools wheel
+    python3 -m pip install setuptools wheel testresources virtualenv 
+    #pip3 install --user --upgrade wheel testresources virtualenv 
     rm -f get-pip.py
     id travis && chown -R travis: /home/travis/.cache/pip/
   fi
