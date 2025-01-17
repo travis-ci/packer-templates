@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-execute 'add_erlang_gpg_key' do
-  command 'wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key add -'
+remote_file '/usr/share/keyrings/erlang_solutions.asc' do
+  source 'https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc'
+  mode '0644'
 end
 
-execute 'add_erlang_repository' do
-  command 'echo "deb https://packages.erlang-solutions.com/ubuntu focal contrib" | sudo tee /etc/apt/sources.list.d/rabbitmq.list'
+apt_repository 'erlang_solutions' do
+  uri          'https://packages.erlang-solutions.com/ubuntu'
+  distribution 'focal'
+  components   ['contrib']
+  key          '/usr/share/keyrings/erlang_solutions.asc'
 end
-
-apt_update
 
 package 'erlang' do
   action :install
