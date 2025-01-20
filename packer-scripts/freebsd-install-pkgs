@@ -1,18 +1,15 @@
-#!/bin/csh
+#!/bin/sh
 
 set -e
 
-pkg install -y bash base64 ncurses || exit 1
+pkg install -y bash base64 ncurses terminfo-db || exit 1
 
 echo "Verifying presence of libncursesw.so.8..."
-if (! ldconfig -r | grep -q libncursesw.so.8) then
-    echo "Error: libncursesw.so.8 not found. Please ensure ncurses is installed or check system configuration."
+if ! ldconfig -r | grep -q libncursesw.so.8; then
+    echo "Error: libncursesw.so.8 not found, please verify ncurses installation."
     exit 1
-else
-    echo "libncursesw.so.8 found."
-endif
+fi
 
-echo "Installing Travis Artifacts..."
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash || exit 1
 
 echo "Script completed successfully."
