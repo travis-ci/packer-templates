@@ -6,19 +6,18 @@ pkg install -y bash base64 ncurses terminfo-db ruby || exit 1
 
 echo "Verifying presence of libncursesw.so.8..."
 if ! ldconfig -r | grep -q libncursesw.so.8; then
-    echo "Adding /usr/local/lib to dynamic linker paths..."
-    echo "/usr/local/lib" >> /etc/ld-elf.so.conf
+    echo "Adding library mapping for libncursesw.so.8 to libncursesw.so.9 in /etc/libmap.conf..."
+    echo "libncursesw.so.8 libncursesw.so.9" >> /etc/libmap.conf
+    echo "libncurses.so.8 libncurses.so.9" >> /etc/libmap.conf
     ldconfig
+fi
 
-    if ! ldconfig -r | grep -q libncursesw.so.8; then
-        echo "Error: libncursesw.so.8 not found after reconfiguring dynamic linker."
-        echo "Recompiling Ruby to ensure compatibility..."
-        cd /usr/ports/lang/ruby || exit 1
-        make clean install
-        ldconfig
-    fi
+echo "Rechecking presence of libncursesw.so.8 after mapping..."
+if ! ldconfig -r | grep -q libncursesw.so.8; then
+    echo "Error: libncursesw.so.8 still not found after mapping. Please check your ncurses installation."
+    exit 1
 else
-    echo "libncursesw.so.8 found."
+    echo "libncursesw.so.8 successfully mapped to libncursesw.so.9."
 fi
 
 if ! id travis >& /dev/null; then
