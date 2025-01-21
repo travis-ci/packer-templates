@@ -4,33 +4,7 @@ set -e
 
 pkg install -y bash base64 ncurses terminfo-db ruby || exit 1
 
-echo "Checking installed version of libncursesw.so..."
-LIBNCURSESW_VERSION=$(ls -l /usr/local/lib/libncursesw.so* 2>/dev/null | grep -o 'libncursesw.so.[0-9]*' | tail -1)
-
-if [ -n "$LIBNCURSESW_VERSION" ]; then
-    echo "Installed libncursesw version: $LIBNCURSESW_VERSION"
-else
-    echo "libncursesw not found in /usr/local/lib. Proceeding with checks..."
-fi
-
-echo "Verifying presence of libncursesw.so.8..."
-if ! ldconfig -r | grep -q libncursesw.so.8; then
-    echo "Adding library mapping for libncursesw.so.8 to libncursesw.so.9 in /etc/libmap.conf..."
-    echo "libncursesw.so.8 libncursesw.so.9" >> /etc/libmap.conf
-    echo "libncurses.so.8 libncurses.so.9" >> /etc/libmap.conf
-    ldconfig
-fi
-
-echo "Rechecking presence of libncursesw.so.8 after mapping..."
-if ! ldconfig -r | grep -q libncursesw.so.8; then
-    echo "Error: libncursesw.so.8 still not found after mapping. Please check your ncurses installation."
-    exit 1
-else
-    echo "libncursesw.so.8 successfully mapped to libncursesw.so.9."
-fi
-
 if ! id travis >& /dev/null; then
-    echo "Creating user 'travis'..."
     pw useradd -n travis -m -s /usr/local/bin/bash -c "Travis User"
 fi
 
