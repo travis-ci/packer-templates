@@ -1,13 +1,4 @@
-#!/bin/sh
+#!/bin/csh
 
-set -e
-
-pkg install -y bash base64 ncurses terminfo-db ruby || exit 1
-
-if ! id travis >& /dev/null; then
-    pw useradd -n travis -m -s /usr/local/bin/bash -c "Travis User"
-fi
-
-curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash || exit 1
-
-echo "Script completed successfully."
+pkg install -y bash base64
+curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
