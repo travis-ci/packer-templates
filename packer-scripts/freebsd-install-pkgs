@@ -4,6 +4,15 @@ set -e
 
 pkg install -y bash base64 ncurses terminfo-db ruby || exit 1
 
+echo "Checking installed version of libncursesw.so..."
+LIBNCURSESW_VERSION=$(ls -l /usr/local/lib/libncursesw.so* 2>/dev/null | grep -o 'libncursesw.so.[0-9]*' | tail -1)
+
+if [ -n "$LIBNCURSESW_VERSION" ]; then
+    echo "Installed libncursesw version: $LIBNCURSESW_VERSION"
+else
+    echo "libncursesw not found in /usr/local/lib. Proceeding with checks..."
+fi
+
 echo "Verifying presence of libncursesw.so.8..."
 if ! ldconfig -r | grep -q libncursesw.so.8; then
     echo "Adding library mapping for libncursesw.so.8 to libncursesw.so.9 in /etc/libmap.conf..."
