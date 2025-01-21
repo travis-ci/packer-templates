@@ -2,12 +2,28 @@
 
 set -e
 
-pkg install -y bash base64 ncurses terminfo-db || exit 1
+pkg install -y bash base64 ncurses terminfo-db ruby || exit 1
 
 echo "Verifying presence of libncursesw.so.8..."
 if ! ldconfig -r | grep -q libncursesw.so.8; then
-    echo "Error: libncursesw.so.8 not found, please verify ncurses installation."
-    exit 1
+    echo "Adding /usr/local/lib to dynamic linker paths..."
+    echo "/usr/local/lib" >> /etc/ld-elf.so.conf
+    ldconfig
+
+    if ! ldconfig -r | grep -q libncursesw.so.8; then
+        echo "Error: libncursesw.so.8 not found after reconfiguring dynamic linker."
+        echo "Recompiling Ruby to ensure compatibility..."
+        cd /usr/ports/lang/ruby || exit 1
+        make clean install
+        ldconfig
+    fi
+else
+    echo "libncursesw.so.8 found."
+fi
+
+if ! id travis >& /dev/null; then
+    echo "Creating user 'travis'..."
+    pw useradd -n travis -m -s /usr/local/bin/bash -c "Travis User"
 fi
 
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash || exit 1
