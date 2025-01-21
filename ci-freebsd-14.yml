@@ -56,7 +56,7 @@ provisioners:
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S sh '{{ .Path }}'"
 - type: chef-solo
-  version: 13.8.5
+  version: 18.4.12
   config_template: chef-solo.rb.tmpl
   <% if ENV['CHEF_PROFILING'] %>
   execute_command: "{{if .Sudo}}sudo {{end}}CI=yes chef-solo -F doc --no-color -c {{.ConfigPath}} -j {{.JsonPath}}"
