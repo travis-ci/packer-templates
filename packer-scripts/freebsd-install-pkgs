@@ -4,16 +4,13 @@
 pkg update || exit 1
 
 # Instalacja wymaganych pakietów
-pkg install -y bash base64 ncurses terminfo-db compat12x-amd64 gcc gmake libffi libmpc libmpfr libgmp zlib bzip2 xz openssl || exit 1
+pkg install -y bash base64 ncurses terminfo-db compat12x-amd64 \
+               gcc gmake libffi mpc mpfr gmp bzip2 openssl || exit 1
 
 # Tworzenie użytkownika 'travis', jeśli nie istnieje
 if ! id travis >/dev/null 2>&1; then
     pw useradd -n travis -m -s /usr/local/bin/bash -c "Travis User" || exit 1
 fi
-
-# Ustawienie zmiennych środowiskowych dla kompilacji Pythona
-export CFLAGS="-I/usr/local/include"
-export LDFLAGS="-L/usr/local/lib"
 
 # Instalacja narzędzia `artifacts`
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash || exit 1
