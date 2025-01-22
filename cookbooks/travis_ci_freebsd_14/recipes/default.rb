@@ -27,7 +27,7 @@
 freebsd_package 'coreutils'
 freebsd_package 'libunwind'
 
-freebsd_package 'gcc10-devel'
+freebsd_package 'gcc11-devel'
 freebsd_package 'cmake'
 freebsd_package 'gmake'
 freebsd_package 'gnulib'
