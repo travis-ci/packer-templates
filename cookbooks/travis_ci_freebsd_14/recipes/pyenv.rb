@@ -12,7 +12,7 @@ remote_file pyenv_installer_path do
 end
 
 bash 'install_pyenv' do
-  code "#{pyenv_installer_path}"
+  code pyenv_installer_path.to_s
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
   environment('HOME' => node['travis_build_environment']['home'])
@@ -33,58 +33,34 @@ bash_profile = ::File.join(
 )
 
 bash 'export_path_to_pyenv' do
-  code <<-EOH
-    echo 'export PATH=#{node['travis_build_environment']['home']}/.pyenv/bin:$PATH' >> #{bash_profile}
-  EOH
+  code "echo 'export PATH=#{node['travis_build_environment']['home']}/.pyenv/bin:$PATH' >> #{bash_profile}"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
 end
 
 bash 'add_pyenv_init_to_bash_profile' do
-  code <<-EOH
-    echo 'eval "$(pyenv init --path)"' >> #{bash_profile}
-    echo 'eval "$(pyenv init -)"' >> #{bash_profile}
-  EOH
+  code "echo 'eval \"$(pyenv init -)\"' >> #{bash_profile}"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
 end
 
 bash 'add_virtualenv_init_to_bash_profile' do
-  code <<-EOH
-    echo 'eval "$(pyenv virtualenv-init -)"' >> #{bash_profile}
-  EOH
+  code "echo 'eval \"$(pyenv virtualenv-init -)\"' >> #{bash_profile}"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
 end
 
-bash 'pyenv_global_2.7.17_genc_pycparser' do
-  code <<-EOH
-    source #{bash_profile}
-    pyenv install 2.7.17
-    pyenv global 2.7.17
-    pip2.7 install -U pip wheel setuptools
-    pip2.7 install genc pycparser
-  EOH
-  user node['travis_build_environment']['user']
-  group node['travis_build_environment']['group']
-  environment(
-    'HOME' => node['travis_build_environment']['home'],
-    'PATH' => ENV.fetch('PATH', nil)
-  )
-end
 
 pyenv_versions = %w[
-  3.6.10
   3.7.6
   3.8.1
+  3.9.16
+  3.10.9
 ]
 
-pyenv_versions.each do |p|
-  bash "pyenv_install_#{p}" do
-    code <<-EOH
-      source #{bash_profile}
-      pyenv install #{p}
-    EOH
+pyenv_versions.each do |version|
+  bash "pyenv_install_#{version}" do
+    code "source #{bash_profile} && pyenv install #{version}"
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
     environment(
@@ -94,15 +70,8 @@ pyenv_versions.each do |p|
   end
 end
 
-%w[pypy pypy3].each do |pkg|
-  freebsd_package pkg
-end
-
-bash 'pyenv_global_set_to_3.6' do
-  code <<-EOH
-    source #{bash_profile}
-    pyenv global 3.6.10
-  EOH
+bash 'pyenv_global_set_to_3.8.1' do
+  code "source #{bash_profile} && pyenv global 3.8.1"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
   environment(
@@ -112,10 +81,7 @@ bash 'pyenv_global_set_to_3.6' do
 end
 
 bash 'pip_install_virtualenv' do
-  code <<-EOH
-    source #{bash_profile}
-    pip install virtualenv==15.1.0
-  EOH
+  code "source #{bash_profile} && pip install virtualenv==15.1.0"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
   environment(
