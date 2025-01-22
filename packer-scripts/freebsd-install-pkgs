@@ -2,11 +2,14 @@
 
 pkg update || exit 1
 
-pkg install -y bash base64 ncurses terminfo-db compat12x-amd64 || exit 1
+pkg install -y bash base64 ncurses terminfo-db compat12x-amd64 gcc gmake libffi libmpc libmpfr libgmp zlib bzip2 xz openssl || exit 1
 
 if ! id travis >/dev/null 2>&1; then
     pw useradd -n travis -m -s /usr/local/bin/bash -c "Travis User" || exit 1
 fi
+
+export CFLAGS="-I/usr/local/include"
+export LDFLAGS="-L/usr/local/lib"
 
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash || exit 1
 
