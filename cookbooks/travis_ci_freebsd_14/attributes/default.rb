@@ -65,7 +65,7 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   python_interpreter
 ]
 override['travis_packer_templates']['job_board']['languages'] = %w[
-  __freebsd_12__
+  __freebsd_14__
   minimal
   sh
   shell

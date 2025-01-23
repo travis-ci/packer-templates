@@ -65,3 +65,4 @@ freebsd_package 'gradle'
 freebsd_package 'apache-ant'
 
 include_recipe '::jdk_switcher'
+include_recipe '::rvm'
