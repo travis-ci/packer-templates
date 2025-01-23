@@ -53,9 +53,10 @@ include_recipe '::create_bash_profile'
 
 include_recipe '::pyenv'
 
-include_recipe 'travis_build_environment::rvm'
+#include_recipe 'travis_build_environment::rvm'
 # include_recipe 'travis_build_environment::go'
 
+include_recipe '::rvm'
 freebsd_package 'openjdk8'
 freebsd_package 'openjdk11'
 freebsd_package 'openjdk12'
@@ -65,4 +66,4 @@ freebsd_package 'gradle'
 freebsd_package 'apache-ant'
 
 include_recipe '::jdk_switcher'
-include_recipe '::rvm'
+
