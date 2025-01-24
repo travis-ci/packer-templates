@@ -41,6 +41,7 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 rubies = %w[
+  2.7.9
   3.2.2
 ]
 
