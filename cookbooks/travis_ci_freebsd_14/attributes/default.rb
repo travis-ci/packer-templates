@@ -19,13 +19,20 @@ override['travis_python']['pyenv_install_url'] = 'https://raw.githubusercontent.
 override['travis_python']['pyenv_install_path'] = '/opt/pyenv/install'
 
 go_versions = %w[
-  1.7.4
+  1.23
+]
+
+pythons = %w[
+  3.7.17
+  3.8.18
+  3.9.18
+  3.12.4
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
 
-override['travis_build_environment']['pythons'] = []
+override['travis_build_environment']['pythons'] = pythons
 override['travis_build_environment']['python_aliases'] = {
   '2.7.15' => %w[2.7],
   '3.6.10' => %w[3.6],
@@ -41,7 +48,6 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 rubies = %w[
-  2.7.6
   3.2.2
 ]
 
