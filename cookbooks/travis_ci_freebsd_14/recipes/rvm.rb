@@ -89,7 +89,7 @@ bash 'run_rvm_installer' do
   retry_delay 30
 end
 
-rvm_install_flag = "--autolibs=enable --fuzzy"
+rvm_install_flag = "--disable-binary --autolibs=enable --fuzzy"
 
 unless node['travis_build_environment']['default_ruby'].to_s.empty?
   bash "install_default_ruby_#{node['travis_build_environment']['default_ruby']}" do
