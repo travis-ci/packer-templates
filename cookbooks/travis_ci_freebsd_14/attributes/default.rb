@@ -41,7 +41,7 @@ override['travis_build_environment']['nodejs_aliases'] = {}
 override['travis_build_environment']['nodejs_default_modules'] = []
 
 rubies = %w[
-  2.7.2
+  3.2.2
 ]
 
 override['travis_build_environment']['default_ruby'] = rubies.max
