@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 gpg_keys = {
   mpapis:     '08f64631c598cbe4398c5850725c8e6ab60dc5d86b6214e069d7ced1d546043b',
-  pkuczynski: 'd33ce5907fe28e6938feab7f63a9ef8a26a565878b1ad5bce063a86019aeaf77',
+  pkuczynski: 'd33ce5907fe28e6938feab7f63a9ef8a26a565878b1ad5bce063a86019aeaf77'
 }
 
 def gpg_key_path(name)
@@ -11,66 +9,35 @@ end
 
 rvm_installer_path = ::File.join(Chef::Config[:file_cache_path], 'rvm-installer')
 rvmrc_path = ::File.join(node['travis_build_environment']['home'], '.rvmrc')
-rvmrc_content = Array(node['travis_build_environment']['rvmrc_env']).map { |k, v| "#{k}='#{v}'" }.join("\n")
+rvmrc_content = Array(node['travis_build_environment']['rvmrc_env'])
+  .map { |k, v| "#{k}='#{v}'" }
+  .join("\n")
 rvm_script_path = ::File.join(node['travis_build_environment']['home'], '.rvm', 'bin', 'rvm')
-global_gems = Array(node['travis_build_environment']['global_gems']).map { |g| g[:name] }.join(' ')
+global_gems = Array(node['travis_build_environment']['global_gems'])
+  .map { |g| g[:name] }
+  .join(' ')
 
-packages = value_for_platform(
-  'ubuntu' => {
-    'default' => %w(
-      automake
-      bash
-      bison
-      bzip2
-      curl
-      g++
-      gawk
-      gcc
-      gnupg2
-      libc6-dev
-      libffi-dev
-      libgdbm-dev
-      libgmp-dev
-      libncurses5-dev
-      libreadline6-dev
-      libsqlite3-dev
-      libssl-dev
-      libtool
-      libyaml-dev
-      make
-      openssl
-      patch
-      pkg-config
-      sqlite3
-      zlib1g
-      zlib1g-dev
-    )
-  },
-  'freebsd' => {
-    'default' => %w(
-      bash
-      gmake
-      curl
-      gnupg
-      pkgconf
-      autoconf
-      automake
-      libtool
-      bison
-      openssl
-      libffi
-      libyaml
-      readline
-      libxslt
-      libxml2
-    )
-  }
-)
+freebsd_packages = %w[
+  bash
+  gmake
+  curl
+  gnupg
+  pkgconf
+  autoconf
+  automake
+  libtool
+  bison
+  openssl
+  libffi
+  libyaml
+  readline
+  libxslt
+  libxml2
+]
 
-packages.each do |p|
-  package p do
+freebsd_packages.each do |pkg|
+  package pkg do
     action :install
-    options '--no-install-recommends --no-upgrade' if platform?('ubuntu')
   end
 end
 
@@ -82,12 +49,12 @@ gpg_keys.each do |name, checksum|
     checksum checksum
     owner node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
-    mode '644'
+    mode '0644'
     retries 2
     retry_delay 30
   end
 
-  bash "import #{name}.asc" do
+  bash "import_#{name}_gpg_key" do
     code "gpg2 --import #{key_path}"
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
@@ -100,7 +67,7 @@ remote_file rvm_installer_path do
   source 'https://get.rvm.io'
   owner node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
-  mode '755'
+  mode '0755'
   retries 2
   retry_delay 30
 end
@@ -109,30 +76,26 @@ file rvmrc_path do
   content rvmrc_content
   owner node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
-  mode '644'
+  mode '0644'
 end
 
-bash 'run rvm installer' do
+bash 'run_rvm_installer' do
   code "#{rvm_installer_path} stable"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
-  creates ::File.join(node['travis_build_environment']['home'], '.rvm', 'VERSION')
   environment('HOME' => node['travis_build_environment']['home'])
+  creates ::File.join(node['travis_build_environment']['home'], '.rvm', 'VERSION')
   retries 2
   retry_delay 30
 end
 
-rvm_install_flag = "--autolibs=enable --fuzzy"
-rvm_install_flag += " -- --use-system-libraries" if node['platform_family'] == 'freebsd'
+rvm_install_flag = "--autolibs=enable --fuzzy -- --use-system-libraries"
 
-=begin
 unless node['travis_build_environment']['default_ruby'].to_s.empty?
-  bash "install default ruby #{node['travis_build_environment']['default_ruby']}" do
-    code %W(
-      #{rvm_script_path} install
-      #{node['travis_build_environment']['default_ruby']}
-      #{rvm_install_flag}
-    ).join(' ')
+  bash "install_default_ruby_#{node['travis_build_environment']['default_ruby']}" do
+    code <<-EOH
+      #{rvm_script_path} install #{node['travis_build_environment']['default_ruby']} #{rvm_install_flag}
+    EOH
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
     environment('HOME' => node['travis_build_environment']['home'])
@@ -140,12 +103,10 @@ unless node['travis_build_environment']['default_ruby'].to_s.empty?
     retry_delay 30
   end
 
-
-  bash "create default alias for #{node['travis_build_environment']['default_ruby']}" do
-    code %W(
-      #{rvm_script_path} alias create
-      default #{node['travis_build_environment']['default_ruby']}
-    ).join(' ')
+  bash "alias_default_ruby_#{node['travis_build_environment']['default_ruby']}" do
+    code <<-EOH
+      #{rvm_script_path} alias create default #{node['travis_build_environment']['default_ruby']}
+    EOH
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
     environment('HOME' => node['travis_build_environment']['home'])
@@ -154,7 +115,7 @@ unless node['travis_build_environment']['default_ruby'].to_s.empty?
   end
 end
 
-bash 'install global gems' do
+bash 'install_global_gems' do
   code "#{rvm_script_path} @global do gem install #{global_gems} --force"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
@@ -167,11 +128,10 @@ end
 Array(node['travis_build_environment']['rubies']).each do |ruby_def|
   next if ruby_def == node['travis_build_environment']['default_ruby']
 
-  bash "install ruby #{ruby_def}" do
-    code %W(
-      #{rvm_script_path} install
-      #{ruby_def} #{rvm_install_flag}
-    ).join(' ')
+  bash "install_ruby_#{ruby_def}" do
+    code <<-EOH
+      #{rvm_script_path} install #{ruby_def} #{rvm_install_flag}
+    EOH
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
     environment('HOME' => node['travis_build_environment']['home'])
@@ -179,5 +139,3 @@ Array(node['travis_build_environment']['rubies']).each do |ruby_def|
     retry_delay 30
   end
 end
-
-=end
