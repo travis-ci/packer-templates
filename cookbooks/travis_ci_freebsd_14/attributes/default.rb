@@ -78,6 +78,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   shell
   ruby
   java
+  julia
   python
 ]
 
