@@ -44,7 +44,6 @@ gimme_versions = %w[
 
 override['travis_build_environment']['gimme']['versions'] = gimme_versions
 override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
-=begin
 override['travis_jdk']['versions'] = %w[
   openjdk8
   openjdk9
@@ -53,7 +52,6 @@ override['travis_jdk']['versions'] = %w[
 ]
 
 override['travis_jdk']['default'] = 'openjdk11'
-=end
 
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
