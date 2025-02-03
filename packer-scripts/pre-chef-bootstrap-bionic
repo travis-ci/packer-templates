@@ -45,7 +45,7 @@ __install_packages() {
 
   # Add Perforce repository
   echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
-  
+
   apt-get clean
   apt-get autoclean -y
   apt-get autoremove -y
@@ -68,10 +68,10 @@ __install_packages() {
     python3 \
     rsync \
     rabbitmq-server \
-    ${APT_GET_INSTALL_PRE_CHEF}
+    "${APT_GET_INSTALL_PRE_CHEF}"
 
-    # rabbitmq service fix
-    sudo systemctl unmask rabbitmq-server.service
+  # rabbitmq service fix
+  sudo systemctl unmask rabbitmq-server.service
 }
 __setup_redis() {
   echo "Installing the newest redis"

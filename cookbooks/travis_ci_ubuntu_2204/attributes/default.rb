@@ -10,7 +10,7 @@ override['travis_build_environment']['python_aliases'] = {
   '3.8.18' => %w[3.8],
   '3.7.17' => %w[3.7],
   'pypy2.7-7.3.1' => %w[pypy],
-  'pypy3.6-7.3.1' => %w[pypy3],
+  'pypy3.6-7.3.1' => %w[pypy3]
 }
 # packages build by Cpython + our repo
 pythons = %w[
@@ -50,8 +50,7 @@ override['travis_build_environment']['clang']['download_url'] = ::File.join(
   "clang+llvm-#{node['travis_build_environment']['clang']['version']}-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
 )
 
-override['travis_build_environment']['clang']['checksum'] = '54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36'	
-
+override['travis_build_environment']['clang']['checksum'] = '54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36'
 
 override['travis_build_environment']['shfmt_url'] = 'https://github.com/mvdan/sh/releases/download/v3.8.0/shfmt_v3.8.0_linux_amd64'
 override['travis_build_environment']['shfmt_checksum'] = '27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0'
@@ -91,7 +90,6 @@ rubies = %w[
 
 override['travis_build_environment']['virtualenv']['version'] = '20.24.6'
 
-
 # changing default ruby version due to dpl issues
 override['travis_build_environment']['default_ruby'] = '3.3.5'
 override['travis_build_environment']['rubies'] = rubies
@@ -115,7 +113,7 @@ override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
 override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
+  'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2204'
 

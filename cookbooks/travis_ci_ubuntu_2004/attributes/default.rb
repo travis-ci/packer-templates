@@ -58,7 +58,7 @@ override['travis_jdk']['versions'] = %w[
   openjdk10
   openjdk11
 ]
-  
+
 override['travis_jdk']['default'] = 'openjdk11'
 
 override['leiningen']['home'] = '/home/travis'
@@ -109,7 +109,7 @@ override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
 override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
+  'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
 
 override['travis_build_environment']['clang']['version'] = '18.1.8'
 override['travis_build_environment']['clang']['download_url'] = ::File.join(

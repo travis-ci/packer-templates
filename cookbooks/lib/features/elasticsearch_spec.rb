@@ -14,13 +14,13 @@ describe 'elasticsearch installation', sudo: true do
     sleep 5
     tcpwait('0.0.0.0', 9200, 30)
     sh(%(curl -H "Content-Type: application/json" -X PUT "#{db_url}/user/koopa93" -d "{
-        \"name\": \"Shy Bowser\"
+        "name": "Shy Bowser"
       }"
     ))
     sh(%(curl -H "Content-Type: application/json" -X PUT "#{db_url}/toot/1" -d "{
-        \"user\": \"koopa93\",
-        \"postDate\": \"2009-11-15T13:12:00\",
-        \"message\": \"Frying up Elastosearch\"
+        "user": "koopa93",
+        "postDate": "2009-11-15T13:12:00",
+        "message": "Frying up Elastosearch"
       }"
     ))
     sleep 8
