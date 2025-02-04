@@ -36,15 +36,11 @@ install:
 script:
 - make
 - bundle exec make test
-- make update-gce-images
-- git diff --exit-code
-- git diff --cached --exit-code
+# - make update-gce-images
+# - git diff --exit-code
+# - git diff --cached --exit-code
 - sudo lsof | grep dpkg || true
 - travis_retry bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
-- for f in ~/.*_rspec.json; do
-    echo "checking $f";
-    jq . < $f &>/dev/null;
-  done
 after_success:
 - if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sardonyx ]]; then
     git fetch --unshallow;

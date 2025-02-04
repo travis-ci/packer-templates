@@ -1,19 +1,62 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC1091
+# shellcheck disable=SC1090
+
 set -o errexit
 set -o xtrace
 
 main() {
 
-   dist=$(lsb_release -cs)
+dist=$(lsb_release -cs)
+
+if [[ "${dist}" = "jammy" ]]; then
+   apt install linux-headers-generic -y
+
+   echo "Installing pip-review"
+
+   # Install rustc (needed for python updates)
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+   export PATH="$HOME/.cargo/bin:$PATH"
+   source ~/.bashrc
+   rustc --version
+
+   sudo apt-get install -y libgirepository1.0-dev libdbus-1-dev libsystemd-dev libcurl4-openssl-dev python3-testresources
+
+   #sudo chown -R $USER:$USER /home/packer/.cache/pip
+
+   pip install --upgrade pip
+   #pip install pip-review
+   #pip-review --auto
+
+   echo "Appling docker buildx fix"
+   sudo install -m 0755 -d /etc/apt/keyrings
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   sudo chmod a+r /etc/apt/keyrings/docker.gpg
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   sudo apt-get update -y
+   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+   # Update composer
+   /home/travis/.phpenv/shims/composer self-update
+
+   # Update bundler
+   gem install bundler
+else
    echo "Appling main updates"
    apt update -yqq --fix-missing
    echo "Uninstalling old kernel modules"
-   dpkg --list | grep linux-image | awk '{ print $2 }' | sort -V | sed -n '/'`uname -r`'/q;p' | xargs sudo apt-get -y purge
-   apt purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
+   dpkg --list | grep linux-image | awk '{ print $2 }' | sort -V | sed -n "/$(uname -r)/q;p" | xargs sudo apt-get -y purge
+   apt purge "$(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c="$(uname -r | cut -d- -f1,2)"; done)"
 
    apt full-upgrade -y
    apt install linux-headers-generic -y
+
+   # Install rustc (needed for python updates)
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+   export PATH="$HOME/.cargo/bin:$PATH"
+   source ~/.bashrc
+   rustc --version
 
    # Uninstall old kernels (yes they are still there) - use it to uninstall when needed only DOCKER
 
@@ -30,26 +73,31 @@ main() {
    # apt remove --purge python3-setuptools -y
 
    echo "Appling python updates"
-   # wget https://bootstrap.pypa.io/get-pip.py
-   # sudo python3 get-pip.py
 
-   # Focal install python modules
-   if [[ "${dist}" = "focal" ]]; then
-      echo "Installing pip-review"
-      # Focal docker issue with pip-review - docker will fail with these
-      pip install importlib_metadata --force-reinstall
-      # pip install pip-review
-      # pip-review --auto
-   else
-      echo "Installing pip-review"
-      pip install --upgrade pip-review
-      pip-review --auto
-   fi
+   sudo apt-get install -y libgirepository1.0-dev libdbus-1-dev libsystemd-dev libcurl4-openssl-dev python3-testresources
+
+   pip3 install --upgrade pip
+   pip3 install pip-review
+   pip-review --auto
+
+   # # Focal install python modules
+   # if [[ "${dist}" = "focal" ]]; then
+   #    echo "Installing pip-review"
+   #    # Focal docker issue with pip-review - docker will fail with these
+   #    pip install importlib_metadata --force-reinstall
+   #    # pip install pip-review
+   #    # pip-review --auto
+   # else
+   #    echo "Installing pip-review"
+   #    pip install --upgrade pip-review
+   #    pip-review --auto
+   # fi
 
    echo "Appling docker buildx fix"
    sudo install -m 0755 -d /etc/apt/keyrings
    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+   # shellcheck source=/etc/os-release
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
    sudo apt update -y
    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -57,7 +105,7 @@ main() {
 
    # Bionic install git
    if [[ "${dist}" = "bionic" ]]; then
-      sudo apt install git-all
+   sudo apt install git-all
    fi
 
    # Update composer
@@ -65,6 +113,7 @@ main() {
 
    # # Update bundler - to fix in the future
    # /home/travis/.rvm/bin/rvm use 3.3.1
+fi
 
 }
 

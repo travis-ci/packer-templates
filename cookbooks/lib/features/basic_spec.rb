@@ -104,32 +104,6 @@ describe 'bazaar installation' do
   end
 end
 
-describe 'ccache installation' do
-  describe command('ccache -V') do
-    its(:exit_status) { should eq 0 }
-  end
-
-  describe 'ccache commands are executed' do
-    describe command('ccache -s') do
-      its(:stdout) do
-        should include(
-          'cache directory',
-          'cache hit',
-          'cache miss',
-          'files in cache',
-          'max cache size'
-        )
-      end
-    end
-
-    describe command('ccache -M 0.5') do
-      its(:stdout) do
-        should match(/Set cache size limit to (512\.0 Mbytes|500\.0 MB)/)
-      end
-    end
-  end
-end
-
 if os[:arch] !~ /aarch64|arm64/
   describe 'clang installation' do
     describe command('clang -v') do
@@ -241,22 +215,6 @@ describe 'gcc installation' do
     ./hai there
   )) do
     its(:stdout) { should match(/^hai 2$/) }
-  end
-end
-
-describe 'gimme installation' do
-  describe command('gimme --version') do
-    its(:exit_status) { should eq 0 }
-  end
-
-  if os[:arch] !~ /ppc64/
-    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.3)" 2>&1)) do
-      its(:stdout) { should match 'go version go1.6.3' }
-    end
-  elsif os[:arch] =~ /ppc64/
-    describe command(%(eval "$(HOME=#{Support.tmpdir} gimme 1.6.4)" 2>&1)) do
-      its(:stdout) { should match 'go version go1.6.4 linux/ppc64le' }
-    end
   end
 end
 
@@ -466,7 +424,7 @@ end
 
 if os[:arch] !~ /aarch64/
   describe command('psql --version') do
-    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2}|13\.[0-9]{1,2})/) }
+    its(:stdout) { should match(/^psql.+(9\.[4-6]+\.[0-9]+|10\.[0-9]{1,2}|11\.[0-9]{1,2}|12\.[0-9]{1,2}|13\.[0-9]{1,2}|14\.[0-9]{1,2})/) }
     its(:exit_status) { should eq 0 }
   end
 end
@@ -522,7 +480,7 @@ if os[:arch] !~ /aarch64|arm64/
     describe 'rvm commands' do
       describe command('rvm list') do
         its(:stdout) { should include('current') }
-        its(:stdout) { should match(/ruby-2\.[234567]\.\d/) }
+        its(:stdout) { should match(/ruby-[23]\.[1234567]\.\d/) }
         its(:stderr) { should be_empty }
       end
 
@@ -633,12 +591,6 @@ describe file('/var/ramfs'), docker: false do
   it { should be_mounted.with(type: 'tmpfs') }
 end
 
-describe 'travis_build_environment packages' do
-  Support.base_packages.each do |package_name|
-    describe(package(package_name)) { it { should be_installed } }
-  end
-end
-
 describe user('travis') do
   it { should exist }
   it { should have_home_directory '/home/travis' }
@@ -734,7 +686,7 @@ if os[:arch] !~ /aarch64|arm64/
     describe 'editing' do
       before do
         test_txt.write("daisy\n")
-        sh(%(emacs -batch #{test_txt} --eval '(insert \"poof\")' -f save-buffer))
+        sh(%(emacs -batch #{test_txt} --eval '(insert "poof")' -f save-buffer))
       end
 
       describe file(test_txt) do

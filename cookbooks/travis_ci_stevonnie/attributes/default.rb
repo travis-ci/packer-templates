@@ -10,12 +10,12 @@ override['travis_perlbrew']['perls'] = []
 override['travis_perlbrew']['modules'] = []
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-gimme_versions = %w[
-  1.18.4
+go_versions = %w[
+  1.23
 ]
 
-override['travis_build_environment']['gimme']['versions'] = gimme_versions
-override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
+override['travis_build_environment']['go']['versions'] = go_versions
+override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_jdk']['versions'] = %w[
   openjdk8

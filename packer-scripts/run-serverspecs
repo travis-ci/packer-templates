@@ -19,13 +19,8 @@ main() {
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
   fi
 
-  if [[ "$(uname -m)" =~ aarch64 ]]; then
-    __install_serverspec
-  elif [[ "$(uname -m)" =~ ppc64 ]]; then
-    __install_serverspec_ppc64le
-  else
-    __install_chef "${PACKER_CHEF_PREFIX}"
-  fi
+  __install_chef "${PACKER_CHEF_PREFIX}"
+
   # shellcheck disable=SC2119
   __create_sudo_bash
   __chown_travis_dirs "${PACKER_CHEF_PREFIX}"
@@ -33,19 +28,13 @@ main() {
     __run_suite "${suite}" "${PACKER_CHEF_PREFIX}" "${SPEC_RUNNER}"
   done
 
-  if [[ "$(uname -m)" =~ ppc64|aarch64 ]]; then
-    __remove_serverspec_chef
-  elif [[ -z ${SKIP_CHEF_REMOVAL} ]]; then
+  if [[ -z ${SKIP_CHEF_REMOVAL} ]]; then
     __remove_chef
   fi
 }
 
 __install_serverspec() {
   chef gem install serverspec
-}
-
-__install_serverspec_ppc64le() {
-  gem install serverspec
 }
 
 __install_chef() {
@@ -117,26 +106,11 @@ export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
 export PACKER_BUILDER_TYPE=${PACKER_BUILDER_TYPE}
 export RUBYOPT=${RUBYOPT}
-if [[ $(uname -m) =~ ppc64 ]]; then
-  gem install serverspec
-else
-  chef gem install serverspec
-fi
+chef gem install serverspec
 unset GEM_PATH
 cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
-if [[ $(uname -m) =~ ppc64 ]]; then
-  rspec ${SPEC_ARGS} \\
-    --format documentation \\
-    --format json \\
-    --out /home/travis/.${suite}_rspec.json
-else
-  chef exec rspec ${SPEC_ARGS} \\
-    --format documentation \\
-    --format json \\
-    --out /home/travis/.${suite}_rspec.json
-fi
 "
 
   local exit_code="$?"

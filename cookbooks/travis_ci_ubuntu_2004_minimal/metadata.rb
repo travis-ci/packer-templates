@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-name 'travis_ci_ubuntu_1804_minimal'
+name 'travis_ci_ubuntu_2004_minimal'
 maintainer 'Travis CI GmbH'
-maintainer_email 'contact+travis-ci-ubuntu-1804-minimal-cookbook@travis-ci.org'
+maintainer_email 'contact+travis-ci-ubuntu-2004-minimal-cookbook@travis-ci.org'
 license 'MIT'
-description 'Installs/Configures travis_ci_ubuntu_1804_minimal'
+description 'Installs/Configures travis_ci_ubuntu_2004_minimal'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.1.0'
 source_url 'https://github.com/travis-ci/packer-templates'

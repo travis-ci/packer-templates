@@ -45,7 +45,7 @@ __install_packages() {
 
   # Add Perforce repository
   echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
-  
+
   apt-get clean
   apt-get autoclean -y
   apt-get autoremove -y
@@ -73,14 +73,13 @@ __install_packages() {
     python-setuptools \
     rsync \
     rabbitmq-server \
-    ${APT_GET_INSTALL_PRE_CHEF}
+    "${APT_GET_INSTALL_PRE_CHEF}"
 
   # Install necessary python packages
   apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 
   # Install chromium since google chrome is not installable
   apt install -y chromium-browser
-
 
   # link python ##TODO move this to chef
   if ! [ -x "$(command -v python)" ]; then

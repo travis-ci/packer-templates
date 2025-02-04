@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o xtrace
+
+main() {
+
+# Install pyenv-update plugin
+git config --global --add safe.directory /opt/pyenv
+cd /opt/pyenv/bin/
+git checkout master
+git clone https://github.com/pyenv/pyenv-update.git "$(pyenv root)"/plugins/pyenv-update
+pyenv update
+pyenv rehash && hash -r
+
+}
+
+main "$@"

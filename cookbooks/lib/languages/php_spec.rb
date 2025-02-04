@@ -11,9 +11,16 @@ if os[:arch] !~ /ppc64|aarch64|arm64/
       its(:stdout) { should match(/^PHP \d+\.\d+\.\d+.+fpm-fcgi/) }
     end
 
-    describe phpcommand('php -m --version') do
-      # Running `php -m` hangs, but adding more args doesn't (???)
-      its(:stdout) { should include(*PHP_MODULES) }
+    if %w[xenial bionic focal].include?(Support.distro)
+      describe phpcommand('php -m --version') do
+        # Running `php -m` hangs, but adding more args doesn't (???)
+        its(:stdout) { should include(*PHP_MODULES_OLDER) }
+      end
+    elsif 'jammy'.include?(Support.distro)
+      describe phpcommand('php -m --version') do
+        # Running `php -m` hangs, but adding more args doesn't (???)
+        its(:stdout) { should include(*PHP_MODULES_NEWER) }
+      end
     end
 
     describe file('/home/travis/.pearrc') do
@@ -22,7 +29,7 @@ if os[:arch] !~ /ppc64|aarch64|arm64/
   end
 end
 
-PHP_MODULES = <<~EOF.split("\n")
+PHP_MODULES_OLDER = <<~EOF.split("\n")
   Core
   PDO
   Phar
@@ -55,6 +62,69 @@ PHP_MODULES = <<~EOF.split("\n")
   xmlrpc
   xmlwriter
   xsl
+  zip
+  zlib
+EOF
+
+PHP_MODULES_NEWER = <<~EOF.split("\n")
+  bcmath
+  bz2
+  calendar
+  Core
+  ctype
+  curl
+  date
+  dba
+  dom
+  exif
+  fileinfo
+  filter
+  ftp
+  gd
+  gettext
+  gmp
+  hash
+  iconv
+  imap
+  intl
+  json
+  ldap
+  libxml
+  mbstring
+  mysqli
+  mysqlnd
+  openssl
+  pcntl
+  pcre
+  PDO
+  pdo_mysql
+  pdo_pgsql
+  pdo_sqlite
+  pgsql
+  Phar
+  posix
+  readline
+  Reflection
+  session
+  shmop
+  SimpleXML
+  soap
+  sockets
+  sodium
+  SPL
+  sqlite3
+  standard
+  sysvmsg
+  sysvsem
+  sysvshm
+  tidy
+  tokenizer
+  xdebug
+  xml
+  xmlreader
+  xmlwriter
+  xsl
+  Zend OPcache
   zip
   zlib
 EOF

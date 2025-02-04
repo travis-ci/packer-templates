@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  set -o xtrace
+  shopt -s nullglob
+
+  export DEBIAN_FRONTEND='noninteractive'
+  export LC_ALL=C.UTF-8
+  export LANG=C.UTF-8
+
+  if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
+    __disable_ipv6
+  fi
+  if ! [[ "$(uname -m)" =~ ppc64 ]]; then
+    __enable_i386
+  fi
+  __install_packages
+  __setup_redis
+  __setup_sshd
+  __setup_travis_user
+  __write_pre_chef_env
+}
+
+__disable_ipv6() {
+  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+  sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+}
+
+__enable_i386() {
+  dpkg --add-architecture i386
+}
+
+__install_packages() {
+
+  if [[ "${PACKER_BUILDER_TYPE}" =~ vmware ]]; then
+    APT_GET_INSTALL_PRE_CHEF='open-vm-tools'
+  fi
+
+  if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
+    rm -rvf /etc/apt/sources.list.d/partner.list \
+      /var/lib/apt/lists/*
+  fi
+
+  apt update -yqq
+  apt full-upgrade -y
+  apt install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    ca-certificates \
+    cron \
+    curl \
+    gawk \
+    git \
+    git-lfs \
+    libelf-dev \
+    sudo \
+    wget \
+    rsync \
+    rubygems \
+    python3 \
+    python3.10 \
+    python3-pip \
+    "${APT_GET_INSTALL_PRE_CHEF}"
+
+  # curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+  # python3.10 get-pip.py
+  pip install setuptools --upgrade
+
+  # link python ##TODO move this to chef
+  if ! [ -x "$(command -v python)" ]; then
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+  fi
+
+}
+
+__setup_redis() {
+  echo "Installing the newest redis"
+  sudo apt-get install lsb-release curl gpg
+  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+  sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+  sudo apt-get update -y
+  sudo apt-get install redis redis-tools redis-server -y
+  sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
+}
+
+__setup_sshd() {
+  mkdir -p /var/run/sshd
+
+  if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
+    echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
+  fi
+  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >>/etc/ssh/sshd_config
+  echo "HostKeyAlgorithms +ssh-rsa" >>/etc/ssh/sshd_config
+}
+
+__setup_travis_user() {
+  if ! getent passwd travis &>/dev/null; then
+    if [[ -z "${TRAVIS_UID}" ]]; then
+      useradd -p travis -s /bin/bash -m travis
+    else
+      useradd -p travis -s /bin/bash -m travis -u "${TRAVIS_UID}"
+      groupmod -g "${TRAVIS_UID}" travis
+      usermod -u "${TRAVIS_UID}" travis
+
+    fi
+  fi
+
+  echo travis:travis | chpasswd
+
+  __setup_sudoers
+  __setup_travis_ssh
+
+  # Save users having to create this directory at runtime (it's already on PATH)
+  mkdir -p /home/travis/bin
+
+  mkdir -p /opt
+  chmod 0755 /opt
+  chown -R travis:travis /home/travis /opt
+}
+
+__setup_sudoers() {
+  sed -i '/^%/d;/^# /d;/^$/d;/^#$/d;/^#includedir/d' /etc/sudoers
+  echo '#includedir /etc/sudoers.d' >>/etc/sudoers
+
+  mkdir -p /etc/sudoers.d
+
+  if [[ -f /var/tmp/sudoers.d-travis ]]; then
+    cp -v /var/tmp/sudoers.d-travis /etc/sudoers.d/travis
+  else
+    cat >/etc/sudoers.d/travis <<EOF
+travis ALL=(ALL) NOPASSWD:ALL
+Defaults !authenticate
+Defaults !env_reset
+Defaults !mail_badpass
+EOF
+  fi
+  chmod 440 /etc/sudoers.d/travis
+}
+
+__setup_travis_ssh() {
+  mkdir -p /home/travis/.ssh
+  chmod 0700 /home/travis/.ssh
+
+  touch /home/travis/.ssh/authorized_keys
+  for f in /var/tmp/*_rsa.pub; do
+    cat "${f}" >>/home/travis/.ssh/authorized_keys
+  done
+  chmod 0600 /home/travis/.ssh/authorized_keys
+  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/ssh_config
+  echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config
+}
+
+__write_pre_chef_env() {
+  local dest=/etc/profile.d/Z99-travis-pre-chef-bootstrap.sh
+  cat >"${dest}" <<EOF
+#!/bin/sh
+# Managed by Packer :heart:
+
+export TRAVIS_PRE_CHEF_BOOTSTRAP_TIME=$(date -u +%Y-%m-%dT%H:%M:%S)
+export TRAVIS_UID=${TRAVIS_UID:-2000}
+EOF
+  chown root:root "${dest}"
+  chmod 0755 "${dest}"
+}
+
+main "$@"

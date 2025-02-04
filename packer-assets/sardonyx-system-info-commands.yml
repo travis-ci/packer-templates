@@ -100,8 +100,8 @@ commands:
   - command: rsync --version
     pipe: head -1
     name: rsync version
-  - command: gimme --version
-    name: gimme version
+  - command: go version
+    name: go version
   - command: nvm --version
     name: nvm version
   - command: perlbrew --version
@@ -135,7 +135,7 @@ commands:
   - command: redis-server --version
     name: Redis version
     pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
-  - command: gimme -l
+  - command: go -l
     name: Pre-installed Go versions
   - command: ant -version
     name: ant version

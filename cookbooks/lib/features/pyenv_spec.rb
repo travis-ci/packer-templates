@@ -3,10 +3,15 @@
 require 'json'
 
 describe 'pyenv', dev: true do
-  describe command('pyenv version-name') do
-    its(:stdout) { should eql("3.7.17\n") }
+  if %w[jammy].include?(Support.distro)
+    describe command('pyenv version-name') do
+      its(:stdout) { should eql("3.10.14\n") }
+    end
+  else
+    describe command('pyenv version-name') do
+      its(:stdout) { should eql("3.7.17\n") }
+    end
   end
-
   describe command('pyenv root') do
     its(:stdout) { should eql("/opt/pyenv\n") }
   end

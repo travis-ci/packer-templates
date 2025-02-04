@@ -19,6 +19,13 @@ pythons = %w[
   3.9.18
   3.12.4
 ]
+
+%w[3].each do |pyver|
+  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+    pythons.unshift(pythons.delete(py))
+  end
+end
+
 override['travis_build_environment']['pythons'] = pythons
 
 override['travis_build_environment']['pip']['packages'] = {} # need to fill in
@@ -38,12 +45,12 @@ override['travis_build_environment']['php_aliases'] = php_aliases
 override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' }]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
-gimme_versions = %w[
-  1.23.0
+go_versions = %w[
+  1.23
 ]
 
-override['travis_build_environment']['gimme']['versions'] = gimme_versions
-override['travis_build_environment']['gimme']['default_version'] = gimme_versions.max
+override['travis_build_environment']['go']['versions'] = go_versions
+override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_jdk']['versions'] = %w[
   openjdk8
@@ -51,7 +58,7 @@ override['travis_jdk']['versions'] = %w[
   openjdk10
   openjdk11
 ]
-  
+
 override['travis_jdk']['default'] = 'openjdk11'
 
 override['leiningen']['home'] = '/home/travis'
@@ -102,7 +109,7 @@ override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
 override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
+  'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
 
 override['travis_build_environment']['clang']['version'] = '18.1.8'
 override['travis_build_environment']['clang']['download_url'] = ::File.join(
