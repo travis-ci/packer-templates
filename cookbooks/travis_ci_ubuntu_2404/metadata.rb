@@ -2,7 +2,7 @@
 
 name 'travis_ci_ubuntu_2404'
 maintainer 'Travis CI GmbH'
-maintainer_email 'contact+packer-templates@travis-ci.org'
+maintainer_email 'contact+travis-ci-ubuntu-2404-minimal-cookbook@travis-ci.org'
 license 'MIT'
 description 'Installs/Configures travis_ci_ubuntu_2404'
 long_description File.read(File.join(File.dirname(__FILE__), 'README.md'))
