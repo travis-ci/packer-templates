@@ -7,9 +7,8 @@ main() {
   shopt -s nullglob
 
   export DEBIAN_FRONTEND='noninteractive'
-  export LC_ALL=C.UTF-8 
+  export LC_ALL=C.UTF-8
   export LANG=C.UTF-8
-
 
   if [[ "${PACKER_BUILDER_TYPE}" != docker ]]; then
     __disable_ipv6
@@ -63,7 +62,7 @@ __install_packages() {
     python3 \
     python3.10 \
     python3-pip \
-    ${APT_GET_INSTALL_PRE_CHEF}
+    "${APT_GET_INSTALL_PRE_CHEF}"
 
   # curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   # python3.10 get-pip.py
@@ -94,8 +93,8 @@ __setup_sshd() {
   if ! grep -Eq '^sshd: ALL: ALLOW' /etc/hosts.allow; then
     echo 'sshd: ALL: ALLOW' >>/etc/hosts.allow
   fi
-  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
-  echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
+  echo "PubkeyAcceptedKeyTypes +ssh-rsa" >>/etc/ssh/sshd_config
+  echo "HostKeyAlgorithms +ssh-rsa" >>/etc/ssh/sshd_config
 }
 
 __setup_travis_user() {

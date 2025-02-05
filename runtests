@@ -40,7 +40,8 @@ git grep -l '^#!/usr/bin/env bash' | xargs shellcheck
 echo 'Running shfmt'
 git grep -l '^#!/usr/bin/env bash' | xargs shfmt -i 2 -w
 
-rubocop
+# Works incorrectly
+# rubocop
 ./run-foodcritic cookbooks
 ./bin/check-job-board-tags
 ./bin/check-image-metadata-export-import

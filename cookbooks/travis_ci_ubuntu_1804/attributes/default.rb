@@ -117,7 +117,7 @@ override['travis_build_environment']['shfmt_checksum'] = '27b3c6f9d9592fc5b4856c
 
 override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
 override['travis_build_environment']['packer']['amd64']['checksum'] = \
-'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
+  'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
 
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_1804'
 

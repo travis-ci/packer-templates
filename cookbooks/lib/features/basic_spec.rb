@@ -686,7 +686,7 @@ if os[:arch] !~ /aarch64|arm64/
     describe 'editing' do
       before do
         test_txt.write("daisy\n")
-        sh(%(emacs -batch #{test_txt} --eval '(insert \"poof\")' -f save-buffer))
+        sh(%(emacs -batch #{test_txt} --eval '(insert "poof")' -f save-buffer))
       end
 
       describe file(test_txt) do
