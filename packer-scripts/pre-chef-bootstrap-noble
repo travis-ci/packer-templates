@@ -56,7 +56,7 @@ __install_packages() {
     rsync \
     rubygems \
     python3 \
-    python3.10 \
+    python3.12 \
     python3-pip \
     "${APT_GET_INSTALL_PRE_CHEF}"
 
