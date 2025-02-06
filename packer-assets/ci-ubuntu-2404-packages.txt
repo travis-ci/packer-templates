@@ -141,9 +141,7 @@ makedev
 man-db
 manpages
 mawk
-mime-support
 mingw-w64
-mlocate
 mount
 mtr-tiny
 mysql-client
