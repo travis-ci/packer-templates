@@ -118,16 +118,6 @@ libjpeg8-dev
 libkrb5-dev
 libldap2-dev
 libltdl-dev
-libmcrypt-dev
-libmhash-dev
-libmysqlclient-dev
-libncurses5
-libncurses5-dev
-libncursesw5-dev
-libossp-uuid-dev
-libonig-dev
-libpng-dev
-libpq-dev
 libreadline-dev
 libsasl2-dev
 libsqlite3-dev
