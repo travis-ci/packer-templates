@@ -1,15 +1,25 @@
 # frozen_string_literal: true
 
-execute 'mariadb_key' do
-  command 'sudo apt-key adv --fetch-keys \'https://mariadb.org/mariadb_release_signing_key.asc\''
-end
-
 execute 'mariadb_repo' do
-  command 'sudo add-apt-repository \'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/11.4.1/ubuntu jammy main\''
+  command 'echo "deb [signed-by=/usr/share/keyrings/mariadb-archive-keyring.gpg] http://mariadb.mirror.globo.tech/repo/11.7.1/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/mariadb.list'
+  action :run
 end
 
-execute 'mariadb_install' do
-  command 'sudo apt install mariadb-server mariadb-client -y'
+execute 'mariadb_key' do
+  command 'wget -O- https://mariadb.org/mariadb_release_signing_key.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mariadb-archive-keyring.gpg'
+  action :run
+end
+
+apt_update 'update' do
+  action :update
+end
+
+package 'mariadb-server' do
+  action :install
+end
+
+package 'mariadb-client' do
+  action :install
 end
 
 service 'mariadb' do

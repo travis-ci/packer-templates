@@ -1,4 +1,14 @@
-#!/bin/csh
+#!/bin/sh
 
-pkg install -y bash base64
-curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
+pkg update || exit 1
+
+pkg install -y bash base64 ncurses terminfo-db compat12x-amd64 \
+               gcc gmake libffi mpc mpfr gmp bzip2 openssl || exit 1
+
+if ! id travis >/dev/null 2>&1; then
+    pw useradd -n travis -m -s /usr/local/bin/bash -c "Travis User" || exit 1
+fi
+
+curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash || exit 1
+
+echo "Script completed successfully."

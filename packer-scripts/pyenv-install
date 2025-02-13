@@ -9,9 +9,9 @@ main() {
 git config --global --add safe.directory /opt/pyenv
 cd /opt/pyenv/bin/
 git checkout master
-git clone https://github.com/pyenv/pyenv-update.git "$(pyenv root)"/plugins/pyenv-update
-pyenv update
-pyenv rehash && hash -r
+git clone https://github.com/pyenv/pyenv-update.git "$(/opt/pyenv/bin/pyenv root)"/plugins/pyenv-update
+/opt/pyenv/bin/pyenv update
+/opt/pyenv/bin/pyenv rehash && hash -r
 
 }
 

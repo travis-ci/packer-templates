@@ -85,6 +85,11 @@ describe 'python environment' do
       'python3.10' => '3.10.14',
       'python3.12' => '3.12.4'
     }
+  elsif 'noble'.include?(Support.distro)
+    vers = {
+      'python3.12' => '3.12.8',
+      'python3.13' => '3.13.1'
+    }
   end
 
   vers.each do |python_alias, python_version|
