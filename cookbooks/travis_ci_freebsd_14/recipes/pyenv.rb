@@ -52,10 +52,10 @@ end
 
 
 pyenv_versions = %w[
-  3.7.6
-  3.8.1
-  3.9.16
-  3.10.9
+  3.10.2
+  3.11.2
+  3.12.4
+  3.13.1
 ]
 
 pyenv_versions.each do |version|
