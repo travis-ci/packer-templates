@@ -1,47 +1,37 @@
 # frozen_string_literal: true
 
+# Definicja katalogu dla virtualenv
 virtualenv_root = "#{node['travis_build_environment']['home']}/virtualenv"
 
-if node['platform'] == 'freebsd'
-  # Na FreeBSD wiele zależności jest już w systemie bazowym.
-  # Instalujemy tylko niezbędne pakiety.
-  package %w(
-    curl
-    gmake
-    wget
-    git
-  )
-else
-  package %w(
-    build-essential
-    curl
-    libbz2-dev
-    liblzma-dev
-    libncurses-dev
-    libreadline-dev
-    libsqlite3-dev
-    libssl-dev
-    llvm
-    make
-    tk-dev
-    wget
-    zlib1g-dev
-  )
-end
+# Instalacja niezbędnych pakietów w FreeBSD
+package %w(
+  bash
+  curl
+  gmake
+  wget
+  git
+  python39
+  py39-virtualenv
+  py39-pip
+)
 
+# Definicja ścieżki dla pyenv
 pyenv_root = '/opt/pyenv'
 
+# Pobranie pyenv
 git pyenv_root do
   repository 'https://github.com/pyenv/pyenv.git'
   revision node['travis_build_environment']['pyenv_revision']
   action :sync
 end
 
+# Instalacja pyenv
 execute "#{pyenv_root}/plugins/python-build/install.sh"
 
+# Tworzenie katalogów
 directory '/opt/python' do
   owner 'root'
-  group 'root'
+  group 'wheel'
   mode '755'
 end
 
@@ -51,171 +41,72 @@ directory virtualenv_root do
   mode '755'
 end
 
+# Ustawienia kompilacji Pythona
 build_environment = {
-  'PYTHON_CONFIGURE_OPTS' => %w(
-    --enable-unicode=ucs4
-    --with-wide-unicode
-    --enable-shared
-    --enable-ipv6
-    --enable-loadable-sqlite-extensions
-    --with-computed-gotos
-  ).join(' '),
-  'PYTHON_CFLAGS' => %w(
-    -g
-    -fstack-protector
-    --param=ssp-buffer-size=4
-    -Wformat
-    -Werror=format-security
-  ).join(' '),
+  'PYTHON_CONFIGURE_OPTS' => '--enable-shared --enable-ipv6 --with-ensurepip=install',
+  'PYTHON_CFLAGS' => '-O2 -pipe -fstack-protector-strong',
 }
 
-node['travis_build_environment']['pythons'].each do |py|
-  pyname = py
-  downloaded_tarball = ::File.join(
-    Chef::Config[:file_cache_path], "#{py}.tar.bz2"
-  )
+# Lista wersji Pythona do zainstalowania
+pyenv_versions = %w[
+  3.10.2
+  3.11.2
+  3.12.4
+  3.13.1
+]
 
-  if /^\d+\.\d+(?:\.\d+)?(?:-dev)?$/ =~ py
-    pyname = "python#{py}"
-    downloaded_tarball = ::File.join(
-      Chef::Config[:file_cache_path], "python-#{py}.tar.bz2"
-    )
-  end
-
-  venv_fullname = "#{virtualenv_root}/#{pyname}"
-
-  remote_file downloaded_tarball do
-    source ::File.join(
-      'https://s3.amazonaws.com/travis-python-archives/binaries',
-      node['platform'],
-      node['platform_version'],
-      node['kernel']['machine'],
-      ::File.basename(downloaded_tarball)
-    )
-    owner 'root'
-    group 'root'
-    mode '644'
-    ignore_failure true
-  end
-
-  bash "extract #{downloaded_tarball}" do
-    code "tar -xjf #{downloaded_tarball} --directory /"
-    creates "/opt/python/#{py}"
-    environment build_environment
-    only_if { ::File.exist?(downloaded_tarball) }
-  end
-
-  bash "build #{py}" do
-    code "python-build #{py} /opt/python/#{py}"
-    creates "/opt/python/#{py}"
-    environment build_environment
-    not_if { ::File.exist?("/opt/python/#{py}") }
-  end
-
-  link "/opt/python/#{py}/bin/#{pyname}" do
-    to "/opt/python/#{py}/bin/python"
-    owner node['travis_build_environment']['user']
-    group node['travis_build_environment']['group']
-  end
-
-  bash "create virtualenv at #{venv_fullname} from #{py}" do
-    code "virtualenv --python=/opt/python/#{py}/bin/python #{venv_fullname}"
-    user node['travis_build_environment']['user']
-    group node['travis_build_environment']['group']
-    not_if { ::File.exist?("#{node['travis_build_environment']['home']}/virtualenv/python#{py}/bin/python") }
-  end
-
-  node['travis_build_environment']['python_aliases'].fetch(py, []).each do |pyalias|
-    if /^\d+\.\d+(?:\.\d+)?(?:-dev)?$/ =~ py
-      pyaliasname = "python#{pyalias}"
-    else
-      pyaliasname = pyalias
-    end
-
-    link "#{virtualenv_root}/#{pyaliasname}" do
-      to venv_fullname
-      owner node['travis_build_environment']['user']
-      group node['travis_build_environment']['group']
-    end
-  end
-
-  if py =~ /^pypy3/
-    link "/opt/python/#{py}/bin/pypy3" do
-      to "/opt/python/#{py}/bin/#{py}"
-      not_if "test -f /opt/python/#{py}/bin/pypy3"
-    end
-  end
-
-  packages = []
-
-  node['travis_build_environment']['python_aliases'].to_hash.fetch(py, []).concat(['default', py]).each do |name|
-    packages.concat(node['travis_build_environment']['pip']['packages'].fetch(name, []))
-  end
-
-  execute "install wheel in #{py}" do
-    command "#{venv_fullname}/bin/pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade wheel"
+# Instalacja wersji Pythona za pomocą pyenv
+pyenv_versions.each do |version|
+  bash "pyenv_install_#{version}" do
+    code "source #{node['travis_build_environment']['home']}/.bash_profile && pyenv install #{version}"
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
     environment(
-      'HOME' => node['travis_build_environment']['home']
-    )
-  end
-
-  execute "install packages in #{py}" do
-    command "#{venv_fullname}/bin/pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade #{packages.join(' ')}"
-    user node['travis_build_environment']['user']
-    group node['travis_build_environment']['group']
-    environment(
-      'HOME' => node['travis_build_environment']['home']
+      'HOME' => node['travis_build_environment']['home'],
+      'PATH' => "#{node['travis_build_environment']['home']}/.pyenv/bin:#{ENV['PATH']}"
     )
   end
 end
 
-link "#{pyenv_root}/versions" do
-  to '/opt/python'
-  owner node['travis_build_environment']['user']
+# Ustawienie domyślnej wersji Pythona
+bash 'pyenv_global_set_to_3.10.2' do
+  code "source #{node['travis_build_environment']['home']}/.bash_profile && pyenv global 3.10.2"
+  user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
-end
-
-include_recipe 'travis_build_environment::bash_profile_d'
-
-template ::File.join(
-  node['travis_build_environment']['home'],
-  '.bash_profile.d/pyenv.bash'
-) do
-  source 'pyenv.bash.erb'
-  owner node['travis_build_environment']['user']
-  group node['travis_build_environment']['group']
-  mode '644'
-  variables(
-    pyenv_root: pyenv_root,
-    build_environment: build_environment
+  environment(
+    'HOME' => node['travis_build_environment']['home'],
+    'PATH' => "#{node['travis_build_environment']['home']}/.pyenv/bin:#{ENV['PATH']}"
   )
-  backup false
 end
 
-if node['platform'] == 'freebsd'
-  bash "Set default python" do
-    code "source #{node['travis_build_environment']['home']}/.bash_profile.d/pyenv.bash && pyenv global 3.10.14"
-    user 'root'
-    group 'root'
-    environment build_environment
-  end
-else
-  case node['lsb']['codename']
-  when 'jammy'
-    bash "Set default python" do
-      code "source /home/travis/.bash_profile.d/pyenv.bash && pyenv global 3.10.14"
-      user 'root'
-      group 'root'
-      environment build_environment
-    end
-  when 'xenial', 'bionic', 'focal'
-    bash "Set default python" do
-      code "source /home/travis/.bash_profile.d/pyenv.bash && pyenv global 3.7.17"
-      user 'root'
-      group 'root'
-      environment build_environment
-    end
-  end
+# Instalacja virtualenv
+bash 'pip_install_virtualenv' do
+  code "source #{node['travis_build_environment']['home']}/.bash_profile && pip install --upgrade virtualenv"
+  user node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
+  environment(
+    'HOME' => node['travis_build_environment']['home'],
+    'PATH' => "#{node['travis_build_environment']['home']}/.pyenv/bin:#{ENV['PATH']}"
+  )
+end
+
+# Linkowanie pyenv do /opt/pyenv
+link '/opt/pyenv' do
+  to "#{node['travis_build_environment']['home']}/.pyenv"
+  owner node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
+  mode '755'
+end
+
+# Konfiguracja pliku .bash_profile dla pyenv
+bash_profile = ::File.join(node['travis_build_environment']['home'], '.bash_profile')
+
+bash 'export_path_to_pyenv' do
+  code <<-EOH
+    echo 'export PATH=#{node['travis_build_environment']['home']}/.pyenv/bin:$PATH' >> #{bash_profile}
+    echo 'eval "$(pyenv init --path)"' >> #{bash_profile}
+    echo 'eval "$(pyenv virtualenv-init -)"' >> #{bash_profile}
+  EOH
+  user node['travis_build_environment']['user']
+  group node['travis_build_environment']['group']
 end
