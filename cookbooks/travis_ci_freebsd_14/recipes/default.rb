@@ -24,16 +24,16 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-freebsd_package 'coreutils'
-freebsd_package 'libunwind'
+#freebsd_package 'coreutils'
+#freebsd_package 'libunwind'
 
-freebsd_package 'gcc11'
-freebsd_package 'cmake'
-freebsd_package 'gmake'
-freebsd_package 'gnulib'
-freebsd_package 'autoconf'
-freebsd_package 'automake'
-freebsd_package 'ccache'
+# freebsd_package 'gcc11'
+# freebsd_package 'cmake'
+# freebsd_package 'gmake'
+# freebsd_package 'gnulib'
+# freebsd_package 'autoconf'
+# freebsd_package 'automake'
+# freebsd_package 'ccache'
 
 link '/usr/local/bin/gcc' do
   to '/usr/local/bin/gcc10'
@@ -51,19 +51,19 @@ end
 
 include_recipe '::create_bash_profile'
 
-include_recipe '::pyenv_test'
+#include_recipe '::pyenv_test'
 
 #include_recipe 'travis_build_environment::rvm'
 # include_recipe 'travis_build_environment::go'
 
 include_recipe 'travis_build_environment::python'
-include_recipe '::rvm'
-freebsd_package 'openjdk8'
-freebsd_package 'openjdk11'
-freebsd_package 'openjdk17'
-freebsd_package 'maven'
-freebsd_package 'gradle'
-freebsd_package 'apache-ant'
+#include_recipe '::rvm'
+#freebsd_package 'openjdk8'
+#freebsd_package 'openjdk11'
+#freebsd_package 'openjdk17'
+#freebsd_package 'maven'
+#freebsd_package 'gradle'
+#freebsd_package 'apache-ant'
 
-include_recipe '::jdk_switcher'
+#include_recipe '::jdk_switcher'
 
