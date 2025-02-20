@@ -23,10 +23,10 @@ go_versions = %w[
 ]
 
 pythons = %w[
-  3.7.17
-  3.8.18
-  3.9.18
+  3.10.2
+  3.11.2
   3.12.4
+  3.13.1
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
