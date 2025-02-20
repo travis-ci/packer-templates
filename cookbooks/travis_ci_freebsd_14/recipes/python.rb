@@ -3,17 +3,17 @@
 # Definicja katalogu dla virtualenv
 virtualenv_root = "#{node['travis_build_environment']['home']}/virtualenv"
 
-# Instalacja niezbędnych pakietów w FreeBSD
-package %w(
-  bash
-  curl
-  gmake
-  wget
-  git
-  python39
-  py39-virtualenv
-  py39-pip
-)
+#   Instalacja niezbędnych pakietów w FreeBSD
+#   package %w(
+#   bash
+#   curl
+#   gmake
+#   wget
+#   git
+#   python39
+#   py39-virtualenv
+#   py39-pip
+# )
 
 # Definicja ścieżki dla pyenv
 pyenv_root = '/opt/pyenv'
