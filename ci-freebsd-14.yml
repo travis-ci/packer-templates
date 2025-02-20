@@ -71,11 +71,11 @@ provisioners:
   - /tmp/chef-stuff/travis-cookbooks/cookbooks
   - /tmp/chef-stuff/travis-cookbooks/community-cookbooks
   <% end %>
-  run_list:
-  - recipe[travis_ci_freebsd_14]
-  <% if ENV['CHEF_PROFILING'] %>
-  - recipe[poise-profiler]
-  <% end %>
+  #run_list:
+  #- recipe[travis_ci_freebsd_14]
+  #<% if ENV['CHEF_PROFILING'] %>
+  #- recipe[poise-profiler]
+  #<% end %>
 - type: shell
   scripts:
   - packer-scripts/create-freebsd-job-board-data

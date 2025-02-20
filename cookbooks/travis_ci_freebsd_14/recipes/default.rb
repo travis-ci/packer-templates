@@ -51,11 +51,12 @@ end
 
 include_recipe '::create_bash_profile'
 
-include_recipe '::pyenv'
+include_recipe '::pyenv_test'
 
 #include_recipe 'travis_build_environment::rvm'
 # include_recipe 'travis_build_environment::go'
 
+include_recipe 'travis_build_environment::python'
 include_recipe '::rvm'
 freebsd_package 'openjdk8'
 freebsd_package 'openjdk11'
