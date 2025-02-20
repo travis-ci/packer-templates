@@ -56,7 +56,7 @@ end
 # include_recipe 'travis_build_environment::rvm'
 # include_recipe 'travis_build_environment::go'
 
-include_recipe '::python'
+include_recipe '::pyenv'
 # include_recipe '::rvm'
 # freebsd_package 'openjdk8'
 # freebsd_package 'openjdk11'
