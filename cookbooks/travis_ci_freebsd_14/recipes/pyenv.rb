@@ -70,8 +70,8 @@ pyenv_versions.each do |version|
   end
 end
 
-bash 'pyenv_global_set_to_3.8.1' do
-  code "source #{bash_profile} && pyenv global 3.8.1"
+bash 'pyenv_global_set_to_3.10.2' do
+  code "source #{bash_profile} && pyenv global 3.10.2"
   user node['travis_build_environment']['user']
   group node['travis_build_environment']['group']
   environment(
