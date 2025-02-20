@@ -2,23 +2,41 @@
 
 virtualenv_root = "#{node['travis_build_environment']['home']}/virtualenv"
 
-include_recipe 'travis_build_environment::virtualenv'
+#include_recipe 'travis_build_environment::virtualenv'
 
-package %w(
-  build-essential
-  curl
-  libbz2-dev
-  liblzma-dev
-  libncurses-dev
-  libreadline-dev
-  libsqlite3-dev
-  libssl-dev
-  llvm
-  make
-  tk-dev
-  wget
-  zlib1g-dev
-)
+if node['platform'] == 'freebsd'
+  package %w(
+    curl
+    bzip2
+    xz
+    ncurses
+    readline
+    sqlite3
+    openssl
+    llvm
+    gmake
+    tk
+    wget
+    zlib
+    git
+  )
+else
+  package %w(
+    build-essential
+    curl
+    libbz2-dev
+    liblzma-dev
+    libncurses-dev
+    libreadline-dev
+    libsqlite3-dev
+    libssl-dev
+    llvm
+    make
+    tk-dev
+    wget
+    zlib1g-dev
+  )
+end
 
 pyenv_root = '/opt/pyenv'
 
@@ -113,7 +131,7 @@ node['travis_build_environment']['pythons'].each do |py|
     code "virtualenv --python=/opt/python/#{py}/bin/python #{venv_fullname}"
     user node['travis_build_environment']['user']
     group node['travis_build_environment']['group']
-    not_if { ::File.exist?("/home/travis/virtualenv/python#{py}/bin/python") }
+    not_if { ::File.exist?("#{node['travis_build_environment']['home']}/virtualenv/python#{py}/bin/python") }
   end
 
   node['travis_build_environment']['python_aliases'].fetch(py, []).each do |pyalias|
@@ -185,23 +203,28 @@ template ::File.join(
   backup false
 end
 
-case node['lsb']['codename']
-when 'jammy'
+if node['platform'] == 'freebsd'
   bash "Set default python" do
-    code "source /home/travis/.bash_profile.d/pyenv.bash && pyenv global 3.10.14"
+    code "source #{node['travis_build_environment']['home']}/.bash_profile.d/pyenv.bash && pyenv global 3.10.14"
     user 'root'
     group 'root'
-    # user node['travis_build_environment']['user']
-    # group node['travis_build_environment']['group']
     environment build_environment
   end
-when 'xenial', 'bionic', 'focal'
-  bash "Set default python" do
-    code "source /home/travis/.bash_profile.d/pyenv.bash && pyenv global 3.7.17"
-    user 'root'
-    group 'root'
-    # user node['travis_build_environment']['user']
-    # group node['travis_build_environment']['group']
-    environment build_environment
+else
+  case node['lsb']['codename']
+  when 'jammy'
+    bash "Set default python" do
+      code "source /home/travis/.bash_profile.d/pyenv.bash && pyenv global 3.10.14"
+      user 'root'
+      group 'root'
+      environment build_environment
+    end
+  when 'xenial', 'bionic', 'focal'
+    bash "Set default python" do
+      code "source /home/travis/.bash_profile.d/pyenv.bash && pyenv global 3.7.17"
+      user 'root'
+      group 'root'
+      environment build_environment
+    end
   end
 end
