@@ -2,22 +2,13 @@
 
 virtualenv_root = "#{node['travis_build_environment']['home']}/virtualenv"
 
-#include_recipe 'travis_build_environment::virtualenv'
-
 if node['platform'] == 'freebsd'
+  # Na FreeBSD wiele zależności jest już w systemie bazowym.
+  # Instalujemy tylko niezbędne pakiety.
   package %w(
     curl
-    bzip2
-    xz
-    ncurses
-    readline
-    sqlite3
-    openssl
-    llvm
     gmake
-    tk
     wget
-    zlib
     git
   )
 else
