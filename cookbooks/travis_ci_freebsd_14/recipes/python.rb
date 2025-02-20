@@ -10,7 +10,7 @@ src_dir        = '/usr/local/src'
 download_url   = "https://www.python.org/ftp/python/#{python_version}/#{tarball}"
 
 log "Rozpoczynam instalację Pythona #{python_version}" do
-  level :info
+  level :debug
 end
 
 directory src_dir do
