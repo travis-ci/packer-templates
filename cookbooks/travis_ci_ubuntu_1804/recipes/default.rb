@@ -40,6 +40,7 @@ else
 end
 include_recipe 'travis_docker::compose'
 include_recipe 'openssl'
+include_recipe 'travis_build_environment::android-sdk'
 include_recipe 'travis_jdk'
 include_recipe 'travis_build_environment::maven'
 include_recipe 'travis_build_environment::lein'
@@ -64,7 +65,6 @@ include_recipe 'travis_build_environment::ibm_advanced_tool_chain'
 include_recipe 'travis_phantomjs::2'
 include_recipe 'travis_phpenv::libargon2'
 include_recipe 'travis_phpenv::libargon2'
-include_recipe 'travis_build_environment::android-sdk'
 
 # HACK: ubuntu_1804-specific shims!
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
