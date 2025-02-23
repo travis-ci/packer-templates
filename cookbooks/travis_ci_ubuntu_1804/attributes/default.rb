@@ -11,13 +11,12 @@ override['travis_build_environment']['python_aliases'] = {
   'pypy3.7-7.3.9' => %w[pypy3]
 }
 
-# Android SDK Configuration (ADDED)
 override['android-sdk'] = {
   'name' => 'android-sdk',
   'setup_root' => '/usr/local/android-sdk',
-  'download_url' => 'https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip',
-  'checksum' => '92ffee5a1d98d856634e8b71132e8a95d96c83a63fde1099be3d86df3106def9',
-  'version' => '4333796',
+  'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip',
+  'checksum' => 'a783f39932268f9f2272eac404cbfa3b', 
+  'version' => '11076708',
   'owner' => 'root',
   'group' => 'root',
   'with_symlink' => true,
