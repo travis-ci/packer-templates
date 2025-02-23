@@ -40,7 +40,6 @@ else
 end
 include_recipe 'travis_docker::compose'
 include_recipe 'openssl'
-include_recipe 'travis_build_environment::android-sdk'
 include_recipe 'travis_jdk'
 include_recipe 'travis_build_environment::maven'
 include_recipe 'travis_build_environment::lein'
@@ -52,6 +51,7 @@ include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::redis'
 include_recipe 'travis_build_environment::mongodb'
 include_recipe 'memcached'
+include_recipe 'travis_build_environment::android-sdk'
 # TODO: Uncomment when cassandra works on Java 8 again
 # https://github.com/travis-ci/packer-templates/issues/589
 # include_recipe 'travis_build_environment::cassandra'
