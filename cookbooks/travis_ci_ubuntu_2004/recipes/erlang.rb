@@ -22,18 +22,15 @@ execute 'add_erlang_repository' do
   not_if { ::File.exist?('/etc/apt/sources.list.d/erlang-solutions.list') }
 end
 
-# Utworzenie katalogu partial, jeśli nie istnieje
-directory '/var/cache/apt/archives/partial' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  recursive true
-  action :create
-end
-
-# Czyszczenie cache apt, aby usunąć ewentualne uszkodzone pliki w katalogu partial
+# Czyszczenie cache apt
 execute 'apt-get_clean' do
   command 'apt-get clean'
+  action :run
+end
+
+# Usunięcie potencjalnych uszkodzonych plików w katalogu partial oraz jego rekreacja
+execute 'clean_apt_partial' do
+  command 'rm -rf /var/cache/apt/archives/partial/* && mkdir -p /var/cache/apt/archives/partial'
   action :run
 end
 
@@ -43,10 +40,11 @@ apt_update 'update_packages' do
   ignore_failure true
 end
 
-# Instalacja pakietu Erlang z dodatkową opcją --fix-missing
+# Instalacja pakietu Erlang
 package 'erlang' do
-  options '--fix-missing'
   action :install
+  # Jeśli opcja --fix-missing powoduje problemy, można ją usunąć (obecnie zakomentowana)
+  # options '--fix-missing'
   notifies :write, 'log[erlang_installed]', :immediately
 end
 
