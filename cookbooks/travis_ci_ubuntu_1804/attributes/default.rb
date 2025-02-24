@@ -89,8 +89,8 @@ if node['kernel']['machine'] == 'ppc64le'
   override['travis_java']['default_version'] = 'openjdk8'
   override['travis_java']['alternate_versions'] = %w[openjdk7]
 else
-  override['travis_jdk']['versions'] = %w[openjdk8 openjdk9 openjdk10 openjdk11]
-  override['travis_jdk']['default'] = 'openjdk11'
+  override['travis_jdk']['versions'] = %w[openjdk8 openjdk9 openjdk10 openjdk11 openjdk17]
+  override['travis_jdk']['default'] = 'openjdk17'
 end
 
 override['travis_build_environment']['nodejs_versions'] = %w[16.15.1]
