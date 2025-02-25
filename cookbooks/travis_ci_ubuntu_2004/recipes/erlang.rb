@@ -1,33 +1,17 @@
-remote_file '/usr/share/keyrings/erlang-solutions.gpg' do
-  source 'https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc'
-  mode '0644'
-  action :create
+# frozen_string_literal: true
+
+execute 'add_erlang_gpg_key' do
+  command 'wget -qO - https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo tee /usr/share/keyrings/erlang.gpg > /dev/null'
 end
 
-apt_repository 'erlang-solutions' do
-  uri 'https://packages.erlang-solutions.com/ubuntu'
-  distribution 'focal'
-  components ['contrib']
-  key_source 'file:///usr/share/keyrings/erlang-solutions.gpg'
-  action :add
+execute 'add_erlang_repository' do
+  command 'echo "deb [signed-by=/usr/share/keyrings/erlang.gpg] https://packages.erlang-solutions.com/ubuntu focal contrib" | sudo tee /etc/apt/sources.list.d/erlang.list'
 end
 
-execute 'apt-get_clean' do
-  command 'apt-get clean'
-  action :run
-end
-
-apt_update 'update_packages' do
+apt_update 'update_sources' do
   action :update
 end
 
 package 'erlang' do
   action :install
-  notifies :write, 'log[erlang_installed]', :immediately
-end
-
-log 'erlang_installed' do
-  message 'Erlang package has been successfully installed.'
-  level :info
-  action :nothing
 end
