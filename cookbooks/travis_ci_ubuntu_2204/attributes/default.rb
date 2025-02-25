@@ -124,6 +124,8 @@ override['travis_postgresql']['default_version'] = '14'
 override['travis_postgresql']['alternate_versions'] = %w[]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
+override['travis_build_environment']['pyenv_revision'] = 'v2.3.24'
+
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   disabled-ipv6
