@@ -27,6 +27,7 @@ override['android-sdk'] = {
     'black_list' => [],
     'default_answer' => 'y'
   },
+  'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
   'components' => [
     'platform-tools',
     'build-tools;30.0.3',
