@@ -32,12 +32,24 @@ class TravisPackerTemplates
     node_attributes_hash = lil_hash(node.attributes.to_hash)
     raise 'Empty node attributes' if node_attributes_hash.keys.empty?
   
-    node_attributes_yml = node['travis_packer_templates']['node_attributes_yml'].force_encoding('UTF-8').scrub('?')
-    write_yml(
-      node_attributes_yml,
-      node_attributes_hash.merge('__timestamp' => init_time.to_s)
-    )
+    begin
+      write_yml(
+        node['travis_packer_templates']['node_attributes_yml'],
+        node_attributes_hash.merge('__timestamp' => init_time.to_s)
+      )
+    rescue Encoding::UndefinedConversionError => e
+      # Log the error with relevant information
+      log_error(e, node['travis_packer_templates']['node_attributes_yml'])
+      raise e
+    end
   end
+  
+  def log_error(error, file)
+    puts "Encoding error in file: #{file}"
+    puts "Error message: #{error.message}"
+    # You can also add more details if needed
+  end
+  
 
   def write_job_board_register_yml
     job_board_attrs = lil_hash(
