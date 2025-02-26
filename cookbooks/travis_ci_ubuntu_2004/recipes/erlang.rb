@@ -1,64 +1,94 @@
 # frozen_string_literal: true
 
-# Usunięcie starych plików konfiguracyjnych
-file '/etc/apt/sources.list.d/erlang.list' do
-  action :delete
-  only_if { ::File.exist?('/etc/apt/sources.list.d/erlang.list') }
-end
-
-file '/etc/apt/sources.list.d/erlang-solutions.list' do
-  action :delete
-  only_if { ::File.exist?('/etc/apt/sources.list.d/erlang-solutions.list') }
-end
-
-file '/usr/share/keyrings/erlang-solutions.gpg' do
-  action :delete
-  only_if { ::File.exist?('/usr/share/keyrings/erlang-solutions.gpg') }
-end
-
-file '/usr/share/keyrings/erlang.gpg' do
-  action :delete
-  only_if { ::File.exist?('/usr/share/keyrings/erlang.gpg') }
-end
-
-# Pobranie nazwy kodowej dystrybucji dynamicznie
-ruby_block 'get_distro_codename' do
+# Clean up existing repository configurations
+ruby_block 'cleanup_old_erlang_repos' do
   block do
-    node.run_state['distro_codename'] = shell_out!('lsb_release -cs').stdout.strip
+    # Remove old repository files and keys
+    [
+      '/etc/apt/sources.list.d/erlang.list',
+      '/etc/apt/sources.list.d/erlang-solutions.list'
+    ].each do |file|
+      File.delete(file) if File.exist?(file)
+    end
+
+    [
+      '/usr/share/keyrings/erlang-solutions.gpg',
+      '/usr/share/keyrings/erlang.gpg'
+    ].each do |key_file|
+      File.delete(key_file) if File.exist?(key_file)
+    end
   end
   action :run
 end
 
-# Instalacja zależności
-package %w(wget gnupg) do
+# Detect distribution codename dynamically
+ruby_block 'get_distro_codename' do
+  block do
+    codename = shell_out!('lsb_release -cs').stdout.strip
+    node.run_state['distro_codename'] = codename
+  end
+  action :run
+end
+
+# Install dependencies
+package %w(wget gnupg software-properties-common) do
   action :install
 end
 
-# Pobranie klucza GPG Erlanga
+# Improved GPG key and repository management
 execute 'download_erlang_gpg_key' do
-  command 'wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | gpg --dearmor | tee /usr/share/keyrings/erlang-solutions.gpg > /dev/null'
-  user 'root'
+  command <<-EOH
+    mkdir -p /usr/share/keyrings
+    wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | \
+    gpg --dearmor -o /usr/share/keyrings/erlang-solutions.gpg
+  EOH
   creates '/usr/share/keyrings/erlang-solutions.gpg'
+  user 'root'
 end
 
-# Dodanie repozytorium Erlanga
+# Add Erlang repository with error handling
 execute 'add_erlang_repository' do
   command lazy {
-    "echo \"deb [signed-by=/usr/share/keyrings/erlang-solutions.gpg] https://packages.erlang-solutions.com/ubuntu #{node.run_state['distro_codename']} contrib\" | tee /etc/apt/sources.list.d/erlang-solutions.list"
+    codename = node.run_state['distro_codename']
+    <<-EOH
+      echo "deb [signed-by=/usr/share/keyrings/erlang-solutions.gpg] https://packages.erlang-solutions.com/ubuntu #{codename} contrib" > /etc/apt/sources.list.d/erlang-solutions.list
+    EOH
   }
   user 'root'
   creates '/etc/apt/sources.list.d/erlang-solutions.list'
-  notifies :run, 'execute[apt_update]', :immediately
 end
 
-# Aktualizacja apt
-execute 'apt_update' do
-  command 'apt-get update -q'
+# Robust apt update with multiple retry mechanism
+execute 'apt_update_with_retry' do
+  command <<-EOH
+    max_attempts=3
+    attempt=0
+    while [ $attempt -lt $max_attempts ]; do
+      apt-get update -q && break
+      attempt=$((attempt+1))
+      echo "Attempt $attempt failed. Waiting 5 seconds before retry..."
+      sleep 5
+    done
+    if [ $attempt -eq $max_attempts ]; then
+      echo "Failed to update repositories after $max_attempts attempts"
+      exit 1
+    fi
+  EOH
   user 'root'
-  action :nothing
+  action :run
 end
 
-# Instalacja Erlanga
+# Install Erlang with flexibility
 package 'erlang' do
   action :install
+  retries 2
+  retry_delay 5
+  timeout 600  # 10-minute timeout
+end
+
+# Verify Erlang installation
+execute 'verify_erlang_installation' do
+  command 'erl -version'
+  user 'root'
+  action :run
 end
