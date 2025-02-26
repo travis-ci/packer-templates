@@ -62,7 +62,7 @@ override['android-sdk'] = {
   'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
   'components' => [
     'platform-tools',
-    'build-tools-30.0.3',
+    'build-tools-30.0.0',
     'android-30',
     'extras-android-m2repository',
     'extras-google-m2repository'
