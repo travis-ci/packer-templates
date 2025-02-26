@@ -31,12 +31,14 @@ class TravisPackerTemplates
   def write_node_attributes_yml
     node_attributes_hash = lil_hash(node.attributes.to_hash)
     raise 'Empty node attributes' if node_attributes_hash.keys.empty?
-
+  
+    node_attributes_yml = node['travis_packer_templates']['node_attributes_yml'].force_encoding('UTF-8')
     write_yml(
-      node['travis_packer_templates']['node_attributes_yml'],
+      node_attributes_yml,
       node_attributes_hash.merge('__timestamp' => init_time.to_s)
     )
   end
+  
 
   def write_job_board_register_yml
     job_board_attrs = lil_hash(
