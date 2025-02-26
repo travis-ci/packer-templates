@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 execute 'download_erlang_gpg_key' do
-  command 'wget -qO /usr/share/keyrings/erlang.gpg https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc'
+  command 'sudo wget -qO /usr/share/keyrings/erlang.gpg https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc'
   not_if { File.exist?('/usr/share/keyrings/erlang.gpg') }
 end
 
