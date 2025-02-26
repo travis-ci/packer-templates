@@ -16,7 +16,7 @@ override['android-sdk'] = {
   'setup_root' => '/usr/local/android-sdk',
   'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
   'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
-  'version' => '9477386', 
+  'version' => '9477386',
   'owner' => 'root',
   'group' => 'root',
   'with_symlink' => true,
@@ -29,11 +29,13 @@ override['android-sdk'] = {
   },
   'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
   'components' => [
+    'tools',
     'platform-tools',
-    'build-tools-30.0.0',
-    'android-30',
-    'extras-android-m2repository',
-    'extras-google-m2repository'
+    'build-tools;30.0.0',     # nowsza wersja niż build-tools-25.0.2
+    'platforms;android-30',   # nowsza wersja niż android-25
+    'extras;google;google_play_services',
+    'extras;google;m2repository',
+    'extras;android;m2repository'
   ],
   'scripts' => {
     'path' => '/usr/local/bin',
