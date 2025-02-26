@@ -21,19 +21,23 @@ file '/usr/share/keyrings/erlang.gpg' do
 end
 
 execute 'download_erlang_gpg_key' do
-  command 'wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | gpg --dearmor | sudo tee /usr/share/keyrings/erlang-solutions.gpg > /dev/null'
+  command 'wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | gpg --dearmor | tee /usr/share/keyrings/erlang-solutions.gpg > /dev/null'
   not_if { File.exist?('/usr/share/keyrings/erlang-solutions.gpg') }
+  user 'root'
 end
 
 execute 'add_erlang_repository' do
-  command 'echo "deb [signed-by=/usr/share/keyrings/erlang-solutions.gpg] https://packages.erlang-solutions.com/ubuntu focal contrib" | sudo tee /etc/apt/sources.list.d/erlang-solutions.list'
+  command 'echo "deb [signed-by=/usr/share/keyrings/erlang-solutions.gpg] https://packages.erlang-solutions.com/ubuntu focal contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list'
   not_if "grep -q 'erlang-solutions' /etc/apt/sources.list.d/erlang-solutions.list"
+  user 'root'
 end
 
-apt_update 'update_sources' do
-  action :update
+execute 'apt-get update' do
+  command 'apt-get update -q'
+  user 'root'
 end
 
-package 'erlang' do
-  action :install
+execute 'install erlang' do
+  command 'apt-get install -y erlang'
+  user 'root'
 end
