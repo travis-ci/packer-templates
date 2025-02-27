@@ -84,3 +84,4 @@ include_recipe 'travis_system_info'
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are
 # good or bad
 execute 'rm -f /home/travis/.pearrc'
+include_recipe 'travis_build_environment::android-sdk'
