@@ -180,6 +180,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   rust
   elixir
   erlang
+  android
 ]
 
 override['travis_docker']['version'] = '26.1.3'
