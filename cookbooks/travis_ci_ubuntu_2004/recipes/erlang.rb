@@ -1,30 +1,34 @@
 # frozen_string_literal: true
 
-execute 'prepare_apt_environment' do
+# Diagnose file system and permissions issues
+execute 'diagnose_filesystem_issues' do
   command <<-EOH
-    # Clean apt cache to free space
-    apt-get clean
+    echo "=== Filesystem Status ==="
+    df -h
+    echo "=== APT Cache Directory Permissions ==="
+    ls -la /var/cache/apt/
+    ls -la /var/cache/apt/archives/
+    echo "=== Checking for stale apt/dpkg locks ==="
+    lsof /var/lib/dpkg/lock* || echo "No locks found"
+    lsof /var/lib/apt/lists/lock || echo "No lists lock found"
+    lsof /var/cache/apt/archives/lock || echo "No archives lock found"
     
-    # Ensure the partial directory exists with correct permissions
+    # Force removal of any locks that might exist
+    rm -f /var/lib/dpkg/lock*
+    rm -f /var/lib/apt/lists/lock
+    rm -f /var/cache/apt/archives/lock
+    
+    # Reset apt cache directories completely
+    rm -rf /var/cache/apt/archives/*
     mkdir -p /var/cache/apt/archives/partial
-    chmod 755 /var/cache/apt/archives /var/cache/apt/archives/partial
+    chmod 755 /var/cache/apt/archives
+    chmod 755 /var/cache/apt/archives/partial
     chown _apt:root /var/cache/apt/archives/partial
-    
-    # Check available disk space
-    available_space=$(df -h /var | awk 'NR==2 {print $4}')
-    echo "Available disk space: $available_space"
-    
-    # Ensure no other apt processes are running
-    killall -9 apt-get || true
-    killall -9 dpkg || true
-    
-    # Fix any interrupted package installations
-    dpkg --configure -a || true
   EOH
-  user 'root'
   action :run
 end
 
+# Clean up existing repository configurations
 ruby_block 'cleanup_old_erlang_repos' do
   block do
     [
@@ -44,119 +48,92 @@ ruby_block 'cleanup_old_erlang_repos' do
   action :run
 end
 
-ruby_block 'get_distro_codename' do
+# Try using the Ubuntu default repositories instead
+execute 'switch_to_ubuntu_repos' do
+  command <<-EOH
+    # Ensure we have a clean start with apt
+    apt-get clean
+    apt-get update -q || true
+    
+    # Try installing erlang from Ubuntu's default repositories
+    apt-get install -y erlang-base erlang-dev || true
+  EOH
+  action :run
+  ignore_failure true
+end
+
+# If Ubuntu repositories didn't work, try direct download approach
+ruby_block 'direct_download_erlang' do
   block do
-    codename = shell_out!('lsb_release -cs').stdout.strip
-    node.run_state['distro_codename'] = codename
+    # Check if erlang is already installed
+    unless system("which erl > /dev/null 2>&1")
+      puts "Trying direct download approach for Erlang..."
+      
+      # Create a temporary directory
+      system("mkdir -p /tmp/erlang_install")
+      
+      # Try to download the base package directly
+      system(%{
+        cd /tmp/erlang_install && \
+        wget https://packages.erlang-solutions.com/erlang/debian/pool/esl-erlang_25.0.3-1~ubuntu~focal_amd64.deb -O erlang.deb || \
+        wget http://archive.ubuntu.com/ubuntu/pool/main/e/erlang/erlang-base_23.0.2+dfsg-1ubuntu1_amd64.deb -O erlang.deb
+      })
+      
+      # Try to install with dpkg, then fix dependencies
+      system("dpkg -i /tmp/erlang_install/erlang.deb || true")
+      system("apt-get -f -y install")
+      
+      # Cleanup
+      system("rm -rf /tmp/erlang_install")
+    end
   end
   action :run
 end
 
-package %w(wget gnupg software-properties-common apt-transport-https ca-certificates) do
-  action :install
+# Last resort: try installing from source
+ruby_block 'install_erlang_from_source' do
+  block do
+    # Only proceed if erlang is not yet installed
+    unless system("which erl > /dev/null 2>&1") 
+      puts "Attempting to install Erlang from source..."
+      
+      # Install build dependencies
+      system("apt-get install -y build-essential libncurses5-dev libssl-dev")
+      
+      # Download, compile and install
+      system(%{
+        cd /tmp && \
+        wget https://github.com/erlang/otp/archive/OTP-24.0.tar.gz && \
+        tar -xzf OTP-24.0.tar.gz && \
+        cd otp-OTP-24.0 && \
+        ./configure --prefix=/usr/local --without-javac && \
+        make -j$(nproc) && \
+        make install
+      })
+    end
+  end
+  action :run
+  ignore_failure true
 end
 
-execute 'download_erlang_gpg_key' do
+# Verify installation with a minimal dependency set
+execute 'verify_erlang_installation' do
   command <<-EOH
-    mkdir -p /usr/share/keyrings
-    wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | \
-    gpg --dearmor -o /usr/share/keyrings/erlang-solutions.gpg
-    chmod 644 /usr/share/keyrings/erlang-solutions.gpg
-  EOH
-  creates '/usr/share/keyrings/erlang-solutions.gpg'
-  user 'root'
-end
-
-execute 'add_erlang_repository' do
-  command lazy {
-    codename = node.run_state['distro_codename']
-    <<-EOH
-      echo "deb [signed-by=/usr/share/keyrings/erlang-solutions.gpg] https://packages.erlang-solutions.com/ubuntu #{codename} contrib" > /etc/apt/sources.list.d/erlang-solutions.list
-    EOH
-  }
-  user 'root'
-  creates '/etc/apt/sources.list.d/erlang-solutions.list'
-end
-
-execute 'apt_update_with_retry' do
-  command <<-EOH
-    max_attempts=3
-    attempt=0
-    while [ $attempt -lt $max_attempts ]; do
-      apt-get update -q && break
-      attempt=$((attempt+1))
-      echo "Attempt $attempt failed. Waiting 5 seconds before retry..."
-      sleep 5
-    done
-    if [ $attempt -eq $max_attempts ]; then
-      echo "Failed to update repositories after $max_attempts attempts"
-      exit 1
+    if which erl > /dev/null 2>&1; then
+      echo "Erlang was successfully installed:"
+      erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().' -noshell
+    else
+      echo "Attempting one final approach - installing just the minimal set of packages"
+      apt-get update -q
+      apt-get install -y --no-install-recommends erlang-base erlang-crypto erlang-syntax-tools erlang-inets erlang-mnesia
+      
+      if which erl > /dev/null 2>&1; then
+        echo "Minimal Erlang installation successful"
+      else
+        echo "All installation attempts failed. Manual intervention needed."
+        exit 1
+      fi
     fi
   EOH
-  user 'root'
   action :run
-end
-
-execute 'install_erlang_direct' do
-  command <<-EOH
-    # First try with direct method and --fix-missing
-    apt-get -y -f install --fix-missing
-    apt-get -y install erlang || true
-  EOH
-  action :run
-  ignore_failure true
-end
-
-ruby_block 'install_erlang_packages' do
-  block do
-    erlang_packages = %w(
-      erlang-base
-      erlang-dev
-      erlang-asn1
-      erlang-crypto
-      erlang-inets
-      erlang-ssl
-      erlang-tools
-    )
-    
-    erlang_packages.each do |pkg|
-      system("apt-get -y -f --allow-downgrades -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold install #{pkg}")
-    end
-    
-    system("apt-get -y -f --allow-downgrades -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold install erlang")
-  end
-  action :run
-  ignore_failure true
-end
-
-package 'erlang' do
-  action :install
-  options "--fix-missing --allow-downgrades -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
-  retries 3
-  retry_delay 10
-  timeout 900  
-end
-
-execute 'verify_erlang_installation' do
-  command 'erl -version || true'
-  user 'root'
-  action :run
-  ignore_failure true
-end
-
-ruby_block 'erlang_installation_diagnostics' do
-  block do
-    puts "===== ERLANG INSTALLATION DIAGNOSTICS ====="
-    puts "APT Cache Directory Status:"
-    system("ls -la /var/cache/apt/archives/")
-    puts "Disk Space:"
-    system("df -h")
-    puts "Repository Status:"
-    system("apt-cache policy erlang")
-    puts "Package Availability:"
-    system("apt-cache search erlang")
-    puts "=========================================="
-  end
-  action :run
-  not_if "which erl"
 end
