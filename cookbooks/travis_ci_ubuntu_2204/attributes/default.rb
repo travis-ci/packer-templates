@@ -45,7 +45,7 @@ go_versions = %w[
 ]
 override['android-sdk'] = {
   'name' => 'android-sdk',
-  'setup_root' => '/usr/local/android-sdk',
+  'setup_root' => '/usr/local',
   'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
   'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
   'version' => '9477386',
@@ -92,6 +92,8 @@ override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_jdk']['versions'] = %w[
   openjdk8
+  openjdk9
+  openjdk10
   openjdk11
   openjdk17
 ]

@@ -53,10 +53,14 @@ override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_jdk']['versions'] = %w[
+  openjdk8
+  openjdk9
+  openjdk10
+  openjdk11
   openjdk17
 ]
 
-override['travis_jdk']['default'] = 'openjdk17'
+override['travis_jdk']['default'] = 'openjdk11'
 
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
@@ -193,7 +197,7 @@ override['travis_docker']['binary']['checksum'] = 'a50076d372d3bbe955664707af1a4
 
 override['android-sdk'] = {
   'name' => 'android-sdk',
-  'setup_root' => '/usr/local/android-sdk',
+  'setup_root' => '/usr/local',
   'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
   'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
   'version' => '9477386',
