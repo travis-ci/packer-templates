@@ -1,6 +1,40 @@
-# frozen_string_literal: true
+module ErlangHelper
+  require 'chef/mixin/shell_out'
+  include Chef::Mixin::ShellOut
+  extend self
 
-# Diagnose file system and permissions issues
+  def direct_download_erlang
+    if shell_out("which erl").exitstatus != 0
+      Chef::Log.info("Trying direct download approach for Erlang...")
+      shell_out!("mkdir -p /tmp/erlang_install")
+      shell_out!(%{
+        cd /tmp/erlang_install && \
+        wget https://packages.erlang-solutions.com/erlang/debian/pool/esl-erlang_25.0.3-1~ubuntu~focal_amd64.deb -O erlang.deb || \
+        wget http://archive.ubuntu.com/ubuntu/pool/main/e/erlang/erlang-base_23.0.2+dfsg-1ubuntu1_amd64.deb -O erlang.deb
+      })
+      shell_out!("dpkg -i /tmp/erlang_install/erlang.deb || true")
+      shell_out!("apt-get -f -y install")
+      shell_out!("rm -rf /tmp/erlang_install")
+    end
+  end
+
+  def install_erlang_from_source
+    if shell_out("which erl").exitstatus != 0
+      Chef::Log.info("Attempting to install Erlang from source...")
+      shell_out!("apt-get install -y build-essential libncurses5-dev libssl-dev")
+      shell_out!(%{
+        cd /tmp && \
+        wget https://github.com/erlang/otp/archive/OTP-24.0.tar.gz && \
+        tar -xzf OTP-24.0.tar.gz && \
+        cd otp-OTP-24.0 && \
+        ./configure --prefix=/usr/local --without-javac && \
+        make -j$(nproc) && \
+        make install
+      })
+    end
+  end
+end
+
 execute 'diagnose_filesystem_issues' do
   command <<-EOH
     echo "=== Filesystem Status ==="
@@ -13,12 +47,10 @@ execute 'diagnose_filesystem_issues' do
     lsof /var/lib/apt/lists/lock || echo "No lists lock found"
     lsof /var/cache/apt/archives/lock || echo "No archives lock found"
     
-    # Force removal of any locks that might exist
     rm -f /var/lib/dpkg/lock*
     rm -f /var/lib/apt/lists/lock
     rm -f /var/cache/apt/archives/lock
     
-    # Reset apt cache directories completely
     rm -rf /var/cache/apt/archives/*
     mkdir -p /var/cache/apt/archives/partial
     chmod 755 /var/cache/apt/archives
@@ -28,7 +60,6 @@ execute 'diagnose_filesystem_issues' do
   action :run
 end
 
-# Clean up existing repository configurations
 ruby_block 'cleanup_old_erlang_repos' do
   block do
     [
@@ -48,75 +79,31 @@ ruby_block 'cleanup_old_erlang_repos' do
   action :run
 end
 
-# Try using the Ubuntu default repositories instead
 execute 'switch_to_ubuntu_repos' do
   command <<-EOH
-    # Ensure we have a clean start with apt
     apt-get clean
     apt-get update -q || true
-    
-    # Try installing erlang from Ubuntu's default repositories
     apt-get install -y erlang-base erlang-dev || true
   EOH
   action :run
   ignore_failure true
 end
 
-# If Ubuntu repositories didn't work, try direct download approach
 ruby_block 'direct_download_erlang' do
   block do
-    # Check if erlang is already installed
-    unless system("which erl > /dev/null 2>&1")
-      puts "Trying direct download approach for Erlang..."
-      
-      # Create a temporary directory
-      system("mkdir -p /tmp/erlang_install")
-      
-      # Try to download the base package directly
-      system(%{
-        cd /tmp/erlang_install && \
-        wget https://packages.erlang-solutions.com/erlang/debian/pool/esl-erlang_25.0.3-1~ubuntu~focal_amd64.deb -O erlang.deb || \
-        wget http://archive.ubuntu.com/ubuntu/pool/main/e/erlang/erlang-base_23.0.2+dfsg-1ubuntu1_amd64.deb -O erlang.deb
-      })
-      
-      # Try to install with dpkg, then fix dependencies
-      system("dpkg -i /tmp/erlang_install/erlang.deb || true")
-      system("apt-get -f -y install")
-      
-      # Cleanup
-      system("rm -rf /tmp/erlang_install")
-    end
+    ErlangHelper.direct_download_erlang
   end
   action :run
 end
 
-# Last resort: try installing from source
 ruby_block 'install_erlang_from_source' do
   block do
-    # Only proceed if erlang is not yet installed
-    unless system("which erl > /dev/null 2>&1") 
-      puts "Attempting to install Erlang from source..."
-      
-      # Install build dependencies
-      system("apt-get install -y build-essential libncurses5-dev libssl-dev")
-      
-      # Download, compile and install
-      system(%{
-        cd /tmp && \
-        wget https://github.com/erlang/otp/archive/OTP-24.0.tar.gz && \
-        tar -xzf OTP-24.0.tar.gz && \
-        cd otp-OTP-24.0 && \
-        ./configure --prefix=/usr/local --without-javac && \
-        make -j$(nproc) && \
-        make install
-      })
-    end
+    ErlangHelper.install_erlang_from_source
   end
   action :run
   ignore_failure true
 end
 
-# Verify installation with a minimal dependency set
 execute 'verify_erlang_installation' do
   command <<-EOH
     if which erl > /dev/null 2>&1; then
