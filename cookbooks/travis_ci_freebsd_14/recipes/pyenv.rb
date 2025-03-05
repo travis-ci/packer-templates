@@ -126,10 +126,13 @@ ruby_block 'log_virtualenv_init' do
 end
 
 pyenv_versions = %w[
-  3.7.6
-  3.8.1
-  3.9.16
-  3.10.9
+  3.7.17
+  3.8.18
+  3.9.19
+  3.10.13
+  3.11.8
+  3.12.5
+  3.13.0
 ]
 
 Chef::Log.info("#{MAGENTA}#{PREFIX} 📋 Installing Python versions: #{pyenv_versions.join(', ')}#{RESET}")
@@ -164,16 +167,16 @@ pyenv_versions.each do |version|
   end
 end
 
-Chef::Log.info("#{BLUE}#{PREFIX} 🔄 Setting global Python version to 3.8.1#{RESET}")
-bash 'pyenv_global_set_to_3.8.1' do
+Chef::Log.info("#{BLUE}#{PREFIX} 🔄 Setting global Python version to 3.8.18#{RESET}")
+bash 'pyenv_global_set_to_3.8.18' do
   code <<-EOH
     source #{bash_profile}
-    pyenv global 3.8.1
+    pyenv global 3.8.18
     echo "#{BLUE}#{PREFIX} 🔍 Current Python version: $(python --version)#{RESET}"
-    if [[ "$(python --version 2>&1)" == *"3.8.1"* ]]; then
-      echo "#{GREEN}#{PREFIX} ✅ Successfully set global Python version to 3.8.1#{RESET}"
+    if [[ "$(python --version 2>&1)" == *"3.8.18"* ]]; then
+      echo "#{GREEN}#{PREFIX} ✅ Successfully set global Python version to 3.8.18#{RESET}"
     else
-      echo "#{RED}#{PREFIX} ❌ Failed to set global Python version to 3.8.1#{RESET}"
+      echo "#{RED}#{PREFIX} ❌ Failed to set global Python version to 3.8.18#{RESET}"
       exit 1
     fi
   EOH
@@ -188,7 +191,7 @@ end
 
 ruby_block 'log_global_python' do
   block do
-    Chef::Log.info("#{GREEN}#{PREFIX} ✅ Global Python version set to 3.8.1#{RESET}")
+    Chef::Log.info("#{GREEN}#{PREFIX} ✅ Global Python version set to 3.8.18#{RESET}")
   end
   action :nothing
 end
@@ -252,7 +255,7 @@ ruby_block 'installation_summary' do
     puts "#{BLUE}#{PREFIX} 📌 Pyenv location: #{node['travis_build_environment']['home']}/.pyenv#{RESET}"
     puts "#{BLUE}#{PREFIX} 📌 Symlink: /opt/pyenv#{RESET}"
     puts "#{BLUE}#{PREFIX} 📌 Python versions installed: #{pyenv_versions.join(', ')}#{RESET}"
-    puts "#{BLUE}#{PREFIX} 📌 Global Python version: 3.8.1#{RESET}"
+    puts "#{BLUE}#{PREFIX} 📌 Global Python version: 3.8.18#{RESET}"
     puts "#{BLUE}#{PREFIX} 📌 Bash profile: #{bash_profile}#{RESET}"
     puts "#{MAGENTA}#{PREFIX} =============================================#{RESET}"
     puts "\n"
