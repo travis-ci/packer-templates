@@ -27,6 +27,7 @@ __install_go() {
   # echo "export PATH=$PATH:/usr/local/go/bin" >> /home/travis/.bashrc
   # source /home/travis/.bashrc
   echo "Installing newest GO"
+  sudo systemctl restart snapd
   sudo snap install go --classic
   go version
 

@@ -14,7 +14,7 @@ main() {
 __install_packages() {
   apt-get update -yqq
   apt-get install -yqq --no-install-suggests --no-install-recommends  \
-  libasound2 libcups2 libfontconfig1 libxrender1 libxext6 libx11-6 \
+  libcups2 libfontconfig1 libxrender1 libxext6 libx11-6 \
   libnss3 libgcc1 util-linux zlib1g libstdc++6 libpcsclite1 libfreetype6 libjpeg8 liblcms2-2 libxtst6 wget;
 }
 

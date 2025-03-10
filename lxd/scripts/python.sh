@@ -52,6 +52,9 @@ __install_pip() {
     pip3 install --user --upgrade setuptools wheel
     rm -f get-pip.py
     id travis && chown -R travis: /home/travis/.cache/pip/
+  elif [[ "${dist}" = "noble" ]]; then
+    # pip doesn't work for Noble!!
+    sudo apt install -y python3-setuptools python3-wheel python3-testresources
   else
     wget https://bootstrap.pypa.io/pip/get-pip.py
     sudo python3 get-pip.py
@@ -90,11 +93,15 @@ __install_pyenv() {
 }
 
 __install_virtualenv() {
-
-  virtualenv_root="/home/travis/virtualenv"
-  pip install --user virtualenv==20.15.1
-  mkdir -p ${virtualenv_root}
-  id travis && chown -R travis: ${virtualenv_root}
+  dist=$(lsb_release -cs)
+  if [[ "${dist}" = "noble" ]]; then
+    sudo apt install -y python3-virtualenv
+  else
+    virtualenv_root="/home/travis/virtualenv"
+    pip install --user virtualenv==20.15.1
+    mkdir -p ${virtualenv_root}
+    id travis && chown -R travis: ${virtualenv_root}
+  fi
 }
 
 __install_default_python() {
@@ -140,6 +147,13 @@ __setup_system_site_packages_jammy(){
   __setup_envirnoment_jammy "python3.10"
 }
 
+__setup_system_site_packages_noble(){
+
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python3-dev
+  sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+  __setup_envirnoment_noble "python3.12"
+}
+
 __setup_system_site_packages() {
   #noop
   :
@@ -159,8 +173,14 @@ __setup_envirnoment_jammy() {
   pyname=$1
   venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
   /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
-  ${venv_fullname}/local/bin/pip install wheel
+  pip install wheel
+  # ${venv_fullname}/local/bin/pip install wheel
   id travis && chown -R travis: ${venv_fullname}
+}
+
+__setup_envirnoment_noble() {
+
+  sudo apt install python3-pip -y
 }
 
 main "$@"

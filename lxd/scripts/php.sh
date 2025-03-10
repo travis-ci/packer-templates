@@ -112,6 +112,16 @@ __install_default_php_jammy(){
 
 }
 
+__install_default_php_noble(){
+  local PHP_VERSION=8.2
+
+  . /etc/os-release
+  archive_url="https://storage.googleapis.com/travis-ci-language-archives/php/binaries/${ID}/${VERSION_ID}/$(uname -m)/php-${PHP_VERSION}.tar.bz2"
+  curl -s -o archive.tar.bz2 $archive_url && tar xf archive.tar.bz2 --directory /
+  phpenv global ${PHP_VERSION}
+
+}
+
 __install_php(){
 
   . /etc/os-release
@@ -128,6 +138,10 @@ __install_php_focal(){
 }
 
 __install_php_jammy(){
+  echo "PHP - only 8.2 is supported"
+}
+
+__install_php_noble(){
   echo "PHP - only 8.2 is supported"
 }
 

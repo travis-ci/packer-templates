@@ -21,10 +21,10 @@ __install_packages() {
   #wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
   #echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
   apt-get update -yqq
-  apt-get install -yqq \
-    --no-install-suggests \
-    --no-install-recommends \
-    sqlite;
+  # apt-get install -yqq \
+  #   --no-install-suggests \
+  #   --no-install-recommends \
+  #   sqlite;
 
     debconf-set-selections <<< 'mysql-server mysql-server/root_password password'
     debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password'
@@ -127,6 +127,22 @@ __mongodb_install_jammy(){
   fi
 }
 
+__mongodb_install_noble(){
+  arch=$(uname -m)
+  # missing binary files for s390x and ppc64le arch
+  if [[ "$arch" = "ppc64le" ]] || [[ "$arch" = "s390x" ]]; then
+  echo "MongoDB not available for $arch";
+  else
+  wget -qO - https://www.mongodb.org/static/pgp/server-8.0.asc |  gpg --dearmor | sudo tee /usr/share/keyrings/mongodb.gpg > /dev/null
+  echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+    apt-get update -yqq
+    apt-get install -yqq \
+      --no-install-suggests \
+      --no-install-recommends \
+      mongodb-org;
+  fi
+}
+
 __mysql_setup() {
 
   mysql -h localhost -NBe "CREATE USER 'travis'@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%'; CREATE USER 'travis'@'localhost' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost'; CREATE USER 'travis'@'127.0.0.1' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'travis'@'127.0.0.1'"
@@ -217,6 +233,14 @@ __redis_jammy(){
   systemctl disable redis-server
 }
 
+__redis_noble(){
+  apt-get update
+  apt-get install -y redis-server
+  __redis_setup
+  systemctl stop redis-server
+  systemctl disable redis-server
+}
+
 __turn_off_all() {
   systemctl stop mysql
   systemctl disable mysql
@@ -245,10 +269,18 @@ __couchdb_install_bionic(){
 }
 
 __couchdb_install_focal(){
-  echo "couchdb - has no installation candidate"
+  apt-get update -yqq
+  apt-get install -yqq \
+    --no-install-suggests \
+    --no-install-recommends \
+    couchdb;
 }
 
 __couchdb_install_jammy(){
+  echo "couchdb - has no installation candidate"
+}
+
+__couchdb_install_noble(){
   echo "couchdb - has no installation candidate"
 }
 

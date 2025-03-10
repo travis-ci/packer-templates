@@ -56,11 +56,9 @@ rvm_silence_path_mismatch_check_flag='1'
 rvm_user_install_flag='1'
 rvm_with_default_gems='rake bundler'
 rvm_without_gems='rubygems-bundler'
-rvm_autolibs_flag='read-fail'
 EOF
 
 source "$HOME/.rvm/scripts/rvm"
-# Ruby 3.X.X causes isuess with DPL
 arch=$(uname -m)
 dist=$(lsb_release -sc)
 sudo chmod -R a+w /var/lib/gems/
@@ -72,13 +70,15 @@ sudo chmod -R a+w /usr/local/bin
 if [[ $dist = "jammy" ]]; then
   rvm pkg install openssl
   rvm install 2.7.8 --with-openssl-dir=$HOME/.rvm/usr
-  rvm install ruby-3.3.1 --autolibs=enable --fuzzy
+  rvm install ruby-3.3.7 --autolibs=enable --fuzzy
+elif [[ $dist = "noble" ]]; then
+  rvm install ruby-3.3.7 --autolibs=enable --fuzzy
 else
   rvm install ruby-2.7.8 --autolibs=enable --fuzzy
-  rvm install ruby-3.3.1 --autolibs=enable --fuzzy
+  rvm install ruby-3.3.7 --autolibs=enable --fuzzy
 fi
-# DPLv2 needs default 3.3.1 ruby and 2.7 preinstalled
-rvm use --default 3.3.1
+# Our gem travis-system-info works with max ruby 3.3
+rvm use --default 3.3.7
 gem install bundler -v 2.4.22
 
 
