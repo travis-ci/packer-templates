@@ -14,6 +14,7 @@ main() {
   if ! [[ "$(uname -m)" =~ ppc64 ]]; then
     __enable_i386
   fi
+  __wait_for_apt_locks
   __install_packages
   __setup_redis
   __setup_git
@@ -31,26 +32,45 @@ __enable_i386() {
   dpkg --add-architecture i386
 }
 
-__install_packages() {
+# Nowa funkcja do czekania na zwolnienie blokad APT
+__wait_for_apt_locks() {
+  local apt_locks=("/var/lib/dpkg/lock" "/var/lib/apt/lists/lock" "/var/lib/dpkg/lock-frontend" "/var/cache/apt/archives/lock")
+  
+  for lock in "${apt_locks[@]}"; do
+    while fuser "${lock}" >/dev/null 2>&1; do
+      echo "Oczekiwanie na zwolnienie blokady ${lock}..."
+      sleep 5
+    done
+  done
+}
 
+__install_packages() {
   machine=$(lsb_release -sc)
 
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
-    rm -rvf /etc/apt/sources.list.d/partner.list \
-      /var/lib/apt/lists/*
+    # Nie usuwamy list repozytoriów całkowicie, tylko czyścimy je
+    sudo apt-get clean
   fi
 
-  # Add Perforce packaging key
-  wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
+  # Nowoczesne podejście do dodawania klucza GPG Perforce
+  wget -qO - https://package.perforce.com/perforce.pubkey | sudo gpg --dearmor -o /usr/share/keyrings/perforce-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/perforce-archive-keyring.gpg] http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
 
-  # Add Perforce repository
-  echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
-
-  apt-get clean
-  apt-get autoclean -y
-  apt-get autoremove -y
-  apt-get update -y
-  apt-get install -yqq \
+  # Czekamy na zwolnienie blokad przed każdą operacją APT
+  __wait_for_apt_locks
+  sudo apt-get clean
+  
+  __wait_for_apt_locks
+  sudo apt-get autoclean -y
+  
+  __wait_for_apt_locks
+  sudo apt-get autoremove -y
+  
+  __wait_for_apt_locks
+  sudo apt-get update -y
+  
+  __wait_for_apt_locks
+  sudo apt-get install -yqq \
     --no-install-suggests \
     --no-install-recommends \
     ca-certificates \
@@ -73,25 +93,36 @@ __install_packages() {
   # rabbitmq service fix
   sudo systemctl unmask rabbitmq-server.service
 }
+
 __setup_redis() {
   echo "Installing the newest redis"
-  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+  
+  # Nowoczesne podejście do dodawania klucza Redis
+  wget -qO - https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+  
+  __wait_for_apt_locks
   sudo apt-get update -y
-  sudo apt-get install redis redis-tools redis-server -y
+  
+  __wait_for_apt_locks
+  sudo apt-get install -y redis redis-tools redis-server
+  
   sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
 }
+
 __setup_git() {
-  apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
-  mkdir tmp_git
-  cd /tmp
+  __wait_for_apt_locks
+  sudo apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
+  
+  mkdir -p /tmp/git_build
+  cd /tmp/git_build
   curl -o git.tar.gz https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.43.0.tar.gz
   tar -zxf git.tar.gz
   cd git-*
   make prefix=/usr/local all
   sudo make prefix=/usr/local install
-  cd ..
-  cd ..
+  cd /
+  rm -rf /tmp/git_build
 }
 
 __setup_sshd() {
@@ -110,7 +141,6 @@ __setup_travis_user() {
       useradd -p travis -s /bin/bash -m travis -u "${TRAVIS_UID}"
       groupmod -g "${TRAVIS_UID}" travis
       usermod -u "${TRAVIS_UID}" travis
-
     fi
   fi
 
