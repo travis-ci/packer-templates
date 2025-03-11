@@ -15,7 +15,8 @@ php_aliases = {
   '7.1' => '7.1.33',
   '7.2' => '7.2.27',
   '7.3' => '7.3.14',
-  '7.4' => '7.4.2'
+  '7.4' => '7.4.2',
+  '8.4' => '8.4.4'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['7.2']
