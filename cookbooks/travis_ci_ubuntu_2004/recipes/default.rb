@@ -48,7 +48,7 @@ include_recipe 'travis_build_environment::gradle'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::redis'
 # include_recipe 'travis_build_environment::mongodb'
-include_recipe '::erlang'
+#include_recipe '::erlang'
 include_recipe 'memcached'
 # TODO: Uncomment when cassandra works on Java 8 again
 # https://github.com/travis-ci/packer-templates/issues/589
@@ -84,3 +84,4 @@ include_recipe 'travis_system_info'
 # HACK: force removal of ~/.pearrc until a decision is reached on if they are
 # good or bad
 execute 'rm -f /home/travis/.pearrc'
+include_recipe 'travis_build_environment::android-sdk'

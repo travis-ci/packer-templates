@@ -67,6 +67,7 @@ else
     openjdk9
     openjdk10
     openjdk11
+    openjdk17
   ]
   override['travis_jdk']['default'] = 'openjdk11'
 end
@@ -184,7 +185,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   perl6
   elixir
   erlang
-
+  android
 ]
 override['travis_docker']['version'] = '24.0.5'
 override['travis_docker']['binary']['version'] = '24.0.5'
@@ -192,3 +193,36 @@ override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose
 override['travis_docker']['compose']['sha256sum'] = 'f45e4cb687df8b48a57f656097ce7175fa8e8bef70be407b011e29ff663f475f'
 override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-24.0.5.tgz'
 override['travis_docker']['binary']['checksum'] = '0a5f3157ce25532c5c1261a97acf3b25065cfe25940ef491fa01d5bea18ddc86'
+override['android-sdk'] = {
+  'name' => 'android-sdk',
+  'setup_root' => '/usr/local',
+  'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
+  'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
+  'version' => '9477386',
+  'owner' => 'root',
+  'group' => 'root',
+  'with_symlink' => true,
+  'java_from_system' => false,
+  'set_environment_variables' => true,
+  'license' => {
+    'white_list' => ['android-sdk-license'],
+    'black_list' => [],
+    'default_answer' => 'y'
+  },
+  'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
+  'components' => [
+    'tools',
+    'platform-tools',
+    'build-tools;30.0.0',     # nowsza wersja niż build-tools-25.0.2
+    'platforms;android-30',   # nowsza wersja niż android-25
+    'extras;google;google_play_services',
+    'extras;google;m2repository',
+    'extras;android;m2repository'
+  ],
+  'scripts' => {
+    'path' => '/usr/local/bin',
+    'owner' => 'root',
+    'group' => 'root'
+  },
+  'maven_rescue' => false
+}
