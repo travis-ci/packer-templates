@@ -213,8 +213,8 @@ override['android-sdk'] = {
   'components' => [
     'tools',
     'platform-tools',
-    'build-tools;30.0.0',     # nowsza wersja niż build-tools-25.0.2
-    'platforms;android-30',   # nowsza wersja niż android-25
+    'build-tools;30.0.0',
+    'platforms;android-30',
     'extras;google;google_play_services',
     'extras;google;m2repository',
     'extras;android;m2repository'

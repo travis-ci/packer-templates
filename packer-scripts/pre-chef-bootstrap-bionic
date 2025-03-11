@@ -32,13 +32,12 @@ __enable_i386() {
   dpkg --add-architecture i386
 }
 
-# Nowa funkcja do czekania na zwolnienie blokad APT
 __wait_for_apt_locks() {
   local apt_locks=("/var/lib/dpkg/lock" "/var/lib/apt/lists/lock" "/var/lib/dpkg/lock-frontend" "/var/cache/apt/archives/lock")
   
   for lock in "${apt_locks[@]}"; do
     while fuser "${lock}" >/dev/null 2>&1; do
-      echo "Oczekiwanie na zwolnienie blokady ${lock}..."
+      echo "Waiting for lock ${lock} to be released..."
       sleep 5
     done
   done
@@ -48,15 +47,12 @@ __install_packages() {
   machine=$(lsb_release -sc)
 
   if [[ "${PACKER_BUILDER_TYPE}" =~ googlecompute ]]; then
-    # Nie usuwamy list repozytoriów całkowicie, tylko czyścimy je
     sudo apt-get clean
   fi
 
-  # Nowoczesne podejście do dodawania klucza GPG Perforce
   wget -qO - https://package.perforce.com/perforce.pubkey | sudo gpg --dearmor -o /usr/share/keyrings/perforce-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/perforce-archive-keyring.gpg] http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
 
-  # Czekamy na zwolnienie blokad przed każdą operacją APT
   __wait_for_apt_locks
   sudo apt-get clean
   
@@ -90,14 +86,12 @@ __install_packages() {
     rabbitmq-server \
     "${APT_GET_INSTALL_PRE_CHEF}"
 
-  # rabbitmq service fix
   sudo systemctl unmask rabbitmq-server.service
 }
 
 __setup_redis() {
   echo "Installing the newest redis"
   
-  # Nowoczesne podejście do dodawania klucza Redis
   wget -qO - https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
   
@@ -149,7 +143,6 @@ __setup_travis_user() {
   __setup_sudoers
   __setup_travis_ssh
 
-  # Save users having to create this directory at runtime (it's already on PATH)
   mkdir -p /home/travis/bin
 
   mkdir -p /opt

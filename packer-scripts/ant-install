@@ -3,7 +3,6 @@
 set -o errexit
 
 main() {
-
   local version="1.10.15"
 
   echo "Download and extract Ant"
@@ -12,17 +11,13 @@ main() {
   sudo mv apache-ant-$version/ /usr/local/ant
   
   echo "Add Ant variables to a profile"
-
-  echo "export ANT_HOME=/usr/local/ant" >> /etc/profile
-  echo "export PATH=\$PATH:/usr/local/ant/bin" >> /etc/profile
+  echo "export ANT_HOME=/usr/local/ant" | sudo tee -a /etc/profile
+  echo "export PATH=\$PATH:/usr/local/ant/bin" | sudo tee -a /etc/profile
   
-
   export ANT_HOME=/usr/local/ant
   export PATH="$PATH:/usr/local/ant/bin"
   
-
   cat /etc/profile
-
 }
 
 main "$@"
