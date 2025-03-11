@@ -34,6 +34,8 @@ override['travis_system_info']['commands_file'] = \
 rubies = %w[
   3.1.2
 ]
+
+override['travis_docker']['update_grub'] = false
 override['travis_build_environment']['default_ruby'] = '3.1.2'
 override['travis_build_environment']['rubies'] = rubies
 override['travis_build_environment']['php_versions'] = []
