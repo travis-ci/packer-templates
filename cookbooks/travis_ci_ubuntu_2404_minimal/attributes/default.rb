@@ -15,20 +15,6 @@ go_versions = %w[
   1.24
 ]
 
-# packages build by Cpython + our repo
-pythons = %w[
-  3.12.8
-  3.13.1
-]
-
-%w[3].each do |pyver|
-  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
-    pythons.unshift(pythons.delete(py))
-  end
-end
-
-override['travis_build_environment']['pythons'] = pythons
-
 override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
 
