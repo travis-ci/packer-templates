@@ -4,17 +4,23 @@ set -o errexit
 
 main() {
 
-  local version="1.10.14"
+  local version="1.10.15"
 
   echo "Download and extract Ant"
   wget -q "https://downloads.apache.org/ant/binaries/apache-ant-${version}-bin.tar.gz"
   tar xzf apache-ant-$version-bin.tar.gz
   sudo mv apache-ant-$version/ /usr/local/ant
+  
   echo "Add Ant variables to a profile"
-  ANT_HOME=/usr/local/ant
-  PATH="$PATH:/usr/local/ant/bin"
-  export ANT_HOME
-  export PATH="$PATH:/usr/local/ant/bin" >>/etc/profile
+
+  echo "export ANT_HOME=/usr/local/ant" >> /etc/profile
+  echo "export PATH=\$PATH:/usr/local/ant/bin" >> /etc/profile
+  
+
+  export ANT_HOME=/usr/local/ant
+  export PATH="$PATH:/usr/local/ant/bin"
+  
+
   cat /etc/profile
 
 }
