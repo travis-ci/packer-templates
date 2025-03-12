@@ -121,7 +121,7 @@ override['travis_build_environment']['firefox_version'] = '99.0'
 
 # not yet supported
 override['travis_postgresql']['default_version'] = '14'
-override['travis_postgresql']['alternate_versions'] = %w[]
+override['travis_postgresql']['alternate_versions'] = %w[13]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
 override['travis_packer_templates']['job_board']['features'] = %w[
