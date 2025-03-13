@@ -11,7 +11,7 @@ main() {
       awk '/\sinstall$/ { print $1 }' |
       xargs dpkg-query -W -f="\"\${${package_field}}\": \"\${Version}\",\\n"
     echo "\"__timestamp\": \"$(date +%Y%m%dT%H%M%S)\"}"
-  ) | python -m json.tool |
+  ) | python3 -m json.tool |
     tee "${DPKG_MANIFEST_JSON}"
 }
 
