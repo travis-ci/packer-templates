@@ -16,7 +16,7 @@ if os[:arch] !~ /ppc64|aarch64|arm64/
         # Running `php -m` hangs, but adding more args doesn't (???)
         its(:stdout) { should include(*PHP_MODULES_OLDER) }
       end
-    elsif 'jammy'.include?(Support.distro)
+    elsif %w[jammy noble].include?(Support.distro)
       describe phpcommand('php -m --version') do
         # Running `php -m` hangs, but adding more args doesn't (???)
         its(:stdout) { should include(*PHP_MODULES_NEWER) }

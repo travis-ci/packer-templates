@@ -3,7 +3,7 @@
 # Cookbook Name:: travis_ci_ubuntu_2204
 # Recipe:: default
 #
-# Copyright 2017, Travis CI GmbH
+# Copyright 2025, Travis CI GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -51,6 +51,8 @@ include_recipe 'travis_sbt_extras'
 include_recipe 'travis_build_environment::gradle'
 include_recipe '::mysql'
 include_recipe '::postgresql'
+# include_recipe '::mariadb'
+include_recipe '::erlang'
 include_recipe 'travis_perlbrew::multi'
 include_recipe 'travis_build_environment::redis'
 include_recipe 'memcached'

@@ -7,6 +7,10 @@ describe 'pyenv', dev: true do
     describe command('pyenv version-name') do
       its(:stdout) { should eql("3.10.14\n") }
     end
+  elsif %w[noble].include?(Support.distro)
+    describe command('pyenv version-name') do
+      its(:stdout) { should eql("3.12.8\n") }
+    end
   else
     describe command('pyenv version-name') do
       its(:stdout) { should eql("3.7.17\n") }
