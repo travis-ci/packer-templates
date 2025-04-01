@@ -43,7 +43,39 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 go_versions = %w[
   1.23
 ]
-
+override['android-sdk'] = {
+  'name' => 'android-sdk',
+  'setup_root' => '/usr/local',
+  'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
+  'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
+  'version' => '9477386',
+  'owner' => 'root',
+  'group' => 'root',
+  'with_symlink' => true,
+  'java_from_system' => false,
+  'set_environment_variables' => true,
+  'license' => {
+    'white_list' => ['android-sdk-license'],
+    'black_list' => [],
+    'default_answer' => 'y'
+  },
+  'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
+  'components' => [
+    'tools',
+    'platform-tools',
+    'build-tools;30.0.0',    
+    'platforms;android-30', 
+    'extras;google;google_play_services',
+    'extras;google;m2repository',
+    'extras;android;m2repository'
+  ],
+  'scripts' => {
+    'path' => '/usr/local/bin',
+    'owner' => 'root',
+    'group' => 'root'
+  },
+  'maven_rescue' => false
+}
 override['travis_build_environment']['clang']['version'] = '18.1.8'
 override['travis_build_environment']['clang']['download_url'] = ::File.join(
   "https://github.com/llvm/llvm-project/releases/download/llvmorg-#{node['travis_build_environment']['clang']['version']}",
@@ -60,6 +92,8 @@ override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_jdk']['versions'] = %w[
   openjdk8
+  openjdk9
+  openjdk10
   openjdk11
   openjdk17
 ]
@@ -124,6 +158,8 @@ override['travis_postgresql']['default_version'] = '14'
 override['travis_postgresql']['alternate_versions'] = %w[13]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
 
+override['travis_build_environment']['pyenv_revision'] = 'v2.3.24'
+
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   disabled-ipv6
@@ -169,6 +205,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   rust
   elixir
   erlang
+  android
 ]
 
 override['travis_docker']['version'] = '26.1.3'

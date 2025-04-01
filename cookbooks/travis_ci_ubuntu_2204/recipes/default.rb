@@ -68,7 +68,7 @@ include_recipe 'travis_build_environment::google_chrome'
 include_recipe 'travis_build_environment::firefox'
 # include_recipe 'travis_build_environment::ibm_advanced_tool_chain'
 include_recipe 'travis_phantomjs::2'
-
+include_recipe 'travis_build_environment::android-sdk'
 execute 'ln -svf /usr/bin/hashdeep /usr/bin/md5deep'
 
 log 'trigger writing node attributes' do

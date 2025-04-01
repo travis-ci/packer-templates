@@ -25,14 +25,20 @@ go_versions = %w[
 pythons = %w[
   3.7.17
   3.8.18
-  3.9.18
-  3.12.4
+  3.9.19
+  3.10.13
+  3.11.8
+  3.12.5
+  3.13.0
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_build_environment']['pythons'] = pythons
+
+override['travis_build_environment']['global_python'] = '3.8.18'
+
 override['travis_build_environment']['python_aliases'] = {
   '2.7.15' => %w[2.7],
   '3.6.10' => %w[3.6],
