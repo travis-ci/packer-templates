@@ -37,7 +37,6 @@ override['travis_build_environment']['go']['default_version'] = go_versions.max
 
 override['travis_build_environment']['pythons'] = pythons
 
-# Ustaw globalną wersję Pythona jako atrybut
 override['travis_build_environment']['global_python'] = '3.8.18'
 
 override['travis_build_environment']['python_aliases'] = {

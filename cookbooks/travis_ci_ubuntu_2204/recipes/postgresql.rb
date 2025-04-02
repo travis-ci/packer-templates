@@ -7,10 +7,12 @@ apt_repository 'postgresql' do
   key 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
 end
 
-package 'postgresql-14'
+package 'postgresql-14' do
+  action [:install]
+end
 
 service 'postgresql' do
-  action [:stop, :disable]
+  action [:stop]
 end
 
 template '/etc/postgresql/14/main/pg_hba.conf' do
