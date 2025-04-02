@@ -84,19 +84,3 @@ include_recipe 'travis_system_info'
 # good or bad
 execute 'rm -f /home/travis/.pearrc'
 
-default['travis_build_environment']['podman_enabled'] = true
-
-if node['lsb']['codename'] == 'bionic'
-  default['travis_build_environment']['podman_repo_url'] = 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/'
-  default['travis_build_environment']['podman_repo_key'] = 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/Release.key'
-  default['travis_build_environment']['podman_packages'] = %w(podman containers-common catatonit)
-elsif node['lsb']['codename'] == 'focal'
-  default['travis_build_environment']['podman_repo_url'] = 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/'
-  default['travis_build_environment']['podman_repo_key'] = 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key'
-  default['travis_build_environment']['podman_packages'] = %w(podman containers-common catatonit)
-elsif node['lsb']['codename'] == 'jammy'
-  default['travis_build_environment']['podman_packages'] = %w(podman containers-common catatonit podman-docker)
-elsif node['lsb']['codename'] == 'noble'
-  default['travis_build_environment']['podman_packages'] = %w(podman containers-common catatonit podman-docker aardvark-dns netavark)
-  default['travis_build_environment']['podman_use_netavark'] = true
-end
