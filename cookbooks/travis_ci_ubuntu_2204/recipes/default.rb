@@ -45,6 +45,7 @@ if node['kernel']['machine'] == 'ppc64le'
 else
   include_recipe 'travis_jdk'
 end
+include_recipe 'travis_build_environment::podman'
 include_recipe 'travis_build_environment::maven'
 include_recipe 'travis_build_environment::lein'
 include_recipe 'travis_sbt_extras'
