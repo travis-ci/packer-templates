@@ -34,8 +34,10 @@ TRAVIS_PACKER_BUILD ?= travis-packer-build
 UNZIP ?= unzip
 
 %: %.yml $(META_FILES)
-	$(PACKER) --version
-	$(PACKER) build -only=$(BUILDER) -debug <(bin/yml2json < $<)
+	@export PACKER_LOG=1; \
+	 export PACKER_LOG_PATH="packer.log"; \
+	 $(PACKER) --version; \
+	 $(PACKER) build -only=$(BUILDER) -on-error=cleanup <(bin/yml2json < $<)
 
 %-debug: %.yml $(META_FILES)
 	$(PACKER) --version
