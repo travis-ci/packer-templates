@@ -35,7 +35,7 @@ UNZIP ?= unzip
 
 %: %.yml $(META_FILES)
 	$(PACKER) --version
-	$(PACKER) build -only=$(BUILDER) <(bin/yml2json < $<)
+	$(PACKER) build -only=$(BUILDER) -debug <(bin/yml2json < $<)
 
 %-debug: %.yml $(META_FILES)
 	$(PACKER) --version

@@ -20,6 +20,8 @@ config:
   - ./packer-templates/bin/packer-build-install
   script:
   - export PACKER_TEMPLATES_BRANCH="%{branch}"
+  - export PACKER_LOG=DEBUG
+  - export PACKER_LOG_PATH="./packer-debug.log"
   - "./packer-templates/bin/packer-build-script %{template_name}"
   addons:
     artifacts:
