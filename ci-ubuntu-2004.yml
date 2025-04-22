@@ -31,7 +31,7 @@ builders:
       - projects/vm-options/global/licenses/enable-vmx
     zone: us-central1-a
     machine_type: n2-standard-4
-    disk_size: 100  # max 70 on Travis worker
+    disk_size: 100
     tags:
       - ci
       - ubuntu-2004
@@ -52,13 +52,11 @@ builders:
     commit: true
 
 provisioners:
-  # GoogleCompute: initial sleep
   - type: shell
     inline: sleep 10
     only:
       - googlecompute
 
-  # Docker: update and install sudo, then clean up apt cache
   - type: shell
     inline: |
       apt-get update -yqq \
@@ -69,7 +67,6 @@ provisioners:
     only:
       - docker
 
-  # Shared files for both builders
   - type: file
     source: tmp/git-meta
     destination: /var/tmp/git-meta
@@ -78,7 +75,6 @@ provisioners:
     source: packer-assets/ubuntu-2004-normal-purge.txt
     destination: /var/tmp/purge.txt
 
-  # Package lists
   - type: file
     source: packer-assets/ci-ubuntu-2004-packages.txt
     destination: /var/tmp/packages.txt
@@ -91,7 +87,6 @@ provisioners:
     only:
       - docker
 
-  # Environment dump, default-user cleanup
   - type: shell
     scripts:
       - packer-scripts/packer-env-dump
@@ -105,13 +100,11 @@ provisioners:
       - docker
       - googlecompute
 
-  # CouchDB pre-configuration
   - type: shell
     scripts:
       - packer-scripts/couchdb_pre_config
     execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 
-  # Pre-Chef bootstrap
   - type: shell
     scripts:
       - packer-scripts/pre-chef-bootstrap-focal
@@ -130,7 +123,6 @@ provisioners:
   - type: shell
     inline: chmod 0644 /var/tmp/ubuntu-2004-system-info-commands.yml
 
-  # Chef solo run
   - type: chef-solo
     version: 18.4.12
     config_template: chef-solo.rb.tmpl
@@ -143,7 +135,6 @@ provisioners:
     run_list:
       - recipe[travis_ci_ubuntu_2004]
 
-  # Final setup and cleanup scripts
   - type: shell
     scripts:
       - packer-scripts/ensure-travis-user
@@ -166,7 +157,6 @@ provisioners:
       - TRAVIS_UID={{ user `travis_uid` }}
     execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
 
-  # Ensure CouchDB ownership
   - type: shell
     inline: |
       chown -R couchdb:couchdb /opt/couchdb/
@@ -175,7 +165,6 @@ provisioners:
       - docker
       - googlecompute
 
-  # Create and download image metadata tarball
   - type: shell
     scripts:
       - packer-scripts/create-image-metadata-tarball
@@ -188,10 +177,17 @@ provisioners:
     destination: tmp/image-metadata-{{ user `image_name` }}.tar.bz2
     direction: download
 
-  # Final cleanup of temporary files
+  # FINAL CLEANUP: reclaim space before commit
   - type: shell
     inline: |
-      rm -rf /tmp/* /var/tmp/*
+      apt-get clean
+      rm -rf /var/lib/apt/lists/* \
+             /tmp/* /var/tmp/* \
+             /usr/share/doc/* \
+             /usr/share/man/* \
+             /var/cache/apt/* \
+             /var/log/* \
+             /root/.cache/*
     only:
       - docker
       - googlecompute
