@@ -137,6 +137,7 @@ provisioners:
 
   - type: shell
     scripts:
+      - packer-scripts/docker-space-check
       - packer-scripts/ensure-travis-user
       - packer-scripts/purge
       - packer-scripts/disable-apparmor
