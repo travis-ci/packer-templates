@@ -4,9 +4,50 @@ set -o errexit
 set -o xtrace
 shopt -s nullglob
 
-# clear the APT cache and delete everything from /var/cache/apt/archives/
-# removed   /etc/ssh/ssh_host_* \ - this probably caused issues with ssh connection for some reason..
 apt clean
+
+echo "Cleaning APT..."
+apt-get autoremove -y || true
+apt-get clean || true
+
+echo "Cleaning Node.js and Yarn..."
+if command -v yarn &>/dev/null; then
+  yarn cache clean || true
+fi
+
+if command -v npm &>/dev/null; then
+  npm cache clean --force || true
+fi
+
+echo "Cleaning Yarn directories..."
+rm -rf /tmp/.yarn-* || true
+rm -rf /root/.npm /root/.yarn || true
+rm -rf /home/*/.npm /home/*/.yarn || true
+rm -rf /usr/local/share/.cache/yarn || true
+rm -rf /usr/local/yarn-*/cache || true
+find /usr/local/yarn-* -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
+
+if command -v docker &>/dev/null; then
+  echo "Cleaning Docker..."
+  docker system prune -af || true
+fi
+
+if command -v pip3 &>/dev/null; then
+  echo "Cleaning pip..."
+  pip3 cache purge || true
+fi
+
+if command -v apt &>/dev/null; then
+  echo "Removing old kernels..."
+  dpkg -l 'linux-*' | awk '/^ii/{ print $2}' | grep -v -e "$(uname -r | sed -r 's/-[a-z]+//')" | grep -E '(image|headers)' | xargs apt-get -y purge || true
+fi
+
+if command -v snap &>/dev/null; then
+  echo "Cleaning snap..."
+  snap list --all | awk '/disabled/{print $1, $3}' | while read -r snapname revision; do
+    snap remove "$snapname" --revision="$revision" || true
+  done
+fi
 
 rm -rf \
   /etc/apparmor* \
@@ -22,7 +63,12 @@ rm -rf \
   /var/log/installer \
   /var/tmp/* \
   VBoxGuestAdditions_*.iso \
-  VBoxGuestAdditions_*.iso.?
+  VBoxGuestAdditions_*.iso.? \
+  /var/cache/* \
+  /usr/share/doc/* \
+  /usr/share/man/* 
+
+find /usr/share/locale -mindepth 1 -maxdepth 1 -type d -not -name 'en' -not -name 'en_US' -exec rm -rf {} \; || true
 
 if [[ $CLEANUP_APT_LISTS ]]; then
   rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
@@ -36,21 +82,21 @@ if [[ -d /home/travis ]]; then
   rm -f /home/travis/linux.iso /home/travis/shutdown.sh
 fi
 
+echo "Cleaning logs..."
 find /var/log -type f | while read -r f; do
   dd if=/dev/null of="${f}"
 done
 
-#
-# Disable motd
-# in /etc/default/motd-news set ENABLED=0
-#
+echo "Removing large files..."
+find / -type f -size +100M -not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*" -print -delete 2>/dev/null || true
+
+journalctl --vacuum-time=1d || true
+journalctl --vacuum-size=10M || true
+
 if test -f /etc/default/motd-news >&/dev/null; then
   sed -i 's|ENABLED=1|ENABLED=0|' /etc/default/motd-news
 fi
 
-#
-# Disable services to speed up boot time
-#
 if command -v systemctl >&/dev/null; then
   systemctl --all --type service | grep -q lxd-containers.service && systemctl disable lxd-containers.service
   systemctl --all --type service | grep -q accounts-daemon.service && systemctl mask accounts-daemon.service
@@ -64,9 +110,6 @@ if command -v systemctl >&/dev/null; then
   systemctl --all --type service | grep -q motd-news.service && systemctl disable motd-news.service
 fi
 
-#
-# Disable package update on boot
-#
 if test -f /etc/cloud/cloud.cfg >&/dev/null; then
   sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
 fi
