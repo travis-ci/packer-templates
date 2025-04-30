@@ -64,9 +64,9 @@ rm -rf \
   /var/tmp/* \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.? \
-  /var/cache/* \
-  /usr/share/doc/* \
-  /usr/share/man/* 
+  # /var/cache/* \
+  # /usr/share/doc/* \
+  # /usr/share/man/* 
 
 find /usr/share/locale -mindepth 1 -maxdepth 1 -type d -not -name 'en' -not -name 'en_US' -exec rm -rf {} \; || true
 
