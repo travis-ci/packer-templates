@@ -64,9 +64,9 @@ rm -rf \
   /var/tmp/* \
   VBoxGuestAdditions_*.iso \
   VBoxGuestAdditions_*.iso.? \
-  # /var/cache/* \
-  # /usr/share/doc/* \
-  # /usr/share/man/* 
+  /var/cache/* \
+  /usr/share/doc/* \
+  /usr/share/man/* 
 
 find /usr/share/locale -mindepth 1 -maxdepth 1 -type d -not -name 'en' -not -name 'en_US' -exec rm -rf {} \; || true
 
@@ -87,8 +87,8 @@ find /var/log -type f | while read -r f; do
   dd if=/dev/null of="${f}"
 done
 
-echo "Removing large files..."
-find / -type f -size +100M -not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*" -print -delete 2>/dev/null || true
+# echo "Removing large files..."
+# find / -type f -size +100M -not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*" -print -delete 2>/dev/null || true
 
 journalctl --vacuum-time=1d || true
 journalctl --vacuum-size=10M || true
