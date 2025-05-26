@@ -39,6 +39,7 @@ else
   include_recipe 'travis_build_environment::ramfs'
 end
 include_recipe 'travis_docker::compose'
+#include_recipe 'travis_build_environment::podman'
 include_recipe 'openssl'
 include_recipe 'travis_jdk'
 include_recipe 'travis_build_environment::maven'
