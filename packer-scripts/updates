@@ -1,138 +1,62 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
-# shellcheck disable=SC1090
-
+# shellcheck disable=SC1091,SC1090
 set -o errexit
+set -o nounset
+set -o pipefail
 set -o xtrace
 
 main() {
+  dist=$(lsb_release -cs)
 
-dist=$(lsb_release -cs)
+  echo "Detected distribution: ${dist}"
+  sudo apt update -yqq --fix-missing
 
-if [[ "${dist}" = "jammy" ]]; then
-   apt install linux-headers-generic -y
+  # Install rust (for native Python modules)
+  echo "Installing Rust..."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || echo "Rust install failed"
+  export PATH="$HOME/.cargo/bin:$PATH"
+  source "$HOME/.cargo/env" || true
+  rustc --version || echo "Rust not available"
 
-   echo "Installing pip-review"
+  # Python-related packages
+  echo "Installing Python-related system packages..."
+  sudo apt-get install -y \
+    libgirepository1.0-dev \
+    libdbus-1-dev \
+    libsystemd-dev \
+    libcurl4-openssl-dev \
+    python3-testresources || echo "Some Python deps failed"
 
-   # Install rustc (needed for python updates)
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-   export PATH="$HOME/.cargo/bin:$PATH"
-   source ~/.bashrc
-   rustc --version
+  # Install or upgrade pip and pip-review
+  echo "Installing/upgrading pip & pip-review..."
+  pip3 install --upgrade pip || echo "pip upgrade failed"
+  pip3 install pip-review || echo "pip-review install failed"
+  pip-review --auto || echo "pip-review run failed"
 
-   sudo apt-get install -y libgirepository1.0-dev libdbus-1-dev libsystemd-dev libcurl4-openssl-dev python3-testresources
+  # Docker & Buildx setup
+  echo "Setting up Docker + Buildx..."
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${dist} stable" |
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt update -y
+  sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || echo "Docker install failed"
 
-   pip install --upgrade pip
+  if [[ "${dist}" == "jammy" ]]; then
+    echo "Installing extras for Jammy..."
+    /home/travis/.phpenv/shims/composer self-update || echo "Composer update failed"
+    gem install bundler || echo "Bundler update failed"
+  fi
 
-   echo "Appling docker buildx fix"
-   sudo install -m 0755 -d /etc/apt/keyrings
-   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-   sudo chmod a+r /etc/apt/keyrings/docker.gpg
-   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-   sudo apt-get update -y
-   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  if [[ "${dist}" == "bionic" ]]; then
+    sudo apt install -y git-all || echo "Git install failed"
+    /home/travis/.phpenv/shims/composer self-update || echo "Composer update failed"
+  fi
 
-   # Update composer
-   /home/travis/.phpenv/shims/composer self-update
-
-   # Update bundler
-   gem install bundler
-
-elif [[ "${dist}" = "noble" ]]; then
-   echo "Appling main updates"
-   apt update -yqq --fix-missing
-   # echo "Uninstalling old kernel modules"
-   # dpkg --list | grep linux-image | awk '{ print $2 }' | sort -V | sed -n "/$(uname -r)/q;p" | xargs sudo apt-get -y purge
-   # apt purge "$(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c="$(uname -r | cut -d- -f1,2)"; done)"
-   apt full-upgrade -y
-   apt install linux-headers-generic -y
-   apt autoremove
-
-   # Install rustc (needed for python updates)
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-   export PATH="$HOME/.cargo/bin:$PATH"
-   source ~/.bashrc
-   rustc --version
-
-   echo "Appling python updates"
-   sudo apt-get install -y libgirepository1.0-dev libdbus-1-dev libsystemd-dev libcurl4-openssl-dev python3-testresources
-
-   echo "Appling docker buildx fix"
-   sudo install -m 0755 -d /etc/apt/keyrings
-   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-   sudo chmod a+r /etc/apt/keyrings/docker.gpg
-   # shellcheck source=/etc/os-release
-   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-   sudo apt update -y
-   sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-else
-   echo "Applying main updates"
-   apt update -yqq --fix-missing
-   
-   # Improved kernel cleanup - avoids issues with malformed package lists
-   echo "Uninstalling old kernel modules"
-   
-   # Get current kernel version
-   CURRENT_KERNEL=$(uname -r)
-   echo "Current kernel: $CURRENT_KERNEL"
-   
-   # Clean up old kernel images safely
-   echo "Removing old kernel images"
-   OLD_IMAGES=$(dpkg --list | grep linux-image | grep -v "$CURRENT_KERNEL" | awk '{ print $2 }')
-   if [ -n "$OLD_IMAGES" ]; then
-     echo "Found old kernel images to remove: $OLD_IMAGES"
-     echo "$OLD_IMAGES" | xargs apt-get -y purge || echo "Some kernel images could not be removed, continuing..."
-   else
-     echo "No old kernel images to remove"
-   fi
-   
-   # Clean up old kernel headers safely
-   echo "Removing old kernel headers"
-   OLD_HEADERS=$(dpkg --list | grep linux-headers | grep -v "$CURRENT_KERNEL" | awk '{ print $2 }')
-   if [ -n "$OLD_HEADERS" ]; then
-     echo "Found old kernel headers to remove: $OLD_HEADERS"
-     echo "$OLD_HEADERS" | xargs apt-get -y purge || echo "Some kernel headers could not be removed, continuing..."
-   else
-     echo "No old kernel headers to remove"
-   fi
-
-   echo "Performing full system upgrade"
-   apt full-upgrade -y || echo "Full upgrade had some issues, continuing..."
-   apt install linux-headers-generic -y || echo "Failed to install linux-headers, continuing..."
-
-   # Install rustc (needed for python updates)
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || echo "Rust installation failed, continuing..."
-   export PATH="$HOME/.cargo/bin:$PATH"
-   source ~/.bashrc || true
-   rustc --version || echo "Rust not available, continuing..."
-
-   echo "Applying python updates"
-
-   sudo apt-get install -y libgirepository1.0-dev libdbus-1-dev libsystemd-dev libcurl4-openssl-dev python3-testresources || echo "Some Python dependencies couldn't be installed, continuing..."
-
-   pip3 install --upgrade pip || echo "pip upgrade failed, continuing..."
-   pip3 install pip-review || echo "pip-review installation failed, continuing..."
-   pip-review --auto || echo "pip-review failed, continuing..."
-
-   echo "Applying docker buildx fix"
-   sudo install -m 0755 -d /etc/apt/keyrings || echo "Failed to create keyrings directory, continuing..."
-   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || echo "Failed to download Docker GPG key, continuing..."
-   sudo chmod a+r /etc/apt/keyrings/docker.gpg || echo "Failed to set permissions, continuing..."
-   # shellcheck source=/etc/os-release
-   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || echo "Failed to add Docker repository, continuing..."
-   sudo apt update -y || echo "apt update failed, continuing..."
-   sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || echo "Docker installation failed, continuing..."
-
-   # Bionic install git
-   if [[ "${dist}" = "bionic" ]]; then
-     sudo apt install git-all -y || echo "git-all installation failed, continuing..."
-   fi
-
-   # Update composer
-   /home/travis/.phpenv/shims/composer self-update || echo "composer update failed, continuing..."
-fi
+  echo "System update complete for ${dist}"
 }
 
 main "$@"

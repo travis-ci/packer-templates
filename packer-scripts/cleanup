@@ -4,8 +4,6 @@ set -o errexit
 set -o xtrace
 shopt -s nullglob
 
-apt clean
-
 echo "Cleaning APT..."
 apt-get autoremove -y || true
 apt-get clean || true
@@ -22,7 +20,9 @@ fi
 echo "Cleaning Yarn directories..."
 rm -rf /tmp/.yarn-* || true
 rm -rf /root/.npm /root/.yarn || true
-rm -rf /home/*/.npm /home/*/.yarn || true
+for d in /home/*; do
+  rm -rf "$d/.npm" "$d/.yarn"
+done
 rm -rf /usr/local/share/.cache/yarn || true
 rm -rf /usr/local/yarn-*/cache || true
 find /usr/local/yarn-* -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
@@ -37,9 +37,12 @@ if command -v pip3 &>/dev/null; then
   pip3 cache purge || true
 fi
 
-if command -v apt &>/dev/null; then
+if command -v apt-get &>/dev/null; then
   echo "Removing old kernels..."
-  dpkg -l 'linux-*' | awk '/^ii/{ print $2}' | grep -v -e "$(uname -r | sed -r 's/-[a-z]+//')" | grep -E '(image|headers)' | xargs apt-get -y purge || true
+  dpkg -l 'linux-*' | awk '/^ii/{ print $2}' | grep -v -e "$(uname -r | sed -r 's/-[a-z]+//')" | grep -E '(image|headers)' | xargs --no-run-if-empty apt-get -y purge || true
+
+  echo "Removing orphaned packages..."
+  dpkg --list | awk '/^rc/ { print $2 }' | xargs --no-run-if-empty dpkg --purge
 fi
 
 if command -v snap &>/dev/null; then
@@ -49,6 +52,7 @@ if command -v snap &>/dev/null; then
   done
 fi
 
+echo "Removing unused system files..."
 rm -rf \
   /etc/apparmor* \
   /etc/profile.d/jdk.csh \
@@ -66,8 +70,9 @@ rm -rf \
   VBoxGuestAdditions_*.iso.? \
   /var/cache/* \
   /usr/share/doc/* \
-  /usr/share/man/* 
+  /usr/share/man/*
 
+echo "Removing unused locales..."
 find /usr/share/locale -mindepth 1 -maxdepth 1 -type d -not -name 'en' -not -name 'en_US' -exec rm -rf {} \; || true
 
 if [[ $CLEANUP_APT_LISTS ]]; then
@@ -83,18 +88,16 @@ if [[ -d /home/travis ]]; then
 fi
 
 echo "Cleaning logs..."
-find /var/log -type f | while read -r f; do
-  dd if=/dev/null of="${f}"
-done
+find /var/log -type f -exec truncate -s 0 {} +
 
 journalctl --vacuum-time=1d || true
 journalctl --vacuum-size=10M || true
 
-if test -f /etc/default/motd-news >&/dev/null; then
+if [[ -f /etc/default/motd-news ]]; then
   sed -i 's|ENABLED=1|ENABLED=0|' /etc/default/motd-news
 fi
 
-if command -v systemctl >&/dev/null; then
+if command -v systemctl &>/dev/null; then
   systemctl --all --type service | grep -q lxd-containers.service && systemctl disable lxd-containers.service
   systemctl --all --type service | grep -q accounts-daemon.service && systemctl mask accounts-daemon.service
   systemctl --all --type service | grep -q docker.service && systemctl disable docker.service
@@ -107,9 +110,17 @@ if command -v systemctl >&/dev/null; then
   systemctl --all --type service | grep -q motd-news.service && systemctl disable motd-news.service
 fi
 
-if test -f /etc/cloud/cloud.cfg >&/dev/null; then
+if [[ -f /etc/cloud/cloud.cfg ]]; then
   sed -i '/package-update-upgrade-install/d' /etc/cloud/cloud.cfg
 fi
 
 echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/sshd_config
 echo "HostKeyAlgorithms +ssh-rsa" >> /etc/ssh/sshd_config
+
+truncate -s 0 /etc/machine-id || true
+rm -f /etc/udev/rules.d/70-persistent-net.rules || true
+
+rm -f /root/.bash_history
+for d in /home/*; do
+  rm -f "$d/.bash_history"
+done

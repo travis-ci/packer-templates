@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
-execute 'mariadb_key' do
-  command 'sudo apt-key adv --fetch-keys \'https://mariadb.org/mariadb_release_signing_key.asc\''
+apt_repository 'mariadb' do
+  uri 'http://mariadb.mirror.globo.tech/repo/12.0.1/ubuntu'
+  components ['main']
+  distribution 'focal'
+  arch 'amd64'
+  key 'https://mariadb.org/mariadb_release_signing_key.asc'
+  action :add
 end
 
-execute 'mariadb_repo' do
-  command 'sudo add-apt-repository \'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/11.2.1/ubuntu focal main\''
-end
-
-execute 'mariadb_install' do
-  command 'sudo apt install mariadb-server mariadb-client -y'
+package %w[mariadb-server mariadb-client] do
+  action :install
 end
 
 service 'mariadb' do
   action [:stop, :disable]
+end
+
+apt_repository 'mariadb' do
+  action :remove
 end

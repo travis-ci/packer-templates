@@ -9,8 +9,8 @@ apt_repository 'mongodb-8.0' do
   retry_delay 30
 end
 
-execute 'mongodb_install' do
-  command 'sudo apt install mongodb-org -y'
+package 'mongodb-org' do
+  action :install
 end
 
 service 'mongod' do

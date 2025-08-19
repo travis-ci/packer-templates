@@ -9,7 +9,11 @@ module Support
     end
 
     def load
-      YAML.safe_load(File.read(yml))
+      YAML.safe_load(
+        File.read(yml),
+        permitted_classes: [ChefUtils::VersionString, Symbol],
+        aliases: true
+      )
     end
 
     private
