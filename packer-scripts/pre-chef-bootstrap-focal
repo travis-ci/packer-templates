@@ -59,7 +59,7 @@ __install_packages() {
     rsync \
     python3 \
     python3-pip \
-    ${APT_GET_INSTALL_PRE_CHEF:-}
+    "${APT_GET_INSTALL_PRE_CHEF:-}"
 
   if ! command -v python &>/dev/null; then
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
