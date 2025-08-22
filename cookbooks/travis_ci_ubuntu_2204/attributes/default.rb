@@ -41,51 +41,8 @@ override['travis_perlbrew']['perls'] = [{ name: '5.33.0', version: 'perl-5.33.0'
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 go_versions = %w[
-  1.23
+  1.24
 ]
-override['android-sdk'] = {
-  'name' => 'android-sdk',
-  'setup_root' => '/usr/local',
-  'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
-  'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
-  'version' => '9477386',
-  'owner' => 'root',
-  'group' => 'root',
-  'with_symlink' => true,
-  'java_from_system' => false,
-  'set_environment_variables' => true,
-  'license' => {
-    'white_list' => ['android-sdk-license'],
-    'black_list' => [],
-    'default_answer' => 'y'
-  },
-  'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
-  'components' => [
-    'tools',
-    'platform-tools',
-    'build-tools;30.0.0',    
-    'platforms;android-30', 
-    'extras;google;google_play_services',
-    'extras;google;m2repository',
-    'extras;android;m2repository'
-  ],
-  'scripts' => {
-    'path' => '/usr/local/bin',
-    'owner' => 'root',
-    'group' => 'root'
-  },
-  'maven_rescue' => false
-}
-override['travis_build_environment']['clang']['version'] = '18.1.8'
-override['travis_build_environment']['clang']['download_url'] = ::File.join(
-  "https://github.com/llvm/llvm-project/releases/download/llvmorg-#{node['travis_build_environment']['clang']['version']}",
-  "clang+llvm-#{node['travis_build_environment']['clang']['version']}-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
-)
-
-override['travis_build_environment']['clang']['checksum'] = '54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36'
-
-override['travis_build_environment']['shfmt_url'] = 'https://github.com/mvdan/sh/releases/download/v3.8.0/shfmt_v3.8.0_linux_amd64'
-override['travis_build_environment']['shfmt_checksum'] = '27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0'
 
 override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
@@ -103,14 +60,6 @@ override['travis_jdk']['default'] = 'openjdk11'
 override['leiningen']['home'] = '/home/travis'
 override['leiningen']['user'] = 'travis'
 
-override['travis_build_environment']['cmake']['version'] = '3.29.0'
-override['travis_build_environment']['cmake']['checksum'] = 'f06258f52c5649752dfb10c4c2e1d8167c760c8826f078c6f5c332fa9d976bf8'
-override['travis_build_environment']['cmake']['download_url'] = ::File.join(
-  'https://cmake.org/files',
-  "v#{node['travis_build_environment']['cmake']['version'].split('.')[0, 2].join('.')}",
-  "cmake-#{node['travis_build_environment']['cmake']['version']}-linux-x86_64.tar.gz"
-)
-
 override['travis_build_environment']['nodejs_versions'] = %w[
   16.20.2
   18.20.3
@@ -119,46 +68,35 @@ override['travis_build_environment']['nodejs_default'] = '18.20.3'
 
 rubies = %w[
   2.7.8
-  3.3.5
+  3.3.9
 ]
 
-override['travis_build_environment']['virtualenv']['version'] = '20.24.6'
-
 # changing default ruby version due to dpl issues
-override['travis_build_environment']['default_ruby'] = '3.3.5'
+override['travis_build_environment']['default_ruby'] = '3.3.9'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
   25.3.2.6
 ]
 elixirs = %w[
-  1.12.2
+  1.18.2
 ]
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
 
 override['travis_build_environment']['update_hostname'] = false
-override['travis_build_environment']['update_hostname'] = true if node['kernel']['machine'] == 'ppc64le'
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '6.5.2'
+override['travis_build_environment']['mercurial_version'] = '7.0.3'
 override['travis_build_environment']['ibm_advanced_tool_chain_version'] = 14.0
 
-override['travis_build_environment']['packer']['amd64']['version'] = '1.11.2'
-override['travis_build_environment']['packer']['amd64']['checksum'] = \
-  'ced13efc257d0255932d14b8ae8f38863265133739a007c430cae106afcfc45a'
-
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu_2204'
-
-override['travis_build_environment']['firefox_version'] = '99.0'
 
 # not yet supported
 override['travis_postgresql']['default_version'] = '14'
 override['travis_postgresql']['alternate_versions'] = %w[13]
 override['travis_postgresql']['enabled'] = false # is default instance started on machine boot?
-
-override['travis_build_environment']['pyenv_revision'] = 'v2.3.24'
 
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic
@@ -208,9 +146,43 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   android
 ]
 
-override['travis_docker']['version'] = '26.1.3'
-override['travis_docker']['binary']['version'] = '26.1.3'
-override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-Linux-x86_64'
-override['travis_docker']['compose']['sha256sum'] = 'ddc876fe2a89d5b7ea455146b0975bfe52904eecba9b192193377d6f99d69ad9'
-override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-26.1.3.tgz'
-override['travis_docker']['binary']['checksum'] = 'a50076d372d3bbe955664707af1a4ce4f5df6b2d896e68b12ecc74e724d1db31'
+override['travis_docker']['version'] = '28.3.3'
+override['travis_docker']['binary']['version'] = '28.3.3'
+override['travis_docker']['compose']['url'] = 'https://github.com/docker/compose/releases/download/v2.39.1/docker-compose-linux-x86_64'
+override['travis_docker']['compose']['sha256sum'] = 'a5ea28722d5da628b59226626f7d6c33c89a7ed19e39f750645925242044c9d2'
+override['travis_docker']['binary']['url'] = 'https://download.docker.com/linux/static/stable/x86_64/docker-28.3.3.tgz'
+override['travis_docker']['binary']['checksum'] = '40c16bcf324f354b382d07e845e6a79e3493fc0c09b252dff9e1a46125589bff'
+
+override['android-sdk'] = {
+  'name' => 'android-sdk',
+  'setup_root' => '/usr/local',
+  'download_url' => 'https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip',
+  'checksum' => '2b3751867a4b4b70dbd8dcf6537aa888',
+  'version' => '9477386',
+  'owner' => 'root',
+  'group' => 'root',
+  'with_symlink' => true,
+  'java_from_system' => false,
+  'set_environment_variables' => true,
+  'license' => {
+    'white_list' => ['android-sdk-license'],
+    'black_list' => [],
+    'default_answer' => 'y'
+  },
+  'license_file_path' => File.expand_path('../../android-accept-licenses', __dir__),
+  'components' => [
+    'tools',
+    'platform-tools',
+    'build-tools;30.0.0',    
+    'platforms;android-30', 
+    'extras;google;google_play_services',
+    'extras;google;m2repository',
+    'extras;android;m2repository'
+  ],
+  'scripts' => {
+    'path' => '/usr/local/bin',
+    'owner' => 'root',
+    'group' => 'root'
+  },
+  'maven_rescue' => false
+}

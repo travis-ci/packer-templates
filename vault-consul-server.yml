@@ -3,10 +3,10 @@ description: Vault and Consul Server template
 variables:
   gce_account_file: "{{ env `GCE_ACCOUNT_FILE` }}"
   gce_project_id: "{{ env `GCE_PROJECT_ID` }}"
-  consul_version: 0.6.4
-  consul_sha: abdf0e1856292468e2c9971420d73b805e93888e006c76324ae39416edcf0627
-  vault_version: 0.6.1
-  vault_sha: 4f248214e4e71da68a166de60cc0c1485b194f4a2197da641187b745c8d5b8be
+  consul_version: 1.21.3
+  consul_sha: ba20631037a5f63f70b0351c0875887a66c0a0d3feac2d255a768c9eb8c95e8b
+  vault_version: 1.20.2
+  vault_sha: 5846abf08deaf04cc9fdbb7c1eddda3348671590445f81bcdb0a2e0d32396c2e
 builders:
 - type: googlecompute
   account_file: "{{ user `gce_account_file` }}"

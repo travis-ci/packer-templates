@@ -17,7 +17,7 @@ main() {
     __enable_i386
   fi
   __install_packages
-  __setup_redis
+  # __setup_redis
   __setup_sshd
   __setup_travis_user
   __write_pre_chef_env
@@ -61,22 +61,6 @@ __install_packages() {
     python3-setuptools \
     python3-virtualenv \
     "${APT_GET_INSTALL_PRE_CHEF}"
-
-    # Install manually required package for PHP to work with phpenv
-    curl -O http://debian.mirror.ac.za/debian/pool/main/o/openldap/libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
-    sudo dpkg -i libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
-    sudo rm -f ./libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
-}
-
-__setup_redis() {
-  echo "Installing the newest redis"
-  sudo apt-get install lsb-release curl gpg
-  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-  sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
-  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-  sudo apt-get update -y
-  sudo apt-get install redis redis-tools redis-server -y
-  sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
 }
 
 __setup_sshd() {

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 execute 'add_erlang_repository' do
-  command 'echo "deb http://binaries2.erlang-solutions.com/ubuntu/ jammy-esl-erlang-25 contrib" | sudo tee /etc/apt/sources.list.d/erlang.list'
+  command 'echo "deb http://binaries2.erlang-solutions.com/ubuntu/ noble-esl-erlang-27 contrib" | sudo tee /etc/apt/sources.list.d/erlang.list'
   action :run
 end
 

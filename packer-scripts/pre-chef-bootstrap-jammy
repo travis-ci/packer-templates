@@ -17,7 +17,6 @@ main() {
     __enable_i386
   fi
   __install_packages
-  __setup_redis
   __setup_sshd
   __setup_travis_user
   __write_pre_chef_env
@@ -70,17 +69,6 @@ __install_packages() {
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
   fi
 
-}
-
-__setup_redis() {
-  echo "Installing the newest redis"
-  sudo apt-get install lsb-release curl gpg
-  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-  sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
-  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-  sudo apt-get update -y
-  sudo apt-get install redis redis-tools redis-server -y
-  sed -ie 's/^bind.*/bind 127.0.0.1/' /etc/redis/redis.conf
 }
 
 __setup_sshd() {

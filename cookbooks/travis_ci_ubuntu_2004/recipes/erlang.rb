@@ -9,8 +9,8 @@ module ErlangHelper
       shell_out!("mkdir -p /tmp/erlang_install")
       shell_out!(%{
         cd /tmp/erlang_install && \
-        wget https://packages.erlang-solutions.com/erlang/debian/pool/esl-erlang_25.0.3-1~ubuntu~focal_amd64.deb -O erlang.deb || \
-        wget http://archive.ubuntu.com/ubuntu/pool/main/e/erlang/erlang-base_23.0.2+dfsg-1ubuntu1_amd64.deb -O erlang.deb
+        wget https://binaries2.erlang-solutions.com/ubuntu/pool/contrib/e/esl-erlang/esl-erlang_27.3.4-1~ubuntu~focal_amd64.deb -O erlang.deb || \
+        wget http://archive.ubuntu.com/ubuntu/pool/main/e/erlang/erlang-base_27.3+dfsg-1ubuntu1_amd64.deb -O erlang.deb
       })
       shell_out!("dpkg -i /tmp/erlang_install/erlang.deb || true")
       shell_out!("apt-get -f -y install")
@@ -24,9 +24,9 @@ module ErlangHelper
       shell_out!("apt-get install -y build-essential libncurses5-dev libssl-dev")
       shell_out!(%{
         cd /tmp && \
-        wget https://github.com/erlang/otp/archive/OTP-24.0.tar.gz && \
-        tar -xzf OTP-24.0.tar.gz && \
-        cd otp-OTP-24.0 && \
+        wget https://github.com/erlang/otp/releases/download/OTP-28.0.2/otp_src_28.0.2.tar.gz && \
+        tar -xzf otp_src_28.0.2.tar.gz && \
+        cd otp-OTP-28.0 && \
         ./configure --prefix=/usr/local --without-javac && \
         make -j$(nproc) && \
         make install

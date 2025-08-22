@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
-package 'mysql-server'
-package 'mysql-client'
+package %w[mysql-server mysql-client] do
+  action :install
+end
+
+service 'mysql' do
+  action [:start]
+end
 
 template "#{node['travis_build_environment']['home']}/.my.cnf" do
   source 'ci_user/dot_my.cnf.erb'
@@ -24,7 +29,6 @@ bash 'config_mysql' do
   E0H
 end
 
-include_recipe 'travis_build_environment::bash_profile_d'
 
 file ::File.join(
   node['travis_build_environment']['home'],
@@ -39,3 +43,5 @@ end
 service 'mysql' do
   action [:disable, :stop]
 end
+
+include_recipe 'travis_build_environment::bash_profile_d'

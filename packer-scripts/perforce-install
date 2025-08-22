@@ -12,7 +12,7 @@ main() {
   # Add Perforce repository
   echo "deb http://package.perforce.com/apt/ubuntu ${machine} release" | sudo tee /etc/apt/sources.list.d/perforce.list
 
-  apt-get update
+  apt-get update -yqq
 
   # Install Perforce
   sudo apt-get install helix-p4d
