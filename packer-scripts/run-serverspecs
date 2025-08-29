@@ -20,7 +20,7 @@ main() {
   fi
 
   __install_chef "${PACKER_CHEF_PREFIX}"
-
+  __install_serverspec
   # shellcheck disable=SC2119
   __create_sudo_bash
   __chown_travis_dirs "${PACKER_CHEF_PREFIX}"
@@ -113,10 +113,10 @@ sudo systemctl start xvfb.service
 set -o errexit
 "
   # FIX THIS TO RUN TESTS
-  # chef exec rspec ${SPEC_ARGS} \\
-  # --format documentation \\
-  # --format json \\
-  # --out /home/travis/.${suite}_rspec.json
+# chef exec rspec ${SPEC_ARGS} \
+#   --format documentation \
+#   --format json \
+#   --out /home/travis/.${suite}_rspec.json
 
   local exit_code="$?"
   if [[ $exit_code != 0 ]]; then

@@ -16,7 +16,7 @@ file '/etc/apt/sources.list.d/erlang-solutions.list' do
   content <<~EOS
     deb [signed-by=/usr/share/keyrings/erlang-archive-keyring.gpg] \
     http://binaries2.erlang-solutions.com/ubuntu \
-    jammy-esl-erlang-25 contrib
+    jammy-esl-erlang-27 contrib
   EOS
   mode '0644'
   notifies :update, 'apt_update[erlang]', :immediately
