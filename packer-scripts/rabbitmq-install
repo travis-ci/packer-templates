@@ -2,7 +2,7 @@
 
 dist=$(lsb_release -cs)
 
-sudo apt remove --purge rabbitmq-server erlang*
+sudo apt remove --purge rabbitmq-server erlang* -y
 
 sudo apt-get update -y
 

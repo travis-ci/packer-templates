@@ -114,9 +114,9 @@ commands:
     name: default ruby version
   - command: python --version
     name: default python version
-  # - command: couchdb -V
-  #   name: CouchDB version
-  #   pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
+  - command: couchdb -V
+    name: CouchDB version
+    pipe: perl -n -e '/CouchDB ([\d\.]+)/ && {print "couchdb $1\n"}'
   - name: ElasticSearch version
     port: 9200
     command: curl localhost:9200
@@ -132,9 +132,9 @@ commands:
   - command: dpkg -l
     name: Pre-installed PostgreSQL versions
     pipe: awk '$2 ~ /^postgresql-[0-9]+\.[0-9]+$/ {print $3}' | grep -E --only '^[^-]+'
-  # - command: redis-server --version
-  #   name: Redis version
-  #   pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
+  - command: redis-server --version
+    name: Redis version
+    pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
   - command: gimme -l
     name: Pre-installed Go versions
   - command: ant -version
@@ -156,3 +156,6 @@ commands:
   - command: rvm list
     name: Pre-installed Ruby versions
     pipe: env GREP_COLORS='mt=01;32' egrep -o '(j?ruby|rbx|ree)-[^ ]+' | sort | uniq
+  - command: kiex list
+    name: elixirs
+    pipe: awk '/^(=>|=\*| \*)/'
