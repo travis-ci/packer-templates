@@ -19,6 +19,11 @@ __install_python_jammy() {
   apt install python3 python3-pip -y --no-install-recommends
 }
 
+__install_python_noble() {
+
+  apt install python3 python3-pip python3-venv build-essential git python3-setuptools python3-wheel -y --no-install-recommends
+}
+
 export DEBIAN_FRONTEND=noninteractive
 
 # https://docs.travis-ci.com/user/reference/trusty/#version-control

@@ -27,6 +27,7 @@ provisioners:
 - type: shell
   scripts:
   - scripts/base.sh
+  - scripts/fixhosts.sh
   - scripts/install-docker.sh
   - scripts/gitconfig.sh
   environment_vars:

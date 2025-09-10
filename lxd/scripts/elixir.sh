@@ -7,7 +7,6 @@ main() {
 
   export DEBIAN_FRONTEND='noninteractive'
   __install_elixir
-
 }
 
 __install_elixir() {
@@ -15,19 +14,24 @@ __install_elixir() {
 
   \curl -sSL https://raw.githubusercontent.com/taylor/kiex/master/install | bash -s
 
-  tee /home/travis/.bash_profile.d/kiex.bash <<\EOF
-test -s "$HOME/.kiex/scripts/kiex" && source "$HOME/.kiex/scripts/kiex"
+  tee /home/travis/.bash_profile.d/kiex.bash <<'EOF'
+export KIEX_HOME="$HOME/.kiex"
+test -s "$KIEX_HOME/scripts/kiex" && source "$KIEX_HOME/scripts/kiex"
 EOF
 
-  elixir="1.15.4"
-  curl -sL -o /tmp/v${elixir}.zip https://github.com/elixir-lang/elixir/releases/download/v${elixir}/elixir-otp-26.zip
+  export KIEX_HOME="$HOME/.kiex"
+  test -s "$KIEX_HOME/scripts/kiex" && source "$KIEX_HOME/scripts/kiex"
+
+  elixir="1.19-latest"
+  curl -sL -o /tmp/v${elixir}.zip \
+    https://github.com/elixir-lang/elixir/releases/download/v${elixir}/elixir-otp-28.zip
 
   mkdir -p ${HOME}/.kiex/elixirs
   unzip -d ${HOME}/.kiex/elixirs/elixir-${elixir} /tmp/v${elixir}.zip
 
   tee ${HOME}/.kiex/elixirs/elixir-${elixir}.env <<EOF
 export ELIXIR_VERSION=${elixir}
-export PATH=${HOME}/.kiex/elixirs/elixir-${elixir}/bin:$PATH
+export PATH=${HOME}/.kiex/elixirs/elixir-${elixir}/bin:\$PATH
 export MIX_ARCHIVES=${HOME}/.kiex/mix/elixir-${elixir}
 EOF
 

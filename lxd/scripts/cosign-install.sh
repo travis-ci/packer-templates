@@ -12,7 +12,7 @@ main() {
   fi
 
   # Cosign installation
-  local COSIGN_VERSION="v2.1.1"
+  local COSIGN_VERSION="v2.5.3"
   wget -q "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-${arch}"
   # rename the binary
   sudo mv cosign-linux-"${arch}" /usr/local/bin/not_cosign
@@ -20,7 +20,7 @@ main() {
   not_cosign version
 
   # Rekor-cli installtion
-  local REKOR_VERSION="v1.2.2"
+  local REKOR_VERSION="v1.4.0"
   wget -q "https://github.com/sigstore/rekor/releases/download/${REKOR_VERSION}/rekor-cli-linux-${arch}"
   sudo mv rekor-cli-linux-"${arch}" /usr/local/bin/rekor-cli
   sudo chmod +x /usr/local/bin/rekor-cli

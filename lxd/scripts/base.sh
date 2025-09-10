@@ -18,16 +18,27 @@ __install_packages_jammy() {
   apt install python3-jsonpatch -y --no-install-recommends
 }
 
+__install_packages_noble() {
+
+  apt install python3-jsonpatch -y --no-install-recommends
+}
+
 __network_setup() {
   # disable cloud network init
   echo network: {config: disabled} > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
-
   # enable manage_etc_hosts: true
   grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
+  # Limit ds
+  echo datasource_list: [ NoCloud ] > /etc/cloud/cloud.cfg.d/98-disable-ds.cfg
+  
+  mkdir -p /etc/systemd/system/systemd-networkd.service.d
+  echo "[Service]" >> /etc/systemd/system/systemd-networkd.service.d/override.conf
+  echo "ReadOnlyPaths=/sys" >> /etc/systemd/system/systemd-networkd.service.d/override.conf
+  systemctl daemon-reload
 }
 
 __network_setup_xenial() {
-  #echo "Xenial: don't override network config"
+  echo "Xenial: don't override network config"
   # enable manage_etc_hosts: true
   grep -q manage_etc_hosts /etc/cloud/cloud.cfg || echo manage_etc_hosts: true | tee -a /etc/cloud/cloud.cfg
 }
@@ -35,13 +46,19 @@ __network_setup_xenial() {
 export DEBIAN_FRONTEND=noninteractive
 # Force use of ipv4
 echo 'Acquire::ForceIPv4 "true";' | tee /etc/apt/apt.conf.d/99force-ipv4
-
+# Add sources
 . /etc/lsb-release
-sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list
-sed -i "s#DISTRIB_CODENAME#${DISTRIB_CODENAME}#g" /etc/apt/sources.list
-dpkg --remove-architecture i386
-apt update -qyy
 dist=$(lsb_release -sc)
+if [[ $dist = "noble" ]]; then
+  # sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list.d/ubuntu.sources
+  # sed -i "s#DISTRIB_CODENAME#${DISTRIB_CODENAME}#g" /etc/apt/sources.list.d/ubuntu.sources
+  cat /etc/apt/sources.list.d/ubuntu.sources
+else
+  sed -i "s#MIRROR#${MIRROR}#g" /etc/apt/sources.list
+  sed -i "s#DISTRIB_CODENAME#${DISTRIB_CODENAME}#g" /etc/apt/sources.list
+  dpkg --remove-architecture i386
+fi
+apt update -yyq
 # missing git-lfs package for xenial
 if [[ $dist = "xenial" ]]; then
   apt install ruby curl gnupg wget git software-properties-common md5deep openssl fuse hashdeep snapd dnsutils -y --no-install-recommends

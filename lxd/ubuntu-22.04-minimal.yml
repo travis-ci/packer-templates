@@ -27,6 +27,7 @@ provisioners:
 - type: shell
   scripts:
   - scripts/base.sh
+  - scripts/fixhosts.sh
   - scripts/minimal.sh
   - scripts/install-docker.sh
   - scripts/gitconfig.sh
@@ -89,6 +90,11 @@ provisioners:
    - chmod 600 /etc/sudoers.d/travis
    - chmod 644 /etc/apt/sources.list
    - chmod 644 /etc/docker/daemon.json
+
+   # Fix cloud-init
+- type: shell
+  inline:
+  - snap refresh lxd --channel=4.0/stable
 
   # Creare image metadata tarball
 - type: shell

@@ -45,17 +45,22 @@ __install_packages() {
 
 __install_pip() {
   dist=$(lsb_release -cs)
-  if [[ "${dist}" = "xenial" ]]; then
-    # Install pip for xenial
-    wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
+  if [[ "${dist}" = "focal" ]]; then
+    # Install pip for focal
+    wget https://bootstrap.pypa.io/pip/3.8/get-pip.py
     sudo python3 get-pip.py
-    pip3 install --user --upgrade setuptools wheel
+    python3 -m pip install setuptools wheel testresources virtualenv 
+    #pip3 install --user --upgrade wheel testresources virtualenv 
     rm -f get-pip.py
     id travis && chown -R travis: /home/travis/.cache/pip/
+  elif [[ "${dist}" = "noble" ]]; then
+    # pip doesn't work for Noble!!
+    sudo apt install -y python3-setuptools python3-wheel python3-testresources
   else
-    wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+    wget https://bootstrap.pypa.io/pip/get-pip.py
     sudo python3 get-pip.py
-    pip3 install --user --upgrade setuptools wheel
+    python3 -m pip install setuptools wheel testresources virtualenv 
+    #pip3 install --user --upgrade wheel testresources virtualenv 
     rm -f get-pip.py
     id travis && chown -R travis: /home/travis/.cache/pip/
   fi
@@ -89,11 +94,15 @@ __install_pyenv() {
 }
 
 __install_virtualenv() {
-
-  virtualenv_root="/home/travis/virtualenv"
-  pip install --user virtualenv==20.15.1
-  mkdir -p ${virtualenv_root}
-  id travis && chown -R travis: ${virtualenv_root}
+  dist=$(lsb_release -cs)
+  if [[ "${dist}" = "noble" ]]; then
+    sudo apt install -y python3-virtualenv
+  else
+    virtualenv_root="/home/travis/virtualenv"
+    pip install --user virtualenv==20.15.1
+    mkdir -p ${virtualenv_root}
+    id travis && chown -R travis: ${virtualenv_root}
+  fi
 }
 
 __install_default_python() {
@@ -102,10 +111,11 @@ __install_default_python() {
   PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4 --with-wide-unicode --enable-shared --enable-ipv6 --with-ssl --enable-loadable-sqlite-extensions --with-computed-gotos"
   PYTHON_CFLAGS="-g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security"
   
+  # openssl issue in xenial with new versions
   if [[ "${dist}" = "xenial" ]]; then
-  pyenv install 3.11.9
+  pyenv install 3.8.8
   else
-  pyenv install 3.12.2
+  pyenv install 3.12.9
   fi
 }
 
@@ -138,6 +148,13 @@ __setup_system_site_packages_jammy(){
   __setup_envirnoment_jammy "python3.10"
 }
 
+__setup_system_site_packages_noble(){
+
+  sudo apt-get -yqq --no-install-suggests --no-install-recommends install python3-dev
+  sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+  __setup_envirnoment_noble "python3.12"
+}
+
 __setup_system_site_packages() {
   #noop
   :
@@ -157,8 +174,14 @@ __setup_envirnoment_jammy() {
   pyname=$1
   venv_fullname="/home/travis/virtualenv/${pyname}_with_system_site_packages"
   /home/travis/.local/bin/virtualenv --system-site-packages --python=/usr/bin/${pyname} ${venv_fullname}
-  ${venv_fullname}/local/bin/pip install wheel
+  pip install wheel
+  # ${venv_fullname}/local/bin/pip install wheel
   id travis && chown -R travis: ${venv_fullname}
+}
+
+__setup_envirnoment_noble() {
+
+  sudo apt install python3-pip -y
 }
 
 main "$@"
