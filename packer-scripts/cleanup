@@ -41,8 +41,8 @@ if command -v apt-get &>/dev/null; then
   echo "Removing old kernels..."
   dpkg -l 'linux-*' | awk '/^ii/{ print $2}' | grep -v -e "$(uname -r | sed -r 's/-[a-z]+//')" | grep -E '(image|headers)' | xargs --no-run-if-empty apt-get -y purge || true
 
-  # echo "Removing orphaned packages..."
-  # dpkg --list | awk '/^rc/ { print $2 }' | xargs --no-run-if-empty dpkg --purge
+  echo "Removing orphaned packages..."
+  dpkg --list | awk '/^rc/ { print $2 }' | xargs --no-run-if-empty dpkg --purge
 fi
 
 if command -v snap &>/dev/null; then

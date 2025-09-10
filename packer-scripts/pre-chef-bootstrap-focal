@@ -135,10 +135,10 @@ __setup_travis_ssh() {
 }
 
 __write_pre_chef_env() {
-  local dest="/etc/profile.d/Z99-travis-pre-chef-bootstrap.sh"
+  local dest=/etc/profile.d/Z99-travis-pre-chef-bootstrap.sh
   cat > "${dest}" <<EOF
 #!/bin/sh
-# Managed by Packer ❤️
+# Managed by Packer
 
 export TRAVIS_PRE_CHEF_BOOTSTRAP_TIME=$(date -u +%Y-%m-%dT%H:%M:%S)
 export TRAVIS_UID=${TRAVIS_UID:-2000}
