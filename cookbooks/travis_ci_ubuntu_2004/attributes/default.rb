@@ -78,7 +78,7 @@ override['travis_build_environment']['otp_releases'] = %w[
   25.3.2.6
 ]
 elixirs = %w[
-  1.18.2
+  1.18.4
 ]
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max

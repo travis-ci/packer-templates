@@ -2,7 +2,7 @@
 
 dist=$(lsb_release -cs)
 
-sudo apt remove --purge rabbitmq-server erlang*
+sudo apt remove --purge rabbitmq-server erlang* -y
 
 sudo apt-get update -y
 
@@ -10,7 +10,6 @@ sudo apt-get install curl gnupg apt-transport-https -y
 
 ## Team RabbitMQ's signing key
 curl -1sLf "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA" | sudo gpg --dearmor | sudo tee /usr/share/keyrings/com.rabbitmq.team.gpg > /dev/null
-$dist
 
 sudo tee /etc/apt/sources.list.d/rabbitmq.list <<EOF
 ## Modern Erlang/OTP releases
