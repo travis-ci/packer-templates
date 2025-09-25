@@ -9,9 +9,12 @@ module Support
     end
 
     def load
+      permitted = [Symbol]
+      permitted << ChefUtils::VersionString if defined?(ChefUtils::VersionString)
+
       YAML.safe_load(
         File.read(yml),
-        permitted_classes: [ChefUtils::VersionString, Symbol],
+        permitted_classes: permitted,
         aliases: true
       )
     end

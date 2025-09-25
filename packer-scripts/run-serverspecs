@@ -34,7 +34,9 @@ main() {
 }
 
 __install_serverspec() {
-  chef gem install serverspec
+  unset GEM_PATH
+  chef exec gem install openssl -v 3.0.1 --no-document || true
+  chef exec gem install serverspec --no-document --conservative
 }
 
 __install_chef() {
@@ -42,11 +44,11 @@ __install_chef() {
     return
   fi
 
-  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 22.5.923
+  curl -sSL https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chef-workstation -v 25.5.1084
   __run_retry 2 30 apt-get update -y
   __run_retry 2 30 apt-get install libc-client2007e-dev mysql-client
-
 }
+
 __run_retry() {
   local retries="${1}"
   shift
@@ -65,6 +67,7 @@ __run_retry() {
     sleep "${retry_delay}"
   done
 }
+
 # shellcheck disable=SC2120
 __create_sudo_bash() {
   cat >/tmp/sudo-bash <<EOF
@@ -73,6 +76,7 @@ exec sudo -- bash "\$@"
 EOF
   chmod 0755 /tmp/sudo-bash
 }
+
 __remove_chef() {
   __run_retry 2 30 apt-get purge -y chef-workstation
   __run_retry 2 30 apt-get update -y
@@ -83,6 +87,7 @@ __remove_serverspec_chef() {
   __run_retry 2 30 apt-get purge -y chef
   __run_retry 2 30 apt-get update -y
 }
+
 __run_suite() {
   local suite="${1}"
   local chef_prefix="${2}"
@@ -95,6 +100,7 @@ __run_suite() {
   __run_suite_as_travis "${suite}" "${cookbook_dir}" "${runner}"
   popd &>/dev/null
 }
+
 __run_suite_as_travis() {
   local suite="${1}"
   local cookbook_dir="${2}"
@@ -106,17 +112,18 @@ export PATH=\"${CHEF_PATH}:\$PATH\"
 export TERM=xterm
 export PACKER_BUILDER_TYPE=${PACKER_BUILDER_TYPE}
 export RUBYOPT=${RUBYOPT}
-chef gem install serverspec
 unset GEM_PATH
 cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
 "
-  # FIX THIS TO RUN TESTS
-# chef exec rspec ${SPEC_ARGS} \
-#   --format documentation \
-#   --format json \
-#   --out /home/travis/.${suite}_rspec.json
+# Arguments should be splitted
+IFS=' ' read -r -a spec_args_array <<< "${SPEC_ARGS}"
+
+chef exec rspec "${spec_args_array[@]}" \
+  --format documentation \
+  --format json \
+  --out /home/travis/."${suite}"_rspec.json
 
   local exit_code="$?"
   if [[ $exit_code != 0 ]]; then
@@ -132,6 +139,7 @@ set -o errexit
   fi
   set -o errexit
 }
+
 __suite_cookbook_dir() {
   local suite="${1}"
   local chef_prefix="${2}"
@@ -143,7 +151,9 @@ __suite_cookbook_dir() {
   )"
   dirname "${spec_dir}"
 }
+
 __chown_travis_dirs() {
   chown -R travis:travis "${1}"/packer-chef-* /var/tmp
 }
+
 main "$@"
