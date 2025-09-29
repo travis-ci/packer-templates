@@ -46,6 +46,10 @@ commands:
     pipe: head -n 1
   - command: heroku version
     name: heroku version
+  - command: cosign version
+    name: cosign version
+  - command: rekor-cli version
+    name: rekor version
   - command: convert --version
     pipe: head -1
     name: imagemagick version
