@@ -46,6 +46,10 @@ commands:
     pipe: head -n 1
   - command: heroku version
     name: heroku version
+  - command: cosign version
+    name: cosign version
+  - command: rekor-cli version
+    name: rekor version
   - command: convert --version
     pipe: head -1
     name: imagemagick version
@@ -100,8 +104,8 @@ commands:
   - command: rsync --version
     pipe: head -1
     name: rsync version
-  - command: gimme --version
-    name: gimme version
+  - command: go version
+    name: go version
   - command: nvm --version
     name: nvm version
   - command: perlbrew --version
@@ -135,7 +139,7 @@ commands:
   - command: redis-server --version
     name: Redis version
     pipe: perl -n -e '/v=([\d\.]+)/ && {print "redis-server $1\n"}'
-  - command: gimme -l
+  - command: go version
     name: Pre-installed Go versions
   - command: ant -version
     name: ant version
