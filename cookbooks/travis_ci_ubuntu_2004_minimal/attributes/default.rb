@@ -17,10 +17,31 @@ go_versions = %w[
 override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
 
-override['travis_build_environment']['pythons'] = []
-override['travis_build_environment']['python_aliases'] = {}
+override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
+override['travis_build_environment']['python_aliases'] = {
+  '3.12.4' => %w[3.12],
+  '3.9.18' => %w[3.9],
+  '3.8.18' => %w[3.8],
+  '3.7.17' => %w[3.7],
+  'pypy2.7-7.3.1' => %w[pypy],
+  'pypy3.8-7.3.9' => %w[pypy3]
+}
+# packages build by Cpython + our repo
+pythons = %w[
+  3.7.17
+  3.8.18
+  3.9.18
+  3.12.4
+]
+
+%w[3].each do |pyver|
+  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+    pythons.unshift(pythons.delete(py))
+  end
+end
+
+override['travis_build_environment']['pythons'] = pythons
 override['travis_build_environment']['pip']['packages'] = {}
-override['travis_build_environment']['system_python']['pythons'] = []
 
 override['travis_build_environment']['nodejs_default'] = ''
 override['travis_build_environment']['nodejs_versions'] = []
@@ -46,7 +67,7 @@ override['travis_build_environment']['update_hostname'] = false
 override['travis_build_environment']['use_tmpfs_for_builds'] = false
 override['travis_build_environment']['install_gometalinter_tools'] = false
 override['travis_build_environment']['mercurial_install_type'] = 'pip'
-override['travis_build_environment']['mercurial_version'] = '5.3'
+override['travis_build_environment']['mercurial_version'] = '7.0.3'
 override['travis_packer_templates']['job_board']['stack'] = 'ubuntu-2004-minimal'
 override['travis_packer_templates']['job_board']['features'] = %w[
   basic

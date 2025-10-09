@@ -130,9 +130,11 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   cplusplus
   cpp
   ruby
+  dart
   python
   go
   java
+  scala
   php
   generic
   node_js

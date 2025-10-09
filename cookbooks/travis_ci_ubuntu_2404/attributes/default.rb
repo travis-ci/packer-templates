@@ -9,7 +9,6 @@ override['travis_build_environment']['python_aliases'] = {
   '3.12.8' => %w[3.12],
   'pypy3.10-7.3.17' => %w[pypy3]
 }
-# packages build by Cpython + our repo
 pythons = %w[
   3.12.8
   3.13.1
@@ -133,7 +132,9 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   node_js
   smalltalk
   shell
+  scala
   csharp
+  dart
   perl
   rust
   elixir
