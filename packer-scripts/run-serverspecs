@@ -117,13 +117,12 @@ cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
 "
-# Arguments should be splitted
-# IFS=' ' read -r -a spec_args_array <<< "${SPEC_ARGS}"
+IFS=' ' read -r -a spec_args_array <<< "${SPEC_ARGS}"
 
-# chef exec rspec "${spec_args_array[@]}" \
-#   --format documentation \
-#   --format json \
-#   --out /home/travis/."${suite}"_rspec.json
+chef exec rspec "${spec_args_array[@]}" \
+  --format documentation \
+  --format json \
+  --out /home/travis/."${suite}"_rspec.json
 
   local exit_code="$?"
   if [[ $exit_code != 0 ]]; then
