@@ -18,10 +18,25 @@ go_versions = %w[
 override['travis_build_environment']['go']['versions'] = go_versions
 override['travis_build_environment']['go']['default_version'] = go_versions.max
 
-override['travis_build_environment']['pythons'] = []
-override['travis_build_environment']['python_aliases'] = {}
+override['travis_build_environment']['python_aliases'] = {
+  '3.13.1' => %w[3.13],
+  '3.12.8' => %w[3.12],
+  'pypy3.10-7.3.17' => %w[pypy3]
+}
+pythons = %w[
+  3.12.8
+  3.13.1
+]
+
+%w[3].each do |pyver|
+  pythons.select { |p| p =~ /^#{pyver}/ }.max.tap do |py|
+    pythons.unshift(pythons.delete(py))
+  end
+end
+
+override['travis_build_environment']['pythons'] = pythons
 override['travis_build_environment']['pip']['packages'] = {}
-override['travis_build_environment']['system_python']['pythons'] = []
+override['travis_build_environment']['system_python']['pythons'] = %w[3.12]
 
 override['travis_build_environment']['nodejs_default'] = ''
 override['travis_build_environment']['nodejs_versions'] = []
@@ -34,7 +49,6 @@ override['travis_system_info']['commands_file'] = \
 rubies = %w[
   3.1.2
 ]
-
 override['travis_docker']['update_grub'] = false
 override['travis_build_environment']['default_ruby'] = '3.1.2'
 override['travis_build_environment']['rubies'] = rubies
@@ -54,7 +68,6 @@ override['travis_packer_templates']['job_board']['features'] = %w[
   basic
   disabled-ipv6
   docker
-  docker-compose
   go-toolchain
   perl_interpreter
   perlbrew
