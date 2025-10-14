@@ -500,7 +500,6 @@ if os[:arch] !~ /aarch64|arm64/
       end
     end
   end
-end
 
 describe command('ssh -V') do
   its(:stderr) { should match(/OpenSSH/) }
