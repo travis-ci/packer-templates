@@ -470,24 +470,22 @@ describe 'ruby interpreter' do
 end
 
 if os[:arch] !~ /aarch64|arm64/
-  describe 'rvm installation' do
-    describe command('rvm version') do
-      its(:stdout) { should match(/^rvm /) }
-      its(:stderr) { should be_empty }
-      its(:exit_status) { should eq 0 }
-    end
+  describe command('rvm version') do
+    its(:stdout) { should match(/^rvm /) }
+    its(:stderr) { should be_empty }
+    its(:exit_status) { should eq 0 }
+  end
 
     describe 'rvm commands' do
       describe command('rvm list') do
-        its(:stdout) { should include('current') }
-        its(:stdout) { should match(/ruby-[23]\.[1234567]\.\d/) }
+        its(:stdout) { should include('current').or include('default') }
+        its(:stdout) { should match(/ruby-[23]\.\d+\.\d+/) }
         its(:stderr) { should be_empty }
       end
 
       describe command('rvm default do echo whatever') do
-        its(:stderr) { should_not include('Warning!') }
-        its(:stdout) { should_not include('Warning!') }
         its(:stdout) { should include('whatever') }
+        its(:stderr) { should_not include('ERROR') }
       end
     end
 

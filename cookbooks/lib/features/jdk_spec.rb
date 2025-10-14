@@ -41,11 +41,12 @@ describe 'jdk installation' do
           }
         }
       EOF
-      Dir.chdir(Support.tmpdir) { sh('javac Hello.java') }
+      Dir.chdir(Support.tmpdir.to_s) { sh('javac Hello.java') }
     end
 
-    describe command("cd #{Support.tmpdir} && java Hello") do
+    describe command("java -cp #{Support.tmpdir} Hello") do
       its(:stdout) { should match 'Hello World!' }
+      its(:exit_status) { should eq 0 }
     end
   end
 end
