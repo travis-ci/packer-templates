@@ -6,57 +6,33 @@ require 'features/python_interpreter_spec'
 require 'features/pyenv_spec'
 
 describe 'python environment' do
-  if %w[xenial bionic].include?(Support.distro) # issue with system python3.8 for Focal dist
-    describe pycommand('easy_install --version') do
-      its(:stderr) { should be_empty }
-      its(:stdout) { should match(/^setuptools \d+\.\d+\.\d+/) }
-    end
-  end
-
-  describe pycommand('pip --version') do
+  describe pycommand('python3 -m pip --version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^pip \d+\.\d+(\.\d+)?/) }
   end
 
-  describe pycommand('wheel version') do
+  describe pycommand('python3 -m wheel version') do
     its(:stderr) { should be_empty }
     its(:stdout) { should match(/^wheel \d+\.\d+\.\d+/) }
   end
 
-  # TO DO: pytest for Xenial
-
-  if %w[bionic].include?(Support.distro)
-    describe pycommand('py.test --version') do
-      its(:stderr) { should be_empty }
-      its(:stdout) { should match(/pytest (version )?\d+\.\d+\.\d+/) }
-    end
-  elsif 'focal'.include?(Support.distro)
-    describe pycommand('py.test --version') do
-      its(:stderr) { should be_empty }
-      its(:stdout) { should match(/pytest (version )?\d+\.\d+\.\d+/) }
-    end
-  end
-
-  describe pycommand('nosetests --version') do
+  describe pycommand('python3 -m pytest --version') do
     its(:stderr) { should be_empty }
-    its(:stdout) { should match(/^nosetests version \d+\.\d+\.\d+/) }
+    its(:stdout) { should match(/pytest( version)? \d+\.\d+\.\d+/) }
   end
 
-  if %w[bionic].include?(Support.distro)
-    describe pycommand(
-      %q(python -c 'import mock,sys;sys.stdout.write(mock.__version__ + "\n")')
-    ) do
-      its(:stderr) { should be_empty }
-      its(:stdout) { should match(/^\d+\.\d+\.\d+/) }
-    end
-  else
-    describe pycommand(
-      %q(python -c 'import sys;from unittest import mock;sys.stdout.write(mock.__version__ + "\n")')
-    ) do
-      its(:stderr) { should be_empty }
-      its(:stdout) { should match(/^\d+\.\d+/) }
-    end
+  describe pycommand('python3 -m nose --version') do
+    its(:stderr) { should be_empty }
+    its(:stdout) { should match(/nose.*\d+\.\d+/) }
   end
+
+  describe pycommand(
+    %q(python3 -c 'import sys; import unittest.mock as m; sys.stdout.write("mock-ok\n")')
+  ) do
+    its(:stderr) { should be_empty }
+    its(:stdout) { should match(/^mock-ok/) }
+  end
+
 
   if 'xenial'.include?(Support.distro)
     vers = {

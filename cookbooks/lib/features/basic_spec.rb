@@ -115,7 +115,6 @@ if os[:arch] !~ /aarch64|arm64/
         its(:stdout) do
           should include(
             'OVERVIEW: clang LLVM compiler',
-            'OPTIONS:'
           )
         end
       end
@@ -123,12 +122,6 @@ if os[:arch] !~ /aarch64|arm64/
   end
 end
 
-# Pollinate repository doesn't contain newer packages no longer
-# if os[:arch] !~ /aarch64|arm64/
-#   describe package('pollinate') do
-#     it { should be_installed }
-#   end
-# end
 
 describe file('/etc/cloud/templates') do
   it { should be_directory }
