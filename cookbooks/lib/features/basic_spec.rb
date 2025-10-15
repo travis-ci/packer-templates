@@ -104,23 +104,22 @@ describe 'bazaar installation' do
   end
 end
 
-if os[:arch] !~ /aarch64|arm64/
-  describe 'clang installation' do
-    describe command('clang -v') do
-      its(:exit_status) { should eq 0 }
-    end
+describe 'clang installation' do
+  describe command('clang -v') do
+    its(:exit_status) { should eq 0 }
+  end
 
-    describe 'clang command' do
-      describe command('clang -help') do
-        its(:stdout) do
-          should include(
-            'OVERVIEW: clang LLVM compiler',
-          )
-        end
+  describe 'clang command' do
+    describe command('clang -help') do
+      its(:stdout) do
+        should include(
+          'OVERVIEW: clang LLVM compiler',
+        )
       end
     end
   end
 end
+
 
 
 describe file('/etc/cloud/templates') do

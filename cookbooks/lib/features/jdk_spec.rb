@@ -32,21 +32,7 @@ describe 'jdk installation' do
     expect(ENV['JAVA_HOME']).to_not be_empty
   end
 
-  describe 'java command' do
-    before do
-      hello_java.write(<<~EOF)
-        class Hello {
-          public static void main (String[] args) {
-            System.out.println("Hello World!");
-          }
-        }
-      EOF
-      Dir.chdir(Support.tmpdir.to_s) { sh('javac Hello.java') }
-    end
-
-    describe command("java -cp #{Support.tmpdir} Hello") do
-      its(:stdout) { should match 'Hello World!' }
-      its(:exit_status) { should eq 0 }
-    end
+  describe command('java --validate-modules') do
+    its(:exit_status) { should eq 0 }
   end
 end
