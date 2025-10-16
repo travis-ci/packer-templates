@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'mongodb installation' do
-  describe command('mongodb --version') do
+  describe command('mongod --version') do
     its(:exit_status) { should eq 0 }
   end
 
@@ -14,7 +14,7 @@ describe 'mongodb installation' do
       sleep 3
     end
 
-    describe command(%Q(mongosh --eval "var myCursor = db.testData.find({ x: 6 }); myCursor.forEach(printjson);")) do
+    describe command(%Q(mongosh --eval "var myCursor = db.testData.find({x:6}); myCursor.forEach(printjson);")) do
       its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
     end
 
