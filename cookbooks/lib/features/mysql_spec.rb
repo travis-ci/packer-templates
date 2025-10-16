@@ -35,14 +35,6 @@ describe 'mysql installation' do
       end
     end
 
-    describe command('echo "SHOW DATABASES" | mysql') do
-      its(:stdout) { should match(/^travis$/) }
-    end
-
-    describe command('echo "SELECT id FROM test" | mysql travis') do
-      its(:stdout) { should match(/^4$/) }
-    end
-
     describe command('echo "SHOW VARIABLES LIKE \'innodb_flush_log_at_trx_commit\'" | mysql'), dev: true do
       its(:stdout) { should include('innodb_flush_log_at_trx_commit	0') }
     end

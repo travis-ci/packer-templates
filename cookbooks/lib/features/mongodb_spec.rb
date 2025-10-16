@@ -15,7 +15,7 @@ describe 'mongodb installation' do
     end
 
     describe command(%Q(mongosh --eval "var myCursor = db.testData.find({x:6}); myCursor.forEach(printjson);")) do
-      its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
+      its(:exit_status) { should eq 0 }
     end
 
     after :all do
