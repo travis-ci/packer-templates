@@ -462,7 +462,7 @@ describe 'ruby interpreter' do
 end
 
 if os[:arch] !~ /aarch64|arm64/
-  describe command('rvm version') do
+  describe command('rvm --version') do
     its(:stdout) { should match(/^rvm /) }
     its(:stderr) { should be_empty }
     its(:exit_status) { should eq 0 }
