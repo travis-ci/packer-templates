@@ -3,25 +3,27 @@
 module Support
   module Php
     def phpcommand(cmd)
-      command("#{phpenv_exec} #{cmd}")
+      command("#{php_exec_prefix} #{cmd}")
     end
 
-    def phpenv_exec
-      return @phpenv_exec if @phpenv_exec
+    def php_exec_prefix
+      return @php_exec_prefix if @php_exec_prefix
 
-      unless php_default_version.empty?
-        @phpenv_exec = "PHPENV_VERSION=#{php_default_version} phpenv exec"
-        return @phpenv_exec
+      if system('command -v phpenv >/dev/null 2>&1')
+        unless php_default_version.empty?
+          @php_exec_prefix = "PHPENV_VERSION=#{php_default_version} phpenv exec"
+          return @php_exec_prefix
+        end
+
+        available = `phpenv versions 2>/dev/null`.strip
+        php_versions.each do |v|
+          next if @php_exec_prefix
+          @php_exec_prefix = "PHPENV_VERSION=#{v} phpenv exec" if available =~ /\b#{v}\b/
+        end
       end
 
-      available = `phpenv versions 2>/dev/null`.strip
-      php_versions.each do |v|
-        next if @phpenv_exec
-
-        @phpenv_exec = "PHPENV_VERSION=#{v} phpenv exec" if available =~ /\b#{v}\b/
-      end
-      @phpenv_exec ||= ''
-      @phpenv_exec
+      @php_exec_prefix ||= 'php'
+      @php_exec_prefix
     end
 
     def php_versions
