@@ -14,9 +14,10 @@ describe 'mongodb installation' do
       sleep 3 # HACK: thanks a bunch more, Mongo
     end
 
-    describe command('mongosh --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
-      its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
-    end
+  describe command('mongosh --eval "var myCursor = db.testData.find( { x: 6 }); myCursor.forEach(printjson);"') do
+    its(:stdout) { should match(/{ "_id" : ObjectId\("\w+"\), "x" : 6 }/) }
+  end
+
 
     after :all do
       sh("sudo service mongod stop || true")
