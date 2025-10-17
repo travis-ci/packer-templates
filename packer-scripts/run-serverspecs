@@ -72,7 +72,7 @@ __run_retry() {
 __create_sudo_bash() {
   cat >/tmp/sudo-bash <<EOF
 #!/usr/bin/env bash
-exec sudo -- bash "\$@"
+exec sudo -E -- bash "\$@"
 EOF
   chmod 0755 /tmp/sudo-bash
 }
