@@ -13,7 +13,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   export RUBYOPT='-W0'
   : "${PACKER_CHEF_PREFIX:=/tmp}"
-  : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
+  : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -c}"
   : "${PACKER_BUILDER_TYPE:=docker}"
   if [[ "${PACKER_BUILDER_TYPE}" == 'docker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
