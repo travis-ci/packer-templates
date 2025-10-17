@@ -18,7 +18,7 @@ env:
   - REQUEST_INTERVAL=5
   - SKIP_CHEF_REMOVAL='1'
   - SPEC_ARGS='--tag ~dev'
-  - SPEC_RUNNER='bash -lc'
+  - SPEC_RUNNER='bash -c'
   - SPEC_SUITES='travis_packer_templates'
   - SYSTEM_INFO_JSON="${TRAVIS_BUILD_DIR}/.example_system_info.json"
   - TRAVIS_SOURCE_AMI="ami-01eefcaf0edcc4cf0"
@@ -40,7 +40,7 @@ script:
 # - git diff --exit-code
 # - git diff --cached --exit-code
 - sudo lsof | grep dpkg || true
-- travis_retry bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
+- bundle exec bash -xc 'sudo packer-scripts/run-serverspecs'
 after_success:
 - if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sardonyx ]]; then
     git fetch --unshallow;
