@@ -40,7 +40,7 @@ script:
 # - git diff --exit-code
 # - git diff --cached --exit-code
 - sudo lsof | grep dpkg || true
-- bundle exec bash -xc 'packer-scripts/run-serverspecs'
+- bundle exec bash -xc 'sudo -E packer-scripts/run-serverspecs'
 after_success:
 - if [[ $TRAVIS_JOB_BOARD_REGISTER_YML =~ sardonyx ]]; then
     git fetch --unshallow;
