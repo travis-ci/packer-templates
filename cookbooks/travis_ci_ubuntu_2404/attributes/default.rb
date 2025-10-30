@@ -5,13 +5,15 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2404-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.12] # apt packages
 override['travis_build_environment']['python_aliases'] = {
-  '3.13.1' => %w[3.13],
-  '3.12.8' => %w[3.12],
-  'pypy3.10-7.3.17' => %w[pypy3]
+  '3.13.9' => %w[3.13],
+  '3.12.12' => %w[3.12],
+  '3.14.0' => %w[3.14],
+  'pypy3.11-7.3.20' => %w[pypy3]
 }
 pythons = %w[
-  3.12.8
-  3.13.1
+  3.12.12
+  3.13.9
+  3.14.0
 ]
 
 %w[3].each do |pyver|
@@ -26,7 +28,7 @@ override['travis_build_environment']['pip']['packages'] = {} # need to fill in
 
 # our php builder
 php_aliases = {
-  '8.3' => '8.3.6'
+  '8.3' => '8.3.27'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
 override['travis_build_environment']['php_default_version'] = php_aliases['8.3']
@@ -37,7 +39,7 @@ override['travis_perlbrew']['prerequisite_packages'] = []
 
 # GO version must be without the minor version
 go_versions = %w[
-  1.24
+  1.25
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
@@ -61,18 +63,19 @@ override['travis_build_environment']['nodejs_versions'] = %w[
 override['travis_build_environment']['nodejs_default'] = '18.20.3'
 
 rubies = %w[
-  3.3.9
+  3.3.10
+  3.4.7
 ]
 
 # changing default ruby version due to dpl issues
-override['travis_build_environment']['default_ruby'] = '3.3.9'
+override['travis_build_environment']['default_ruby'] = '3.3.10'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
   26.1.1
 ]
 elixirs = %w[
-  1.18.4
+  1.19.1
 ]
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
@@ -123,6 +126,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   c++
   cplusplus
   cpp
+  clojure
   ruby
   python
   go

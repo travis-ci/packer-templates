@@ -5,19 +5,17 @@ override['travis_system_info']['commands_file'] = \
   '/var/tmp/ubuntu-2004-system-info-commands.yml'
 override['travis_build_environment']['system_python']['pythons'] = %w[3.8] # apt packages
 override['travis_build_environment']['python_aliases'] = {
-  '3.12.4' => %w[3.12],
-  '3.9.18' => %w[3.9],
-  '3.8.18' => %w[3.8],
-  '3.7.17' => %w[3.7],
-  'pypy2.7-7.3.1' => %w[pypy],
-  'pypy3.8-7.3.9' => %w[pypy3]
+  '3.12.12' => %w[3.12],
+  '3.9.24' => %w[3.9],
+  '3.8.20' => %w[3.8],
+  'pypy2.7-7.3.20' => %w[pypy],
+  'pypy3.11-7.3.20' => %w[pypy3]
 }
 # packages build by Cpython + our repo
 pythons = %w[
-  3.7.17
-  3.8.18
-  3.9.18
-  3.12.4
+  3.8.20
+  3.9.24
+  3.12.12
 ]
 
 %w[3].each do |pyver|
@@ -32,17 +30,17 @@ override['travis_build_environment']['pythons'] = pythons
 
 # our php builder
 php_aliases = {
-  '7.4' => '7.4.6'
+  '8.3' => '8.3.27'
 }
 override['travis_build_environment']['php_versions'] = php_aliases.values
-override['travis_build_environment']['php_default_version'] = php_aliases['7.4']
+override['travis_build_environment']['php_default_version'] = php_aliases['8.3']
 override['travis_build_environment']['php_aliases'] = php_aliases
 
 override['travis_perlbrew']['perls'] = [{ name: '5.32.0', version: 'perl-5.32.0' }, { name: '5.33.0', version: 'perl-5.33.0' }]
 override['travis_perlbrew']['prerequisite_packages'] = []
 
 go_versions = %w[
-  1.24
+  1.25
 ]
 
 override['travis_build_environment']['go']['versions'] = go_versions
@@ -68,17 +66,17 @@ override['travis_build_environment']['nodejs_default'] = '18.20.3'
 
 rubies = %w[
   2.7.8
-  3.3.5
+  3.3.10
 ]
 
-override['travis_build_environment']['default_ruby'] = '3.3.5'
+override['travis_build_environment']['default_ruby'] = '3.3.10'
 override['travis_build_environment']['rubies'] = rubies
 
 override['travis_build_environment']['otp_releases'] = %w[
   25.3.2.6
 ]
 elixirs = %w[
-  1.18.4
+  1.19.1
 ]
 override['travis_build_environment']['elixir_versions'] = elixirs
 override['travis_build_environment']['default_elixir_version'] = elixirs.max
@@ -145,6 +143,7 @@ override['travis_packer_templates']['job_board']['languages'] = %w[
   php
   node_js
   smalltalk
+  clojure
   csharp
   scala
   perl

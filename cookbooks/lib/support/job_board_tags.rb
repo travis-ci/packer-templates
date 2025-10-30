@@ -28,7 +28,11 @@ module Support
     private
 
     def declared_job_board_tagset(tagset)
-      YAML.safe_load(File.read(job_board_register_yml)).fetch(tagset)
+      YAML.safe_load(
+      File.read(job_board_register_yml),
+      permitted_classes: [Gem::Version],
+      aliases: true
+    ).fetch(tagset)
     end
 
     def job_board_register_yml

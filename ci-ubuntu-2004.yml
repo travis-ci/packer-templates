@@ -137,6 +137,7 @@ provisioners:
   <% if ENV['CHEF_PROFILING'] %>
   - recipe[poise-profiler]
   <% end %>
+
 - type: shell
   scripts:
   - packer-scripts/ensure-travis-user
@@ -144,10 +145,12 @@ provisioners:
   - packer-scripts/disable-apparmor
   - packer-scripts/run-serverspecs
   - packer-scripts/perforce-install
+  - packer-scripts/pyenv-install
   - packer-scripts/cosign-install
-  - packer-scripts/ant-install
   - packer-scripts/rabbitmq-install
+  - packer-scripts/ant-install
   - packer-scripts/updates
+  - packer-scripts/run-serverspecs
   - packer-scripts/test-system-info-output
   - packer-scripts/dump-dpkg-manifest
   - packer-scripts/create-bin-lib-checksums
@@ -159,6 +162,7 @@ provisioners:
   - TRAVIS_OBFUSCATE_PASSWORD=1
   - TRAVIS_UID={{ user `travis_uid` }}
   execute_command: "{{ .Vars }} exec sudo -E -S bash '{{ .Path }}'"
+
 # - type: shell
 #   environment_vars:
 #   - TRAVIS_OBFUSCATE_PASSWORD=1

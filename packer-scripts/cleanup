@@ -38,8 +38,9 @@ if command -v pip3 &>/dev/null; then
 fi
 
 if command -v apt-get &>/dev/null; then
-  echo "Removing old kernels..."
-  dpkg -l 'linux-*' | awk '/^ii/{ print $2}' | grep -v -e "$(uname -r | sed -r 's/-[a-z]+//')" | grep -E '(image|headers)' | xargs --no-run-if-empty apt-get -y purge || true
+  # Sometimes removes necessary packages, so commented out for now (Noble - docker issues)
+  # echo "Removing old kernels..."
+  # dpkg -l 'linux-*' | awk '/^ii/{ print $2}' | grep -v -e "$(uname -r | sed -r 's/-[a-z]+//')" | grep -E '(image|headers)' | xargs --no-run-if-empty apt-get -y purge || true
 
   echo "Removing orphaned packages..."
   dpkg --list | awk '/^rc/ { print $2 }' | xargs --no-run-if-empty dpkg --purge
@@ -52,9 +53,9 @@ if command -v snap &>/dev/null; then
   done
 fi
 
+# /etc/apparmor* \ causes issues in Noble with snap
 echo "Removing unused system files..."
 rm -rf \
-  /etc/apparmor* \
   /etc/profile.d/jdk.csh \
   /etc/profile.d/jdk.sh \
   /lib/recovery-mode \

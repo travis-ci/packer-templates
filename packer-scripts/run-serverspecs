@@ -13,7 +13,7 @@ main() {
   export DEBIAN_FRONTEND='noninteractive'
   export RUBYOPT='-W0'
   : "${PACKER_CHEF_PREFIX:=/tmp}"
-  : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -lc}"
+  : "${SPEC_RUNNER:=sudo -u travis HOME=/home/travis -- bash -c}"
   : "${PACKER_BUILDER_TYPE:=docker}"
   if [[ "${PACKER_BUILDER_TYPE}" == 'docker' ]]; then
     export SPEC_ARGS="${SPEC_ARGS} --tag ~docker:false"
@@ -72,7 +72,7 @@ __run_retry() {
 __create_sudo_bash() {
   cat >/tmp/sudo-bash <<EOF
 #!/usr/bin/env bash
-exec sudo -- bash "\$@"
+exec sudo -E -- bash "\$@"
 EOF
   chmod 0755 /tmp/sudo-bash
 }
@@ -117,8 +117,7 @@ cd ${cookbook_dir}
 sudo systemctl start xvfb.service
 set -o errexit
 "
-# Arguments should be splitted
-# IFS=' ' read -r -a spec_args_array <<< "${SPEC_ARGS}"
+IFS=' ' read -r -a spec_args_array <<< "${SPEC_ARGS}"
 
 # chef exec rspec "${spec_args_array[@]}" \
 #   --format documentation \

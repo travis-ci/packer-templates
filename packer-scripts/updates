@@ -29,11 +29,16 @@ main() {
     python3-testresources || echo "Some Python deps failed"
 
   # Install or upgrade pip and pip-review
-  echo "Installing/upgrading pip & pip-review..."
-  pip3 install --upgrade pip || echo "pip upgrade failed"
-  pip3 install pip-review || echo "pip-review install failed"
-  pip-review --auto || echo "pip-review run failed"
-
+  if [[ "${dist}" == "noble" ]]; then
+    echo "Installing/upgrading pip & pip-review..."
+    sudo apt install python3-pip python3-venv python3-setuptools -y
+    # pip-review --auto
+  else
+    echo "Installing/upgrading pip & pip-review..."
+    pip3 install --upgrade pip || echo "pip upgrade failed"
+    pip3 install pip-review || echo "pip-review install failed"
+    # pip-review --auto || echo "pip-review run failed"
+  fi
   # Docker & Buildx setup
   echo "Setting up Docker + Buildx..."
   sudo install -m 0755 -d /etc/apt/keyrings

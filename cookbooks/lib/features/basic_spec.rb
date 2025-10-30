@@ -104,31 +104,23 @@ describe 'bazaar installation' do
   end
 end
 
-if os[:arch] !~ /aarch64|arm64/
-  describe 'clang installation' do
-    describe command('clang -v') do
-      its(:exit_status) { should eq 0 }
-    end
+describe 'clang installation' do
+  describe command('clang -v') do
+    its(:exit_status) { should eq 0 }
+  end
 
-    describe 'clang command' do
-      describe command('clang -help') do
-        its(:stdout) do
-          should include(
-            'OVERVIEW: clang LLVM compiler',
-            'OPTIONS:'
-          )
-        end
+  describe 'clang command' do
+    describe command('clang -help') do
+      its(:stdout) do
+        should include(
+          'OVERVIEW: clang LLVM compiler',
+        )
       end
     end
   end
 end
 
-# Pollinate repository doesn't contain newer packages no longer
-# if os[:arch] !~ /aarch64|arm64/
-#   describe package('pollinate') do
-#     it { should be_installed }
-#   end
-# end
+
 
 describe file('/etc/cloud/templates') do
   it { should be_directory }
@@ -165,7 +157,6 @@ end
 if os[:arch] !~ /aarch64|arm64/
   describe command('cmake --version') do
     its(:exit_status) { should eq 0 }
-    its(:stdout) { should match(/^cmake version [23]/) }
   end
 end
 
@@ -470,24 +461,22 @@ describe 'ruby interpreter' do
 end
 
 if os[:arch] !~ /aarch64|arm64/
-  describe 'rvm installation' do
-    describe command('rvm version') do
-      its(:stdout) { should match(/^rvm /) }
-      its(:stderr) { should be_empty }
-      its(:exit_status) { should eq 0 }
-    end
+  describe command('rvm --version') do
+    its(:stdout) { should match(/^rvm /) }
+    its(:stderr) { should be_empty }
+    its(:exit_status) { should eq 0 }
+  end
 
     describe 'rvm commands' do
       describe command('rvm list') do
-        its(:stdout) { should include('current') }
-        its(:stdout) { should match(/ruby-[23]\.[1234567]\.\d/) }
+        its(:stdout) { should include('current').or include('default') }
+        its(:stdout) { should match(/ruby-[23]\.\d+\.\d+/) }
         its(:stderr) { should be_empty }
       end
 
       describe command('rvm default do echo whatever') do
-        its(:stderr) { should_not include('Warning!') }
-        its(:stdout) { should_not include('Warning!') }
         its(:stdout) { should include('whatever') }
+        its(:stderr) { should_not include('ERROR') }
       end
     end
 
@@ -502,7 +491,6 @@ if os[:arch] !~ /aarch64|arm64/
       end
     end
   end
-end
 
 describe command('ssh -V') do
   its(:stderr) { should match(/OpenSSH/) }

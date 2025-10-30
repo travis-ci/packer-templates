@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'chef-utils'
+require 'rubygems'
 
 module Support
   class NodeAttributes
@@ -9,7 +11,7 @@ module Support
     end
 
     def load
-      permitted = [Symbol]
+      permitted = [Symbol, Gem::Version]
       permitted << ChefUtils::VersionString if defined?(ChefUtils::VersionString)
 
       YAML.safe_load(
