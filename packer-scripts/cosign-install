@@ -25,11 +25,21 @@ main() {
   #!/usr/bin/env bash
 
   set -o errexit
-  set -o xtrace
 
   main() {
 
   args="$@"
+  
+  if [ ! -z "${COSIGN_EXPERIMENTAL}" ] \
+   && [ ! -z "${TRAVIS_REPO_PRIVATE}" ] \
+   && [ $COSIGN_EXPERIMENTAL == 1 ] \
+   && [ $TRAVIS_REPO_PRIVATE == "true" ] \
+   && [[ $args != *"--key"* ]]
+  then
+    echo "Experimental cosign features are not allowed in builds for private repositories"
+    exit 1
+  fi
+  
   # call original cosign binary and send arguments
   echo y | not_cosign $args
 
